@@ -1,5 +1,6 @@
 package com.leskiewicz.schoolsystem.service;
 
+import com.leskiewicz.schoolsystem.dto.request.AuthenticationRequest;
 import com.leskiewicz.schoolsystem.dto.request.RegisterRequest;
 import com.leskiewicz.schoolsystem.dto.response.AuthenticationResponse;
 import com.leskiewicz.schoolsystem.model.Faculty;
@@ -18,8 +19,17 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import javax.swing.text.html.Option;
+import java.util.ArrayList;
+import java.util.Optional;
+
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -67,11 +77,10 @@ public class AuthenticationServiceTest {
                 .faculty(faculty)
                 .role(Role.STUDENT)
                 .build();
-
     }
 
     @Test
-    public void registerHappyFlow() {
+    public void registerHappyPath() {
         given(facultyService.getByName("Engineering")).willReturn(faculty);
         given(passwordEncoder.encode("12345")).willReturn("encoded_password");
         given(jwtUtils.generateToken(newUser)).willReturn("12");
@@ -94,5 +103,39 @@ public class AuthenticationServiceTest {
         Assertions.assertThrows(EntityNotFoundException.class, () -> {
             authenticationService.register(request);
         });
+    }
+
+    @Test
+    public void authenticateHappyPath() {
+        AuthenticationRequest request = new AuthenticationRequest("johndoe@example.com", "password");
+
+        given(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
+                .willReturn(new UsernamePasswordAuthenticationToken(newUser, null, new ArrayList<>()));
+        given(userRepository.findByEmail("johndoe@example.com")).willReturn(Optional.of(new User()));
+        given(jwtUtils.generateToken(any(User.class))).willReturn("jwtToken");
+
+        AuthenticationResponse response = authenticationService.authenticate(request);
+
+        Assertions.assertEquals("jwtToken", response.getToken());
+    }
+
+    @Test
+    public void authenticateUserNotFound() {
+        AuthenticationRequest request = new AuthenticationRequest("johndoe@example.com", "password");
+
+        given(userRepository.findByEmail("johndoe@example.com")).willReturn(Optional.empty());
+
+        Assertions.assertThrows(UsernameNotFoundException.class, () ->
+                authenticationService.authenticate(request));
+    }
+
+    @Test
+    public void authenticateWrongCredentials() {
+        AuthenticationRequest request = new AuthenticationRequest("johndoe@example.com", "wrong_password");
+
+        given(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class))).willThrow(new BadCredentialsException("Bad credentials"));
+
+        Assertions.assertThrows(BadCredentialsException.class, () ->
+                authenticationService.authenticate(request));
     }
 }
