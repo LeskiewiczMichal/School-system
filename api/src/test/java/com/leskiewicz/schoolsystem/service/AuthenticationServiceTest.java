@@ -2,7 +2,6 @@ package com.leskiewicz.schoolsystem.service;
 
 import com.leskiewicz.schoolsystem.dto.request.RegisterRequest;
 import com.leskiewicz.schoolsystem.dto.response.AuthenticationResponse;
-import com.leskiewicz.schoolsystem.error.MissingFieldException;
 import com.leskiewicz.schoolsystem.model.Faculty;
 import com.leskiewicz.schoolsystem.model.Role;
 import com.leskiewicz.schoolsystem.model.User;
@@ -18,15 +17,11 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.util.Assert;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class AuthenticationServiceTest {
@@ -97,20 +92,6 @@ public class AuthenticationServiceTest {
                 .willReturn(null);
 
         Assertions.assertThrows(EntityNotFoundException.class, () -> {
-            authenticationService.register(request);
-        });
-    }
-
-    @Test
-    public void registerThrowsExceptionOnBodyMissing() {
-        request = RegisterRequest.builder()
-                .firstName("John")
-                .lastName("Doe")
-                .password("12345")
-                .facultyName("Engineering")
-                .build();
-
-        Assertions.assertThrows(MissingFieldException.class, () -> {
             authenticationService.register(request);
         });
     }

@@ -3,14 +3,12 @@ package com.leskiewicz.schoolsystem.service;
 import com.leskiewicz.schoolsystem.dto.request.AuthenticationRequest;
 import com.leskiewicz.schoolsystem.dto.request.RegisterRequest;
 import com.leskiewicz.schoolsystem.dto.response.AuthenticationResponse;
-import com.leskiewicz.schoolsystem.error.MissingFieldException;
 import com.leskiewicz.schoolsystem.model.Faculty;
 import com.leskiewicz.schoolsystem.model.Role;
 import com.leskiewicz.schoolsystem.model.User;
 import com.leskiewicz.schoolsystem.repository.UserRepository;
 import com.leskiewicz.schoolsystem.utils.JwtUtils;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,7 +29,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public AuthenticationResponse register(RegisterRequest request) {
         Faculty faculty = facultyService.getByName(request.getFacultyName());
         if (faculty == null) {
-            throw new EntityNotFoundException("Faculty not found");
+            throw new EntityNotFoundException("Faculty with given name not found");
         }
 
         var user = User.builder()
