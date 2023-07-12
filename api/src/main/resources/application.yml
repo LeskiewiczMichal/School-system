@@ -12,7 +12,12 @@ spring:
     database: MYSQL
     hibernate:
       dialect: org.hibernate.dialect.mySQL8Dialect
-  # Base path for api
+#   Base path for api
   data:
     rest:
       base-path: /api
+
+## Base path for api settings
+#server:
+#  servlet:
+#    context-path: /api
