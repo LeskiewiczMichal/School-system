@@ -1,0 +1,14 @@
+spring:
+  profiles:
+    active: dev
+  #  Database type
+  datasource:
+    platform: mysql
+    testWhileIdle: true
+    validationQuery: SELECT 1
+  database:
+    driverClassName: com.mysql.cj.jdbc.Driver
+  jpa:
+    database: MYSQL
+    hibernate:
+      dialect: org.hibernate.dialect.mySQL8Dialect
