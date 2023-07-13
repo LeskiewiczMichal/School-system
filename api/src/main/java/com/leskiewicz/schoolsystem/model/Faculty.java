@@ -22,15 +22,22 @@ public class Faculty {
     @Column(name = "name")
     private String name;
 
-    @OneToMany
-    @JoinColumn(name = "course_ids", referencedColumnName = "id")
+    @OneToMany(mappedBy = "faculty")
     private List<Course> courses;
 
+    @OneToMany(mappedBy = "faculty")
+    private List<Degree> degrees;
+
+
     @ManyToMany
-    @JoinColumn(name = "teacher_ids", referencedColumnName = "id")
+    @JoinTable(
+            name = "faculty_teacher",
+            joinColumns = @JoinColumn(name = "faculty_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "teacher_id", referencedColumnName = "id")
+    )
     private List<User> teachers;
 
     @OneToMany
-    @JoinColumn(name = "student_ids", referencedColumnName = "id")
+    @JoinColumn(name = "student_faculty", referencedColumnName = "id")
     private List<User> students;
 }

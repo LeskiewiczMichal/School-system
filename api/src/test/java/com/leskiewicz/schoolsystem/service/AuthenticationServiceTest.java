@@ -4,7 +4,7 @@ import com.leskiewicz.schoolsystem.dto.request.AuthenticationRequest;
 import com.leskiewicz.schoolsystem.dto.request.RegisterRequest;
 import com.leskiewicz.schoolsystem.dto.response.AuthenticationResponse;
 import com.leskiewicz.schoolsystem.model.Faculty;
-import com.leskiewicz.schoolsystem.model.Role;
+import com.leskiewicz.schoolsystem.model.enums.Role;
 import com.leskiewicz.schoolsystem.model.User;
 import com.leskiewicz.schoolsystem.repository.UserRepository;
 import com.leskiewicz.schoolsystem.utils.JwtUtils;
@@ -21,11 +21,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.Optional;
 

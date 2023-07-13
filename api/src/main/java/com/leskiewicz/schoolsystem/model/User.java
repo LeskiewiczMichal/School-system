@@ -1,6 +1,7 @@
 package com.leskiewicz.schoolsystem.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.leskiewicz.schoolsystem.model.enums.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -42,8 +43,20 @@ public class User implements UserDetails {
     private String password;
 
     @ManyToOne
-    @JoinColumn(name = "faculty", referencedColumnName = "id")
+    @JoinColumn(name = "student_faculty", referencedColumnName = "id")
     private Faculty faculty;
+
+    @ManyToOne
+    @JoinColumn(name = "degree", referencedColumnName = "id")
+    private Degree degree;
+
+    @ManyToMany
+    @JoinTable(
+            name = "faculty_teacher",
+            joinColumns = @JoinColumn(name = "teacher_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "faculty_id", referencedColumnName = "id")
+    )
+    private List<Faculty> faculties;
 
     @Column(name = "role")
     @Enumerated(EnumType.STRING)

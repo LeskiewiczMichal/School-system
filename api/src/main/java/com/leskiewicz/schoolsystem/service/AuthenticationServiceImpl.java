@@ -4,7 +4,7 @@ import com.leskiewicz.schoolsystem.dto.request.AuthenticationRequest;
 import com.leskiewicz.schoolsystem.dto.request.RegisterRequest;
 import com.leskiewicz.schoolsystem.dto.response.AuthenticationResponse;
 import com.leskiewicz.schoolsystem.model.Faculty;
-import com.leskiewicz.schoolsystem.model.Role;
+import com.leskiewicz.schoolsystem.model.enums.Role;
 import com.leskiewicz.schoolsystem.model.User;
 import com.leskiewicz.schoolsystem.repository.UserRepository;
 import com.leskiewicz.schoolsystem.utils.JwtUtils;

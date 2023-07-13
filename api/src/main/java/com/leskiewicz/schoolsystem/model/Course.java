@@ -17,7 +17,7 @@ public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private Long id;
 
     @Column(name = "title")
     private String title;
@@ -26,10 +26,16 @@ public class Course {
     private int duration_in_hours;
 
     @ManyToOne
-    @JoinColumn(name = "teacher_id", referencedColumnName = "id")
+    @JoinColumn(name = "faculty", referencedColumnName = "id")
+    private Faculty faculty;
+
+    @ManyToOne
+    @JoinColumn(name = "teacher", referencedColumnName = "id")
     private User teacher;
 
     @ManyToMany
-    @JoinColumn(name = "student_ids", referencedColumnName = "id")
+    @JoinTable(name = "course_student",
+    joinColumns = @JoinColumn(name = "course_id", referencedColumnName = "id"),
+    inverseJoinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id"))
     private List<User> students;
 }
