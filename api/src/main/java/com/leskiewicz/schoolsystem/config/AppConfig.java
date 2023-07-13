@@ -1,5 +1,6 @@
 package com.leskiewicz.schoolsystem.config;
 
+import com.leskiewicz.schoolsystem.dto.entity.CustomUserDetails;
 import com.leskiewicz.schoolsystem.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -23,6 +24,7 @@ public class AppConfig {
     @Bean
     public UserDetailsService userDetailsService() {
         return username -> userRepository.findByEmail(username)
+                .map(CustomUserDetails::new)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 

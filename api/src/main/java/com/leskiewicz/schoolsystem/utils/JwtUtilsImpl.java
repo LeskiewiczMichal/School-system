@@ -1,5 +1,7 @@
 package com.leskiewicz.schoolsystem.utils;
 
+import com.leskiewicz.schoolsystem.dto.entity.CustomUserDetails;
+import com.leskiewicz.schoolsystem.model.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import io.jsonwebtoken.Claims;
@@ -26,8 +28,8 @@ public class JwtUtilsImpl implements JwtUtils {
         return extractClaim(token, Claims::getSubject);
     }
 
-    public String generateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
+    public String generateToken(User user) {
+        return generateToken(new HashMap<>(), new CustomUserDetails(user));
     }
 
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
