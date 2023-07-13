@@ -105,7 +105,7 @@ INSERT INTO faculty_teacher (faculty_id, teacher_id)
 VALUES (1, 3);
 
 INSERT INTO degree (id, title, field_of_study, faculty)
-VALUES (2, 'Master of Science', 'Software Engineering', 1);
+VALUES (2, 'MASTER', 'Software Engineering', 1);
 
 INSERT INTO users (first_name, last_name, email, password, student_faculty, degree, role)
 VALUES ('Emily', 'Wilson', 'emilywilson@example.com', 'qwerty', 1, 2, 'ROLE_STUDENT');
