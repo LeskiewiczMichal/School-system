@@ -23,10 +23,9 @@ public class AuthorizationControllerTest {
                 .firstName("Happy")
                 .lastName("Path")
                 .email("happypath@example.com")
-                .facultyName("Engineering")
+                .facultyName("Informatics")
+                .password("12345")
                 .build();
-
-
     }
 
 }

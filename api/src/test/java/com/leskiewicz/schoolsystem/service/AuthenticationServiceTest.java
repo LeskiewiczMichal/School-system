@@ -3,7 +3,9 @@ package com.leskiewicz.schoolsystem.service;
 import com.leskiewicz.schoolsystem.dto.request.AuthenticationRequest;
 import com.leskiewicz.schoolsystem.dto.request.RegisterRequest;
 import com.leskiewicz.schoolsystem.dto.response.AuthenticationResponse;
+import com.leskiewicz.schoolsystem.model.Degree;
 import com.leskiewicz.schoolsystem.model.Faculty;
+import com.leskiewicz.schoolsystem.model.enums.DegreeTitle;
 import com.leskiewicz.schoolsystem.model.enums.Role;
 import com.leskiewicz.schoolsystem.model.User;
 import com.leskiewicz.schoolsystem.repository.UserRepository;
@@ -45,6 +47,8 @@ public class AuthenticationServiceTest {
     private JwtUtils jwtUtils = new JwtUtilsImpl();
     @Mock
     private AuthenticationManager authenticationManager;
+    @Mock
+    private DegreeService degreeService;
 
     @InjectMocks AuthenticationServiceImpl authenticationService;
 
@@ -52,6 +56,7 @@ public class AuthenticationServiceTest {
     private RegisterRequest request;
     private Faculty faculty;
     private User newUser;
+    private Degree degree;
 
     @BeforeEach
     public void setUp() {
@@ -59,12 +64,20 @@ public class AuthenticationServiceTest {
         faculty = new Faculty();
         faculty.setName("Engineering");
 
+        degree = Degree.builder()
+                .title(DegreeTitle.BACHELOR)
+                .fieldOfStudy("Computer Science")
+                .faculty(faculty)
+                .build();
+
         request = RegisterRequest.builder()
                 .email("johndoe@example.com")
                 .firstName("John")
                 .lastName("Doe")
                 .password("12345")
                 .facultyName("Engineering")
+                .degreeField("Computer Science")
+                .degreeTitle("Bachelor")
                 .build();
 
         newUser = User.builder()
@@ -74,6 +87,7 @@ public class AuthenticationServiceTest {
                 .password("encoded_password")
                 .faculty(faculty)
                 .role(Role.STUDENT)
+                .degree(degree)
                 .build();
     }
 
@@ -82,6 +96,7 @@ public class AuthenticationServiceTest {
         given(facultyService.getByName("Engineering")).willReturn(faculty);
         given(passwordEncoder.encode("12345")).willReturn("encoded_password");
         given(jwtUtils.generateToken(newUser)).willReturn("12");
+        given(degreeService.getByTitleAndFieldOfStudy("Bachelor", "Computer Science")).willReturn(degree);
 
         AuthenticationResponse authenticationResponse = authenticationService.register(request);
 
@@ -101,6 +116,12 @@ public class AuthenticationServiceTest {
         Assertions.assertThrows(EntityNotFoundException.class, () -> {
             authenticationService.register(request);
         });
+    }
+
+    @Test
+    public void registerThrowsExceptionOnDegreeNotFound() {
+        Assertions.assertThrows(EntityNotFoundException.class, () ->
+                authenticationService.register(request));
     }
 
     @Test

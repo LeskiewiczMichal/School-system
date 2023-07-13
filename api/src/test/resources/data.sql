@@ -80,5 +80,35 @@ CREATE TABLE degree_course (
 INSERT INTO faculty (id, name)
 VALUES (1, 'Informatics');
 
-INSERT INTO users (id, first_name, last_name, email, password, faculty, role)
-VALUES (1, 'John', 'Doe', 'johndoe@example.com', '12345', 'Informatics', 'STUDENT');
+INSERT INTO degree (id, title, field_of_study, faculty)
+VALUES (1, 'Bachelor of Science', 'Computer Science', 1);
+
+INSERT INTO users (id, first_name, last_name, email, password, student_faculty, degree, role)
+VALUES (1, 'John', 'Doe', 'johndoe@example.com', '12345', 1, 1, 'STUDENT');
+
+INSERT INTO course (id, title, duration_in_hours, teacher, faculty)
+VALUES (1, 'Introduction to Programming', 40, 1, 1);
+
+INSERT INTO course_student (course_id, student_id)
+VALUES (1, 1);
+
+INSERT INTO users (id, first_name, last_name, email, password, student_faculty, degree, role)
+VALUES (2, 'Alice', 'Smith', 'alicesmith@example.com', '54321', 1, 1, 'STUDENT');
+
+INSERT INTO course_student (course_id, student_id)
+VALUES (1, 2);
+
+INSERT INTO users (id, first_name, last_name, email, password, student_faculty, role)
+VALUES (3, 'Bob', 'Johnson', 'bobjohnson@example.com', 'abcde', NULL, 'TEACHER');
+
+INSERT INTO faculty_teacher (faculty_id, teacher_id)
+VALUES (1, 3);
+
+INSERT INTO degree (id, title, field_of_study, faculty)
+VALUES (2, 'Master of Science', 'Software Engineering', 1);
+
+INSERT INTO users (id, first_name, last_name, email, password, student_faculty, degree, role)
+VALUES (4, 'Emily', 'Wilson', 'emilywilson@example.com', 'qwerty', 1, 2, 'STUDENT');
+
+INSERT INTO degree_course (degree_id, course_id)
+VALUES (2, 1);

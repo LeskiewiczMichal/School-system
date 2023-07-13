@@ -27,4 +27,10 @@ public class RegisterRequest {
     @NotNull(message = "Faculty name required")
     private String facultyName;
 
+    @NotNull(message = "Degree field of study required")
+    private String degreeField;
+
+    @NotNull(message = "Title of degree required")
+    private String degreeTitle;
+
 }
