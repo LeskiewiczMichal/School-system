@@ -1,6 +1,7 @@
 package com.leskiewicz.schoolsystem.dto.request;
 
 
+import com.leskiewicz.schoolsystem.model.enums.DegreeTitle;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,6 +32,6 @@ public class RegisterRequest {
     private String degreeField;
 
     @NotNull(message = "Title of degree required")
-    private String degreeTitle;
+    private DegreeTitle degreeTitle;
 
 }

@@ -8,3 +8,7 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     show-sql: true
+
+jwt:
+  secret:
+    key: "U+pamSKQ1pwTziF5t0gKCv9m8J8Y4VbW/8s0BAP6Va0="

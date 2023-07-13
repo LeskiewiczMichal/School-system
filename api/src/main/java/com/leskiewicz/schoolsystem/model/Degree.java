@@ -23,6 +23,7 @@ public class Degree {
     private Long id;
 
     @Column(name = "title")
+    @Enumerated(EnumType.STRING)
     private DegreeTitle title;
 
     @Column(name = "field_of_study")

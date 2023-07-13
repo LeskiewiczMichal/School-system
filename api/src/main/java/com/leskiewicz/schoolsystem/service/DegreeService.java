@@ -1,8 +1,9 @@
 package com.leskiewicz.schoolsystem.service;
 
 import com.leskiewicz.schoolsystem.model.Degree;
+import com.leskiewicz.schoolsystem.model.enums.DegreeTitle;
 
 public interface DegreeService {
 
-    Degree getByTitleAndFieldOfStudy(String title, String fieldOfStudy);
+    Degree getByTitleAndFieldOfStudy(DegreeTitle title, String fieldOfStudy);
 }

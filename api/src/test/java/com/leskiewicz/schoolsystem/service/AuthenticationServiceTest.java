@@ -77,7 +77,7 @@ public class AuthenticationServiceTest {
                 .password("12345")
                 .facultyName("Engineering")
                 .degreeField("Computer Science")
-                .degreeTitle("Bachelor")
+                .degreeTitle(DegreeTitle.BACHELOR)
                 .build();
 
         newUser = User.builder()
@@ -86,7 +86,7 @@ public class AuthenticationServiceTest {
                 .lastName("Doe")
                 .password("encoded_password")
                 .faculty(faculty)
-                .role(Role.STUDENT)
+                .role(Role.ROLE_STUDENT)
                 .degree(degree)
                 .build();
     }
@@ -96,7 +96,7 @@ public class AuthenticationServiceTest {
         given(facultyService.getByName("Engineering")).willReturn(faculty);
         given(passwordEncoder.encode("12345")).willReturn("encoded_password");
         given(jwtUtils.generateToken(newUser)).willReturn("12");
-        given(degreeService.getByTitleAndFieldOfStudy("Bachelor", "Computer Science")).willReturn(degree);
+        given(degreeService.getByTitleAndFieldOfStudy(DegreeTitle.BACHELOR, "Computer Science")).willReturn(degree);
 
         AuthenticationResponse authenticationResponse = authenticationService.register(request);
 
