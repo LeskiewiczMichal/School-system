@@ -7,10 +7,8 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.leskiewicz.schoolsystem.dto.request.RegisterRequest;
 import com.leskiewicz.schoolsystem.dto.response.AuthenticationResponse;
 import com.leskiewicz.schoolsystem.error.ApiError;
-import com.leskiewicz.schoolsystem.model.User;
 import com.leskiewicz.schoolsystem.model.enums.DegreeTitle;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -23,7 +21,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.util.Assert;
+import org.springframework.test.web.servlet.ResultMatcher;
 
 import java.util.stream.Stream;
 
@@ -62,19 +60,17 @@ public class AuthorizationControllerTest {
                 .degreeField("Computer Science")
                 .password("12345")
                 .build();
-        String requestBody = mapper.writeValueAsString(request);
 
-        MvcResult result = mvc.perform(post(REGISTER_PATH)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(requestBody))
-                .andExpect(status().isOk())
-                .andReturn();
+        MvcResult result = performPostRequest(REGISTER_PATH, request, status().isOk());
 
         // Mapping response to readable objects
         JsonNode node = mapper.readTree(result.getResponse().getContentAsString());
         AuthenticationResponse response = mapResponse(result, AuthenticationResponse.class);
 
         Assertions.assertEquals(request.getEmail(), response.getUser().getEmail());
+        Assertions.assertEquals(request.getFirstName(), response.getUser().getFirstName());
+        Assertions.assertEquals(request.getLastName(), response.getUser().getLastName());
+        Assertions.assertEquals(request.getFacultyName(), response.getUser().getFaculty().getName());
         Assertions.assertNotNull(response.getToken());
         Assertions.assertTrue(node.has("_links") && node.get("_links").has("self"), "Expected self link in response");
     }
@@ -82,13 +78,7 @@ public class AuthorizationControllerTest {
     @ParameterizedTest
     @MethodSource("registerReturnsStatus400RequestProvider")
     public void registerReturnsStatus400OnBodyNotProvided(RegisterRequest request, String expectedErrorMessage) throws Exception {
-        String requestBody = mapper.writeValueAsString(request);
-
-        MvcResult result = mvc.perform(post(REGISTER_PATH)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestBody))
-                .andExpect(status().isBadRequest())
-                .andReturn();
+        MvcResult result = performPostRequest(REGISTER_PATH, request, status().isBadRequest());
 
         ApiError response = mapResponse(result, ApiError.class);
 
@@ -165,4 +155,13 @@ public class AuthorizationControllerTest {
         return mapper.readValue(responseBody, responseType);
     }
 
+    private MvcResult performPostRequest(String path, Object request, ResultMatcher expectedStatus) throws Exception {
+        String requestBody = mapper.writeValueAsString(request);
+
+        return mvc.perform(post(path)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(expectedStatus)
+                .andReturn();
+    }
 }

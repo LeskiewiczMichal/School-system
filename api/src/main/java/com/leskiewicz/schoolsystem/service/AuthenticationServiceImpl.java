@@ -1,13 +1,12 @@
 package com.leskiewicz.schoolsystem.service;
 
-import com.leskiewicz.schoolsystem.dto.entity.CustomUserDetails;
 import com.leskiewicz.schoolsystem.dto.request.AuthenticationRequest;
 import com.leskiewicz.schoolsystem.dto.request.RegisterRequest;
 import com.leskiewicz.schoolsystem.dto.response.AuthenticationResponse;
 import com.leskiewicz.schoolsystem.model.Degree;
 import com.leskiewicz.schoolsystem.model.Faculty;
-import com.leskiewicz.schoolsystem.model.enums.Role;
 import com.leskiewicz.schoolsystem.model.User;
+import com.leskiewicz.schoolsystem.model.enums.Role;
 import com.leskiewicz.schoolsystem.repository.UserRepository;
 import com.leskiewicz.schoolsystem.utils.JwtUtils;
 import jakarta.persistence.EntityNotFoundException;
@@ -28,6 +27,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final FacultyService facultyService;
     private final DegreeService degreeService;
+    private final LinksService linksService;
 
     public AuthenticationResponse register(RegisterRequest request) {
         Faculty faculty = facultyService.getByName(request.getFacultyName());
@@ -49,7 +49,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .faculty(faculty)
                 .build();
         userRepository.save(user);
+        linksService.addLinks(user);
         var jwtToken = jwtUtils.generateToken(user);
+
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .user(user)
@@ -63,9 +65,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                         request.getPassword()
                 )
         );
+
         var user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         var jwtToken = jwtUtils.generateToken(user);
+        linksService.addLinks(user);
+
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .user(user)
