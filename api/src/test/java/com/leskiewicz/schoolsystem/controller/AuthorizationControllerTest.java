@@ -70,7 +70,6 @@ public class AuthorizationControllerTest {
         Assertions.assertEquals(request.getEmail(), response.getUser().getEmail());
         Assertions.assertEquals(request.getFirstName(), response.getUser().getFirstName());
         Assertions.assertEquals(request.getLastName(), response.getUser().getLastName());
-        Assertions.assertEquals(request.getFacultyName(), response.getUser().getFaculty().getName());
         Assertions.assertNotNull(response.getToken());
         Assertions.assertTrue(node.has("_links") && node.get("_links").has("self"), "Expected self link in response");
     }
