@@ -49,6 +49,8 @@ public class AuthenticationServiceTest {
     private AuthenticationManager authenticationManager;
     @Mock
     private DegreeService degreeService;
+    @Mock
+    private LinksService linksService;
 
     @InjectMocks AuthenticationServiceImpl authenticationService;
 
@@ -100,12 +102,18 @@ public class AuthenticationServiceTest {
 
         AuthenticationResponse authenticationResponse = authenticationService.register(request);
 
-        Assertions.assertEquals(newUser, authenticationResponse.getUser()); // Proper user response
-        Assertions.assertEquals("12", authenticationResponse.getToken()); // Proper token response
+        // Proper response
+        Assertions.assertEquals(newUser, authenticationResponse.getUser());
+        Assertions.assertEquals("12", authenticationResponse.getToken());
+
+        // User was saved in repository
         ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
-        verify(userRepository).save(userCaptor.capture()); // User was saved in repository
+        verify(userRepository).save(userCaptor.capture());
         User savedUser = userCaptor.getValue();
-        Assertions.assertEquals(newUser, savedUser); // Saved proper user
+        Assertions.assertEquals(newUser, savedUser);
+
+        // Links where added
+        verify(linksService).addLinks(newUser);
     }
 
     @Test
@@ -130,12 +138,17 @@ public class AuthenticationServiceTest {
 
         given(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
                 .willReturn(new UsernamePasswordAuthenticationToken(newUser, null, new ArrayList<>()));
-        given(userRepository.findByEmail("johndoe@example.com")).willReturn(Optional.of(new User()));
+        given(userRepository.findByEmail("johndoe@example.com")).willReturn(Optional.of(newUser));
         given(jwtUtils.generateToken(any(User.class))).willReturn("jwtToken");
 
         AuthenticationResponse response = authenticationService.authenticate(request);
 
-        Assertions.assertEquals("jwtToken", response.getToken()); // Response has proper jwt token
+        // Proper response
+        Assertions.assertEquals("jwtToken", response.getToken());
+        Assertions.assertEquals(newUser, response.getUser());
+
+        // Links where added
+        verify(linksService).addLinks(newUser);
     }
 
     @Test
