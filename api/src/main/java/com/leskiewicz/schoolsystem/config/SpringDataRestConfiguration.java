@@ -23,6 +23,7 @@ public class SpringDataRestConfiguration implements RepositoryRestConfigurer {
             public RepositoryLinksResource process(RepositoryLinksResource resource) {
                 Link registerLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(AuthenticationController.class).register(null)).withRel("register");
                 Link authenticateLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(AuthenticationController.class).authenticate(null)).withRel("authenticate");
+
                 resource.add(registerLink, authenticateLink);
                 return resource;
             }
