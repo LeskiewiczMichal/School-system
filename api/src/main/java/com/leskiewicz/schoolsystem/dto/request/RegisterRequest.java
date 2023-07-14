@@ -31,7 +31,7 @@ public class RegisterRequest {
     @NotNull(message = "Degree field of study required")
     private String degreeField;
 
-    @NotNull(message = "Title of degree required")
+    @NotNull(message = "Degree title required")
     private DegreeTitle degreeTitle;
 
 }

@@ -103,7 +103,7 @@ public class AuthenticationServiceTest {
         Assertions.assertEquals(newUser, authenticationResponse.getUser()); // Proper user response
         Assertions.assertEquals("12", authenticationResponse.getToken()); // Proper token response
         ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
-        verify(userRepository).save(userCaptor.capture()); // User saved in repository
+        verify(userRepository).save(userCaptor.capture()); // User was saved in repository
         User savedUser = userCaptor.getValue();
         Assertions.assertEquals(newUser, savedUser); // Saved proper user
     }
@@ -135,7 +135,7 @@ public class AuthenticationServiceTest {
 
         AuthenticationResponse response = authenticationService.authenticate(request);
 
-        Assertions.assertEquals("jwtToken", response.getToken());
+        Assertions.assertEquals("jwtToken", response.getToken()); // Response has proper jwt token
     }
 
     @Test
