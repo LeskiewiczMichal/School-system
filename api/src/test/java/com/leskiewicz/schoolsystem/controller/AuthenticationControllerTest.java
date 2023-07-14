@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Sql(scripts = "classpath:data.sql")
-public class AuthorizationControllerTest {
+public class AuthenticationControllerTest {
 
     private String REGISTER_PATH = "/api/auth/register";
 
