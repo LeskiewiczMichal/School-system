@@ -36,4 +36,6 @@ public class SpringDataRestConfiguration implements RepositoryRestConfigurer {
                 .forDomainType(User.class)
                 .withItemExposure((metadata, httpMethods) -> httpMethods.disable(HttpMethod.POST));
     }
+
+
 }
