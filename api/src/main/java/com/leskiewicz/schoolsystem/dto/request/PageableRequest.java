@@ -25,12 +25,19 @@ public class PageableRequest {
         return PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(direction), sort));
     }
 
-    public MultiValueMap<String, String> toQueryParams() {
-        MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
-        queryParams.add("page", String.valueOf(getPage()));
-        queryParams.add("size", String.valueOf(getSize()));
-        queryParams.add("sort", getSort());
-        queryParams.add("direction", getDirection());
-        return queryParams;
+//    public MultiValueMap<String, String> toQueryParams() {
+//        MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+//        queryParams.add("page", String.valueOf(getPage()));
+//        queryParams.add("size", String.valueOf(getSize()));
+//        queryParams.add("sort", getSort());
+//        queryParams.add("direction", getDirection());
+//        return queryParams;
+//    }
+
+    public String toQueryParams() {
+        return "page=" + getPage() +
+                "&size=" + getSize() +
+                "&sort=" + getSort() +
+                "&direction=" + getDirection();
     }
 }

@@ -12,7 +12,10 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RestController
 @RequestMapping("/api")
 public class ApiController {
-
+    //        Link selfLink = linkTo(controllerClass).withSelfRel();
+//        String uriTemplate = selfLink.getHref() + "{?size,page,sort,direction}";
+//        selfLink = Link.of(uriTemplate).withSelfRel();
+//        resources.add(selfLink);
     @GetMapping
     public ResponseEntity<RepresentationModel<?>> index() {
         RepresentationModel<?> model = new RepresentationModel<>();
