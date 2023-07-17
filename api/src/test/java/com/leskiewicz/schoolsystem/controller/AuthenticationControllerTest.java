@@ -4,10 +4,19 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.leskiewicz.schoolsystem.degree.Degree;
+import com.leskiewicz.schoolsystem.degree.DegreeRepository;
+import com.leskiewicz.schoolsystem.faculty.Faculty;
+import com.leskiewicz.schoolsystem.faculty.FacultyRepository;
+import com.leskiewicz.schoolsystem.security.Role;
+import com.leskiewicz.schoolsystem.security.dto.AuthenticationRequest;
 import com.leskiewicz.schoolsystem.security.dto.RegisterRequest;
 import com.leskiewicz.schoolsystem.security.dto.AuthenticationResponse;
 import com.leskiewicz.schoolsystem.error.ApiError;
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
+import com.leskiewicz.schoolsystem.user.User;
+import com.leskiewicz.schoolsystem.user.UserRepository;
+import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,10 +27,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultMatcher;
+import org.springframework.util.Assert;
 
 import java.util.stream.Stream;
 
@@ -33,13 +44,26 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Sql(scripts = "classpath:data.sql")
 public class AuthenticationControllerTest {
 
-    private String REGISTER_PATH = "/api/auth/register";
+    private final String REGISTER_PATH = "/api/auth/register";
+    private final String AUTHENTICATE_PATH = "/api/auth/authenticate";
 
     @Autowired
     private MockMvc mvc;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private DegreeRepository degreeRepository;
+    @Autowired
+    private FacultyRepository facultyRepository;
+
 //    Variables
     private ObjectMapper mapper;
+
+    RegisterRequest request;
+    UserDto userDto;
 
     @BeforeEach
     public void setUp() {
@@ -47,11 +71,8 @@ public class AuthenticationControllerTest {
         mapper = new ObjectMapper()
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
                 .registerModule(new JavaTimeModule());
-    }
 
-    @Test
-    public void registrationHappyPath() throws Exception {
-        RegisterRequest request = RegisterRequest.builder()
+        request = RegisterRequest.builder()
                 .firstName("Happy")
                 .lastName("Path")
                 .email("happypath@example.com")
@@ -61,17 +82,29 @@ public class AuthenticationControllerTest {
                 .password("12345")
                 .build();
 
+        userDto = UserDto.builder()
+                .email(request.getEmail())
+                .firstName(request.getFirstName())
+                .lastName(request.getLastName())
+                .faculty(request.getFacultyName())
+                .degree(request.getDegreeField())
+                .build();
+    }
+
+    @Test
+    public void registrationHappyPath() throws Exception {
         MvcResult result = performPostRequest(REGISTER_PATH, request, status().isOk());
 
         // Mapping response to readable objects
         JsonNode node = mapper.readTree(result.getResponse().getContentAsString());
         AuthenticationResponse response = mapResponse(result, AuthenticationResponse.class);
 
-        Assertions.assertEquals(request.getEmail(), response.getUser().getEmail());
-        Assertions.assertEquals(request.getFirstName(), response.getUser().getFirstName());
-        Assertions.assertEquals(request.getLastName(), response.getUser().getLastName());
+        userDto.setId(response.getUser().getId());
+
+        Assertions.assertEquals(userDto, response.getUser());
         Assertions.assertNotNull(response.getToken());
         Assertions.assertTrue(node.has("_links") && node.get("_links").has("self"), "Expected self link in response");
+        Assertions.assertTrue(node.has("_links") && node.get("_links").has("authenticate"), "Expected authenticate link in response");
     }
 
     @ParameterizedTest
@@ -87,66 +120,87 @@ public class AuthenticationControllerTest {
         Assertions.assertNotNull(response.localDateTime());
     }
 
+    @Test
+    public void registerReturnsStatus400WhenUserWithGivenEmailAlreadyExists() throws Exception {
+        RegisterRequest testRequest = request.toBuilder().email("johndoe@example.com").build();
+        MvcResult result = performPostRequest(REGISTER_PATH, testRequest, status().isBadRequest());
+
+        ApiError response = mapResponse(result, ApiError.class);
+
+        Assertions.assertEquals("User with provided email already exists", response.message());
+        Assertions.assertEquals(REGISTER_PATH, response.path());
+        Assertions.assertEquals(400, response.statusCode());
+        Assertions.assertNotNull(response.localDateTime());
+    }
+
+    @Test
+    public void authenticateHappyPath() throws Exception {
+        // Query degree and faculty from provided sql
+        Degree degree = degreeRepository.findByTitleAndFieldOfStudy(DegreeTitle.BACHELOR_OF_SCIENCE, "Computer Science").orElse(null);
+        Faculty faculty = facultyRepository.findByName("Informatics").orElse(null);
+
+        // Create and save user that we are going to log into
+        User authenticationTestUser = User.builder()
+                .id(99999L)
+                .firstName("Happy")
+                .lastName("Path")
+                .email("authenticationhappypath@example.com")
+                .role(Role.ROLE_STUDENT)
+                .faculty(faculty)
+                .degree(degree)
+                .password(passwordEncoder.encode("1234"))
+                .build();
+        userRepository.save(authenticationTestUser);
+
+        // Build request
+        AuthenticationRequest authenticationRequest = AuthenticationRequest.builder()
+                .email("authenticationhappypath@example.com")
+                .password("1234")
+                .build();
+
+        MvcResult result = performPostRequest(AUTHENTICATE_PATH, authenticationRequest, status().isOk());
+
+        // Mapping response to readable objects
+        JsonNode node = mapper.readTree(result.getResponse().getContentAsString());
+        AuthenticationResponse response = mapResponse(result, AuthenticationResponse.class);
+
+        // Create userDto that should be provided with response
+        UserDto authenticationTestUserDto = UserDto.builder()
+                .id(response.getUser().getId())
+                .firstName(authenticationTestUser.getFirstName())
+                .lastName(authenticationTestUser.getLastName())
+                .email(authenticationTestUser.getEmail())
+                .faculty(authenticationTestUser.getFaculty().getName())
+                .degree(authenticationTestUser.getDegree().getFieldOfStudy())
+                .build();
+
+        Assertions.assertEquals(authenticationTestUserDto, response.getUser());
+        Assertions.assertNotNull(response.getToken());
+        Assertions.assertTrue(node.has("_links") && node.get("_links").has("self"), "Expected self link in response");
+        Assertions.assertTrue(node.has("_links") && node.get("_links").has("register"), "Expected register link in response");
+    }
+
     static Stream<Arguments> registerReturnsStatus400RequestProvider() {
         // Each of requests has one different field missing
+        RegisterRequest baseRequest = RegisterRequest.builder()
+                .firstName("Happy")
+                .lastName("Path")
+                .email("happypath@example.com")
+                .facultyName("Informatics")
+                .degreeTitle(DegreeTitle.BACHELOR_OF_SCIENCE)
+                .degreeField("Computer Science")
+                .password("12345")
+                .build();
+
         return Stream.of(
-                Arguments.of(RegisterRequest.builder()
-                    .lastName("Path")
-                    .email("happypath@example.com")
-                    .facultyName("Informatics")
-                    .degreeTitle(DegreeTitle.BACHELOR_OF_SCIENCE)
-                    .degreeField("Computer Science")
-                    .password("12345")
-                    .build(), "First name required"),
-                Arguments.of(RegisterRequest.builder()
-                    .firstName("Happy")
-                    .email("happypath@example.com")
-                    .facultyName("Informatics")
-                    .degreeTitle(DegreeTitle.BACHELOR_OF_SCIENCE)
-                    .degreeField("Computer Science")
-                    .password("12345")
-                    .build(), "Last name required"),
-                Arguments.of(RegisterRequest.builder()
-                        .firstName("Happy")
-                        .lastName("Path")
-                        .facultyName("Informatics")
-                        .degreeTitle(DegreeTitle.BACHELOR_OF_SCIENCE)
-                        .degreeField("Computer Science")
-                        .password("12345")
-                        .build(), "Email required"),
-                Arguments.of(RegisterRequest.builder()
-                        .firstName("Happy")
-                        .lastName("Path")
-                        .email("happypath@example.com")
-                        .degreeTitle(DegreeTitle.BACHELOR_OF_SCIENCE)
-                        .degreeField("Computer Science")
-                        .password("12345")
-                        .build(), "Faculty name required"),
-                Arguments.of(RegisterRequest.builder()
-                        .firstName("Happy")
-                        .lastName("Path")
-                        .email("happypath@example.com")
-                        .facultyName("Informatics")
-                        .degreeField("Computer Science")
-                        .password("12345")
-                        .build(), "Degree title required"),
-                Arguments.of(RegisterRequest.builder()
-                        .firstName("Happy")
-                        .lastName("Path")
-                        .email("happypath@example.com")
-                        .facultyName("Informatics")
-                        .degreeTitle(DegreeTitle.BACHELOR_OF_SCIENCE)
-                        .password("12345")
-                        .build(), "Degree field of study required"),
-                Arguments.of(RegisterRequest.builder()
-                        .firstName("Happy")
-                        .lastName("Path")
-                        .email("happypath@example.com")
-                        .facultyName("Informatics")
-                        .degreeTitle(DegreeTitle.BACHELOR_OF_SCIENCE)
-                        .degreeField("Computer Science")
-                        .build(), "Password required")
-                );
+                Arguments.of(baseRequest.toBuilder().firstName(null).build(), "First name required"),
+                Arguments.of(baseRequest.toBuilder().lastName(null).build(), "Last name required"),
+                Arguments.of(baseRequest.toBuilder().email(null).build(), "Email required"),
+                Arguments.of(baseRequest.toBuilder().facultyName(null).build(), "Faculty name required"),
+                Arguments.of(baseRequest.toBuilder().degreeTitle(null).build(), "Degree title required"),
+                Arguments.of(baseRequest.toBuilder().degreeField(null).build(), "Degree field of study required"),
+                Arguments.of(baseRequest.toBuilder().password(null).build(), "Password required")
+        );
     }
 
     private <T> T mapResponse(MvcResult result, Class<T> responseType) throws Exception {
