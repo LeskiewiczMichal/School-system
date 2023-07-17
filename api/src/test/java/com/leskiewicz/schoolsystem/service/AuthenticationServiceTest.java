@@ -14,6 +14,9 @@ import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.UserRepository;
 import com.leskiewicz.schoolsystem.security.utils.JwtUtils;
 import com.leskiewicz.schoolsystem.security.utils.JwtUtilsImpl;
+import com.leskiewicz.schoolsystem.user.UserService;
+import com.leskiewicz.schoolsystem.user.dto.UserDto;
+import com.leskiewicz.schoolsystem.user.utils.UserModelAssembler;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,7 +44,7 @@ public class AuthenticationServiceTest {
 
     // Mocks
     @Mock
-    private UserRepository userRepository;
+    private UserService userService;
     @Mock
     private FacultyService facultyService;
     @Mock
@@ -53,7 +56,8 @@ public class AuthenticationServiceTest {
     @Mock
     private DegreeService degreeService;
     @Mock
-    private LinksService linksService;
+    private UserModelAssembler userModelAssembler;
+
 
     @InjectMocks
     AuthenticationServiceImpl authenticationService;
@@ -63,6 +67,7 @@ public class AuthenticationServiceTest {
     private Faculty faculty;
     private User newUser;
     private Degree degree;
+    private UserDto userDto;
 
     @BeforeEach
     public void setUp() {
@@ -95,6 +100,14 @@ public class AuthenticationServiceTest {
                 .role(Role.ROLE_STUDENT)
                 .degree(degree)
                 .build();
+
+        userDto = UserDto.builder()
+                .firstName(newUser.getFirstName())
+                .lastName(newUser.getLastName())
+                .faculty(newUser.getFaculty().getName())
+                .degree(newUser.getDegree().getFieldOfStudy())
+                .email(newUser.getEmail())
+                .build();
     }
 
     @Test
@@ -103,27 +116,28 @@ public class AuthenticationServiceTest {
         given(passwordEncoder.encode("12345")).willReturn("encoded_password");
         given(jwtUtils.generateToken(newUser)).willReturn("12");
         given(degreeService.getByTitleAndFieldOfStudy(DegreeTitle.BACHELOR, "Computer Science")).willReturn(degree);
+        given(userModelAssembler.toModel(newUser)).willReturn(userDto);
 
         AuthenticationResponse authenticationResponse = authenticationService.register(request);
 
         // Proper response
-        Assertions.assertEquals(newUser, authenticationResponse.getUser());
+        Assertions.assertEquals(userDto, authenticationResponse.getUser());
         Assertions.assertEquals("12", authenticationResponse.getToken());
 
         // User was saved in repository
         ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
-        verify(userRepository).save(userCaptor.capture());
+        verify(userService).addUser(userCaptor.capture());
         User savedUser = userCaptor.getValue();
         Assertions.assertEquals(newUser, savedUser);
 
-        // Links where added
-        verify(linksService).addLinks(newUser);
+        // User was converted into dto
+        verify(userModelAssembler).toModel(newUser);
     }
 
     @Test
     public void registerThrowsExceptionOnFacultyNotFound() {
-        given(facultyService.getByName("Engineering"))
-                .willReturn(null);
+        given(facultyService.getByName(any(String.class)))
+                .willThrow(new EntityNotFoundException());
 
         Assertions.assertThrows(EntityNotFoundException.class, () -> {
             authenticationService.register(request);
@@ -132,34 +146,37 @@ public class AuthenticationServiceTest {
 
     @Test
     public void registerThrowsExceptionOnDegreeNotFound() {
+        given(degreeService.getByTitleAndFieldOfStudy(any(DegreeTitle.class), any(String.class))).willThrow(new EntityNotFoundException());
+
         Assertions.assertThrows(EntityNotFoundException.class, () ->
                 authenticationService.register(request));
     }
 
     @Test
     public void authenticateHappyPath() {
-        AuthenticationRequest request = new AuthenticationRequest("johndoe@example.com", "password");
+        AuthenticationRequest request = new AuthenticationRequest(newUser.getEmail(), "password");
 
         given(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
                 .willReturn(new UsernamePasswordAuthenticationToken(newUser, null, new ArrayList<>()));
-        given(userRepository.findByEmail("johndoe@example.com")).willReturn(Optional.of(newUser));
+        given(userService.getByEmail(newUser.getEmail())).willReturn(newUser);
         given(jwtUtils.generateToken(any(User.class))).willReturn("jwtToken");
+        given(userModelAssembler.toModel(any(User.class))).willReturn(userDto);
 
         AuthenticationResponse response = authenticationService.authenticate(request);
 
         // Proper response
         Assertions.assertEquals("jwtToken", response.getToken());
-        Assertions.assertEquals(newUser, response.getUser());
+        Assertions.assertEquals(userDto, response.getUser());
 
         // Links where added
-        verify(linksService).addLinks(newUser);
+//        verify(linksService).addLinks(newUser);
     }
-
+//
     @Test
     public void authenticateUserNotFound() {
         AuthenticationRequest request = new AuthenticationRequest("johndoe@example.com", "password");
 
-        given(userRepository.findByEmail("johndoe@example.com")).willReturn(Optional.empty());
+        given(userService.getByEmail("johndoe@example.com")).willThrow(new UsernameNotFoundException("User with given email not found"));
 
         Assertions.assertThrows(UsernameNotFoundException.class, () ->
                 authenticationService.authenticate(request));
