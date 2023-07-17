@@ -1,5 +1,7 @@
 package com.leskiewicz.schoolsystem.controller;
 
+import com.leskiewicz.schoolsystem.security.AuthenticationController;
+import com.leskiewicz.schoolsystem.user.UserController;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.http.ResponseEntity;

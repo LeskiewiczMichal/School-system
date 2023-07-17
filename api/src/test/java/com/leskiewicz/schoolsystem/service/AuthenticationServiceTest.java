@@ -1,16 +1,19 @@
 package com.leskiewicz.schoolsystem.service;
 
-import com.leskiewicz.schoolsystem.dto.request.AuthenticationRequest;
-import com.leskiewicz.schoolsystem.dto.request.RegisterRequest;
-import com.leskiewicz.schoolsystem.dto.response.AuthenticationResponse;
-import com.leskiewicz.schoolsystem.model.Degree;
-import com.leskiewicz.schoolsystem.model.Faculty;
-import com.leskiewicz.schoolsystem.model.enums.DegreeTitle;
-import com.leskiewicz.schoolsystem.model.enums.Role;
-import com.leskiewicz.schoolsystem.model.User;
-import com.leskiewicz.schoolsystem.repository.UserRepository;
-import com.leskiewicz.schoolsystem.utils.JwtUtils;
-import com.leskiewicz.schoolsystem.utils.JwtUtilsImpl;
+import com.leskiewicz.schoolsystem.security.AuthenticationServiceImpl;
+import com.leskiewicz.schoolsystem.security.dto.AuthenticationRequest;
+import com.leskiewicz.schoolsystem.security.dto.RegisterRequest;
+import com.leskiewicz.schoolsystem.security.dto.AuthenticationResponse;
+import com.leskiewicz.schoolsystem.degree.DegreeService;
+import com.leskiewicz.schoolsystem.faculty.FacultyService;
+import com.leskiewicz.schoolsystem.degree.Degree;
+import com.leskiewicz.schoolsystem.faculty.Faculty;
+import com.leskiewicz.schoolsystem.degree.DegreeTitle;
+import com.leskiewicz.schoolsystem.security.Role;
+import com.leskiewicz.schoolsystem.user.User;
+import com.leskiewicz.schoolsystem.user.UserRepository;
+import com.leskiewicz.schoolsystem.security.utils.JwtUtils;
+import com.leskiewicz.schoolsystem.security.utils.JwtUtilsImpl;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -52,7 +55,8 @@ public class AuthenticationServiceTest {
     @Mock
     private LinksService linksService;
 
-    @InjectMocks AuthenticationServiceImpl authenticationService;
+    @InjectMocks
+    AuthenticationServiceImpl authenticationService;
 
     // Variables
     private RegisterRequest request;
