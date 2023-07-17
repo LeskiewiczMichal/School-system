@@ -1,5 +1,6 @@
 package com.leskiewicz.schoolsystem.controller;
 
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,13 +23,22 @@ public class ApiController {
 
         model.add(linkTo(methodOn(ApiController.class).index()).withSelfRel());
 
-        // Authentication
-//        model.add(linkTo(methodOn(AuthenticationController.class).authenticate(null)).withRel("authenticate"));
-//        model.add(linkTo(methodOn(AuthenticationController.class).register(null)).withRel("register"));
-
-        // Users
-
+        this.addAuthenticationLinks(model);
+        this.addUsersLinks(model);
 
         return ResponseEntity.ok(model);
+    }
+
+    private void addAuthenticationLinks(RepresentationModel<?> model) {
+
+        model.add(linkTo(methodOn(AuthenticationController.class).authenticate(null)).withRel("authenticate"));
+        model.add(linkTo(methodOn(AuthenticationController.class).register(null)).withRel("register"));
+    }
+
+    private void addUsersLinks(RepresentationModel<?> model) {
+        Link usersLink = linkTo(UserController.class).withRel("users");
+        String uriTemplate = usersLink.getHref() + "{?size,page,sort,direction}";
+        usersLink = Link.of(uriTemplate).withRel("users");
+        model.add(usersLink);
     }
 }
