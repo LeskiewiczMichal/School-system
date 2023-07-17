@@ -1,6 +1,6 @@
 package com.leskiewicz.schoolsystem.controller;
 
-import com.leskiewicz.schoolsystem.assembler.UserModelAssemblerImpl;
+import com.leskiewicz.schoolsystem.assembler.UserModelAssembler;
 import com.leskiewicz.schoolsystem.dto.entity.UserDto;
 import com.leskiewicz.schoolsystem.dto.request.PageableRequest;
 import com.leskiewicz.schoolsystem.model.User;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private UserService userService;
-    private UserModelAssemblerImpl userModelAssembler;
+    private UserModelAssembler userModelAssembler;
     private PageableLinksService pageableLinksService;
 
     @GetMapping
