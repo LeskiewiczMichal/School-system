@@ -9,7 +9,6 @@ import com.leskiewicz.schoolsystem.model.Degree;
 import com.leskiewicz.schoolsystem.model.Faculty;
 import com.leskiewicz.schoolsystem.model.User;
 import com.leskiewicz.schoolsystem.model.enums.Role;
-import com.leskiewicz.schoolsystem.repository.UserRepository;
 import com.leskiewicz.schoolsystem.utils.JwtUtils;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +22,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtils jwtUtils;
     private final AuthenticationManager authenticationManager;
@@ -33,13 +32,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     public AuthenticationResponse register(RegisterRequest request) {
         Faculty faculty = facultyService.getByName(request.getFacultyName());
-        if (faculty == null) {
-            throw new EntityNotFoundException("Faculty with given name not found");
-        }
         Degree degree = degreeService.getByTitleAndFieldOfStudy(request.getDegreeTitle(), request.getDegreeField());
-        if (degree == null) {
-            throw new EntityNotFoundException("Degree with given degree and title not found");
-        }
 
         var user = User.builder()
                 .firstName(request.getFirstName())
@@ -50,7 +43,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .degree(degree)
                 .faculty(faculty)
                 .build();
-        userRepository.save(user);
+        userService.addUser(user);
         var jwtToken = jwtUtils.generateToken(user);
         UserDto userDto = userModelAssembler.toModel(user);
 
@@ -68,8 +61,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 )
         );
 
-        var user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        var user = userService.getByEmail(request.getEmail());
         var jwtToken = jwtUtils.generateToken(user);
         UserDto userDto = userModelAssembler.toModel(user);
 

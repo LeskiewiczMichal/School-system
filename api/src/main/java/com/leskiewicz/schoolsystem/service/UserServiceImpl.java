@@ -1,6 +1,7 @@
 package com.leskiewicz.schoolsystem.service;
 
 import com.leskiewicz.schoolsystem.dto.entity.UserDto;
+import com.leskiewicz.schoolsystem.error.customexception.UserAlreadyExistsException;
 import com.leskiewicz.schoolsystem.mapper.UserMapper;
 import com.leskiewicz.schoolsystem.model.User;
 import com.leskiewicz.schoolsystem.repository.UserRepository;
@@ -26,6 +27,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getByEmail(String email) {
+        return userRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("User with given email not found"));
+    }
+
+    @Override
     public Page<User> getUsers(Pageable pageable) {
         return userRepository.findAll(pageable);
     }
@@ -36,6 +42,15 @@ public class UserServiceImpl implements UserService {
                 .map(userMapper::convertToDto)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public void addUser(User user) {
+        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+            throw new UserAlreadyExistsException();
+        }
+        userRepository.save(user);
+    }
+
 
 
 }
