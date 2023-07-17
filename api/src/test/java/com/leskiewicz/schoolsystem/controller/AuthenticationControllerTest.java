@@ -62,7 +62,7 @@ public class AuthenticationControllerTest {
 //    Variables
     private ObjectMapper mapper;
 
-    RegisterRequest request;
+    RegisterRequest registerRequest;
     UserDto userDto;
 
     @BeforeEach
@@ -72,7 +72,7 @@ public class AuthenticationControllerTest {
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
                 .registerModule(new JavaTimeModule());
 
-        request = RegisterRequest.builder()
+        registerRequest = RegisterRequest.builder()
                 .firstName("Happy")
                 .lastName("Path")
                 .email("happypath@example.com")
@@ -83,17 +83,19 @@ public class AuthenticationControllerTest {
                 .build();
 
         userDto = UserDto.builder()
-                .email(request.getEmail())
-                .firstName(request.getFirstName())
-                .lastName(request.getLastName())
-                .faculty(request.getFacultyName())
-                .degree(request.getDegreeField())
+                .email(registerRequest.getEmail())
+                .firstName(registerRequest.getFirstName())
+                .lastName(registerRequest.getLastName())
+                .faculty(registerRequest.getFacultyName())
+                .degree(registerRequest.getDegreeField())
                 .build();
     }
 
+    /// REGISTER ///
+
     @Test
     public void registrationHappyPath() throws Exception {
-        MvcResult result = performPostRequest(REGISTER_PATH, request, status().isOk());
+        MvcResult result = performPostRequest(REGISTER_PATH, registerRequest, status().isOk());
 
         // Mapping response to readable objects
         JsonNode node = mapper.readTree(result.getResponse().getContentAsString());
@@ -122,7 +124,7 @@ public class AuthenticationControllerTest {
 
     @Test
     public void registerReturnsStatus400WhenUserWithGivenEmailAlreadyExists() throws Exception {
-        RegisterRequest testRequest = request.toBuilder().email("johndoe@example.com").build();
+        RegisterRequest testRequest = registerRequest.toBuilder().email("johndoe@example.com").build();
         MvcResult result = performPostRequest(REGISTER_PATH, testRequest, status().isBadRequest());
 
         ApiError response = mapResponse(result, ApiError.class);
@@ -132,6 +134,8 @@ public class AuthenticationControllerTest {
         Assertions.assertEquals(400, response.statusCode());
         Assertions.assertNotNull(response.localDateTime());
     }
+
+    /// AUTHENTICATE ///
 
     @Test
     public void authenticateHappyPath() throws Exception {
@@ -180,6 +184,51 @@ public class AuthenticationControllerTest {
         Assertions.assertTrue(node.has("_links") && node.get("_links").has("register"), "Expected register link in response");
     }
 
+    @ParameterizedTest
+    @MethodSource("authenticationReturnsStatus400OnBodyNotProvidedProvider")
+    public void authenticationReturnsStatus400OnBodyNotProvided(AuthenticationRequest request, String expectedErrorMessage) throws Exception {
+        MvcResult result = performPostRequest(AUTHENTICATE_PATH, request, status().isBadRequest());
+
+        ApiError response = mapResponse(result, ApiError.class);
+
+        Assertions.assertEquals(expectedErrorMessage, response.message());
+        Assertions.assertEquals(AUTHENTICATE_PATH, response.path());
+        Assertions.assertEquals(400, response.statusCode());
+        Assertions.assertNotNull(response.localDateTime());
+    }
+
+    @Test
+    public void authenticationReturnsStatus401OnBadCredentialsProvided() throws Exception {
+        AuthenticationRequest authenticationBadRequest = AuthenticationRequest.builder()
+                .email("bad@example.com")
+                .password("bAd")
+                .build();
+
+        MvcResult result = performPostRequest(AUTHENTICATE_PATH, authenticationBadRequest, status().isUnauthorized());
+
+        ApiError response = mapResponse(result, ApiError.class);
+
+        Assertions.assertEquals("Incorrect email or password", response.message());
+        Assertions.assertEquals(AUTHENTICATE_PATH, response.path());
+        Assertions.assertEquals(401, response.statusCode());
+        Assertions.assertNotNull(response.localDateTime());
+    }
+
+    private <T> T mapResponse(MvcResult result, Class<T> responseType) throws Exception {
+        String responseBody = result.getResponse().getContentAsString();
+        return mapper.readValue(responseBody, responseType);
+    }
+
+    private MvcResult performPostRequest(String path, Object request, ResultMatcher expectedStatus) throws Exception {
+        String requestBody = mapper.writeValueAsString(request);
+
+        return mvc.perform(post(path)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(expectedStatus)
+                .andReturn();
+    }
+
     static Stream<Arguments> registerReturnsStatus400RequestProvider() {
         // Each of requests has one different field missing
         RegisterRequest baseRequest = RegisterRequest.builder()
@@ -203,18 +252,13 @@ public class AuthenticationControllerTest {
         );
     }
 
-    private <T> T mapResponse(MvcResult result, Class<T> responseType) throws Exception {
-        String responseBody = result.getResponse().getContentAsString();
-        return mapper.readValue(responseBody, responseType);
-    }
+    static Stream<Arguments> authenticationReturnsStatus400OnBodyNotProvidedProvider() {
+        AuthenticationRequest baseRequest = AuthenticationRequest.builder()
+                .email("johndoe@example.com")
+                .password("12345")
+                .build();
 
-    private MvcResult performPostRequest(String path, Object request, ResultMatcher expectedStatus) throws Exception {
-        String requestBody = mapper.writeValueAsString(request);
-
-        return mvc.perform(post(path)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestBody))
-                .andExpect(expectedStatus)
-                .andReturn();
+        return Stream.of(Arguments.of(baseRequest.toBuilder().email(null).build(), "Email required"),
+                Arguments.of(baseRequest.toBuilder().password(null).build(), "Password required"));
     }
 }
