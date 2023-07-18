@@ -63,7 +63,6 @@ public class AuthenticationControllerTest {
     private ObjectMapper mapper;
 
     RegisterRequest registerRequest;
-//    UserDto userDto;
 
     @BeforeEach
     public void setUp() {
@@ -82,14 +81,6 @@ public class AuthenticationControllerTest {
                 .password("12345")
                 .build();
 
-//        userDto = UserDto.builder()
-//                .id(null)
-//                .email(registerRequest.getEmail())
-//                .firstName(registerRequest.getFirstName())
-//                .lastName(registerRequest.getLastName())
-//                .faculty(registerRequest.getFacultyName())
-//                .degree(registerRequest.getDegreeField())
-//                .build();
     }
 
     //region Registration Tests

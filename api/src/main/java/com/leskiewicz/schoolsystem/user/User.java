@@ -22,24 +22,28 @@ import java.util.Objects;
 public class User {
 
     @Id
+    @NotNull
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
+    @NotNull
     @Column(name = "first_name")
     private String firstName;
 
+    @NotNull
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "email")
     @NotNull
+    @Column(name = "email")
     private String email;
 
     @Column(name = "password")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "faculty", referencedColumnName = "id")
     private Faculty faculty;
@@ -48,6 +52,7 @@ public class User {
     @JoinColumn(name = "degree", referencedColumnName = "id")
     private Degree degree;
 
+    @NotNull
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
     private Role role;

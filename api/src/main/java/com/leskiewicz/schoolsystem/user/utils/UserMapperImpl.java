@@ -7,15 +7,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 @Component
-@AllArgsConstructor
 public class UserMapperImpl implements UserMapper {
-
-    private ModelMapper modelMapper;
 
     @Override
     public UserDto convertToDto(User user) {
-//        UserDto userDto = modelMapper.map(user, UserDto.class);
-
         UserDto.UserDtoBuilder userDto = UserDto.builder()
                 .id(user.getId())
                 .firstName(user.getFirstName())
