@@ -100,9 +100,17 @@ public class AuthenticationControllerTest {
         JsonNode node = mapper.readTree(result.getResponse().getContentAsString());
         AuthenticationResponse response = mapResponse(result, AuthenticationResponse.class);
 
-        userDto.setId(response.getUser().getId());
+        // Create userDto that should be provided with response
+        UserDto registerTestUserDto = UserDto.builder()
+                .id(response.getUser().getId())
+                .firstName(registerRequest.getFirstName())
+                .lastName(registerRequest.getLastName())
+                .email(registerRequest.getEmail())
+                .faculty(registerRequest.getFacultyName())
+                .degree(registerRequest.getDegreeField())
+                .build();
 
-        Assertions.assertEquals(userDto, response.getUser());
+        Assertions.assertEquals(registerTestUserDto, response.getUser());
         Assertions.assertNotNull(response.getToken());
         Assertions.assertTrue(node.has("_links") && node.get("_links").has("self"), "Expected self link in response");
         Assertions.assertTrue(node.has("_links") && node.get("_links").has("authenticate"), "Expected authenticate link in response");
@@ -166,7 +174,18 @@ public class AuthenticationControllerTest {
         Faculty faculty = facultyRepository.findByName("Informatics").orElse(null);
 
         // Create and save user that we are going to log into
-        User authenticationTestUser = User.builder()
+        User authenticationTestUser = new User(
+                null,
+                "Happy",
+                "Path",
+                "authenticationhappypath@example.com",
+                passwordEncoder.encode("12345"),
+                faculty,
+                degree,
+                Role.ROLE_STUDENT
+        );
+
+                User.builder()
                 .id(99999L)
                 .firstName("Happy")
                 .lastName("Path")

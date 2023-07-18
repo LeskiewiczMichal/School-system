@@ -62,8 +62,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUser(PatchUserRequest request, Long userId) {
-        User user = this.getById(userId);
+        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User with given id not found"));
         if (request.getDegreeField() != null && request.getDegreeTitle() != null) {
+            // Update Degree
             Faculty userFaculty;
             // If user is changing faculty, validate the new one
             if (request.getFacultyName() != null) {
@@ -71,8 +72,7 @@ public class UserServiceImpl implements UserService {
             } else {
                 userFaculty = user.getFaculty();
             }
-            Degree degree = degreeService.getByTitleAndFieldOfStudy(request.getDegreeTitle(), request.getDegreeField());
-            facultyService.validateDegreeForFaculty(userFaculty, degree);
+            Degree degree = facultyService.getDegreeByTitleAndFieldOfStudy(userFaculty, request.getDegreeTitle(), request.getDegreeField());
             user.setDegree(degree);
         }
         if ((request.getDegreeField() != null && request.getDegreeTitle() == null) || (request.getDegreeField() == null && request.getDegreeTitle() != null)) {
@@ -81,9 +81,9 @@ public class UserServiceImpl implements UserService {
         if (request.getFacultyName() != null) {
             // TODO: add logic for user changing faculty
             Faculty faculty = facultyService.getByName(request.getFacultyName());
-            Degree degree = user.getDegree();
-            facultyService.validateDegreeForFaculty(faculty, degree);
+            Degree degree = facultyService.getDegreeByTitleAndFieldOfStudy(faculty, user.getDegree().getTitle(), user.getDegree().getFieldOfStudy());
             user.setFaculty(faculty);
+            user.setDegree(degree);
         }
         if (request.getEmail() != null) {
             Optional<User> sameEmailUser = userRepository.findByEmail(request.getEmail());

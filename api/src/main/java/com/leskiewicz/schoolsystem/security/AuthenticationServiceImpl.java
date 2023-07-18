@@ -32,27 +32,24 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     public AuthenticationResponse register(RegisterRequest request) {
         Faculty faculty = facultyService.getByName(request.getFacultyName());
-        Degree degree = degreeService.getByTitleAndFieldOfStudy(request.getDegreeTitle(), request.getDegreeField());
-        facultyService.validateDegreeForFaculty(faculty, degree);
+        Degree degree = facultyService.getDegreeByTitleAndFieldOfStudy(faculty, request.getDegreeTitle(), request.getDegreeField());
 
-        var user = User.builder()
-                .firstName(request.getFirstName())
-                .lastName(request.getLastName())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.ROLE_STUDENT)
-                .degree(degree)
-                .faculty(faculty)
-                .build();
+        User user = new User(
+                null,
+                request.getFirstName(),
+                request.getLastName(),
+                request.getEmail(),
+                passwordEncoder.encode(request.getPassword()),
+                faculty,
+                degree,
+                Role.ROLE_STUDENT
+                );
 
         userService.addUser(user);
         var jwtToken = jwtUtils.generateToken(user);
         UserDto userDto = userModelAssembler.toModel(user);
 
-        return AuthenticationResponse.builder()
-                .token(jwtToken)
-                .user(userDto)
-                .build();
+        return new AuthenticationResponse(jwtToken, userDto);
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
@@ -67,9 +64,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         var jwtToken = jwtUtils.generateToken(user);
         UserDto userDto = userModelAssembler.toModel(user);
 
-        return AuthenticationResponse.builder()
-                .token(jwtToken)
-                .user(userDto)
-                .build();
+        return new AuthenticationResponse(jwtToken, userDto);
     }
 }

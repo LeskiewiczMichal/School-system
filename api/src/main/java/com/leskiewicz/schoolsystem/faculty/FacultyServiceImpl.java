@@ -1,9 +1,13 @@
 package com.leskiewicz.schoolsystem.faculty;
 
 import com.leskiewicz.schoolsystem.degree.Degree;
+import com.leskiewicz.schoolsystem.degree.DegreeTitle;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -17,9 +21,13 @@ public class FacultyServiceImpl implements FacultyService{
     }
 
     @Override
-    public void validateDegreeForFaculty(Faculty faculty, Degree degree) {
-        if (!faculty.getDegrees().contains(degree)) {
-            throw new IllegalArgumentException("Degree " + degree.getTitle() + " in the field of " + degree.getFieldOfStudy() + " is not offered by the faculty " + faculty.getName());
-        }
+    public Degree getDegreeByTitleAndFieldOfStudy(Faculty faculty, DegreeTitle title, String fieldOfStudy) {
+        List<Degree> degrees = faculty.getDegrees();
+
+        Optional<Degree> degree = degrees.stream()
+                .filter(d -> d.getTitle().equals(title) && d.getFieldOfStudy().equals(fieldOfStudy))
+                .findFirst();
+
+        return degree.orElseThrow(() -> new EntityNotFoundException("Degree with given title and field of study not found on chosen faculty"));
     }
 }

@@ -92,15 +92,16 @@ public class AuthenticationServiceTest {
                 .degreeTitle(DegreeTitle.BACHELOR)
                 .build();
 
-        newUser = User.builder()
-                .email("johndoe@example.com")
-                .firstName("John")
-                .lastName("Doe")
-                .password("encoded_password")
-                .faculty(faculty)
-                .role(Role.ROLE_STUDENT)
-                .degree(degree)
-                .build();
+        newUser = new User(
+                null,
+                "John",
+                "Doe",
+                "johndoe@example.com",
+                "encoded_password",
+                faculty,
+                degree,
+                Role.ROLE_STUDENT
+        );
 
         userDto = UserDto.builder()
                 .firstName(newUser.getFirstName())
@@ -111,12 +112,13 @@ public class AuthenticationServiceTest {
                 .build();
     }
 
+    //region Register Tests
     @Test
     public void registerHappyPath() {
         given(facultyService.getByName("Engineering")).willReturn(faculty);
         given(passwordEncoder.encode("12345")).willReturn("encoded_password");
         given(jwtUtils.generateToken(newUser)).willReturn("12");
-        given(degreeService.getByTitleAndFieldOfStudy(DegreeTitle.BACHELOR, "Computer Science")).willReturn(degree);
+        given(facultyService.getDegreeByTitleAndFieldOfStudy(faculty, request.getDegreeTitle(), request.getDegreeField())).willReturn(degree);
         given(userModelAssembler.toModel(newUser)).willReturn(userDto);
 
         AuthenticationResponse authenticationResponse = authenticationService.register(request);
@@ -146,23 +148,16 @@ public class AuthenticationServiceTest {
     }
 
     @Test
-    public void registerThrowsExceptionOnDegreeNotFound() {
-        given(degreeService.getByTitleAndFieldOfStudy(any(DegreeTitle.class), any(String.class))).willThrow(new EntityNotFoundException());
-
-        Assertions.assertThrows(EntityNotFoundException.class, () ->
-                authenticationService.register(request));
-    }
-
-    @Test
     public void registerThrowsExceptionOnDegreeNotInFaculty() {
         given(facultyService.getByName(any())).willReturn(faculty);
-        given(degreeService.getByTitleAndFieldOfStudy(degree.getTitle(), degree.getFieldOfStudy())).willReturn(degree);
-        doThrow(new IllegalArgumentException()).when(facultyService).validateDegreeForFaculty(faculty, degree);
+        doThrow(new IllegalArgumentException()).when(facultyService).getDegreeByTitleAndFieldOfStudy(faculty, degree.getTitle(), degree.getFieldOfStudy());
 
         Assertions.assertThrows(IllegalArgumentException.class, () ->
                 authenticationService.register(request));
     }
+    //endregion
 
+    //region Authentication Tests
     @Test
     public void authenticateHappyPath() {
         AuthenticationRequest request = new AuthenticationRequest(newUser.getEmail(), "password");
@@ -178,11 +173,8 @@ public class AuthenticationServiceTest {
         // Proper response
         Assertions.assertEquals("jwtToken", response.getToken());
         Assertions.assertEquals(userDto, response.getUser());
-
-        // Links where added
-//        verify(linksService).addLinks(newUser);
     }
-//
+
     @Test
     public void authenticateUserNotFound() {
         AuthenticationRequest request = new AuthenticationRequest("johndoe@example.com", "password");
@@ -202,4 +194,5 @@ public class AuthenticationServiceTest {
         Assertions.assertThrows(BadCredentialsException.class, () ->
                 authenticationService.authenticate(request));
     }
+    //endregion
 }

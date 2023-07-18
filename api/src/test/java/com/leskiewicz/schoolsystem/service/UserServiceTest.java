@@ -9,8 +9,8 @@ import com.leskiewicz.schoolsystem.faculty.FacultyService;
 import com.leskiewicz.schoolsystem.security.Role;
 import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.UserRepository;
-import com.leskiewicz.schoolsystem.user.UserService;
 import com.leskiewicz.schoolsystem.user.UserServiceImpl;
+import com.leskiewicz.schoolsystem.user.dto.PatchUserRequest;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserMapper;
 import jakarta.persistence.EntityNotFoundException;
@@ -18,6 +18,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -28,6 +31,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -135,7 +139,7 @@ public class UserServiceTest {
     @Test
     public void toUserDtosReturnsListOfUserDtos() {
         Page<User> userPage = new PageImpl<>(Arrays.asList(user, user));
-        UserDto userDto = new UserDto();
+        UserDto userDto = Mockito.mock(UserDto.class);
         given(userMapper.convertToDto(any(User.class))).willReturn(userDto);
 
         List<UserDto> result = userService.toUserDtos(userPage);
@@ -162,6 +166,138 @@ public class UserServiceTest {
 
         Assertions.assertThrows(UserAlreadyExistsException.class, () ->
                 userService.addUser(user));
+    }
+    //endregion
+
+    //region UpdateUser Tests
+    @ParameterizedTest
+    @MethodSource("updateUserWithDifferentFieldsSavesProperUserProvider")
+    public void updateUserWithDifferentFieldsSavesProperUser(PatchUserRequest request, User baseUser, User expectedUserToSave) {
+        given(userRepository.findById(baseUser.getId())).willReturn(Optional.of(baseUser));
+        Mockito.lenient().when(passwordEncoder.encode(any(String.class))).thenReturn("encoded");
+        Mockito.lenient().when(userRepository.findByEmail(any(String.class))).thenReturn(Optional.empty());
+
+        userService.updateUser(request, baseUser.getId());
+
+        verify(userRepository).save(expectedUserToSave);
+    }
+
+    @Test
+    public void updateUserDegree() {
+        Degree testDegree = Degree.builder()
+                .fieldOfStudy("Testing")
+                .title(DegreeTitle.BACHELOR)
+                .faculty(faculty)
+                .build();
+        User testUser = user.toBuilder().build();
+        User expectedUser = user.toBuilder()
+                .degree(testDegree)
+                .build();
+        given(facultyService.getDegreeByTitleAndFieldOfStudy(any(Faculty.class), any(DegreeTitle.class), any(String.class))).willReturn(testDegree);
+        given(userRepository.findById(testUser.getId())).willReturn(Optional.of(testUser));
+
+        userService.updateUser(PatchUserRequest.builder().degreeTitle(testDegree.getTitle()).degreeField(testDegree.getFieldOfStudy()).build(), testUser.getId());
+
+        verify(userRepository).save(expectedUser);
+    }
+
+
+    @Test
+    public void updateUserFaculty() {
+        Faculty testFaculty = Faculty.builder()
+                .name("test")
+                .build();
+        User testUser = user.toBuilder().build();
+        User expectedUser = user.toBuilder()
+                .faculty(testFaculty)
+                .build();
+        given(facultyService.getDegreeByTitleAndFieldOfStudy(any(Faculty.class), any(DegreeTitle.class), any(String.class))).willReturn(degree);
+        given(facultyService.getByName(any(String.class))).willReturn(testFaculty);
+        given(userRepository.findById(testUser.getId())).willReturn(Optional.of(testUser));
+
+        userService.updateUser(PatchUserRequest.builder().facultyName(testFaculty.getName()).build(), testUser.getId());
+
+        verify(userRepository).save(expectedUser);
+    }
+
+    @Test
+    public void updateUserFacultyAndDegree() {
+        Faculty testFaculty = Faculty.builder()
+                .name("test")
+                .build();
+        Degree testDegree = Degree.builder()
+                .fieldOfStudy("Testing")
+                .title(DegreeTitle.BACHELOR)
+                .faculty(testFaculty)
+                .build();
+        User testUser = user.toBuilder().build();
+        User expectedUser = user.toBuilder()
+                .faculty(testFaculty)
+                .degree(testDegree)
+                .build();
+        given(facultyService.getDegreeByTitleAndFieldOfStudy(any(Faculty.class), any(DegreeTitle.class), any(String.class))).willReturn(testDegree);
+        given(facultyService.getByName(any(String.class))).willReturn(testFaculty);
+        given(userRepository.findById(testUser.getId())).willReturn(Optional.of(testUser));
+
+        userService.updateUser(PatchUserRequest.builder().facultyName(testFaculty.getName()).degreeField(testDegree.getFieldOfStudy()).degreeTitle(testDegree.getTitle()).build(), testUser.getId());
+
+        verify(userRepository).save(expectedUser);
+    }
+
+    static Stream<Arguments> updateUserWithDifferentFieldsSavesProperUserProvider() {
+        Faculty baseFaculty = Faculty.builder()
+                .name("Engineering")
+                .build();
+
+        Degree baseDegree = Degree.builder()
+                .title(DegreeTitle.BACHELOR)
+                .fieldOfStudy("Computer Science")
+                .faculty(baseFaculty)
+                .build();
+
+//        Degree changeOnlyDegree = Degree.builder()
+//                .title(DegreeTitle.BACHELOR_OF_SCIENCE)
+//                .fieldOfStudy("Test")
+//                .faculty(baseFaculty)
+//                .build();
+//
+//        Faculty changeOnlyFaculty = Faculty.builder()
+//                .name("Test")
+//                .build();
+//        Degree changeOnlyFacultyDegree = Degree.builder()
+//                .title(DegreeTitle.BACHELOR)
+//                .fieldOfStudy("Computer Science")
+//                .faculty(changeOnlyFaculty)
+//                .build();
+//
+//        Faculty changeDegreeAndFacultyFac = Faculty.builder()
+//                .name("T")
+//                .build();
+//        Degree changeDegreeAndFacultyDegree = Degree.builder()
+//                .title(DegreeTitle.BACHELOR)
+//                .fieldOfStudy("Computer Science")
+//                .faculty(changeDegreeAndFacultyFac)
+//                .build();
+
+
+        User baseUser = User.builder()
+                .email("test@example.com")
+                .firstName("Tester")
+                .lastName("Testing")
+                .password("encoded_password")
+                .role(Role.ROLE_STUDENT)
+                .faculty(baseFaculty)
+                .degree(baseDegree)
+                .build();
+
+        PatchUserRequest request = PatchUserRequest.builder().build();
+
+        return Stream.of(
+                Arguments.of(request.toBuilder().firstName("Test").build(), baseUser.toBuilder().build(), baseUser.toBuilder().firstName("Test").build()),
+                Arguments.of(request.toBuilder().lastName("Test").build(), baseUser.toBuilder().build(), baseUser.toBuilder().lastName("Test").build()),
+                Arguments.of(request.toBuilder().email("test@example.com").build(),  baseUser.toBuilder().build(), baseUser.toBuilder().email("test@example.com").build()),
+                Arguments.of(request.toBuilder().password("Test").build(),  baseUser.toBuilder().build(), baseUser.toBuilder().password("encoded").build())
+        );
     }
     //endregion
 }

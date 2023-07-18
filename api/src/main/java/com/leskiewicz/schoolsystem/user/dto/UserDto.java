@@ -1,23 +1,25 @@
 package com.leskiewicz.schoolsystem.user.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
-@Data
+@Getter
 @Builder
 @Relation(collectionRelation = "users")
-@NoArgsConstructor
 @AllArgsConstructor
 public class UserDto extends RepresentationModel<UserDto> {
 
-    private Long id;
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String faculty;
-    private String degree;
+    @NonNull
+    private final Long id;
+    @NonNull
+    private final String firstName;
+    @NonNull
+    private final String lastName;
+    @NonNull
+    private final String email;
+    @NonNull
+    private final String faculty;
+    private final String degree;
 }

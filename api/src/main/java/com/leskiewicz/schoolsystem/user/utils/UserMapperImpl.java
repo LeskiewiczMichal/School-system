@@ -16,20 +16,20 @@ public class UserMapperImpl implements UserMapper {
     public UserDto convertToDto(User user) {
 //        UserDto userDto = modelMapper.map(user, UserDto.class);
 
-        UserDto userDto = new UserDto();
+        UserDto.UserDtoBuilder userDto = UserDto.builder()
+                .id(user.getId())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail());
 
         if (user.getFaculty() != null) {
-            userDto.setFaculty(user.getFaculty().getName());
+            userDto.faculty(user.getFaculty().getName());
         }
         if (user.getDegree() != null) {
-            userDto.setDegree(user.getDegree().getFieldOfStudy());
+            userDto.degree(user.getDegree().getFieldOfStudy());
         }
-        userDto.setId(user.getId());
-        userDto.setEmail(user.getEmail());
-        userDto.setLastName(user.getLastName());
-        userDto.setFirstName(user.getFirstName());
 
-        return userDto;
+        return userDto.build();
     }
 
 }
