@@ -255,31 +255,6 @@ public class UserServiceTest {
                 .faculty(baseFaculty)
                 .build();
 
-//        Degree changeOnlyDegree = Degree.builder()
-//                .title(DegreeTitle.BACHELOR_OF_SCIENCE)
-//                .fieldOfStudy("Test")
-//                .faculty(baseFaculty)
-//                .build();
-//
-//        Faculty changeOnlyFaculty = Faculty.builder()
-//                .name("Test")
-//                .build();
-//        Degree changeOnlyFacultyDegree = Degree.builder()
-//                .title(DegreeTitle.BACHELOR)
-//                .fieldOfStudy("Computer Science")
-//                .faculty(changeOnlyFaculty)
-//                .build();
-//
-//        Faculty changeDegreeAndFacultyFac = Faculty.builder()
-//                .name("T")
-//                .build();
-//        Degree changeDegreeAndFacultyDegree = Degree.builder()
-//                .title(DegreeTitle.BACHELOR)
-//                .fieldOfStudy("Computer Science")
-//                .faculty(changeDegreeAndFacultyFac)
-//                .build();
-
-
         User baseUser = User.builder()
                 .email("test@example.com")
                 .firstName("Tester")

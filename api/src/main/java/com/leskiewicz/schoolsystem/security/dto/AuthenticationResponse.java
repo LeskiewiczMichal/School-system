@@ -6,6 +6,8 @@ import org.springframework.hateoas.RepresentationModel;
 
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
+@Setter
 public class AuthenticationResponse extends RepresentationModel<AuthenticationResponse> {
 
     private String token;

@@ -59,8 +59,6 @@ public class User {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
-                ", faculty=" + faculty +
-                ", degree=" + degree +
                 ", role=" + role +
                 '}';
     }

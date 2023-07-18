@@ -63,7 +63,7 @@ public class AuthenticationControllerTest {
     private ObjectMapper mapper;
 
     RegisterRequest registerRequest;
-    UserDto userDto;
+//    UserDto userDto;
 
     @BeforeEach
     public void setUp() {
@@ -82,13 +82,14 @@ public class AuthenticationControllerTest {
                 .password("12345")
                 .build();
 
-        userDto = UserDto.builder()
-                .email(registerRequest.getEmail())
-                .firstName(registerRequest.getFirstName())
-                .lastName(registerRequest.getLastName())
-                .faculty(registerRequest.getFacultyName())
-                .degree(registerRequest.getDegreeField())
-                .build();
+//        userDto = UserDto.builder()
+//                .id(null)
+//                .email(registerRequest.getEmail())
+//                .firstName(registerRequest.getFirstName())
+//                .lastName(registerRequest.getLastName())
+//                .faculty(registerRequest.getFacultyName())
+//                .degree(registerRequest.getDegreeField())
+//                .build();
     }
 
     //region Registration Tests
@@ -174,18 +175,7 @@ public class AuthenticationControllerTest {
         Faculty faculty = facultyRepository.findByName("Informatics").orElse(null);
 
         // Create and save user that we are going to log into
-        User authenticationTestUser = new User(
-                null,
-                "Happy",
-                "Path",
-                "authenticationhappypath@example.com",
-                passwordEncoder.encode("12345"),
-                faculty,
-                degree,
-                Role.ROLE_STUDENT
-        );
-
-                User.builder()
+        User authenticationTestUser = User.builder()
                 .id(99999L)
                 .firstName("Happy")
                 .lastName("Path")

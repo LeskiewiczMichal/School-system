@@ -23,6 +23,7 @@ public class FacultyServiceImpl implements FacultyService{
     @Override
     public Degree getDegreeByTitleAndFieldOfStudy(Faculty faculty, DegreeTitle title, String fieldOfStudy) {
         List<Degree> degrees = faculty.getDegrees();
+        System.out.println(degrees);
 
         Optional<Degree> degree = degrees.stream()
                 .filter(d -> d.getTitle().equals(title) && d.getFieldOfStudy().equals(fieldOfStudy))

@@ -3,14 +3,13 @@ package com.leskiewicz.schoolsystem.degree;
 import com.leskiewicz.schoolsystem.course.Course;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
+import java.util.Objects;
 
-@Data
+@Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -41,4 +40,30 @@ public class Degree {
     @ManyToOne
     @JoinColumn(name = "faculty", referencedColumnName = "id")
     private Faculty faculty;
+
+    @Override
+    public String toString() {
+        return "Degree{" +
+                "id=" + id +
+                ", title=" + title +
+                ", fieldOfStudy='" + fieldOfStudy + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Degree degree = (Degree) o;
+        return Objects.equals(id, degree.id) &&
+                title == degree.title &&
+                Objects.equals(fieldOfStudy, degree.fieldOfStudy) &&
+                Objects.equals(courses, degree.courses) &&
+                Objects.equals(faculty, degree.faculty);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, fieldOfStudy, courses, faculty);
+    }
 }
