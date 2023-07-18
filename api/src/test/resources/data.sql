@@ -92,7 +92,7 @@ INSERT INTO course_student (course_id, student_id)
 VALUES (1, 2);
 
 INSERT INTO users (first_name, last_name, email, password, faculty, role)
-VALUES ('Bob', 'Johnson', 'bobjohnson@example.com', 'abcde', NULL, 'ROLE_TEACHER');
+VALUES ('Bob', 'Johnson', 'bobjohnson@example.com', 'abcde', 1, 'ROLE_TEACHER');
 
 INSERT INTO degree (id, title, field_of_study, faculty)
 VALUES (2, 'MASTER', 'Software Engineering', 1);

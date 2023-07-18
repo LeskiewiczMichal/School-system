@@ -1,6 +1,7 @@
 package com.leskiewicz.schoolsystem.user.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -22,6 +23,8 @@ public class UserDto extends RepresentationModel<UserDto> {
     private final String email;
     @NonNull
     private final String faculty;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private final String degree;
 
     public UserDto(
