@@ -91,8 +91,7 @@ public class AuthenticationControllerTest {
                 .build();
     }
 
-    /// REGISTER ///
-
+    //region Registration Tests
     @Test
     public void registrationHappyPath() throws Exception {
         MvcResult result = performPostRequest(REGISTER_PATH, registerRequest, status().isOk());
@@ -135,8 +134,31 @@ public class AuthenticationControllerTest {
         Assertions.assertNotNull(response.localDateTime());
     }
 
-    /// AUTHENTICATE ///
+    static Stream<Arguments> registerReturnsStatus400RequestProvider() {
+        // Each of requests has one different field missing
+        RegisterRequest baseRequest = RegisterRequest.builder()
+                .firstName("Happy")
+                .lastName("Path")
+                .email("happypath@example.com")
+                .facultyName("Informatics")
+                .degreeTitle(DegreeTitle.BACHELOR_OF_SCIENCE)
+                .degreeField("Computer Science")
+                .password("12345")
+                .build();
 
+        return Stream.of(
+                Arguments.of(baseRequest.toBuilder().firstName(null).build(), "First name required"),
+                Arguments.of(baseRequest.toBuilder().lastName(null).build(), "Last name required"),
+                Arguments.of(baseRequest.toBuilder().email(null).build(), "Email required"),
+                Arguments.of(baseRequest.toBuilder().facultyName(null).build(), "Faculty name required"),
+                Arguments.of(baseRequest.toBuilder().degreeTitle(null).build(), "Degree title required"),
+                Arguments.of(baseRequest.toBuilder().degreeField(null).build(), "Degree field of study required"),
+                Arguments.of(baseRequest.toBuilder().password(null).build(), "Password required")
+        );
+    }
+    //endregion
+
+    ///region Authentication tests
     @Test
     public void authenticateHappyPath() throws Exception {
         // Query degree and faculty from provided sql
@@ -214,6 +236,18 @@ public class AuthenticationControllerTest {
         Assertions.assertNotNull(response.localDateTime());
     }
 
+    static Stream<Arguments> authenticationReturnsStatus400OnBodyNotProvidedProvider() {
+        AuthenticationRequest baseRequest = AuthenticationRequest.builder()
+                .email("johndoe@example.com")
+                .password("12345")
+                .build();
+
+        return Stream.of(Arguments.of(baseRequest.toBuilder().email(null).build(), "Email required"),
+                Arguments.of(baseRequest.toBuilder().password(null).build(), "Password required"));
+    }
+    //endregion
+
+    //region Utils
     private <T> T mapResponse(MvcResult result, Class<T> responseType) throws Exception {
         String responseBody = result.getResponse().getContentAsString();
         return mapper.readValue(responseBody, responseType);
@@ -228,37 +262,5 @@ public class AuthenticationControllerTest {
                 .andExpect(expectedStatus)
                 .andReturn();
     }
-
-    static Stream<Arguments> registerReturnsStatus400RequestProvider() {
-        // Each of requests has one different field missing
-        RegisterRequest baseRequest = RegisterRequest.builder()
-                .firstName("Happy")
-                .lastName("Path")
-                .email("happypath@example.com")
-                .facultyName("Informatics")
-                .degreeTitle(DegreeTitle.BACHELOR_OF_SCIENCE)
-                .degreeField("Computer Science")
-                .password("12345")
-                .build();
-
-        return Stream.of(
-                Arguments.of(baseRequest.toBuilder().firstName(null).build(), "First name required"),
-                Arguments.of(baseRequest.toBuilder().lastName(null).build(), "Last name required"),
-                Arguments.of(baseRequest.toBuilder().email(null).build(), "Email required"),
-                Arguments.of(baseRequest.toBuilder().facultyName(null).build(), "Faculty name required"),
-                Arguments.of(baseRequest.toBuilder().degreeTitle(null).build(), "Degree title required"),
-                Arguments.of(baseRequest.toBuilder().degreeField(null).build(), "Degree field of study required"),
-                Arguments.of(baseRequest.toBuilder().password(null).build(), "Password required")
-        );
-    }
-
-    static Stream<Arguments> authenticationReturnsStatus400OnBodyNotProvidedProvider() {
-        AuthenticationRequest baseRequest = AuthenticationRequest.builder()
-                .email("johndoe@example.com")
-                .password("12345")
-                .build();
-
-        return Stream.of(Arguments.of(baseRequest.toBuilder().email(null).build(), "Email required"),
-                Arguments.of(baseRequest.toBuilder().password(null).build(), "Password required"));
-    }
+    //endregion
 }
