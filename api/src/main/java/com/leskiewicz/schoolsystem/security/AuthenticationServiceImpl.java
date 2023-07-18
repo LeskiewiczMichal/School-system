@@ -23,16 +23,18 @@ import org.springframework.stereotype.Service;
 public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final UserService userService;
+    private final FacultyService facultyService;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtils jwtUtils;
     private final AuthenticationManager authenticationManager;
-    private final FacultyService facultyService;
     private final DegreeService degreeService;
     private final UserModelAssembler userModelAssembler;
 
     public AuthenticationResponse register(RegisterRequest request) {
         Faculty faculty = facultyService.getByName(request.getFacultyName());
         Degree degree = degreeService.getByTitleAndFieldOfStudy(request.getDegreeTitle(), request.getDegreeField());
+        facultyService.validateDegreeForFaculty(faculty, degree);
+
         var user = User.builder()
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())

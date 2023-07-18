@@ -37,6 +37,7 @@ import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -149,6 +150,16 @@ public class AuthenticationServiceTest {
         given(degreeService.getByTitleAndFieldOfStudy(any(DegreeTitle.class), any(String.class))).willThrow(new EntityNotFoundException());
 
         Assertions.assertThrows(EntityNotFoundException.class, () ->
+                authenticationService.register(request));
+    }
+
+    @Test
+    public void registerThrowsExceptionOnDegreeNotInFaculty() {
+        given(facultyService.getByName(any())).willReturn(faculty);
+        given(degreeService.getByTitleAndFieldOfStudy(degree.getTitle(), degree.getFieldOfStudy())).willReturn(degree);
+        doThrow(new IllegalArgumentException()).when(facultyService).validateDegreeForFaculty(faculty, degree);
+
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
                 authenticationService.register(request));
     }
 

@@ -64,6 +64,12 @@ public class UserServiceImpl implements UserService {
     public User updateUser(PatchUserRequest request, Long userId) {
         User user = this.getById(userId);
         if (request.getDegreeField() != null && request.getDegreeTitle() != null) {
+            Faculty userFaculty;
+            if (request.getFacultyName() != null) {
+                userFaculty = facultyService.getByName(request.getFacultyName());
+            } else {
+                userFaculty = user.getFaculty();
+            }
             Degree degree = degreeService.getByTitleAndFieldOfStudy(request.getDegreeTitle(), request.getDegreeField());
             user.setDegree(degree);
         }

@@ -29,11 +29,11 @@ CREATE TABLE users (
    last_name VARCHAR(100) NOT NULL,
    email VARCHAR(100) NOT NULL,
    password VARCHAR(100) NOT NULL,
-   student_faculty BIGINT,
+   faculty BIGINT,
    degree BIGINT,
    role VARCHAR(100) NOT NULL,
    PRIMARY KEY (id),
-   FOREIGN KEY (student_faculty) REFERENCES faculty(id),
+   FOREIGN KEY (faculty) REFERENCES faculty(id),
    FOREIGN KEY (degree) REFERENCES degree(id)
 );
 
@@ -43,13 +43,6 @@ CREATE TABLE authorities (
     name VARCHAR(50) NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES users (id)
-);
-
-CREATE TABLE faculty_teacher (
-     faculty_id BIGINT,
-     teacher_id BIGINT,
-     FOREIGN KEY (faculty_id) REFERENCES faculty(id),
-     FOREIGN KEY (teacher_id) REFERENCES users(id)
 );
 
 CREATE TABLE course (

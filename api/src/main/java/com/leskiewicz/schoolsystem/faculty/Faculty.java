@@ -41,7 +41,6 @@ public class Faculty extends RepresentationModel<Faculty> {
     )
     private List<User> teachers;
 
-    @OneToMany
-    @JoinColumn(name = "student_faculty", referencedColumnName = "id")
-    private List<User> students;
+    @OneToMany(mappedBy = "faculty")
+    private List<User> users;
 }
