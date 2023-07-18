@@ -29,7 +29,7 @@ import static org.mockito.BDDMockito.given;
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
 
-    // Mocks
+    //region Mocks
     @Mock
     private UserRepository userRepository;
     @Mock
@@ -43,6 +43,7 @@ public class UserServiceTest {
 
     @InjectMocks
     private UserServiceImpl userService;
+    //endregion
 
     // Variables
     Faculty faculty;
@@ -88,6 +89,25 @@ public class UserServiceTest {
 
         Assertions.assertThrows(EntityNotFoundException.class, () ->
                 userService.getById(1L));
+    }
+    //endregion
+
+    //region GetByEmail tests
+    @Test
+    public void getByEmailHappyPath() {
+        given(userRepository.findByEmail(any(String.class))).willReturn(Optional.of(user));
+
+        User testUser = userService.getByEmail("email@example.com");
+
+        Assertions.assertEquals(user, testUser);
+    }
+
+    @Test
+    public void getByEmailThrowsEntityNotFound() {
+        given(userRepository.findByEmail(any(String.class))).willReturn(Optional.empty());
+
+        Assertions.assertThrows(EntityNotFoundException.class, () ->
+                userService.getByEmail("email@example/com"));
     }
     //endregion
 }

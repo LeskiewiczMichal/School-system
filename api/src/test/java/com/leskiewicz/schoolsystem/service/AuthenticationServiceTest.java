@@ -43,7 +43,7 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 public class AuthenticationServiceTest {
 
-    // Mocks
+    //region Mocks
     @Mock
     private UserService userService;
     @Mock
@@ -59,9 +59,9 @@ public class AuthenticationServiceTest {
     @Mock
     private UserModelAssembler userModelAssembler;
 
-
     @InjectMocks
     AuthenticationServiceImpl authenticationService;
+    //endregion
 
     // Variables
     private RegisterRequest request;
