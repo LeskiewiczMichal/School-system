@@ -65,19 +65,24 @@ public class UserServiceImpl implements UserService {
         User user = this.getById(userId);
         if (request.getDegreeField() != null && request.getDegreeTitle() != null) {
             Faculty userFaculty;
+            // If user is changing faculty, validate the new one
             if (request.getFacultyName() != null) {
                 userFaculty = facultyService.getByName(request.getFacultyName());
             } else {
                 userFaculty = user.getFaculty();
             }
             Degree degree = degreeService.getByTitleAndFieldOfStudy(request.getDegreeTitle(), request.getDegreeField());
+            facultyService.validateDegreeForFaculty(userFaculty, degree);
             user.setDegree(degree);
         }
         if ((request.getDegreeField() != null && request.getDegreeTitle() == null) || (request.getDegreeField() == null && request.getDegreeTitle() != null)) {
             throw new MissingFieldException("Required for degree: title and field of study");
         }
         if (request.getFacultyName() != null) {
+            // TODO: add logic for user changing faculty
             Faculty faculty = facultyService.getByName(request.getFacultyName());
+            Degree degree = user.getDegree();
+            facultyService.validateDegreeForFaculty(faculty, degree);
             user.setFaculty(faculty);
         }
         if (request.getEmail() != null) {

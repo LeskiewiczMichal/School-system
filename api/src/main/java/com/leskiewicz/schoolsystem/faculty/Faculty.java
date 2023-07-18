@@ -32,15 +32,6 @@ public class Faculty extends RepresentationModel<Faculty> {
     @OneToMany(mappedBy = "faculty")
     private List<Degree> degrees;
 
-
-    @ManyToMany
-    @JoinTable(
-            name = "faculty_teacher",
-            joinColumns = @JoinColumn(name = "faculty_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "teacher_id", referencedColumnName = "id")
-    )
-    private List<User> teachers;
-
     @OneToMany(mappedBy = "faculty")
     private List<User> users;
 }
