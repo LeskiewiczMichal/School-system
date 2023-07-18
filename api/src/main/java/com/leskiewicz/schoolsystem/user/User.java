@@ -5,6 +5,7 @@ import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.security.Role;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.hateoas.RepresentationModel;
@@ -22,7 +23,6 @@ import java.util.Objects;
 public class User {
 
     @Id
-    @NotNull
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
@@ -56,6 +56,11 @@ public class User {
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @AssertTrue(message = "Degree must not be null for students")
+    public boolean isDegreeValid() {
+        return role != Role.ROLE_STUDENT || degree != null;
+    }
 
     @Override
     public String toString() {
