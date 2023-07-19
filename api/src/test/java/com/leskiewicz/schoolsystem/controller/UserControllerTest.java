@@ -291,8 +291,6 @@ public class UserControllerTest {
     }
     //endregion
 
-
-
     //region Utils
     private void assertUserInCollection(ResultActions matchers, int index, long id, String firstName, String lastName, String email, String faculty, String degree) throws Exception {
         matchers.andExpect(jsonPath(String.format("$._embedded.users[%d].id", index)).value(id))
