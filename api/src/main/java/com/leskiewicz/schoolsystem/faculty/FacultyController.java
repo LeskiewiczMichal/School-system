@@ -6,4 +6,6 @@ import org.springframework.stereotype.Controller;
 public class FacultyController {
 
     private FacultyService facultyService;
+
+
 }
