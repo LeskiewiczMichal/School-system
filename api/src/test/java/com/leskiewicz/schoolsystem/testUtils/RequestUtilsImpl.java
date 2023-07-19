@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.ResultMatcher;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -43,10 +44,9 @@ public class RequestUtilsImpl implements RequestUtils {
     }
 
     @Override
-    public MvcResult performGetRequest(String path, ResultMatcher expectedStatus) throws Exception {
+    public ResultActions performGetRequest(String path, ResultMatcher expectedStatus) throws Exception {
         return mvc.perform(get(path)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(expectedStatus)
-                .andReturn();
+                        .contentType("application/hal+json"))
+                .andExpect(expectedStatus);
     }
 }
