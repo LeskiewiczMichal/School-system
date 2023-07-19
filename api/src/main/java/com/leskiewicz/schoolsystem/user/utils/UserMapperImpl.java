@@ -18,36 +18,41 @@ import java.util.Set;
 @AllArgsConstructor
 public class UserMapperImpl implements UserMapper {
 
-    private final Validator validator;
-    private final Logger logger = LoggerFactory.getLogger(UserMapperImpl.class);
+  private final Validator validator;
+  private final Logger logger = LoggerFactory.getLogger(UserMapperImpl.class);
 
-    @Override
-    public UserDto convertToDto(User user) {
-        // Perform manual validation
-        Set<ConstraintViolation<User>> violations = validator.validate(user);
-        if (!violations.isEmpty()) {
-            logger.error("An error occurred while converting a User object to a UserDto object: User = {}, Violations = {}", user, violations);
-            throw new IllegalArgumentException("Invalid User object: " + violations.toString());
-        }
-        if (user.getId() == null) {
-            logger.error("An error occurred while converting a User object to a UserDto object: User = {}, no id provided", user);
-            throw new IllegalArgumentException("Invalid User object: id missing");
-        }
-
-        UserDto.UserDtoBuilder userDto = UserDto.builder()
-                .id(user.getId())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .email(user.getEmail())
-                .faculty(user.getFaculty().getName());
-
-        if (user.getRole() == Role.ROLE_STUDENT) {
-            userDto.degree(user.getDegree().getFieldOfStudy());
-        } else {
-            userDto.degree(null);
-        }
-
-        return userDto.build();
+  @Override
+  public UserDto convertToDto(User user) {
+    // Perform manual validation
+    Set<ConstraintViolation<User>> violations = validator.validate(user);
+    if (!violations.isEmpty()) {
+      logger.error(
+          "An error occurred while converting a User object to a UserDto object: User = {}, Violations = {}",
+          user, violations);
+      throw new IllegalArgumentException("Invalid User object: " + violations.toString());
     }
+    if (user.getId() == null) {
+      logger.error(
+          "An error occurred while converting a User object to a UserDto object: User = {}, no id provided",
+          user);
+      throw new IllegalArgumentException("Invalid User object: id missing");
+    }
+
+    // Create dto from user
+    UserDto.UserDtoBuilder userDto = UserDto.builder()
+        .id(user.getId())
+        .firstName(user.getFirstName())
+        .lastName(user.getLastName())
+        .email(user.getEmail())
+        .faculty(user.getFaculty().getName());
+    if (user.getRole() == Role.ROLE_STUDENT) {
+      userDto.degree(user.getDegree().getFieldOfStudy());
+    } else {
+      userDto.degree(null);
+    }
+    logger.debug("Converted User entity with ID: {} to UserDto", user.getId());
+
+    return userDto.build();
+  }
 
 }

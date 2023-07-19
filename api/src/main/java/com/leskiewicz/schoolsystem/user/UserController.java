@@ -38,10 +38,10 @@ public class UserController {
 
   @GetMapping("/{id}")
   public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
-    logger.info("Received request to get user with ID: {}", id);
+//    logger.info("Received request to get user with ID: {}", id);
     User user = userService.getById(id);
     UserDto userDto = userModelAssembler.toModel(user);
-    logger.info("Successfully retrieved user with ID: {}", id);
+//    logger.info("Successfully retrieved user with ID: {}", id);
 
     return ResponseEntity.ok(userDto);
   }
