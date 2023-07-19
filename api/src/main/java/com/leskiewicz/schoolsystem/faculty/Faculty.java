@@ -4,6 +4,7 @@ import com.leskiewicz.schoolsystem.course.Course;
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.user.User;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.hateoas.RepresentationModel;
 
@@ -24,6 +25,7 @@ public class Faculty extends RepresentationModel<Faculty> {
     @Column(name = "id")
     private Long id;
 
+    @NotNull
     @Column(name = "name")
     private String name;
 
