@@ -265,13 +265,12 @@ public class UserServiceTest {
                 .degree(baseDegree)
                 .build();
 
-        PatchUserRequest request = PatchUserRequest.builder().build();
 
         return Stream.of(
-                Arguments.of(request.toBuilder().firstName("Test").build(), baseUser.toBuilder().build(), baseUser.toBuilder().firstName("Test").build()),
-                Arguments.of(request.toBuilder().lastName("Test").build(), baseUser.toBuilder().build(), baseUser.toBuilder().lastName("Test").build()),
-                Arguments.of(request.toBuilder().email("test@example.com").build(),  baseUser.toBuilder().build(), baseUser.toBuilder().email("test@example.com").build()),
-                Arguments.of(request.toBuilder().password("Test").build(),  baseUser.toBuilder().build(), baseUser.toBuilder().password("encoded").build())
+                Arguments.of(PatchUserRequest.builder().firstName("Test").build(), baseUser.toBuilder().build(), baseUser.toBuilder().firstName("Test").build()),
+                Arguments.of(PatchUserRequest.builder().lastName("Test").build(), baseUser.toBuilder().build(), baseUser.toBuilder().lastName("Test").build()),
+                Arguments.of(PatchUserRequest.builder().email("test@example.com").build(),  baseUser.toBuilder().build(), baseUser.toBuilder().email("test@example.com").build()),
+                Arguments.of(PatchUserRequest.builder().password("Test").build(),  baseUser.toBuilder().build(), baseUser.toBuilder().password("encoded").build())
         );
     }
     //endregion

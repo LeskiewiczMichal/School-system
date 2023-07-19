@@ -3,25 +3,30 @@ package com.leskiewicz.schoolsystem.controller;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.leskiewicz.schoolsystem.error.ErrorMessages;
+import com.leskiewicz.schoolsystem.degree.DegreeTitle;
+import com.leskiewicz.schoolsystem.error.ApiError;
 import com.leskiewicz.schoolsystem.testModels.UserDto;
-import com.leskiewicz.schoolsystem.testUtils.CustomLink;
+import com.leskiewicz.schoolsystem.testModels.CustomLink;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtils;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtilsImpl;
-import com.leskiewicz.schoolsystem.user.User;
+import com.leskiewicz.schoolsystem.user.UserRepository;
+import com.leskiewicz.schoolsystem.user.dto.PatchUserRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.ResultMatcher;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
@@ -40,6 +45,8 @@ public class UserControllerTest {
 
     @Autowired
     private MockMvc mvc;
+    @Autowired
+    private UserRepository userRepository;
 
     // Variables
     private ObjectMapper mapper;
@@ -176,9 +183,114 @@ public class UserControllerTest {
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType("application/json"));
 
-        assertError(result, "User with given id not found", "/api/users/9999", 404);
+        assertError(result, ErrorMessages.USER_WITH_ID_NOT_FOUND, GET_USER_BY_ID + "9999", 404);
     }
     //endregion
+
+    //region PatchUser tests
+    @DisplayName("Patch user API with different params")
+    @ParameterizedTest
+    @MethodSource("patchUserHappyPathProvider")
+    public void patchUserHappyPath(PatchUserRequest request, UserDto expectedUser) throws Exception {
+        ResultActions result = requestUtils.performPatchRequest(GET_USER_BY_ID + "20", request, status().isOk());
+
+        assertUser(result, expectedUser);
+    }
+
+    @Test
+    public void patchUserReturnsStatus404OnUserNotFound() throws Exception {
+        ResultActions result = requestUtils.performPatchRequest(
+                GET_USER_BY_ID + "300", PatchUserRequest.builder().firstName("Ok").build(), status().isNotFound());
+
+        assertError(result, ErrorMessages.USER_WITH_ID_NOT_FOUND, GET_USER_BY_ID + "300", 404);
+    }
+
+    @ParameterizedTest
+    @MethodSource("patchUserErrorTestingProvider")
+    public void patchUserErrorTesting(PatchUserRequest request, ApiError expectedError, ResultMatcher expectedStatus) throws Exception {
+        ResultActions result = requestUtils.performPatchRequest(GET_USER_BY_ID + "20", request, expectedStatus);
+
+        assertError(result, expectedError.message(), expectedError.path(), expectedError.statusCode());
+    }
+
+    static Stream<Arguments> patchUserHappyPathProvider() {
+        UserDto baseUser = UserDto.builder()
+                .id(20L)
+                .firstName("Alice")
+                .lastName("Smith")
+                .email("alicesmith@example.com")
+                .faculty("Informatics")
+                .degree("Computer Science")
+                .build();
+
+        Arguments changeName = Arguments.of(
+                PatchUserRequest.builder().firstName("Michal").build(),
+                baseUser.toBuilder().firstName("Michal").build()
+        );
+
+        Arguments changeLastName = Arguments.of(
+                PatchUserRequest.builder().lastName("Leskiewicz").build(),
+                baseUser.toBuilder().lastName("Leskiewicz").build()
+        );
+
+        Arguments changeEmail = Arguments.of(
+                PatchUserRequest.builder().email("test@example.com").build(),
+                baseUser.toBuilder().email("test@example.com").build()
+        );
+
+        Arguments changeDegree = Arguments.of(
+                PatchUserRequest.builder().degreeField("Software Engineering").degreeTitle(DegreeTitle.MASTER).build(),
+                baseUser.toBuilder().degree("Software Engineering").build()
+        );
+
+        Arguments changeFaculty = Arguments.of(
+                PatchUserRequest.builder().facultyName("Biology").build(),
+                baseUser.toBuilder().faculty("Biology").build()
+        );
+
+        Arguments changeFacultyAndDegree = Arguments.of(
+                PatchUserRequest.builder().facultyName("Biology").degreeTitle(DegreeTitle.BACHELOR).degreeField("Nano").build(),
+                baseUser.toBuilder().faculty("Biology").degree("Nano").build()
+        );
+
+        return Stream.of(changeName, changeLastName, changeEmail, changeDegree, changeFaculty, changeFacultyAndDegree);
+    }
+
+    static Stream<Arguments> patchUserErrorTestingProvider() {
+        String path = "/api/users/20";
+
+        Arguments changeDegreeToNotCorrectOnCurrentFaculty = Arguments.of(
+                PatchUserRequest.builder().degreeField("Nano").degreeTitle(DegreeTitle.BACHELOR).build(),
+                new ApiError(path, ErrorMessages.DEGREE_NOT_ON_FACULTY, 404, LocalDateTime.now()),
+                status().isNotFound()
+        );
+
+        Arguments changeFacultyToNonExistent = Arguments.of(
+                PatchUserRequest.builder().facultyName("qwre").build(),
+                new ApiError(path, ErrorMessages.FACULTY_WITH_NAME_NOT_FOUND, 404, LocalDateTime.now()),
+                status().isNotFound()
+        );
+
+        Arguments changeFacultyToOneThatHaveNotGotTheSameDegree = Arguments.of(
+                PatchUserRequest.builder().facultyName("Electronics").build(),
+                new ApiError(path, ErrorMessages.DEGREE_NOT_ON_FACULTY, 404, LocalDateTime.now()),
+                status().isNotFound()
+        );
+
+        Arguments changeFacultyAndDegreeButDegreeButDegreeIsNotOnNewFaculty = Arguments.of(
+                PatchUserRequest.builder().facultyName("Electronics").degreeTitle(DegreeTitle.BACHELOR).degreeField("Nano").build(),
+                new ApiError(path, ErrorMessages.DEGREE_NOT_ON_FACULTY, 404, LocalDateTime.now()),
+                status().isNotFound()
+        );
+
+        return Stream.of(
+                changeDegreeToNotCorrectOnCurrentFaculty,
+                changeFacultyToNonExistent,
+                changeFacultyToOneThatHaveNotGotTheSameDegree,
+                changeFacultyAndDegreeButDegreeButDegreeIsNotOnNewFaculty);
+    }
+    //endregion
+
 
 
     //region Utils
@@ -194,6 +306,7 @@ public class UserControllerTest {
                 }
     }
 
+
     private void assertUser(ResultActions matchers, long id, String firstName, String lastName, String email, String faculty, String degree) throws Exception {
         matchers.andExpect(jsonPath(String.format("$.id")).value(id))
                 .andExpect(jsonPath(String.format("$.firstName")).value(firstName))
@@ -203,6 +316,18 @@ public class UserControllerTest {
                 .andExpect(jsonPath(String.format("$._links.self.href")).value(String.format("http://localhost/api/users/%d", id)));
         if (degree != null) {
             matchers.andExpect(jsonPath(String.format("$.degree")).value(degree));
+        }
+    }
+
+    private void assertUser(ResultActions matchers, UserDto userDto) throws Exception {
+        matchers.andExpect(jsonPath(String.format("$.id")).value(userDto.getId()))
+                .andExpect(jsonPath(String.format("$.firstName")).value(userDto.getFirstName()))
+                .andExpect(jsonPath(String.format("$.lastName")).value(userDto.getLastName()))
+                .andExpect(jsonPath(String.format("$.email")).value(userDto.getEmail()))
+                .andExpect(jsonPath(String.format("$.faculty")).value(userDto.getFaculty()))
+                .andExpect(jsonPath(String.format("$._links.self.href")).value(String.format("http://localhost/api/users/%d", userDto.getId())));
+        if (userDto.getDegree() != null) {
+            matchers.andExpect(jsonPath(String.format("$.degree")).value(userDto.getDegree()));
         }
     }
 
@@ -216,4 +341,6 @@ public class UserControllerTest {
                 .andExpect(jsonPath(String.format("$.path")).value(path));
     }
     //endregion
+
+
 }

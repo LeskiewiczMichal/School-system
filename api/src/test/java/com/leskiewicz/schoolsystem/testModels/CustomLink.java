@@ -1,4 +1,4 @@
-package com.leskiewicz.schoolsystem.testUtils;
+package com.leskiewicz.schoolsystem.testModels;
 
 import lombok.Builder;
 import lombok.Getter;

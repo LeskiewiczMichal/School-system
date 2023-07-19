@@ -5,7 +5,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Getter
-@Builder(toBuilder = true)
+@AllArgsConstructor
+@Builder
 public class PatchUserRequest {
 
         private String firstName;

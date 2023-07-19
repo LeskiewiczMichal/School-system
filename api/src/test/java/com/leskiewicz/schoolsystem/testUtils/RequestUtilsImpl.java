@@ -11,8 +11,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.ResultMatcher;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 @AllArgsConstructor
 public class RequestUtilsImpl implements RequestUtils {
@@ -33,7 +32,7 @@ public class RequestUtilsImpl implements RequestUtils {
     }
 
     @Override
-    public MvcResult performPostRequest(String path, Object request, ResultMatcher expectedStatus) throws Exception {
+    public MvcResult performPostRequestResult(String path, Object request, ResultMatcher expectedStatus) throws Exception {
         String requestBody = mapper.writeValueAsString(request);
 
         return mvc.perform(post(path)
@@ -41,6 +40,26 @@ public class RequestUtilsImpl implements RequestUtils {
                         .content(requestBody))
                 .andExpect(expectedStatus)
                 .andReturn();
+    }
+
+    @Override
+    public ResultActions performPostRequest(String path, Object request, ResultMatcher expectedStatus) throws Exception {
+        String requestBody = mapper.writeValueAsString(request);
+
+        return mvc.perform(post(path)
+                        .contentType("application/hal+json")
+                        .content(requestBody))
+                .andExpect(expectedStatus);
+    }
+
+    @Override
+    public ResultActions performPatchRequest(String path, Object request, ResultMatcher expectedStatus) throws Exception {
+        String requestBody = mapper.writeValueAsString(request);
+
+        return mvc.perform(patch(path)
+                        .contentType("application/hal+json")
+                        .content(requestBody))
+                .andExpect(expectedStatus);
     }
 
     @Override

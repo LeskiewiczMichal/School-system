@@ -1,5 +1,6 @@
 package com.leskiewicz.schoolsystem.user;
 
+import com.leskiewicz.schoolsystem.error.ErrorMessages;
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.degree.DegreeService;
 import com.leskiewicz.schoolsystem.error.MissingFieldException;
@@ -32,12 +33,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getById(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User with given id not found"));
+        return userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ErrorMessages.USER_WITH_ID_NOT_FOUND));
     }
 
     @Override
     public User getByEmail(String email) {
-        return userRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("User with given email not found"));
+        return userRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException(ErrorMessages.USER_WITH_EMAIL_NOT_FOUND));
     }
 
     @Override
@@ -62,7 +63,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUser(PatchUserRequest request, Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User with given id not found"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException(ErrorMessages.USER_WITH_ID_NOT_FOUND));
         if (request.getDegreeField() != null && request.getDegreeTitle() != null) {
             // Update Degree
             Faculty userFaculty;
