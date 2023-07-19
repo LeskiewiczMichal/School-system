@@ -2,28 +2,23 @@ package com.leskiewicz.schoolsystem.security.utils;
 
 import com.leskiewicz.schoolsystem.security.dto.CustomUserDetails;
 import com.leskiewicz.schoolsystem.user.User;
-import com.leskiewicz.schoolsystem.utils.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 
 @Component
 public class JwtUtilsImpl implements JwtUtils {
 
-  private final Logger logger = LoggerFactory.getLogger(JwtUtilsImpl.class);
 
   @Value("${jwt.secret.key}")
   private String JWT_SECRET;
@@ -37,8 +32,6 @@ public class JwtUtilsImpl implements JwtUtils {
   }
 
   public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
-    logger.debug("Generating jwt token for user: {}",
-        StringUtils.maskEmail(userDetails.getUsername()));
     return Jwts.builder().setClaims(extraClaims).setSubject(userDetails.getUsername())
         .setIssuedAt(new Date(System.currentTimeMillis()))
         .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))

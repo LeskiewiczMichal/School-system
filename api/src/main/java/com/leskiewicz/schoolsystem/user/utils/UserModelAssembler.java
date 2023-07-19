@@ -17,7 +17,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class UserModelAssembler extends RepresentationModelAssemblerSupport<User, UserDto> {
 
   private final UserMapper userMapper;
-  private final Logger logger = LoggerFactory.getLogger(UserModelAssembler.class);
 
   public UserModelAssembler(UserMapper userMapper) {
     super(UserController.class, UserDto.class);
@@ -31,7 +30,6 @@ public class UserModelAssembler extends RepresentationModelAssemblerSupport<User
     Link selfLink = WebMvcLinkBuilder.linkTo(
         methodOn(UserController.class).getUserById(entity.getId())).withSelfRel();
     userDto.add(selfLink);
-    logger.debug("Added links to user with ID: {}", userDto.getId());
 
     return userDto;
   }

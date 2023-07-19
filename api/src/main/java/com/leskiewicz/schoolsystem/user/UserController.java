@@ -21,27 +21,21 @@ public class UserController {
   private final UserService userService;
   private final UserModelAssembler userModelAssembler;
   private final PageableLinksService pageableLinksService;
-  private final Logger logger = LoggerFactory.getLogger(UserController.class);
 
   @GetMapping
   public ResponseEntity<CollectionModel<UserDto>> getUsers(
       @ModelAttribute PageableRequest request) {
-    logger.info("Received request to get users with page number: {} and page size: {}",
-        request.getPage(), request.getSize());
     Page<User> users = userService.getUsers(request.toPageable());
     CollectionModel<UserDto> userDtos = userModelAssembler.toCollectionModel(users);
     pageableLinksService.addLinks(userDtos, users, UserController.class, request);
-    logger.info("Successfully retrieved {} users", users.getNumberOfElements());
 
     return ResponseEntity.ok(userDtos);
   }
 
   @GetMapping("/{id}")
   public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
-//    logger.info("Received request to get user with ID: {}", id);
     User user = userService.getById(id);
     UserDto userDto = userModelAssembler.toModel(user);
-//    logger.info("Successfully retrieved user with ID: {}", id);
 
     return ResponseEntity.ok(userDto);
   }
@@ -49,10 +43,8 @@ public class UserController {
   @PatchMapping("/{id}")
   public ResponseEntity<UserDto> patchUser(@RequestBody PatchUserRequest request,
       @PathVariable Long id) {
-    logger.info("Received request to update user with ID: {}", id);
     User user = userService.updateUser(request, id);
     UserDto userDto = userModelAssembler.toModel(user);
-    logger.info("Successfully updated user with ID: {}", id);
 
     return ResponseEntity.ok(userDto);
   }

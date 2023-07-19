@@ -26,15 +26,9 @@ public class UserMapperImpl implements UserMapper {
     // Perform manual validation
     Set<ConstraintViolation<User>> violations = validator.validate(user);
     if (!violations.isEmpty()) {
-      logger.error(
-          "An error occurred while converting a User object to a UserDto object: User = {}, Violations = {}",
-          user, violations);
       throw new IllegalArgumentException("Invalid User object: " + violations.toString());
     }
     if (user.getId() == null) {
-      logger.error(
-          "An error occurred while converting a User object to a UserDto object: User = {}, no id provided",
-          user);
       throw new IllegalArgumentException("Invalid User object: id missing");
     }
 

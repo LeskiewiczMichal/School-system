@@ -32,31 +32,31 @@ public class LoggingUtils {
   }
 
   private static AuthenticationRequest maskAuthenticationRequest(AuthenticationRequest request) {
-    return new AuthenticationRequest(StringUtils.maskEmail(request.getEmail()), "[PROVIDED]");
+    return new AuthenticationRequest(LoggingUtils.maskEmail(request.getEmail()), "[PROVIDED]");
   }
 
   private static RegisterRequest maskRegisterRequest(RegisterRequest request) {
-    return new RegisterRequest(StringUtils.maskInfo(request.getFirstName()),
-        StringUtils.maskInfo(request.getLastName()), StringUtils.maskEmail(request.getEmail()),
+    return new RegisterRequest(LoggingUtils.maskInfo(request.getFirstName()),
+        LoggingUtils.maskInfo(request.getLastName()), LoggingUtils.maskEmail(request.getEmail()),
         "[PROVIDED]", request.getFacultyName(), request.getDegreeField(), request.getDegreeTitle());
   }
 
   private static AuthenticationResponse maskAuthenticationResponse(
       AuthenticationResponse response) {
     // mask sensitive information in response object
-    return new AuthenticationResponse(StringUtils.maskInfo(response.getToken()),
+    return new AuthenticationResponse(LoggingUtils.maskInfo(response.getToken()),
         LoggingUtils.maskUserDto(response.getUser()));
   }
 
   private static User maskUser(User user) {
-    return new User(user.getId(), StringUtils.maskInfo(user.getFirstName()),
-        StringUtils.maskInfo(user.getLastName()), StringUtils.maskEmail(user.getEmail()),
+    return new User(user.getId(), LoggingUtils.maskInfo(user.getFirstName()),
+        LoggingUtils.maskInfo(user.getLastName()), LoggingUtils.maskEmail(user.getEmail()),
         "[PROVIDED]", user.getFaculty(), user.getDegree(), user.getRole());
   }
 
   private static UserDto maskUserDto(UserDto userDto) {
-    return new UserDto(userDto.getId(), StringUtils.maskInfo(userDto.getFirstName()),
-        StringUtils.maskInfo(userDto.getLastName()), StringUtils.maskEmail(userDto.getEmail()),
+    return new UserDto(userDto.getId(), LoggingUtils.maskInfo(userDto.getFirstName()),
+        LoggingUtils.maskInfo(userDto.getLastName()), LoggingUtils.maskEmail(userDto.getEmail()),
         userDto.getFaculty(), userDto.getDegree());
   }
 
@@ -64,5 +64,36 @@ public class LoggingUtils {
     List<?> content = collectionModel.getContent().stream()
         .map(LoggingUtils::maskSensitiveInformation).collect(Collectors.toList());
     return CollectionModel.of(content, collectionModel.getLinks());
+  }
+
+  public static String maskEmail(String email) {
+    int atIndex = email.indexOf("@");
+    if (atIndex == -1) {
+      return email;
+    }
+    String username = email.substring(0, atIndex);
+    String domain = email.substring(atIndex);
+    int usernameLength = username.length();
+    if (usernameLength <= 2) {
+      return email;
+    }
+    int numCharsToMask = (int) Math.ceil(usernameLength / 2.0);
+    int maskStartIndex = (usernameLength - numCharsToMask) / 2;
+    char[] maskedUsernameChars = username.toCharArray();
+    for (int i = maskStartIndex; i < maskStartIndex + numCharsToMask; i++) {
+      maskedUsernameChars[i] = '*';
+    }
+    String maskedUsername = new String(maskedUsernameChars);
+    return maskedUsername + domain;
+  }
+
+  public static String maskInfo(String info) {
+    if (info == null || info.length() <= 2) {
+      return info;
+    }
+    int length = info.length();
+    return info.substring(0, 1)
+        + "*".repeat(length - 2)
+        + info.substring(length - 1);
   }
 }

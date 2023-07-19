@@ -1,21 +1,17 @@
 package com.leskiewicz.schoolsystem.security;
 
-import com.leskiewicz.schoolsystem.security.dto.AuthenticationRequest;
-import com.leskiewicz.schoolsystem.security.dto.AuthenticationResponse;
-import com.leskiewicz.schoolsystem.security.utils.JwtUtils;
-import com.leskiewicz.schoolsystem.degree.DegreeService;
-import com.leskiewicz.schoolsystem.faculty.FacultyService;
-import com.leskiewicz.schoolsystem.user.utils.UserModelAssembler;
-import com.leskiewicz.schoolsystem.user.dto.UserDto;
-import com.leskiewicz.schoolsystem.security.dto.RegisterRequest;
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
+import com.leskiewicz.schoolsystem.faculty.FacultyService;
+import com.leskiewicz.schoolsystem.security.dto.AuthenticationRequest;
+import com.leskiewicz.schoolsystem.security.dto.AuthenticationResponse;
+import com.leskiewicz.schoolsystem.security.dto.RegisterRequest;
+import com.leskiewicz.schoolsystem.security.utils.JwtUtils;
 import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.UserService;
-import com.leskiewicz.schoolsystem.utils.StringUtils;
+import com.leskiewicz.schoolsystem.user.dto.UserDto;
+import com.leskiewicz.schoolsystem.user.utils.UserModelAssembler;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,7 +27,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
   private final JwtUtils jwtUtils;
   private final AuthenticationManager authenticationManager;
   private final UserModelAssembler userModelAssembler;
-  private final Logger logger = LoggerFactory.getLogger(AuthenticationServiceImpl.class);
 
   public AuthenticationResponse register(RegisterRequest request) {
     // Retrieve faculty and degree
@@ -59,7 +54,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
   }
 
   public AuthenticationResponse authenticate(AuthenticationRequest request) {
-    logger.debug("Authenticating user: {}", StringUtils.maskEmail(request.getEmail()));
     authenticationManager.authenticate(
         new UsernamePasswordAuthenticationToken(
             request.getEmail(),

@@ -1,12 +1,6 @@
 package com.leskiewicz.schoolsystem.aspect;
 
-import com.leskiewicz.schoolsystem.security.dto.AuthenticationRequest;
-import com.leskiewicz.schoolsystem.security.dto.AuthenticationResponse;
-import com.leskiewicz.schoolsystem.security.dto.RegisterRequest;
-import com.leskiewicz.schoolsystem.user.User;
-import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.utils.LoggingUtils;
-import com.leskiewicz.schoolsystem.utils.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
