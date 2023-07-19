@@ -16,22 +16,26 @@ import java.util.Set;
 @AllArgsConstructor
 public class FacultyMapperImpl implements FacultyMapper {
 
-    private final Validator validator;
-    private final Logger logger = LoggerFactory.getLogger(FacultyMapperImpl.class);
+  private final Validator validator;
+  private final Logger logger = LoggerFactory.getLogger(FacultyMapperImpl.class);
 
-    @Override
-    public FacultyDto convertToDto(Faculty faculty) {
-        // Perform manual validation
-        Set<ConstraintViolation<Faculty>> violations = validator.validate(faculty);
-        if (!violations.isEmpty()) {
-            logger.error("An error occurred while converting a Faculty object to a FacultyDto object: Faculty = {}, Violations = {}", faculty, violations);
-            throw new IllegalArgumentException("Invalid Faculty object: " + violations.toString());
-        }
-        if (faculty.getId() == null) {
-            logger.error("An error occurred while converting a Faculty object to a FacultyDto object: Faculty = {}, no id provided", faculty);
-            throw new IllegalArgumentException("Invalid Faculty object: " + "id missing");
-        }
-
-        return new FacultyDto(faculty.getId(), faculty.getName());
+  @Override
+  public FacultyDto convertToDto(Faculty faculty) {
+    // Perform manual validation
+    Set<ConstraintViolation<Faculty>> violations = validator.validate(faculty);
+    if (!violations.isEmpty()) {
+      logger.error(
+          "An error occurred while converting a Faculty object to a FacultyDto object: Faculty = {}, Violations = {}",
+          faculty, violations);
+      throw new IllegalArgumentException("Invalid Faculty object: " + violations.toString());
     }
+    if (faculty.getId() == null) {
+      logger.error(
+          "An error occurred while converting a Faculty object to a FacultyDto object: Faculty = {}, no id provided",
+          faculty);
+      throw new IllegalArgumentException("Invalid Faculty object: " + "id missing");
+    }
+
+    return new FacultyDto(faculty.getId(), faculty.getName());
+  }
 }

@@ -29,49 +29,44 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @ExtendWith(MockitoExtension.class)
 public class UserModelAssemblerTest {
 
-    @Mock
-    private UserMapper userMapper;
+  @Mock
+  private UserMapper userMapper;
 
-    @InjectMocks
-    private UserModelAssembler userModelAssembler;
+  @InjectMocks
+  private UserModelAssembler userModelAssembler;
 
-    @BeforeEach
-    public void setup() {
-        given(userMapper.convertToDto(any(User.class)))
-                .willReturn(UserDto.builder()
-                        .id(1L)
-                        .firstName("John")
-                        .lastName("Doe")
-                        .email("johndoe@example.com")
-                        .faculty("Informatics")
-                        .degree("Computer Science")
-                        .build());
-    }
+  @BeforeEach
+  public void setup() {
+    given(userMapper.convertToDto(any(User.class))).willReturn(
+        UserDto.builder().id(1L).firstName("John").lastName("Doe").email("johndoe@example.com")
+            .faculty("Informatics").degree("Computer Science").build());
+  }
 
-    @Test
-    public void testToModel() {
-        User user = User.builder().id(1L).build();
+  @Test
+  public void testToModel() {
+    User user = User.builder().id(1L).build();
 
-        Link selfLink = WebMvcLinkBuilder.linkTo(methodOn(UserController.class).getUserById(1L)).withSelfRel();
-        UserDto userDto = userModelAssembler.toModel(user);
+    Link selfLink = WebMvcLinkBuilder.linkTo(methodOn(UserController.class).getUserById(1L))
+        .withSelfRel();
+    UserDto userDto = userModelAssembler.toModel(user);
 
-        Assertions.assertEquals(userDto.getLink("self").get(), selfLink);
-    }
+    Assertions.assertEquals(userDto.getLink("self").get(), selfLink);
+  }
 
-    @Test
-    public void testToCollectionModel() {
-        User user = User.builder().id(1L).build();
+  @Test
+  public void testToCollectionModel() {
+    User user = User.builder().id(1L).build();
 
-        // Create collection with single user
-        Iterable<User> users = Collections.singleton(user);
+    // Create collection with single user
+    Iterable<User> users = Collections.singleton(user);
 
-        CollectionModel<UserDto> userDtos = userModelAssembler.toCollectionModel(users);
+    CollectionModel<UserDto> userDtos = userModelAssembler.toCollectionModel(users);
 
-        Assert.notEmpty(userDtos.getContent());
-        userDtos.getContent().forEach(dto -> {
-            // Assert every user has a self link
-            Link selfLink = dto.getLink("self").get();
-            Assertions.assertNotNull(selfLink, "UserDto should have a self link");
-        });
-    }
+    Assert.notEmpty(userDtos.getContent());
+    userDtos.getContent().forEach(dto -> {
+      // Assert every user has a self link
+      Link selfLink = dto.getLink("self").get();
+      Assertions.assertNotNull(selfLink, "UserDto should have a self link");
+    });
+  }
 }

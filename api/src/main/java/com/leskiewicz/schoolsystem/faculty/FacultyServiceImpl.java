@@ -12,24 +12,27 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class FacultyServiceImpl implements FacultyService{
+public class FacultyServiceImpl implements FacultyService {
 
-    private final FacultyRepository facultyRepository;
+  private final FacultyRepository facultyRepository;
 
-    @Override
-    public Faculty getByName(String name) {
-        return facultyRepository.findByName(name).orElseThrow(() -> new EntityNotFoundException(ErrorMessages.FACULTY_WITH_NAME_NOT_FOUND));
-    }
+  @Override
+  public Faculty getByName(String name) {
+    return facultyRepository.findByName(name).orElseThrow(
+        () -> new EntityNotFoundException(ErrorMessages.objectWithNameNotFound("Faculty", name)));
+  }
 
-    @Override
-    public Degree getDegreeByTitleAndFieldOfStudy(Faculty faculty, DegreeTitle title, String fieldOfStudy) {
-        List<Degree> degrees = faculty.getDegrees();
-        System.out.println(degrees);
+  @Override
+  public Degree getDegreeByTitleAndFieldOfStudy(Faculty faculty, DegreeTitle title,
+      String fieldOfStudy) {
+    List<Degree> degrees = faculty.getDegrees();
 
-        Optional<Degree> degree = degrees.stream()
-                .filter(d -> d.getTitle().equals(title) && d.getFieldOfStudy().equals(fieldOfStudy))
-                .findFirst();
+    // Get degree if it is in the faculty
+    Optional<Degree> degree = degrees.stream()
+        .filter(d -> d.getTitle().equals(title) && d.getFieldOfStudy().equals(fieldOfStudy))
+        .findFirst();
 
-        return degree.orElseThrow(() -> new EntityNotFoundException(ErrorMessages.DEGREE_NOT_ON_FACULTY));
-    }
+    return degree.orElseThrow(() -> new EntityNotFoundException(
+        ErrorMessages.degreeNotOnFaculty(fieldOfStudy, title, faculty.getName())));
+  }
 }

@@ -1,10 +1,40 @@
 package com.leskiewicz.schoolsystem.error;
 
-public interface ErrorMessages {
+import com.leskiewicz.schoolsystem.degree.DegreeTitle;
 
-    String USER_WITH_ID_NOT_FOUND = "User with provided id not found";
-    String USER_WITH_EMAIL_NOT_FOUND = "User with provided email not found";
-    String FACULTY_WITH_NAME_NOT_FOUND = "Faculty with provided name not found";
+public class ErrorMessages {
 
-    String DEGREE_NOT_ON_FACULTY = "Degree with given title and field of study not found on chosen faculty";
+    public static String objectWithIdNotFound(String object, Long userId) {
+        return object + " with ID: " + userId + " not found";
+    }
+
+    public static String objectWithEmailNotFound(String object, String email) {
+        return object + " with email: " + email + " not found";
+    }
+
+    public static String objectWithNameNotFound(String object, String facultyName) {
+        return object + " with name: " + facultyName + " not found";
+    }
+
+    public static String objectWasNotUpdated(String object) {
+        return object + " was not updated";
+    }
+
+    public static String degreeNotOnFaculty(String fieldOfStudy, DegreeTitle title, String facultyName) {
+        String titleString = "Bachelor";
+        switch (title) {
+            case DOCTOR -> titleString = "Doctor";
+            case MASTER -> titleString = "Master";
+            case BACHELOR -> titleString = "Bachelor";
+            case PROFESSOR -> titleString = "Professor";
+            case BACHELOR_OF_SCIENCE -> titleString = "Bachelor of science";
+        }
+
+        return titleString + " in the field: " + fieldOfStudy + " on faculty: " + facultyName + " not found";
+    }
+
+    public static String userWithEmailAlreadyExists(String email) {
+        return "User with email: " + email + " already exists";
+    }
+
 }
