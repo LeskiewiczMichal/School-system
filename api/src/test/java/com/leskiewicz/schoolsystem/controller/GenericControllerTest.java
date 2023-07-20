@@ -6,18 +6,13 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.leskiewicz.schoolsystem.testModels.CustomLink;
-import com.leskiewicz.schoolsystem.testModels.TriConsumer;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtils;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtilsImpl;
 import com.leskiewicz.schoolsystem.testUtils.TestAssertions;
 import com.leskiewicz.schoolsystem.testUtils.assertions.DtoAssertion;
 import java.util.List;
-import java.util.function.BiConsumer;
-import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -36,6 +31,7 @@ public class GenericControllerTest<T> {
 
   @BeforeEach
   public void setup() {
+    // Setting up my utils class for performing requests
     requestUtils = new RequestUtilsImpl(mvc,
         new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
             .registerModule(new JavaTimeModule()));
@@ -47,6 +43,7 @@ public class GenericControllerTest<T> {
     ResultActions result = requestUtils.performGetRequest(apiPath, status().isOk());
 
     for (int i = 0; i < dtos.size(); i++) {
+      // Assert with custom interface for each type
       T dto = dtos.get(i);
       dtoAssertion.assertDtoInCollection(result, i, dto);
     }
