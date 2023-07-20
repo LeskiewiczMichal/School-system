@@ -29,12 +29,18 @@ public class Faculty extends RepresentationModel<Faculty> {
     @Column(name = "name")
     private String name;
 
+    @NotNull
+    @Singular
     @OneToMany(mappedBy = "faculty")
     private List<Course> courses;
 
+    @NotNull
+    @Singular
     @OneToMany(mappedBy = "faculty")
     private List<Degree> degrees;
 
+    @NotNull
+    @Singular
     @OneToMany(mappedBy = "faculty")
     private List<User> users;
 
@@ -63,4 +69,5 @@ public class Faculty extends RepresentationModel<Faculty> {
     public int hashCode() {
         return Objects.hash(id, name, courses, degrees, users);
     }
+
 }

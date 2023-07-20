@@ -115,7 +115,7 @@ public class UserServiceTest {
   //region GetUsers tests
   @Test
   public void getUsersReturnsPagedUsers() {
-    Pageable pageable = PageRequest.of(0, 10, Sort.by(Sort.Direction.fromString("asc"), "id"));
+    Pageable pageable = Mockito.mock(PageRequest.class);
     Page<User> mockPage = Mockito.mock(Page.class);
 
     given(userRepository.findAll(pageable)).willReturn(mockPage);

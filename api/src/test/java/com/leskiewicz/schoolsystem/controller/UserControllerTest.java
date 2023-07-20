@@ -250,24 +250,27 @@ public class UserControllerTest {
     Arguments changeDegreeToNotCorrectOnCurrentFaculty = Arguments.of(
         PatchUserRequest.builder().degreeField("Nano").degreeTitle(DegreeTitle.BACHELOR).build(),
         new ApiError(path,
-            ErrorMessages.degreeNotOnFaculty("Nano", DegreeTitle.BACHELOR, "Informatics"), 404,
-            LocalDateTime.now()), status().isNotFound());
+            ErrorMessages.objectWasNotUpdated("User") + ". " + ErrorMessages.degreeNotOnFaculty(
+                "Nano", DegreeTitle.BACHELOR, "Informatics"), 404, LocalDateTime.now()),
+        status().isNotFound());
 
     Arguments changeFacultyToNonExistent = Arguments.of(
-        PatchUserRequest.builder().facultyName("qwre").build(),
-        new ApiError(path, ErrorMessages.objectWithNameNotFound("Faculty", "qwre"), 404,
-            LocalDateTime.now()), status().isNotFound());
+        PatchUserRequest.builder().facultyName("qwre").build(), new ApiError(path,
+            ErrorMessages.objectWasNotUpdated("User") + ". " + ErrorMessages.objectWithNameNotFound(
+                "Faculty", "qwre"), 404, LocalDateTime.now()), status().isNotFound());
 
     Arguments changeFacultyToOneThatHaveNotGotTheSameDegree = Arguments.of(
         PatchUserRequest.builder().facultyName("Electronics").build(), new ApiError(path,
-            ErrorMessages.degreeNotOnFaculty("Computer Science", DegreeTitle.BACHELOR_OF_SCIENCE,
-                "Electronics"), 404, LocalDateTime.now()), status().isNotFound());
+            ErrorMessages.objectWasNotUpdated("User") + ". " + ErrorMessages.degreeNotOnFaculty(
+                "Computer Science", DegreeTitle.BACHELOR_OF_SCIENCE, "Electronics"), 404,
+            LocalDateTime.now()), status().isNotFound());
 
     Arguments changeFacultyAndDegreeButDegreeButDegreeIsNotOnNewFaculty = Arguments.of(
         PatchUserRequest.builder().facultyName("Electronics").degreeTitle(DegreeTitle.BACHELOR)
             .degreeField("Nano").build(), new ApiError(path,
-            ErrorMessages.degreeNotOnFaculty("Nano", DegreeTitle.BACHELOR, "Electronics"), 404,
-            LocalDateTime.now()), status().isNotFound());
+            ErrorMessages.objectWasNotUpdated("User") + ". " + ErrorMessages.degreeNotOnFaculty(
+                "Nano", DegreeTitle.BACHELOR, "Electronics"), 404, LocalDateTime.now()),
+        status().isNotFound());
 
     return Stream.of(changeDegreeToNotCorrectOnCurrentFaculty, changeFacultyToNonExistent,
         changeFacultyToOneThatHaveNotGotTheSameDegree,
