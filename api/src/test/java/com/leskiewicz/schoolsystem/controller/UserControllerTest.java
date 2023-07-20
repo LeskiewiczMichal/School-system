@@ -40,7 +40,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Sql(scripts = "classpath:usersTest.sql")
+@Sql(scripts = {"classpath:schema.sql", "classpath:usersTest.sql"})
 public class UserControllerTest {
 
   private final String GET_USERS_PATH = "/api/users";

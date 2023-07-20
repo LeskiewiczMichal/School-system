@@ -33,7 +33,6 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultMatcher;
-import org.springframework.util.Assert;
 
 import java.util.stream.Stream;
 
@@ -42,7 +41,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Sql(scripts = "classpath:data.sql")
+@Sql(scripts = {"classpath:schema.sql", "classpath:authentication.sql"})
 public class AuthenticationControllerTest {
 
   private final String REGISTER_PATH = "/api/auth/register";
