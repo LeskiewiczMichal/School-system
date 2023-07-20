@@ -66,7 +66,7 @@ public class UserControllerTest {
   }
 
   //region GetUsers tests
-  @DisplayName("Get users API happy path with different params")
+  @DisplayName("Get users API returns correct responses different params")
   @ParameterizedTest
   @MethodSource("getUsersHappyPathProvider")
   public void getUsersHappyPath(String queryString, List<UserDto> users, List<CustomLink> links)
