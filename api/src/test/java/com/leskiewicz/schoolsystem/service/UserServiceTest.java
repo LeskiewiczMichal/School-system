@@ -44,8 +44,6 @@ public class UserServiceTest {
   @Mock
   private UserRepository userRepository;
   @Mock
-  private UserMapper userMapper;
-  @Mock
   private DegreeService degreeService;
   @Mock
   private FacultyService facultyService;
@@ -130,7 +128,7 @@ public class UserServiceTest {
   public void toUserDtosReturnsListOfUserDtos() {
     Page<User> userPage = new PageImpl<>(Arrays.asList(user, user));
     UserDto userDto = Mockito.mock(UserDto.class);
-    given(userMapper.convertToDto(any(User.class))).willReturn(userDto);
+    given(UserMapper.convertToDto(any(User.class))).willReturn(userDto);
 
     List<UserDto> result = userService.toUserDtos(userPage);
 

@@ -16,12 +16,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
-import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Collections;
 
@@ -32,8 +29,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @ExtendWith(MockitoExtension.class)
 public class UserModelAssemblerTest {
 
-  @Mock
-  private UserMapper userMapper;
 
   @InjectMocks
   private UserModelAssembler userModelAssembler;
@@ -45,13 +40,12 @@ public class UserModelAssemblerTest {
   @BeforeEach
   public void setup() {
     user = Mockito.mock(User.class);
-
     faculty = Mockito.mock(Faculty.class);
 
     given(faculty.getId()).willReturn(1L);
     given(user.getFaculty()).willReturn(faculty);
 
-    given(userMapper.convertToDto(any(User.class))).willReturn(
+    given(UserMapper.convertToDto(any(User.class))).willReturn(
         UserDto.builder().id(1L).firstName("John").lastName("Doe").email("johndoe@example.com")
             .faculty("Informatics").degree("Computer Science").build());
   }

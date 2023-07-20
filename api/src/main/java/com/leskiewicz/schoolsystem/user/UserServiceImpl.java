@@ -7,8 +7,8 @@ import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.FacultyService;
 import com.leskiewicz.schoolsystem.error.UserAlreadyExistsException;
 import com.leskiewicz.schoolsystem.user.dto.PatchUserRequest;
-import com.leskiewicz.schoolsystem.user.utils.UserMapper;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
+import com.leskiewicz.schoolsystem.user.utils.UserMapper;
 import com.leskiewicz.schoolsystem.utils.ValidationUtils;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
@@ -28,7 +28,6 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
   private final UserRepository userRepository;
-  private final UserMapper userMapper;
   private final FacultyService facultyService;
   private final PasswordEncoder passwordEncoder;
   private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
@@ -53,7 +52,7 @@ public class UserServiceImpl implements UserService {
   @Override
   public List<UserDto> toUserDtos(Page<User> usersPage) {
     return usersPage.getContent().stream()
-        .map(userMapper::convertToDto)
+        .map(UserMapper::convertToDto)
         .collect(Collectors.toList());
   }
 
