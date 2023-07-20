@@ -6,10 +6,12 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
 import com.leskiewicz.schoolsystem.error.ApiError;
 import com.leskiewicz.schoolsystem.error.ErrorMessages;
+import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
 import com.leskiewicz.schoolsystem.testModels.UserDto;
 import com.leskiewicz.schoolsystem.testModels.CustomLink;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtils;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtilsImpl;
+import com.leskiewicz.schoolsystem.testUtils.TestAssertions;
 import com.leskiewicz.schoolsystem.user.UserRepository;
 import com.leskiewicz.schoolsystem.user.dto.PatchUserRequest;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,6 +23,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -42,6 +45,7 @@ public class UserControllerTest {
 
   private final String GET_USERS_PATH = "/api/users";
   private final String GET_USER_BY_ID = "/api/users/";
+  private final String GET_USER_FACULTY = "/api/users/%d/faculty";
 
   @Autowired
   private MockMvc mvc;
@@ -72,11 +76,11 @@ public class UserControllerTest {
 
     for (int i = 0; i < users.size(); i++) {
       UserDto user = users.get(i);
-      assertUserInCollection(result, i, user.getId(), user.getFirstName(), user.getLastName(),
-          user.getEmail(), user.getFaculty(), user.getDegree());
+      TestAssertions.assertUserInCollection(result, i, user.getId(), user.getFirstName(),
+          user.getLastName(), user.getEmail(), user.getFaculty(), user.getDegree());
     }
     for (CustomLink customLink : links) {
-      assertLink(result, customLink.getRel(), customLink.getHref());
+      TestAssertions.assertLink(result, customLink.getRel(), customLink.getHref());
     }
   }
 
@@ -160,24 +164,25 @@ public class UserControllerTest {
   @Test
   public void getUserByIdHappyPath() throws Exception {
     ResultActions result = requestUtils.performGetRequest(GET_USER_BY_ID + "1", status().isOk());
-    assertUser(result, 1L, "John", "Doe", "johndoe@example.com", "Informatics", "Computer Science");
+    TestAssertions.assertUser(result, 1L, "John", "Doe", "johndoe@example.com", "Informatics",
+        "Computer Science");
   }
 
   @Test
   public void getUserByIdReturnsStatus400OnStringProvided() throws Exception {
-    ResultActions result = mvc.perform(get(GET_USER_BY_ID + "asdf"))
-        .andExpect(status().isBadRequest()).andExpect(content().contentType("application/json"));
+    ResultActions result = requestUtils.performGetRequest(GET_USER_BY_ID + "asdf",
+        status().isBadRequest(), MediaType.APPLICATION_JSON.toString());
 
-    assertError(result, "Wrong argument types provided", "/api/users/asdf", 400);
+    TestAssertions.assertError(result, "Wrong argument types provided", "/api/users/asdf", 400);
   }
 
   @Test
   public void getUserByIdReturnsStatus404OnUserNotFound() throws Exception {
-    ResultActions result = mvc.perform(get(GET_USER_BY_ID + "9999"))
-        .andExpect(status().isNotFound()).andExpect(content().contentType("application/json"));
+    ResultActions result = requestUtils.performGetRequest(GET_USER_BY_ID + "9999",
+        status().isNotFound(), MediaType.APPLICATION_JSON.toString());
 
-    assertError(result, ErrorMessages.objectWithIdNotFound("User", 9999L), GET_USER_BY_ID + "9999",
-        404);
+    TestAssertions.assertError(result, ErrorMessages.objectWithIdNotFound("User", 9999L),
+        GET_USER_BY_ID + "9999", 404);
   }
   //endregion
 
@@ -189,7 +194,7 @@ public class UserControllerTest {
     ResultActions result = requestUtils.performPatchRequest(GET_USER_BY_ID + "20", request,
         status().isOk());
 
-    assertUser(result, expectedUser);
+    TestAssertions.assertUser(result, expectedUser);
   }
 
   @Test
@@ -197,8 +202,8 @@ public class UserControllerTest {
     ResultActions result = requestUtils.performPatchRequest(GET_USER_BY_ID + "300",
         PatchUserRequest.builder().firstName("Ok").build(), status().isNotFound());
 
-    assertError(result, ErrorMessages.objectWithIdNotFound("User", 300L), GET_USER_BY_ID + "300",
-        404);
+    TestAssertions.assertError(result, ErrorMessages.objectWithIdNotFound("User", 300L),
+        GET_USER_BY_ID + "300", 404);
   }
 
   @ParameterizedTest
@@ -208,7 +213,8 @@ public class UserControllerTest {
     ResultActions result = requestUtils.performPatchRequest(GET_USER_BY_ID + "20", request,
         expectedStatus);
 
-    assertError(result, expectedError.message(), expectedError.path(), expectedError.statusCode());
+    TestAssertions.assertError(result, expectedError.message(), expectedError.path(),
+        expectedError.statusCode());
   }
 
   static Stream<Arguments> patchUserHappyPathProvider() {
@@ -278,62 +284,26 @@ public class UserControllerTest {
   }
   //endregion
 
-  //region Utils
-  private void assertUserInCollection(ResultActions matchers, int index, long id, String firstName,
-      String lastName, String email, String faculty, String degree) throws Exception {
-    matchers.andExpect(jsonPath(String.format("$._embedded.users[%d].id", index)).value(id))
-        .andExpect(
-            jsonPath(String.format("$._embedded.users[%d].firstName", index)).value(firstName))
-        .andExpect(jsonPath(String.format("$._embedded.users[%d].lastName", index)).value(lastName))
-        .andExpect(jsonPath(String.format("$._embedded.users[%d].email", index)).value(email))
-        .andExpect(jsonPath(String.format("$._embedded.users[%d].faculty", index)).value(faculty))
-        .andExpect(jsonPath(String.format("$._embedded.users[%d]._links.self.href", index)).value(
-            String.format("http://localhost/api/users/%d", id)));
-    if (degree != null) {
-      matchers.andExpect(
-          jsonPath(String.format("$._embedded.users[%d].degree", index)).value(degree));
-    }
+  //region GetUserFaculty tests
+  @Test
+  public void getUserFacultyReturnsCorrectFaculty() throws Exception {
+    ResultActions result = requestUtils.performGetRequest(String.format(GET_USER_FACULTY, 1),
+        status().isOk());
+
+    FacultyDto expectedFaculty = FacultyDto.builder().id(1L).name("Informatics").build();
+
+    TestAssertions.assertFaculty(result, expectedFaculty);
   }
 
+  @Test
+  public void getUserFacultyReturnsStatus404WhenUserNotAssociatedWithFaculty() throws Exception {
+    ResultActions result = requestUtils.performGetRequest(String.format(GET_USER_FACULTY, 9999),
+        status().isNotFound());
 
-  private void assertUser(ResultActions matchers, long id, String firstName, String lastName,
-      String email, String faculty, String degree) throws Exception {
-    matchers.andExpect(jsonPath(String.format("$.id")).value(id))
-        .andExpect(jsonPath(String.format("$.firstName")).value(firstName))
-        .andExpect(jsonPath(String.format("$.lastName")).value(lastName))
-        .andExpect(jsonPath(String.format("$.email")).value(email))
-        .andExpect(jsonPath(String.format("$.faculty")).value(faculty)).andExpect(
-            jsonPath(String.format("$._links.self.href")).value(
-                String.format("http://localhost/api/users/%d", id)));
-    if (degree != null) {
-      matchers.andExpect(jsonPath(String.format("$.degree")).value(degree));
-    }
+    TestAssertions.assertError(result, "User with ID: 9999 does not have associated faculty",
+        "/api/users/9999/faculty", 404);
+
   }
 
-  private void assertUser(ResultActions matchers, UserDto userDto) throws Exception {
-    matchers.andExpect(jsonPath(String.format("$.id")).value(userDto.getId()))
-        .andExpect(jsonPath(String.format("$.firstName")).value(userDto.getFirstName()))
-        .andExpect(jsonPath(String.format("$.lastName")).value(userDto.getLastName()))
-        .andExpect(jsonPath(String.format("$.email")).value(userDto.getEmail()))
-        .andExpect(jsonPath(String.format("$.faculty")).value(userDto.getFaculty())).andExpect(
-            jsonPath(String.format("$._links.self.href")).value(
-                String.format("http://localhost/api/users/%d", userDto.getId())));
-    if (userDto.getDegree() != null) {
-      matchers.andExpect(jsonPath(String.format("$.degree")).value(userDto.getDegree()));
-    }
-  }
-
-  private void assertLink(ResultActions matchers, String rel, String href) throws Exception {
-    matchers.andExpect(jsonPath(String.format("$._links.%s.href", rel)).value(href));
-  }
-
-  private void assertError(ResultActions matchers, String message, String path, int status)
-      throws Exception {
-    matchers.andExpect(jsonPath(String.format("$.message")).value(message))
-        .andExpect(jsonPath(String.format("$.statusCode")).value(status))
-        .andExpect(jsonPath(String.format("$.path")).value(path));
-  }
   //endregion
-
-
 }

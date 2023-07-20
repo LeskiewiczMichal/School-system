@@ -14,5 +14,6 @@ public interface RequestUtils {
     ResultActions performPostRequest(String path, Object request, ResultMatcher expectedStatus) throws Exception;
     ResultActions performPatchRequest(String path, Object request, ResultMatcher expectedStatus) throws Exception;
     ResultActions performGetRequest(String path, ResultMatcher expectedStatus) throws Exception;
+    public ResultActions performGetRequest(String path, ResultMatcher expectedStatus, String expectedContentType) throws Exception;
     <T> T mapResponse(MvcResult result, TypeReference<T> responseType) throws Exception;
 }

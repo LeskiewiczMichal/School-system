@@ -68,4 +68,11 @@ public class RequestUtilsImpl implements RequestUtils {
                         .contentType("application/hal+json"))
                 .andExpect(expectedStatus);
     }
+
+    @Override
+    public ResultActions performGetRequest(String path, ResultMatcher expectedStatus, String expectedContentType) throws Exception {
+        return mvc.perform(get(path)
+                .contentType(expectedContentType))
+            .andExpect(expectedStatus);
+    }
 }
