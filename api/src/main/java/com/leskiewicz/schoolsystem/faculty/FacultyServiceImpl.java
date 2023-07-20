@@ -3,9 +3,18 @@ package com.leskiewicz.schoolsystem.faculty;
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
 import com.leskiewicz.schoolsystem.error.ErrorMessages;
+import com.leskiewicz.schoolsystem.error.customexception.EntityAlreadyExistsException;
+import com.leskiewicz.schoolsystem.faculty.dto.CreateFacultyRequest;
 import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
+import com.leskiewicz.schoolsystem.faculty.utils.FacultyMapper;
+import com.leskiewicz.schoolsystem.utils.StringUtils;
+import com.leskiewicz.schoolsystem.utils.ValidationUtils;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.integration.IntegrationProperties.Error;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,6 +27,7 @@ import java.util.Optional;
 public class FacultyServiceImpl implements FacultyService {
 
   private final FacultyRepository facultyRepository;
+  private final Logger logger = LoggerFactory.getLogger(FacultyController.class);
 
   @Override
   public Faculty getById(Long id) {
@@ -51,8 +61,19 @@ public class FacultyServiceImpl implements FacultyService {
   }
 
   @Override
-  public FacultyDto createFaculty() {
-    return null;
+  public Faculty createFaculty(CreateFacultyRequest request) {
+    if (facultyRepository.findByName(request.getName()).isPresent()) {
+      throw new EntityAlreadyExistsException(
+          ErrorMessages.objectWithPropertyAlreadyExists("Faculty", "name", request.getName()));
+    }
+
+    Faculty faculty = Faculty.builder()
+        .name(StringUtils.capitalizeFirstLetterOfEveryWord(request.getName())).build();
+    ValidationUtils.validate(faculty);
+    facultyRepository.save(faculty);
+    logger.info("Created new faculty with name: {}", faculty.getName());
+
+    return faculty;
   }
 
 

@@ -2,11 +2,15 @@ package com.leskiewicz.schoolsystem.service;
 
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
+import com.leskiewicz.schoolsystem.error.customexception.EntityAlreadyExistsException;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.FacultyRepository;
 import com.leskiewicz.schoolsystem.faculty.FacultyServiceImpl;
+import com.leskiewicz.schoolsystem.faculty.dto.CreateFacultyRequest;
 import com.leskiewicz.schoolsystem.faculty.utils.FacultyModelAssembler;
+import com.leskiewicz.schoolsystem.user.User;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.ConstraintViolationException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -16,6 +20,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -24,6 +29,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.util.Assert;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -119,6 +125,42 @@ public class FacultyServiceTest {
     Assertions.assertThrows(EntityNotFoundException.class,
         () -> facultyService.getDegreeByTitleAndFieldOfStudy(faculty, DegreeTitle.BACHELOR,
             "test"));
+  }
+  //endregion
+
+  //region CreateFaculty tests
+  @Test
+  public void createsAndReturnsFacultyAndOnProperRequest() {
+    CreateFacultyRequest request = new CreateFacultyRequest(faculty.getName());
+
+    Faculty testFaculty = facultyService.createFaculty(request);
+
+    // Responded with proper Faculty
+    Assertions.assertEquals(faculty.getName(), testFaculty.getName());
+
+    // Proper faculty was saved in the repository
+    ArgumentCaptor<Faculty> facultyCapture = ArgumentCaptor.forClass(Faculty.class);
+    verify(facultyRepository).save(facultyCapture.capture());
+    Faculty savedFaculty = facultyCapture.getValue();
+    Assertions.assertEquals(savedFaculty, testFaculty);
+  }
+
+  @Test
+  public void throwsConstraintViolationExceptionOnRequestInvalid() {
+    CreateFacultyRequest request = new CreateFacultyRequest(null);
+
+    Assertions.assertThrows(ConstraintViolationException.class, () ->
+        facultyService.createFaculty(request));
+  }
+
+  @Test
+  public void throwsEntityAlreadyExistsExceptionOnNameThatIsAlreadyTaken() {
+    CreateFacultyRequest request = new CreateFacultyRequest(faculty.getName());
+
+    given(facultyRepository.findByName(any(String.class))).willReturn(Optional.of(faculty));
+
+    Assertions.assertThrows(EntityAlreadyExistsException.class, () ->
+        facultyService.createFaculty(request));
   }
   //endregion
 }

@@ -16,6 +16,10 @@ public class ErrorMessages {
         return object + " with name: " + facultyName + " not found";
     }
 
+    public static String objectWithPropertyAlreadyExists(String object, String propertyName, String propertyValue) {
+        return String.format("%s with %s: %s already exists", object, propertyName, propertyValue);
+    }
+
     public static String objectWasNotUpdated(String object) {
         return object + " was not updated";
     }

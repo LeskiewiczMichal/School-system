@@ -1,10 +1,12 @@
 package com.leskiewicz.schoolsystem.faculty;
 
 import com.leskiewicz.schoolsystem.dto.request.PageableRequest;
+import com.leskiewicz.schoolsystem.faculty.dto.CreateFacultyRequest;
 import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
 import com.leskiewicz.schoolsystem.faculty.utils.FacultyModelAssembler;
 import com.leskiewicz.schoolsystem.service.links.PageableLinksService;
 import com.leskiewicz.schoolsystem.utils.ValidationUtils;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.hateoas.CollectionModel;
@@ -45,10 +47,10 @@ public class FacultyController {
   }
 
   @PostMapping
-  public ResponseEntity<Faculty> createFaculty(Faculty faculty) {
-    Faculty faculty1 = Faculty.builder().name("qwer").build();
-    ValidationUtils.validate(faculty1);
+  public ResponseEntity<FacultyDto> createFaculty(@Valid CreateFacultyRequest request) {
+    Faculty faculty = facultyService.createFaculty(request);
+    FacultyDto facultyDto = facultyModelAssembler.toModel(faculty);
 
-    return ResponseEntity.ok(faculty1);
+    return ResponseEntity.created(facultyDto.getLink("self").get().toUri()).body(facultyDto);
   }
 }

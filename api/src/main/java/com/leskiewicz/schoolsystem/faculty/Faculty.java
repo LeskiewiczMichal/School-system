@@ -30,7 +30,7 @@ public class Faculty extends RepresentationModel<Faculty> {
     private String name;
 
     @NotNull
-//    @Singular
+    @Singular
     @OneToMany(mappedBy = "faculty")
     private List<Course> courses;
 
