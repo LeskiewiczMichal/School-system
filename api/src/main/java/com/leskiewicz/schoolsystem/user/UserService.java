@@ -1,5 +1,6 @@
 package com.leskiewicz.schoolsystem.user;
 
+import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.user.dto.PatchUserRequest;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
@@ -21,4 +22,6 @@ public interface UserService {
   User updateUser(PatchUserRequest request, Long userId);
 
   Faculty getUserFaculty(Long userId);
+
+  Degree getUserDegree(Long userId);
 }

@@ -153,7 +153,9 @@ public class UserServiceImpl implements UserService {
         "User with ID: " + userId + " does not have associated faculty"));
   }
 
-
-
-
+  @Override
+  public Degree getUserDegree(Long userId) {
+    return userRepository.findDegreeByUserId(userId).orElseThrow(() -> new EntityNotFoundException(
+        "User with ID: " + userId + " does not have associated degree"));
+  }
 }

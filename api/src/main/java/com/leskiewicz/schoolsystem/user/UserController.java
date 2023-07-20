@@ -61,4 +61,9 @@ public class UserController {
     return ResponseEntity.ok(facultyDto);
   }
 
+//  @GetMapping("/{id}/degree")
+//  public ResponseEntity<DegreeDto> getUserDegree(@PathVariable Long id) {
+//
+//  }
+
 }
