@@ -1,6 +1,7 @@
 package com.leskiewicz.schoolsystem.testUtils;
 
 import com.leskiewicz.schoolsystem.degree.Degree;
+import com.leskiewicz.schoolsystem.degree.DegreeTitle;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.security.Role;
 import com.leskiewicz.schoolsystem.user.User;
@@ -24,6 +25,16 @@ public class TestHelper {
         .id(1L)
         .name("TestFaculty")
         .build();
+  }
+
+  public static Degree createDegree(Faculty faculty) {
+    return Degree.builder()
+        .id(0L)
+        .title(DegreeTitle.BACHELOR_OF_SCIENCE)
+        .fieldOfStudy("Computer Science")
+        .faculty(faculty)
+        .build();
+
   }
 
 }

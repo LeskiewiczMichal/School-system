@@ -19,46 +19,43 @@ import org.mockito.junit.jupiter.MockitoExtension;
 public class FacultyMapperTest {
 
   @InjectMocks
-      private FacultyMapperImpl facultyMapper;
+  private FacultyMapperImpl facultyMapper;
 
-  User user;
   Faculty faculty;
   Degree degree;
 
   @BeforeEach
   public void setup() {
     degree = Mockito.mock(Degree.class);
-    user = Mockito.mock(User.class);
 
     faculty = TestHelper.createFaculty();
   }
 
   @Test
   public void convertToDtoCorrectForFaculty() {
-    FacultyDto expectedFacultyDto = FacultyDto.builder()
-        .id(1L)
-        .name("TestFaculty")
-        .build();
+    FacultyDto expectedFacultyDto = FacultyDto.builder().id(1L).name("TestFaculty").build();
 
     FacultyDto result = facultyMapper.convertToDto(faculty);
 
     Assertions.assertEquals(expectedFacultyDto, result);
-  };
+  }
+
+
 
   @Test
   public void convertToDtoThrowsIllegalArgumentExceptionOnNoId() {
     Faculty testFaculty = faculty.toBuilder().id(null).build();
 
-    Assertions.assertThrows(IllegalArgumentException.class, () ->
-        facultyMapper.convertToDto(testFaculty));
+    Assertions.assertThrows(IllegalArgumentException.class,
+        () -> facultyMapper.convertToDto(testFaculty));
   }
 
   @Test
   public void throwsConstraintViolationExceptionOnInvalidFaculty() {
     Faculty testFaculty = faculty.toBuilder().name(null).build();
 
-    Assertions.assertThrows(ConstraintViolationException.class, () ->
-        facultyMapper.convertToDto(testFaculty));
+    Assertions.assertThrows(ConstraintViolationException.class,
+        () -> facultyMapper.convertToDto(testFaculty));
   }
 
 }
