@@ -63,4 +63,12 @@ public class GenericControllerTest<T> {
     dtoAssertion.assertDto(result, dto);
   }
 
+  @ParameterizedTest
+  @MethodSource("getApiSingleItemErrorsProvider")
+  public void getApiErrors(String apiPath, ResultMatcher status, String mediaType, String errorMessage, int apiErrorCode) throws Exception {
+    ResultActions result = requestUtils.performGetRequest(apiPath, status, mediaType);
+
+    TestAssertions.assertError(result, errorMessage, apiPath, apiErrorCode);
+  }
+
 }

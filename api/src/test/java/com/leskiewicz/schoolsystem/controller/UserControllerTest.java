@@ -163,20 +163,27 @@ public class UserControllerTest extends GenericControllerTest<UserDto> {
    return Stream.of(happyPath);
   }
 
-  @Test
-  public void getUserByIdHappyPath() throws Exception {
-    ResultActions result = requestUtils.performGetRequest(GET_USER_BY_ID + "1", status().isOk());
-    TestAssertions.assertUser(result, 1L, "John", "Doe", "johndoe@example.com", "Informatics",
-        "Computer Science");
+  static Stream<Arguments> getApiSingleItemErrorsProvider() {
+    String apiPath = "/api/users/";
+
+    Arguments status400OnStringProvided = Arguments.of(
+        apiPath + "asdf",
+        status().isBadRequest(),
+        MediaType.APPLICATION_JSON.toString(),
+        "Wrong argument types provided",
+        400
+    );
+
+    return Stream.of(status400OnStringProvided);
   }
 
-  @Test
-  public void getUserByIdReturnsStatus400OnStringProvided() throws Exception {
-    ResultActions result = requestUtils.performGetRequest(GET_USER_BY_ID + "asdf",
-        status().isBadRequest(), MediaType.APPLICATION_JSON.toString());
-
-    TestAssertions.assertError(result, "Wrong argument types provided", "/api/users/asdf", 400);
-  }
+//  @Test
+//  public void getUserByIdReturnsStatus400OnStringProvided() throws Exception {
+//    ResultActions result = requestUtils.performGetRequest(GET_USER_BY_ID + "asdf",
+//        status().isBadRequest(), MediaType.APPLICATION_JSON.toString());
+//
+//    TestAssertions.assertError(result, "Wrong argument types provided", "/api/users/asdf", 400);
+//  }
 
   @Test
   public void getUserByIdReturnsStatus404OnUserNotFound() throws Exception {
