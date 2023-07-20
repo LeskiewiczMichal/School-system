@@ -103,8 +103,14 @@ public class AuthenticationControllerTest {
         .degree(registerRequest.getDegreeField())
         .build();
 
+    // Check if Location header was added
+    String locationHeader = result.getResponse().getHeader("Location");
+    Assertions.assertNotNull(locationHeader, "Expected Location header in response");
+    // Correct user was returned
     Assertions.assertEquals(registerTestUserDto, response.getUser());
+    // Token was returned
     Assertions.assertNotNull(response.getToken());
+    // Proper links were added
     Assertions.assertTrue(node.has("_links") && node.get("_links").has("self"),
         "Expected self link in response");
     Assertions.assertTrue(node.has("_links") && node.get("_links").has("authenticate"),
