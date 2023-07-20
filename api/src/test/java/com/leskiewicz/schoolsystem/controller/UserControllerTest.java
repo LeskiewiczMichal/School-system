@@ -12,6 +12,7 @@ import com.leskiewicz.schoolsystem.testModels.CustomLink;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtils;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtilsImpl;
 import com.leskiewicz.schoolsystem.testUtils.TestAssertions;
+import com.leskiewicz.schoolsystem.testUtils.assertions.UserDtoAssertions;
 import com.leskiewicz.schoolsystem.user.UserRepository;
 import com.leskiewicz.schoolsystem.user.dto.PatchUserRequest;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,7 +42,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Sql(scripts = {"classpath:schema.sql", "classpath:usersTest.sql"})
-public class UserControllerTest {
+public class UserControllerTest extends GenericControllerTest<UserDto> {
 
   private final String GET_USERS_PATH = "/api/users";
   private final String GET_USER_BY_ID = "/api/users/";
@@ -66,73 +67,61 @@ public class UserControllerTest {
   }
 
   //region GetUsers tests
-  @DisplayName("Get users API returns correct responses different params")
-  @ParameterizedTest
-  @MethodSource("getUsersHappyPathProvider")
-  public void getUsersHappyPath(String queryString, List<UserDto> users, List<CustomLink> links)
-      throws Exception {
-    ResultActions result = requestUtils.performGetRequest(GET_USERS_PATH + queryString,
-        status().isOk());
 
-    for (int i = 0; i < users.size(); i++) {
-      UserDto user = users.get(i);
-      TestAssertions.assertUserInCollection(result, i, user.getId(), user.getFirstName(),
-          user.getLastName(), user.getEmail(), user.getFaculty(), user.getDegree());
-    }
-    for (CustomLink customLink : links) {
-      TestAssertions.assertLink(result, customLink.getRel(), customLink.getHref());
-    }
-  }
-
-  static Stream<Arguments> getUsersHappyPathProvider() {
+  static Stream<Arguments> getApiCollectionResponsesProvider() {
     UserDto baseUser = UserDto.builder().id(1L).firstName("John").lastName("Doe")
         .email("johndoe@example.com").faculty("Informatics").degree("Computer Science").build();
 
-    Arguments noParams = Arguments.of("", Arrays.asList(baseUser.toBuilder().build(),
-        baseUser.toBuilder().id(2L).firstName("Alice").lastName("Smith")
-            .email("alicesmith@example.com").build(),
-        baseUser.toBuilder().id(3L).firstName("Bob").lastName("Johnson")
-            .email("bobjohnson@example.com").degree(null).build()), Arrays.asList(
-        CustomLink.builder().rel("self")
-            .href("http://localhost/api/users?page=0&size=10&sort=id&direction=asc").build(),
-        CustomLink.builder().rel("first")
-            .href("http://localhost/api/users?page=0&size=10&sort=id&direction=asc").build(),
-        CustomLink.builder().rel("next")
-            .href("http://localhost/api/users?page=1&size=10&sort=id&direction=asc").build(),
-        CustomLink.builder().rel("last")
-            .href("http://localhost/api/users?page=2&size=10&sort=id&direction=asc").build()));
+    UserDtoAssertions userDtoAssertions = new UserDtoAssertions();
 
-    Arguments pageOne = Arguments.of("?page=1", Arrays.asList(
-        baseUser.toBuilder().id(11L).firstName("Alice").lastName("Smith")
-            .email("alicesmith@example.com").build(),
-        baseUser.toBuilder().id(12L).firstName("Alice").lastName("Smith")
-            .email("alicesmith@example.com").build()), Arrays.asList(
-        CustomLink.builder().rel("self")
-            .href("http://localhost/api/users?page=1&size=10&sort=id&direction=asc").build(),
-        CustomLink.builder().rel("first")
-            .href("http://localhost/api/users?page=0&size=10&sort=id&direction=asc").build(),
-        CustomLink.builder().rel("next")
-            .href("http://localhost/api/users?page=2&size=10&sort=id&direction=asc").build(),
-        CustomLink.builder().rel("last")
-            .href("http://localhost/api/users?page=2&size=10&sort=id&direction=asc").build(),
-        CustomLink.builder().rel("prev")
-            .href("http://localhost/api/users?page=0&size=10&sort=id&direction=asc").build()));
+    Arguments noParams = Arguments.of("/api/users", Arrays.asList(baseUser.toBuilder().build(),
+            baseUser.toBuilder().id(2L).firstName("Alice").lastName("Smith")
+                .email("alicesmith@example.com").build(),
+            baseUser.toBuilder().id(3L).firstName("Bob").lastName("Johnson")
+                .email("bobjohnson@example.com").degree(null).build()), Arrays.asList(
+            CustomLink.builder().rel("self")
+                .href("http://localhost/api/users?page=0&size=10&sort=id&direction=asc").build(),
+            CustomLink.builder().rel("first")
+                .href("http://localhost/api/users?page=0&size=10&sort=id&direction=asc").build(),
+            CustomLink.builder().rel("next")
+                .href("http://localhost/api/users?page=1&size=10&sort=id&direction=asc").build(),
+            CustomLink.builder().rel("last")
+                .href("http://localhost/api/users?page=2&size=10&sort=id&direction=asc").build()),
+        userDtoAssertions);
 
-    Arguments descending = Arguments.of("?direction=desc", Arrays.asList(
-        baseUser.toBuilder().id(25L).firstName("Alice").lastName("Smith")
-            .email("alicesmith@example.com").build(),
-        baseUser.toBuilder().id(24L).firstName("Alice").lastName("Smith")
-            .email("alicesmith@example.com").build()), Arrays.asList(
-        CustomLink.builder().rel("self")
-            .href("http://localhost/api/users?page=0&size=10&sort=id&direction=desc").build(),
-        CustomLink.builder().rel("first")
-            .href("http://localhost/api/users?page=0&size=10&sort=id&direction=desc").build(),
-        CustomLink.builder().rel("next")
-            .href("http://localhost/api/users?page=1&size=10&sort=id&direction=desc").build(),
-        CustomLink.builder().rel("last")
-            .href("http://localhost/api/users?page=2&size=10&sort=id&direction=desc").build()));
+    Arguments pageOne = Arguments.of("/api/users?page=1", Arrays.asList(
+            baseUser.toBuilder().id(11L).firstName("Alice").lastName("Smith")
+                .email("alicesmith@example.com").build(),
+            baseUser.toBuilder().id(12L).firstName("Alice").lastName("Smith")
+                .email("alicesmith@example.com").build()), Arrays.asList(
+            CustomLink.builder().rel("self")
+                .href("http://localhost/api/users?page=1&size=10&sort=id&direction=asc").build(),
+            CustomLink.builder().rel("first")
+                .href("http://localhost/api/users?page=0&size=10&sort=id&direction=asc").build(),
+            CustomLink.builder().rel("next")
+                .href("http://localhost/api/users?page=2&size=10&sort=id&direction=asc").build(),
+            CustomLink.builder().rel("last")
+                .href("http://localhost/api/users?page=2&size=10&sort=id&direction=asc").build(),
+            CustomLink.builder().rel("prev")
+                .href("http://localhost/api/users?page=0&size=10&sort=id&direction=asc").build()),
+        userDtoAssertions);
 
-    Arguments sortByName = Arguments.of("?sort=firstName", Arrays.asList(
+    Arguments descending = Arguments.of("/api/users?direction=desc", Arrays.asList(
+            baseUser.toBuilder().id(25L).firstName("Alice").lastName("Smith")
+                .email("alicesmith@example.com").build(),
+            baseUser.toBuilder().id(24L).firstName("Alice").lastName("Smith")
+                .email("alicesmith@example.com").build()), Arrays.asList(
+            CustomLink.builder().rel("self")
+                .href("http://localhost/api/users?page=0&size=10&sort=id&direction=desc").build(),
+            CustomLink.builder().rel("first")
+                .href("http://localhost/api/users?page=0&size=10&sort=id&direction=desc").build(),
+            CustomLink.builder().rel("next")
+                .href("http://localhost/api/users?page=1&size=10&sort=id&direction=desc").build(),
+            CustomLink.builder().rel("last")
+                .href("http://localhost/api/users?page=2&size=10&sort=id&direction=desc").build()),
+        userDtoAssertions);
+
+    Arguments sortByName = Arguments.of("/api/users?sort=firstName", Arrays.asList(
         baseUser.toBuilder().id(14L).firstName("Alice").lastName("Smith")
             .email("alicesmith@example.com").build()), Arrays.asList(
         CustomLink.builder().rel("self")
@@ -143,17 +132,18 @@ public class UserControllerTest {
             .href("http://localhost/api/users?page=1&size=10&sort=firstName&direction=asc").build(),
         CustomLink.builder().rel("last")
             .href("http://localhost/api/users?page=2&size=10&sort=firstName&direction=asc")
-            .build()));
+            .build()), userDtoAssertions);
 
-    Arguments pageSize20 = Arguments.of("?size=20", Arrays.asList(), Arrays.asList(
-        CustomLink.builder().rel("self")
-            .href("http://localhost/api/users?page=0&size=20&sort=id&direction=asc").build(),
-        CustomLink.builder().rel("first")
-            .href("http://localhost/api/users?page=0&size=20&sort=id&direction=asc").build(),
-        CustomLink.builder().rel("next")
-            .href("http://localhost/api/users?page=1&size=20&sort=id&direction=asc").build(),
-        CustomLink.builder().rel("last")
-            .href("http://localhost/api/users?page=1&size=20&sort=id&direction=asc").build()));
+    Arguments pageSize20 = Arguments.of("/api/users?size=20", Arrays.asList(), Arrays.asList(
+            CustomLink.builder().rel("self")
+                .href("http://localhost/api/users?page=0&size=20&sort=id&direction=asc").build(),
+            CustomLink.builder().rel("first")
+                .href("http://localhost/api/users?page=0&size=20&sort=id&direction=asc").build(),
+            CustomLink.builder().rel("next")
+                .href("http://localhost/api/users?page=1&size=20&sort=id&direction=asc").build(),
+            CustomLink.builder().rel("last")
+                .href("http://localhost/api/users?page=1&size=20&sort=id&direction=asc").build()),
+        userDtoAssertions);
 
     return Stream.of(noParams, pageOne, descending, sortByName, pageSize20);
   }
