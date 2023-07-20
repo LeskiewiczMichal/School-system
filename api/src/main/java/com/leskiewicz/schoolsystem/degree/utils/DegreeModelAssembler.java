@@ -15,13 +15,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class DegreeModelAssembler extends RepresentationModelAssemblerSupport<Degree, DegreeDto> {
 
-  public DegreeModelAssembler() {
+  private final DegreeMapper degreeMapper;
+
+  public DegreeModelAssembler(DegreeMapper degreeMapper) {
     super(DegreeController.class, DegreeDto.class);
+    this.degreeMapper = degreeMapper;
   }
 
   @Override
   public DegreeDto toModel(Degree entity) {
-    DegreeDto degreeDto = DegreeMapperImpl.convertToDto(entity);
+    DegreeDto degreeDto = degreeMapper.convertToDto(entity);
 
     Link selfLink = WebMvcLinkBuilder.linkTo(
         methodOn(DegreeController.class).getDegreeById(degreeDto.getId())).withSelfRel();

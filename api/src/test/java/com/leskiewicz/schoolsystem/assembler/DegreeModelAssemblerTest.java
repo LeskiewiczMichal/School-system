@@ -6,7 +6,9 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.degree.DegreeController;
+import com.leskiewicz.schoolsystem.degree.DegreeTitle;
 import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
+import com.leskiewicz.schoolsystem.degree.utils.DegreeMapper;
 import com.leskiewicz.schoolsystem.degree.utils.DegreeMapperImpl;
 import com.leskiewicz.schoolsystem.degree.utils.DegreeModelAssembler;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
@@ -29,7 +31,7 @@ import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 public class DegreeModelAssemblerTest {
 
   @Mock
-  private DegreeMapperImpl degreeMapperMock;
+  private DegreeMapper degreeMapper;
 
   @InjectMocks
   private DegreeModelAssembler degreeModelAssembler;
@@ -44,14 +46,20 @@ public class DegreeModelAssemblerTest {
     faculty = Mockito.mock(Faculty.class);
     degree = Mockito.mock(Degree.class);
 
-    given(degree)
+    degreeDto = DegreeDto.builder()
+        .id(0L)
+        .title(DegreeTitle.BACHELOR)
+        .faculty("Faculty")
+        .fieldOfStudy("Computer science")
+        .build();
+
+    given(degreeMapper.convertToDto(any(Degree.class))).willReturn(degreeDto);
+    given(degree.getFaculty()).willReturn(faculty);
+    given(faculty.getId()).willReturn(0L);
   }
 
   @Test
   public void testToModel() {
-    given(faculty.getName()).willReturn("FacultyName");
-    given(faculty.getId()).willReturn(0L);
-
     Link selfLink = WebMvcLinkBuilder.linkTo(methodOn(DegreeController.class).getDegreeById(0L))
         .withSelfRel();
     Link facultyLink = WebMvcLinkBuilder.linkTo(
@@ -59,8 +67,9 @@ public class DegreeModelAssemblerTest {
 
     DegreeDto result = degreeModelAssembler.toModel(degree);
 
-    Assertions.assertEquals(result.getLink("self").get(), selfLink);
-    Assertions.assertEquals(result.getLink("faculty").get(), facultyLink);
+    Assertions.assertEquals(degreeDto, result);
+    Assertions.assertEquals(selfLink, result.getLink("self").get());
+    Assertions.assertEquals(facultyLink, result.getLink("faculty").get());
   }
 
   @Test

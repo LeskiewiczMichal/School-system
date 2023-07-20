@@ -6,12 +6,15 @@ import com.leskiewicz.schoolsystem.error.ErrorMessages;
 import com.leskiewicz.schoolsystem.utils.ValidationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
-public class DegreeMapperImpl {
+@Component
+public class DegreeMapperImpl implements DegreeMapper{
 
-  private static final Logger logger = LoggerFactory.getLogger(DegreeMapperImpl.class);
+  private final Logger logger = LoggerFactory.getLogger(DegreeMapperImpl.class);
 
-  public static DegreeDto convertToDto(Degree degree) {
+  @Override
+  public DegreeDto convertToDto(Degree degree) {
     ValidationUtils.validate(degree);
     if (degree.getId() == null) {
       throw new IllegalArgumentException(
