@@ -22,7 +22,7 @@ public class UserMapperTest {
 
     // Inject validator
     private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
-    private final UserMapperImpl userMapper = new UserMapperImpl(validator);
+    private final UserMapperImpl userMapper = new UserMapperImpl();
 
     // Variables
     Faculty faculty;

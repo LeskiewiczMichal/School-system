@@ -9,6 +9,7 @@ import com.leskiewicz.schoolsystem.error.UserAlreadyExistsException;
 import com.leskiewicz.schoolsystem.user.dto.PatchUserRequest;
 import com.leskiewicz.schoolsystem.user.utils.UserMapper;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
+import com.leskiewicz.schoolsystem.utils.ValidationUtils;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -58,10 +59,12 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public void addUser(User user) {
+    ValidationUtils.validate(user);
     if (userRepository.findByEmail(user.getEmail()).isPresent()) {
       throw new UserAlreadyExistsException(
           ErrorMessages.userWithEmailAlreadyExists(user.getEmail()));
     }
+
     logger.info("Adding new user with email: " + user.getEmail());
     userRepository.save(user);
   }
@@ -149,6 +152,7 @@ public class UserServiceImpl implements UserService {
       user.setPassword(encodedPassword);
     }
 
+    ValidationUtils.validate(user);
     userRepository.save(user);
     return user;
   }

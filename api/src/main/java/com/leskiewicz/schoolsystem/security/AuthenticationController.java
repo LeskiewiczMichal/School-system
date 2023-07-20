@@ -29,7 +29,7 @@ public class AuthenticationController {
     AuthenticationResponse response = authenticationService.register(request);
     registrationAddLinks(request, response);
 
-    return ResponseEntity.ok(response);
+    return ResponseEntity.created(response.getUser().getLink("self").get().toUri()).body(response);
   }
 
   @PostMapping("/authenticate")

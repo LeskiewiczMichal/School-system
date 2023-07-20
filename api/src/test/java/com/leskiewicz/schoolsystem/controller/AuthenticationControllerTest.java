@@ -87,7 +87,7 @@ public class AuthenticationControllerTest {
   //region Registration Tests
   @Test
   public void registrationHappyPath() throws Exception {
-    MvcResult result = performPostRequest(REGISTER_PATH, registerRequest, status().isOk());
+    MvcResult result = performPostRequest(REGISTER_PATH, registerRequest, status().isCreated());
 
     // Mapping response to readable objects
     JsonNode node = mapper.readTree(result.getResponse().getContentAsString());

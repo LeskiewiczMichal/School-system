@@ -3,6 +3,7 @@ package com.leskiewicz.schoolsystem.faculty;
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
 import com.leskiewicz.schoolsystem.error.ErrorMessages;
+import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -48,4 +49,11 @@ public class FacultyServiceImpl implements FacultyService {
     return degree.orElseThrow(() -> new EntityNotFoundException(
         ErrorMessages.degreeNotOnFaculty(fieldOfStudy, title, faculty.getName())));
   }
+
+  @Override
+  public FacultyDto createFaculty() {
+    return null;
+  }
+
+
 }
