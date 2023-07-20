@@ -97,7 +97,8 @@ public class UserServiceImpl implements UserService {
             request.getDegreeTitle(), request.getDegreeField());
         user.setDegree(degree);
       } catch (EntityNotFoundException e) {
-        throw new EntityNotFoundException(ErrorMessages.objectWasNotUpdated("User") + ". " + e.getMessage());
+        throw new EntityNotFoundException(
+            ErrorMessages.objectWasNotUpdated("User") + ". " + e.getMessage());
       }
     }
 
@@ -112,7 +113,8 @@ public class UserServiceImpl implements UserService {
         user.setFaculty(faculty);
         user.setDegree(degree);
       } catch (EntityNotFoundException e) {
-        throw new EntityNotFoundException(ErrorMessages.objectWasNotUpdated("User") + ". " + e.getMessage());
+        throw new EntityNotFoundException(
+            ErrorMessages.objectWasNotUpdated("User") + ". " + e.getMessage());
       }
     }
 

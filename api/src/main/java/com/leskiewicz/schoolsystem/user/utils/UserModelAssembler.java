@@ -36,8 +36,7 @@ public class UserModelAssembler extends RepresentationModelAssemblerSupport<User
 
   @Override
   public CollectionModel<UserDto> toCollectionModel(Iterable<? extends User> entities) {
-    CollectionModel<UserDto> userDtos = super.toCollectionModel(entities);
 
-    return userDtos;
+    return super.toCollectionModel(entities);
   }
 }

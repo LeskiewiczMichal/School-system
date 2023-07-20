@@ -24,18 +24,13 @@ public class FacultyMapperImpl implements FacultyMapper {
     // Perform manual validation
     Set<ConstraintViolation<Faculty>> violations = validator.validate(faculty);
     if (!violations.isEmpty()) {
-      logger.error(
-          "An error occurred while converting a Faculty object to a FacultyDto object: Faculty = {}, Violations = {}",
-          faculty, violations);
       throw new IllegalArgumentException("Invalid Faculty object: " + violations.toString());
     }
     if (faculty.getId() == null) {
-      logger.error(
-          "An error occurred while converting a Faculty object to a FacultyDto object: Faculty = {}, no id provided",
-          faculty);
       throw new IllegalArgumentException("Invalid Faculty object: " + "id missing");
     }
 
+    logger.debug("Converted Faculty entity with ID: {} to FacultyDto", faculty.getId());
     return new FacultyDto(faculty.getId(), faculty.getName());
   }
 }
