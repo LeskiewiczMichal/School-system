@@ -34,14 +34,14 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public User getById(Long id) {
-    return userRepository.findById(id).orElseThrow(() ->
-        new EntityNotFoundException(ErrorMessages.objectWithIdNotFound("User", id)));
+    return userRepository.findById(id).orElseThrow(
+        () -> new EntityNotFoundException(ErrorMessages.objectWithIdNotFound("User", id)));
   }
 
   @Override
   public User getByEmail(String email) {
-    return userRepository.findByEmail(email).orElseThrow(() ->
-        new EntityNotFoundException(ErrorMessages.objectWithEmailNotFound("User", email)));
+    return userRepository.findByEmail(email).orElseThrow(
+        () -> new EntityNotFoundException(ErrorMessages.objectWithEmailNotFound("User", email)));
   }
 
   @Override
@@ -51,8 +51,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public List<UserDto> toUserDtos(Page<User> usersPage) {
-    return usersPage.getContent().stream()
-        .map(UserMapper::convertToDto)
+    return usersPage.getContent().stream().map(UserMapper::convertToDto)
         .collect(Collectors.toList());
   }
 
@@ -71,8 +70,8 @@ public class UserServiceImpl implements UserService {
   @Override
   public User updateUser(PatchUserRequest request, Long userId) {
     // Find user
-    User user = userRepository.findById(userId).orElseThrow(() ->
-        new EntityNotFoundException(ErrorMessages.objectWithIdNotFound("User", userId)));
+    User user = userRepository.findById(userId).orElseThrow(
+        () -> new EntityNotFoundException(ErrorMessages.objectWithIdNotFound("User", userId)));
 
     // Update degree
     if (request.getDegreeField() != null || request.getDegreeTitle() != null) {
@@ -81,9 +80,8 @@ public class UserServiceImpl implements UserService {
       // If faculty data not complete, throw an error
       if ((request.getDegreeField() != null && request.getDegreeTitle() == null) || (
           request.getDegreeField() == null && request.getDegreeTitle() != null)) {
-        throw new MissingFieldException(
-            ErrorMessages.objectWasNotUpdated("User")
-                + ". Required fields to update degree: title and field of study");
+        throw new MissingFieldException(ErrorMessages.objectWasNotUpdated("User")
+            + ". Required fields to update degree: title and field of study");
       }
 
       // If user is changing faculty, validate the new one
@@ -125,9 +123,8 @@ public class UserServiceImpl implements UserService {
       logger.debug("Updating email of user with ID: {}", userId);
       Optional<User> sameEmailUser = userRepository.findByEmail(request.getEmail());
       if (sameEmailUser.isPresent()) {
-        throw new UserAlreadyExistsException(
-            ErrorMessages.objectWasNotUpdated("User") + ". "
-                + ErrorMessages.userWithEmailAlreadyExists(request.getEmail()));
+        throw new UserAlreadyExistsException(ErrorMessages.objectWasNotUpdated("User") + ". "
+            + ErrorMessages.userWithEmailAlreadyExists(request.getEmail()));
       }
       user.setEmail(request.getEmail());
     }
@@ -155,5 +152,14 @@ public class UserServiceImpl implements UserService {
     userRepository.save(user);
     return user;
   }
+
+  @Override
+  public Faculty getUserFaculty(Long userId) {
+    return userRepository.findFacultyByUserId(userId).orElseThrow(() -> new EntityNotFoundException(
+        "User with ID: " + userId + " does not have associated faculty"));
+  }
+
+
+
 
 }

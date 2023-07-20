@@ -27,7 +27,7 @@ public class UserModelAssembler extends RepresentationModelAssemblerSupport<User
     Link selfLink = WebMvcLinkBuilder.linkTo(
         methodOn(UserController.class).getUserById(entity.getId())).withSelfRel();
     Link facultyLink = WebMvcLinkBuilder.linkTo(
-        methodOn(FacultyController.class).getFacultyById(entity.getFaculty().getId())).withRel("faculty");
+        methodOn(UserController.class).getUserFaculty(entity.getFaculty().getId())).withRel("faculty");
 
     userDto.add(selfLink);
     userDto.add(facultyLink);
