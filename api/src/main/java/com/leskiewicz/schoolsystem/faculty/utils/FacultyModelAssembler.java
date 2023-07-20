@@ -15,14 +15,16 @@ import org.springframework.stereotype.Component;
 public class FacultyModelAssembler extends
     RepresentationModelAssemblerSupport<Faculty, FacultyDto> {
 
+  private final FacultyMapper facultyMapper;
 
-  public FacultyModelAssembler() {
+  public FacultyModelAssembler(FacultyMapper facultyMapper) {
     super(FacultyController.class, FacultyDto.class);
+    this.facultyMapper = facultyMapper;
   }
 
   @Override
   public FacultyDto toModel(Faculty entity) {
-    FacultyDto facultyDto = FacultyMapper.convertToDto(entity);
+    FacultyDto facultyDto = facultyMapper.convertToDto(entity);
 
     Link selfLink = WebMvcLinkBuilder.linkTo(
         methodOn(FacultyController.class).getFacultyById(entity.getId())).withSelfRel();

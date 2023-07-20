@@ -16,6 +16,7 @@ public class DegreeDto extends RepresentationModel<DegreeDto> {
   private final Long id;
   private final DegreeTitle title;
   private final String fieldOfStudy;
+  private final String faculty;
 
 
 }
