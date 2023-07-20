@@ -21,7 +21,7 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 
 @ExtendWith(MockitoExtension.class)
-public class FacultyModelAssembleTest {
+public class FacultyModelAssemblerTest {
 
   @Mock
   private FacultyMapper facultyMapper;
