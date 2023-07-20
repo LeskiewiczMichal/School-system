@@ -7,6 +7,7 @@ import com.leskiewicz.schoolsystem.error.UserAlreadyExistsException;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.FacultyService;
 import com.leskiewicz.schoolsystem.security.Role;
+import com.leskiewicz.schoolsystem.testUtils.TestHelper;
 import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.UserRepository;
 import com.leskiewicz.schoolsystem.user.UserServiceImpl;
@@ -61,16 +62,10 @@ public class UserServiceTest {
 
   @BeforeEach
   public void setUp() {
-    // Set up test data
-    faculty = new Faculty();
-    faculty.setName("Engineering");
+    faculty = Mockito.mock(Faculty.class);
+    degree = Mockito.mock(Degree.class);
 
-    degree = Degree.builder().title(DegreeTitle.BACHELOR).fieldOfStudy("Computer Science")
-        .faculty(faculty).build();
-
-    user = User.builder().email("test@example.com").firstName("Tester").lastName("Testing")
-        .password("encoded_password").role(Role.ROLE_STUDENT).faculty(faculty).degree(degree)
-        .build();
+    user = TestHelper.createUser(faculty, degree);
   }
 
   //region GetById tests
@@ -162,6 +157,7 @@ public class UserServiceTest {
         .faculty(faculty).build();
     User testUser = user.toBuilder().build();
     User expectedUser = user.toBuilder().degree(testDegree).build();
+
     given(facultyService.getDegreeByTitleAndFieldOfStudy(any(Faculty.class), any(DegreeTitle.class),
         any(String.class))).willReturn(testDegree);
     given(userRepository.findById(testUser.getId())).willReturn(Optional.of(testUser));
@@ -175,15 +171,18 @@ public class UserServiceTest {
 
   @Test
   public void updateUserFaculty() {
-    Faculty testFaculty = Faculty.builder().name("test").build();
+    Faculty testFaculty = Faculty.builder().name("test").degree(degree).build();
     User testUser = user.toBuilder().build();
     User expectedUser = user.toBuilder().faculty(testFaculty).build();
+
+    given(degree.getFieldOfStudy()).willReturn("mock");
+    given(degree.getTitle()).willReturn(DegreeTitle.BACHELOR);
     given(facultyService.getDegreeByTitleAndFieldOfStudy(any(Faculty.class), any(DegreeTitle.class),
         any(String.class))).willReturn(degree);
     given(facultyService.getByName(any(String.class))).willReturn(testFaculty);
     given(userRepository.findById(testUser.getId())).willReturn(Optional.of(testUser));
 
-    userService.updateUser(PatchUserRequest.builder().facultyName(testFaculty.getName()).build(),
+    userService.updateUser(PatchUserRequest.builder().facultyName("test").build(),
         testUser.getId());
 
     verify(userRepository).save(expectedUser);
@@ -230,10 +229,20 @@ public class UserServiceTest {
   //endregion
 
   //region GetUserFaculty tests
-//  @Test
-//  public void getUserFacultyReturnsCorrectFaculty() {
-//
-//
-//  }
+  @Test
+  public void getUserFacultyReturnsCorrectFaculty() {
+    given(userRepository.findFacultyByUserId(any(Long.class))).willReturn(Optional.of(faculty));
+    Faculty result = userService.getUserFaculty(user.getId());
+
+    Assertions.assertEquals(faculty, result);
+  }
+
+  @Test
+  public void getUserFacultyThrowsEntityNotFoundErrorWhenUserNotAssociatedWithFaculty() {
+    given(userRepository.findFacultyByUserId(any(Long.class))).willReturn(Optional.empty());
+
+    Assertions.assertThrows(EntityNotFoundException.class, () ->
+        userService.getUserFaculty(user.getId()));
+  }
   //endregion
 }
