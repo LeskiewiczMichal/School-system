@@ -22,4 +22,18 @@ public class UserDtoAssertions implements DtoAssertion<UserDto> {
           jsonPath(String.format("$._embedded.users[%d].degree", index)).value(dto.getDegree()));
     }
   }
+
+  @Override
+  public void assertDto(ResultActions result, UserDto dto) throws Exception {
+    result.andExpect(jsonPath(String.format("$.id")).value(dto.getId()))
+        .andExpect(jsonPath(String.format("$.firstName")).value(dto.getFirstName()))
+        .andExpect(jsonPath(String.format("$.lastName")).value(dto.getLastName()))
+        .andExpect(jsonPath(String.format("$.email")).value(dto.getEmail()))
+        .andExpect(jsonPath(String.format("$.faculty")).value(dto.getFaculty())).andExpect(
+            jsonPath(String.format("$._links.self.href")).value(
+                String.format("http://localhost/api/users/%d", dto.getId())));
+    if (dto.getDegree() != null) {
+      result.andExpect(jsonPath(String.format("$.degree")).value(dto.getDegree()));
+    }
+  }
 }

@@ -19,6 +19,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.ResultMatcher;
+import org.springframework.test.web.servlet.result.StatusResultMatchers;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -51,6 +53,14 @@ public class GenericControllerTest<T> {
     for (CustomLink customLink : links) {
       TestAssertions.assertLink(result, customLink.getRel(), customLink.getHref());
     }
+  }
+
+  @ParameterizedTest
+  @MethodSource("getApiSingleItemResponsesProvider")
+  public <T> void getApiResponses(String apiPath, ResultMatcher status, String mediaType, T dto, DtoAssertion<T> dtoAssertion) throws Exception {
+    ResultActions result = requestUtils.performGetRequest(apiPath, status, mediaType);
+
+    dtoAssertion.assertDto(result, dto);
   }
 
 }

@@ -151,6 +151,18 @@ public class UserControllerTest extends GenericControllerTest<UserDto> {
   //endregion
 
   //region GetUserById Tests
+  static Stream<Arguments> getApiSingleItemResponsesProvider() {
+   Arguments happyPath = Arguments.of(
+       "/api/users/1",
+       status().isOk(),
+       "application/hal+json",
+       new UserDto(1L, "John", "Doe", "johndoe@example.com", "Informatics", "Computer Science"),
+       new UserDtoAssertions()
+   );
+
+   return Stream.of(happyPath);
+  }
+
   @Test
   public void getUserByIdHappyPath() throws Exception {
     ResultActions result = requestUtils.performGetRequest(GET_USER_BY_ID + "1", status().isOk());
