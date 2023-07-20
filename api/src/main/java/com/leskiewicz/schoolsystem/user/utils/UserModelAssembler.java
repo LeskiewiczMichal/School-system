@@ -1,5 +1,6 @@
 package com.leskiewicz.schoolsystem.user.utils;
 
+import com.leskiewicz.schoolsystem.faculty.FacultyController;
 import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.UserController;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
@@ -29,7 +30,11 @@ public class UserModelAssembler extends RepresentationModelAssemblerSupport<User
 
     Link selfLink = WebMvcLinkBuilder.linkTo(
         methodOn(UserController.class).getUserById(entity.getId())).withSelfRel();
+    Link facultyLink = WebMvcLinkBuilder.linkTo(
+        methodOn(FacultyController.class).getFacultyById(entity.getFaculty().getId())).withRel("faculty");
+
     userDto.add(selfLink);
+    userDto.add(facultyLink);
 
     return userDto;
   }
