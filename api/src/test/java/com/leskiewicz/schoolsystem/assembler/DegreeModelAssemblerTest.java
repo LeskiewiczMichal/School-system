@@ -74,7 +74,7 @@ public class DegreeModelAssemblerTest {
 
   @Test
   public void testToCollectionModel() {
-    // Create collection with a single faculty
+    // Create collection with a single degree
     Iterable<Degree> degrees = Collections.singleton(degree);
 
     CollectionModel<DegreeDto> degreeDtos = degreeModelAssembler.toCollectionModel(degrees);
