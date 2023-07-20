@@ -4,11 +4,15 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.leskiewicz.schoolsystem.faculty.FacultyRepository;
-import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
 import com.leskiewicz.schoolsystem.testModels.CustomLink;
+import com.leskiewicz.schoolsystem.testModels.FacultyDto;
 import com.leskiewicz.schoolsystem.testModels.UserDto;
+import com.leskiewicz.schoolsystem.testModels.TriConsumer;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtils;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtilsImpl;
+import com.leskiewicz.schoolsystem.testUtils.TestAssertions;
+import com.leskiewicz.schoolsystem.testUtils.assertions.FacultyDtoAssertions;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeAll;
@@ -72,14 +76,17 @@ public class FacultyControllerTest extends GenericControllerTest<UserDto> {
 //    }
 //
 //  }
-  static Stream<Arguments> getHappyPathProvider() {
-    FacultyDto facultyDto = FacultyDto.builder()
-        .id(1L)
-        .name("")
+  static Stream<Arguments> getApiCollectionResponsesProvider() {
+    FacultyDto facultyDto = FacultyDto.builder().id(1L).name("Informatics").build();
 
-    Arguments arguments = Arguments.of(
+    Arguments noParams = Arguments.of("/api/faculties", Arrays.asList(facultyDto), Arrays.asList(
+            CustomLink.builder().rel("self")
+                .href("http://localhost/api/faculties?page=0&size=10&sort=id&direction=asc").build()),
+        new FacultyDtoAssertions()
 
-    )
+    );
+
+    return Stream.of(noParams);
   }
   //endregion
 }

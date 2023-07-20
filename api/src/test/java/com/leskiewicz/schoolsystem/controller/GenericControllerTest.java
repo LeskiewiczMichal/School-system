@@ -6,13 +6,14 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.leskiewicz.schoolsystem.testModels.CustomLink;
+import com.leskiewicz.schoolsystem.testModels.TriConsumer;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtils;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtilsImpl;
 import com.leskiewicz.schoolsystem.testUtils.TestAssertions;
+import com.leskiewicz.schoolsystem.testUtils.assertions.DtoAssertion;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.stream.Stream;
-import org.apache.logging.log4j.util.TriConsumer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -40,16 +41,14 @@ public class GenericControllerTest<T> {
             .registerModule(new JavaTimeModule()));
   }
 
-  @DisplayName("Get API returns correct responses with different params")
   @ParameterizedTest
-  @MethodSource // leave this undefined
-  public void getHappyPath(String queryString, List<T> dtos, List<CustomLink> links, String path,
-      TriConsumer<ResultActions, T, Integer> assertDtoInCollection) throws Exception {
-    ResultActions result = requestUtils.performGetRequest(path + queryString, status().isOk());
+  @MethodSource("getApiCollectionResponsesProvider")
+  public <T> void getApiCollectionResponses(String apiPath, List<T> dtos, List<CustomLink> links, DtoAssertion<T> dtoAssertion) throws Exception {
+    ResultActions result = requestUtils.performGetRequest(apiPath, status().isOk());
 
     for (int i = 0; i < dtos.size(); i++) {
       T dto = dtos.get(i);
-      assertDtoInCollection.accept(result, dto, i);
+      dtoAssertion.assertDtoInCollection(result, i, dto);
     }
 
     for (CustomLink customLink : links) {

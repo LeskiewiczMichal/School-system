@@ -5,7 +5,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.FacultyController;
-import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
+//import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
+import com.leskiewicz.schoolsystem.testModels.FacultyDto;
 import com.leskiewicz.schoolsystem.testModels.UserDto;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.test.web.servlet.ResultActions;
@@ -60,6 +61,15 @@ public class TestAssertions {
   //endregion
 
   //region Faculty
+  public static void assertFacultyInCollection(ResultActions matchers, FacultyDto faculty, Integer index) throws Exception {
+    matchers.andExpect(jsonPath(String.format("$._embedded.faculties[%d].id", index)).value(faculty.getId()))
+        .andExpect(
+            jsonPath(String.format("$._embedded.faculties[%d].name", index)).value(faculty.getName()))
+        .andExpect(jsonPath(String.format("$._embedded.faculties[%d]._links.self.href", index)).value(
+            String.format("http://localhost/api/users/%d", faculty.getId())));
+
+  }
+
   public static void assertFaculty(ResultActions matchers, FacultyDto faculty) throws Exception {
     matchers.andExpect(jsonPath(String.format("$.id")).value(faculty.getId()))
         .andExpect(jsonPath(String.format("$.name")).value(faculty.getName()))
