@@ -8,6 +8,7 @@ import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
 import com.leskiewicz.schoolsystem.degree.utils.DegreeMapperImpl;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.testUtils.TestHelper;
+import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,7 +32,6 @@ public class DegreeMapperTest {
     faculty = Mockito.mock(Faculty.class);
     degree = TestHelper.createDegree(faculty);
 
-    given(faculty.getName()).willReturn("DegreeTitle");
   }
 
   @Test
@@ -43,13 +43,28 @@ public class DegreeMapperTest {
         .faculty("DegreeTitle")
         .build();
 
+    given(faculty.getName()).willReturn("DegreeTitle");
+
     DegreeDto result = degreeMapper.convertToDto(degree);
 
     Assertions.assertEquals(expectedDegreeDto, result);
   }
 
-//  @Test
+  @Test
+  public void convertToDtoThrowsIllegalArgumentExceptionOnNoId() {
+    degree.setId(null);
 
+    Assertions.assertThrows(IllegalArgumentException.class,
+        () -> degreeMapper.convertToDto(degree));
+  }
+
+  @Test
+  public void throwsConstraintViolationExceptionOnInvalidDegree() {
+    degree.setFieldOfStudy(null);
+
+    Assertions.assertThrows(ConstraintViolationException.class,
+        () -> degreeMapper.convertToDto(degree));
+  }
 
 
 }
