@@ -1,5 +1,6 @@
 package com.leskiewicz.schoolsystem.faculty.utils;
 
+import com.leskiewicz.schoolsystem.error.ErrorMessages;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
 import com.leskiewicz.schoolsystem.utils.ValidationUtils;
@@ -14,7 +15,8 @@ public class FacultyMapper {
     // Perform manual validation
     ValidationUtils.validate(faculty);
     if (faculty.getId() == null) {
-      throw new IllegalArgumentException("Invalid Faculty object: " + "id missing");
+      throw new IllegalArgumentException(
+          ErrorMessages.objectInvalidPropertyMissing("Faculty", "id"));
     }
 
     logger.debug("Converted Faculty entity with ID: {} to FacultyDto", faculty.getId());

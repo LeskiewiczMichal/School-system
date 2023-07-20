@@ -20,6 +20,10 @@ public class ErrorMessages {
         return String.format("%s with %s: %s already exists", object, propertyName, propertyValue);
     }
 
+    public static String objectInvalidPropertyMissing(String object, String property) {
+        return "Invalid " + object + " object: " + property + " missing";
+    }
+
     public static String objectWasNotUpdated(String object) {
         return object + " was not updated";
     }

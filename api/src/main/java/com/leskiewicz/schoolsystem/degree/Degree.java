@@ -3,6 +3,7 @@ package com.leskiewicz.schoolsystem.degree;
 import com.leskiewicz.schoolsystem.course.Course;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.util.List;
@@ -22,13 +23,17 @@ public class Degree {
     @Column(name = "id")
     private Long id;
 
+    @NotNull
     @Column(name = "title")
     @Enumerated(EnumType.STRING)
     private DegreeTitle title;
 
+    @NotNull
     @Column(name = "field_of_study")
     private String fieldOfStudy;
 
+    @NotNull
+    @Singular
     @ManyToMany
     @JoinTable(
             name = "degree_course",
@@ -37,6 +42,7 @@ public class Degree {
     )
     private List<Course> courses;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "faculty", referencedColumnName = "id")
     private Faculty faculty;
