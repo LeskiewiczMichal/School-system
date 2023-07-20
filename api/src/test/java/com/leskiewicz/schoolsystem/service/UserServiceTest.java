@@ -123,21 +123,6 @@ public class UserServiceTest {
   }
   //endregion
 
-  //region ToUserDtos tests
-  @Test
-  public void toUserDtosReturnsListOfUserDtos() {
-    Page<User> userPage = new PageImpl<>(Arrays.asList(user, user));
-    UserDto userDto = Mockito.mock(UserDto.class);
-    given(UserMapper.convertToDto(any(User.class))).willReturn(userDto);
-
-    List<UserDto> result = userService.toUserDtos(userPage);
-
-    Assertions.assertEquals(2, result.size());
-    Assertions.assertEquals(userDto, result.get(0));
-    Assertions.assertEquals(userDto, result.get(1));
-  }
-  //endregion
-
   //region AddUser tests
   @Test
   public void addUserSavesUser() {
@@ -242,5 +227,13 @@ public class UserServiceTest {
         Arguments.of(PatchUserRequest.builder().password("Test").build(),
             baseUser.toBuilder().build(), baseUser.toBuilder().password("encoded").build()));
   }
+  //endregion
+
+  //region GetUserFaculty tests
+//  @Test
+//  public void getUserFacultyReturnsCorrectFaculty() {
+//
+//
+//  }
   //endregion
 }

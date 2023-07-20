@@ -14,8 +14,6 @@ public interface UserService {
 
   Page<User> getUsers(Pageable pageable);
 
-  List<UserDto> toUserDtos(Page<User> usersPage);
-
   void addUser(User user);
 
   User getByEmail(String email);

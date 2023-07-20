@@ -50,12 +50,6 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public List<UserDto> toUserDtos(Page<User> usersPage) {
-    return usersPage.getContent().stream().map(UserMapper::convertToDto)
-        .collect(Collectors.toList());
-  }
-
-  @Override
   public void addUser(User user) {
     ValidationUtils.validate(user);
     if (userRepository.findByEmail(user.getEmail()).isPresent()) {
