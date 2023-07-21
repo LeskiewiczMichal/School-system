@@ -111,7 +111,15 @@ public class DegreeControllerTest extends GenericControllerTest<DegreeDto> {
             "Wrong argument types provided",
             400);
 
-    return Stream.of(status400OnStringProvided);
+    Arguments status404OnDegreeNotFound =
+        Arguments.of(
+            SINGLE_URL + "999",
+            status().isNotFound(),
+            MediaType.APPLICATION_JSON.toString(),
+            "Degree with ID: 999 not found",
+            404);
+
+    return Stream.of(status400OnStringProvided, status404OnDegreeNotFound);
   }
 
   @BeforeEach
