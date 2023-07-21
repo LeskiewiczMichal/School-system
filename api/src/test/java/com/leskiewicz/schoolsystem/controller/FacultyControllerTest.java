@@ -100,12 +100,12 @@ public class FacultyControllerTest extends GenericControllerTest<FacultyDto> {
     //region CreateFaculty
     @Test
     public void createFacultyReturnsCorrectFaculty() throws Exception {
-        CreateFacultyRequest request = new CreateFacultyRequest("TestFaculty");
+        CreateFacultyRequest request = new CreateFacultyRequest("Testfaculty");
         ResultActions result = requestUtils.performPostRequest(GET_FACULTIES, request, status().isCreated());
 
-        FacultyDto expected = FacultyDto.builder().name("TestFaculty").build();
+        FacultyDto expected = FacultyDto.builder().id(1L).name(request.getName()).build();
 
-        facultyDtoAssertions.assertDtoNoId(result, expected);
+        facultyDtoAssertions.assertDto(result, expected);
     }
     //endregion
 
