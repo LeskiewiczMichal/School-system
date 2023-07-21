@@ -165,6 +165,20 @@ public class FacultyControllerTest extends GenericControllerTest<FacultyDto> {
 
     //region GetFacultyStudents and GetFacultyTeachers tests
     @Test
+    public void getFacultyStudentsReturnsCorrectStudents() throws Exception {
+        ResultActions result = requestUtils.performGetRequest(BASE_FACULTIES + "/101/students", status().isOk());
+
+        result.andExpect(MockMvcResultMatchers.jsonPath("$._links").exists())
+                .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.users").exists())
+                .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.users").isArray())
+                .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.users").isNotEmpty())
+                .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.users[0].id").value(1))
+                .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.users[0].firstName").value("John"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.users[0].lastName").value("Doe"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.users[0].email").value("johndoe@example.com"));
+    }
+
+    @Test
     public void getFacultyUsersAndGetFacultyTeachersTestPagination() throws Exception {
         CommonTests.paginationLinksTest(requestUtils, BASE_FACULTIES + "/101/students", 0);
         CommonTests.paginationLinksTest(requestUtils, BASE_FACULTIES + "/101/teachers", 0);
