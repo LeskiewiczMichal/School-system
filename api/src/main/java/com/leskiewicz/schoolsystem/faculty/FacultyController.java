@@ -5,11 +5,16 @@ import com.leskiewicz.schoolsystem.faculty.dto.CreateFacultyRequest;
 import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
 import com.leskiewicz.schoolsystem.faculty.dto.PatchFacultyRequest;
 import com.leskiewicz.schoolsystem.faculty.utils.FacultyModelAssembler;
+import com.leskiewicz.schoolsystem.security.Role;
 import com.leskiewicz.schoolsystem.service.links.PageableLinksService;
+import com.leskiewicz.schoolsystem.user.User;
+import com.leskiewicz.schoolsystem.user.dto.UserDto;
+import com.leskiewicz.schoolsystem.user.utils.UserModelAssembler;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +26,7 @@ public class FacultyController {
     private final FacultyService facultyService;
     private final FacultyModelAssembler facultyModelAssembler;
     private final PageableLinksService pageableLinksService;
+    private final UserModelAssembler userModelAssembler;
 
     @GetMapping
     public ResponseEntity<CollectionModel<FacultyDto>> getFaculties(@ModelAttribute PageableRequest request) {
@@ -54,4 +60,16 @@ public class FacultyController {
 
         return ResponseEntity.ok(facultyDto);
     }
+
+    @GetMapping("/{id}/students")
+    public ResponseEntity<CollectionModel> getFacultyStudents(@PathVariable Long id, @ModelAttribute PageableRequest request) {
+        Page<User> users = facultyService.getFacultyUsers(id, request.toPageable(), Role.ROLE_STUDENT);
+        CollectionModel<UserDto> userDtos = userModelAssembler.toCollectionModel(users);
+        pageableLinksService.addLinks(userDtos, users, FacultyController.class, request, "/" + id + "/students");
+//        userDtos.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(FacultyController.class)
+//                .getFacultyStudents(id, request)).withSelfRel());
+
+        return ResponseEntity.ok(userDtos);
+    }
+
 }
