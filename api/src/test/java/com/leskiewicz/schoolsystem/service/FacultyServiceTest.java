@@ -9,6 +9,7 @@ import com.leskiewicz.schoolsystem.faculty.FacultyServiceImpl;
 import com.leskiewicz.schoolsystem.faculty.dto.CreateFacultyRequest;
 import com.leskiewicz.schoolsystem.faculty.dto.PatchFacultyRequest;
 import com.leskiewicz.schoolsystem.faculty.utils.FacultyModelAssembler;
+import com.leskiewicz.schoolsystem.security.Role;
 import com.leskiewicz.schoolsystem.user.User;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
@@ -199,4 +200,17 @@ public class FacultyServiceTest {
         facultyService.updateFaculty(request, faculty.getId()));
   }
   //endregion
+
+  //region GetFacultyUsers tests
+  @Test
+  public void getFacultyUsersReturnsPagedUsers() {
+    Pageable pageable = Mockito.mock(PageRequest.class);
+    Page<User> mockPage = Mockito.mock(Page.class);
+
+    given(facultyRepository.findFacultyUsers(faculty.getId(), pageable, Role.ROLE_STUDENT)).willReturn(mockPage);
+
+    Page<User> users = facultyService.getFacultyUsers(faculty.getId(), pageable, Role.ROLE_STUDENT);
+    Assertions.assertEquals(users, mockPage);
+  }
+
 }

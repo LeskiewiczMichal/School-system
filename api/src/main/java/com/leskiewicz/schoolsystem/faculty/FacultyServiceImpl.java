@@ -6,6 +6,7 @@ import com.leskiewicz.schoolsystem.error.ErrorMessages;
 import com.leskiewicz.schoolsystem.error.customexception.EntityAlreadyExistsException;
 import com.leskiewicz.schoolsystem.faculty.dto.CreateFacultyRequest;
 import com.leskiewicz.schoolsystem.faculty.dto.PatchFacultyRequest;
+import com.leskiewicz.schoolsystem.security.Role;
 import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.utils.StringUtils;
 import com.leskiewicz.schoolsystem.utils.ValidationUtils;
@@ -95,8 +96,8 @@ public class FacultyServiceImpl implements FacultyService {
     }
 
     @Override
-    public Page<User> getFacultyStudent(Long facultyId, Pageable pageable) {
-        return facultyRepository.findFacultyStudents(facultyId, pageable);
+    public Page<User> getFacultyUsers(Long facultyId, Pageable pageable, Role role) {
+        return facultyRepository.findFacultyUsers(facultyId, pageable, role);
     }
 
 
