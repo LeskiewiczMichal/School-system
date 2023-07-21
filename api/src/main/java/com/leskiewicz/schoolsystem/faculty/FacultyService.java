@@ -5,6 +5,7 @@ import com.leskiewicz.schoolsystem.degree.DegreeTitle;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.dto.CreateFacultyRequest;
 import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
+import com.leskiewicz.schoolsystem.faculty.dto.PatchFacultyRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -19,4 +20,6 @@ public interface FacultyService {
   Degree getDegreeByTitleAndFieldOfStudy(Faculty faculty, DegreeTitle title, String fieldOfStudy);
 
   Faculty createFaculty(CreateFacultyRequest request);
+
+  Faculty updateFaculty(PatchFacultyRequest request, Long facultyId);
 }
