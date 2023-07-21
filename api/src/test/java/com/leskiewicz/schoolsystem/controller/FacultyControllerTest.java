@@ -155,6 +155,14 @@ public class FacultyControllerTest extends GenericControllerTest<FacultyDto> {
 
         TestAssertions.assertError(result, "Faculty with ID: 999 not found", BASE_FACULTIES + "/999", 404);
     }
+
+    @Test
+    public void updateFacultyReturns400OnFacultyWithNameAlreadyExists() throws Exception {
+        PatchFacultyRequest request = new PatchFacultyRequest("Biology");
+        ResultActions result = requestUtils.performPatchRequest(BASE_FACULTIES + "/101", request, status().isBadRequest());
+
+        TestAssertions.assertError(result, "Faculty with name: Biology already exists", BASE_FACULTIES + "/101", 400);
+    }
     //endregion
 
 
