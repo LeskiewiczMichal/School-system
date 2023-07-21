@@ -7,6 +7,7 @@ import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.FacultyRepository;
 import com.leskiewicz.schoolsystem.faculty.FacultyServiceImpl;
 import com.leskiewicz.schoolsystem.faculty.dto.CreateFacultyRequest;
+import com.leskiewicz.schoolsystem.faculty.dto.PatchFacultyRequest;
 import com.leskiewicz.schoolsystem.faculty.utils.FacultyModelAssembler;
 import com.leskiewicz.schoolsystem.user.User;
 import jakarta.persistence.EntityNotFoundException;
@@ -161,6 +162,21 @@ public class FacultyServiceTest {
 
     Assertions.assertThrows(EntityAlreadyExistsException.class, () ->
         facultyService.createFaculty(request));
+  }
+  //endregion
+
+  //region UpdateFaculty tests
+  @Test
+  public void updateFacultySavesCorrectFaculty() {
+    given(facultyRepository.findById(any(Long.class))).willReturn(Optional.of(faculty));
+    PatchFacultyRequest request = new PatchFacultyRequest("new name");
+
+    Faculty result = facultyService.updateFaculty(request, faculty.getId());
+
+    faculty.setName("New name");
+
+    verify(facultyRepository).save(faculty);
+    Assertions.assertEquals(faculty, result);
   }
   //endregion
 }
