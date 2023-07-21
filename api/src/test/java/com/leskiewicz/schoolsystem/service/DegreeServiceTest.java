@@ -79,4 +79,19 @@ public class DegreeServiceTest {
     Assertions.assertEquals(mockPage, degrees);
   }
   //endregion
+
+    //region GetByTitleAndFieldOfStudy tests
+    @Test
+    public void getByTitleAndFieldOfStudyReturnsCorrectDegree() {
+      given(degreeRepository.findByTitleAndFieldOfStudy(degree.getTitle(), degree.getFieldOfStudy()))
+          .willReturn(Optional.of(degree));
+
+      Degree testDegree =
+          degreeService.getByTitleAndFieldOfStudy(degree.getTitle(), degree.getFieldOfStudy());
+
+      Assertions.assertEquals(degree, testDegree);
+    }
+
+    
+    //endregion
 }
