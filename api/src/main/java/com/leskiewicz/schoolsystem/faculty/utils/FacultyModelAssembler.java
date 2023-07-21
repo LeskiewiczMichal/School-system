@@ -28,7 +28,13 @@ public class FacultyModelAssembler extends
 
     Link selfLink = WebMvcLinkBuilder.linkTo(
         methodOn(FacultyController.class).getFacultyById(entity.getId())).withSelfRel();
+
+    Link studentsLink = WebMvcLinkBuilder.linkTo(
+            methodOn(FacultyController.class).getFacultyStudents(entity.getId(), null)).withRel("students");
+
+
     facultyDto.add(selfLink);
+    facultyDto.add(studentsLink);
 
     return facultyDto;
   }

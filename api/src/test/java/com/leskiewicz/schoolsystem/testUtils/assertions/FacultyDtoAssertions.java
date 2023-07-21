@@ -29,13 +29,7 @@ public class FacultyDtoAssertions implements DtoAssertion<FacultyDto> {
         .andExpect(jsonPath(String.format("$.name")).value(dto.getName()))
         .andExpect(
             jsonPath(String.format("$._links.self.href")).value(WebMvcLinkBuilder.linkTo(
-                methodOn(FacultyController.class).getFacultyById(dto.getId())).toString()));
-  }
-
-  public void assertDtoNoId(ResultActions result, FacultyDto dto) throws Exception {
-    result.andExpect(jsonPath(String.format("$.id")).value(any(Long.class)))
-            .andExpect(jsonPath(String.format("$.name")).value(dto.getName()))
-            .andExpect(
-                    jsonPath(String.format("$._links.self.href")).value(any(String.class)));
+                methodOn(FacultyController.class).getFacultyById(dto.getId())).toString()))
+            .andExpect(jsonPath("$._links.students.href").exists());
   }
 }
