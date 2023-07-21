@@ -31,10 +31,12 @@ public class FacultyModelAssembler extends
 
     Link studentsLink = WebMvcLinkBuilder.linkTo(
             methodOn(FacultyController.class).getFacultyStudents(entity.getId(), null)).withRel("students");
-
+    Link teachersLink = WebMvcLinkBuilder.linkTo(
+            methodOn(FacultyController.class).getFacultyTeachers(entity.getId(), null)).withRel("teachers");
 
     facultyDto.add(selfLink);
     facultyDto.add(studentsLink);
+    facultyDto.add(teachersLink);
 
     return facultyDto;
   }

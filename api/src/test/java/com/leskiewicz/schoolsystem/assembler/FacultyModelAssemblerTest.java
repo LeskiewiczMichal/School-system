@@ -52,12 +52,15 @@ public class FacultyModelAssemblerTest {
         .withSelfRel();
     Link studentsLink = WebMvcLinkBuilder.linkTo(methodOn(FacultyController.class).getFacultyStudents(0L, null))
         .withRel("students");
+    Link teachersLink = WebMvcLinkBuilder.linkTo(methodOn(FacultyController.class).getFacultyTeachers(0L, null))
+        .withRel("teachers");
 
     FacultyDto result = facultyModelAssembler.toModel(faculty);
 
     Assertions.assertEquals(facultyDto, result);
     Assertions.assertEquals(selfLink, result.getLink("self").get());
     Assertions.assertEquals(studentsLink, result.getLink("students").get());
+    Assertions.assertEquals(teachersLink, result.getLink("teachers").get());
   }
 
   @Test
@@ -72,9 +75,11 @@ public class FacultyModelAssemblerTest {
       // Assert every faculty has correct links
       Link selfLink = dto.getLink("self").get();
       Link studentsLink = dto.getLink("students").get();
+        Link teachersLink = dto.getLink("teachers").get();
 
       Assertions.assertNotNull(selfLink, "DegreeDto should have a self link");
       Assertions.assertNotNull(studentsLink, "DegreeDto should have a students link");
+        Assertions.assertNotNull(teachersLink, "DegreeDto should have a teachers link");
     });
   }
 }

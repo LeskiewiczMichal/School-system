@@ -30,6 +30,7 @@ public class FacultyDtoAssertions implements DtoAssertion<FacultyDto> {
         .andExpect(
             jsonPath(String.format("$._links.self.href")).value(WebMvcLinkBuilder.linkTo(
                 methodOn(FacultyController.class).getFacultyById(dto.getId())).toString()))
-            .andExpect(jsonPath("$._links.students.href").exists());
+            .andExpect(jsonPath("$._links.students.href").exists())
+            .andExpect(jsonPath("$._links.teachers.href").exists());
   }
 }
