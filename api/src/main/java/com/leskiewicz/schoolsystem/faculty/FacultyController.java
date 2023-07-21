@@ -66,8 +66,15 @@ public class FacultyController {
         Page<User> users = facultyService.getFacultyUsers(id, request.toPageable(), Role.ROLE_STUDENT);
         CollectionModel<UserDto> userDtos = userModelAssembler.toCollectionModel(users);
         pageableLinksService.addLinks(userDtos, users, FacultyController.class, request, "/" + id + "/students");
-//        userDtos.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(FacultyController.class)
-//                .getFacultyStudents(id, request)).withSelfRel());
+
+        return ResponseEntity.ok(userDtos);
+    }
+
+    @GetMapping("/{id}/teachers")
+    public ResponseEntity<CollectionModel> getFacultyTeachers(@PathVariable Long id, @ModelAttribute PageableRequest request) {
+        Page<User> users = facultyService.getFacultyUsers(id, request.toPageable(), Role.ROLE_TEACHER);
+        CollectionModel<UserDto> userDtos = userModelAssembler.toCollectionModel(users);
+        pageableLinksService.addLinks(userDtos, users, FacultyController.class, request, "/" + id + "/teachers");
 
         return ResponseEntity.ok(userDtos);
     }
