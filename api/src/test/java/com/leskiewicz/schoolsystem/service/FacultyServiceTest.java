@@ -207,4 +207,16 @@ public class FacultyServiceTest {
     Page<User> users = facultyService.getFacultyUsers(faculty.getId(), pageable, Role.ROLE_STUDENT);
     Assertions.assertEquals(users, mockPage);
   }
+
+  @Test
+  public void getFacultyUsersReturns404IfFacultyDoesntExist() {
+    Pageable pageable = Mockito.mock(PageRequest.class);
+
+    given(facultyRepository.existsById(any(Long.class))).willReturn(false);
+
+    Assertions.assertThrows(
+        EntityNotFoundException.class,
+        () -> facultyService.getFacultyUsers(faculty.getId(), pageable, Role.ROLE_STUDENT));
+  }
+  //endregion
 }
