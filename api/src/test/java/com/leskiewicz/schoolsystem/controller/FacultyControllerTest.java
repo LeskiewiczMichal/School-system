@@ -123,7 +123,15 @@ public class FacultyControllerTest extends GenericControllerTest<FacultyDto> {
 
         TestAssertions.assertError(result, "Faculty name required", BASE_FACULTIES, 400);
     }
-    //endregion
+
+    @Test
+    public void createFacultyReturns400OnFacultyWithNameAlreadyExists() throws Exception {
+        CreateFacultyRequest request = new CreateFacultyRequest("Informatics");
+        ResultActions result = requestUtils.performPostRequest(BASE_FACULTIES, request, status().isBadRequest());
+
+        TestAssertions.assertError(result, "Faculty with name: Informatics already exists", BASE_FACULTIES, 400);
+    }
+     //endregion
 
 
 
