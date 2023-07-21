@@ -20,9 +20,9 @@ public class DegreeDtoAssertions implements DtoAssertion<DegreeDto> {
                 .value(dto.getFaculty()))
         .andExpect(
             jsonPath(String.format("$._embedded.degrees[%d].fieldOfStudy", index))
-                .value(dto.getFaculty()))
+                .value(dto.getFieldOfStudy()))
         .andExpect(
-            jsonPath(String.format("$._embedded.degrees[%d].title", index)).value(dto.getTitle()))
+            jsonPath(String.format("$._embedded.degrees[%d].title", index)).value(dto.getTitle().toString()))
         .andExpect(
             jsonPath(String.format("$._embedded.degrees[%d]._links.self.href", index))
                 .value(String.format("http://localhost/api/degrees/%d", dto.getId())));
