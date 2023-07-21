@@ -4,12 +4,14 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.leskiewicz.schoolsystem.faculty.FacultyRepository;
+import com.leskiewicz.schoolsystem.faculty.dto.CreateFacultyRequest;
 import com.leskiewicz.schoolsystem.testModels.CustomLink;
 import com.leskiewicz.schoolsystem.testModels.FacultyDto;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtils;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtilsImpl;
 import com.leskiewicz.schoolsystem.testUtils.assertions.FacultyDtoAssertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.provider.Arguments;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -17,6 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.Arrays;
 import java.util.stream.Stream;
@@ -40,11 +43,13 @@ public class FacultyControllerTest extends GenericControllerTest<FacultyDto> {
     // Variables
     private ObjectMapper mapper;
     private RequestUtils requestUtils;
+    private FacultyDtoAssertions facultyDtoAssertions;
 
     @BeforeEach
     public void setUp() {
         mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false).registerModule(new JavaTimeModule());
         requestUtils = new RequestUtilsImpl(mvc, mapper);
+        facultyDtoAssertions = new FacultyDtoAssertions();
     }
 
 
@@ -92,7 +97,17 @@ public class FacultyControllerTest extends GenericControllerTest<FacultyDto> {
     }
     //endregion
 
+    //region CreateFaculty
+    @Test
+    public void createFacultyReturnsCorrectFaculty() throws Exception {
+        CreateFacultyRequest request = new CreateFacultyRequest("TestFaculty");
+        ResultActions result = requestUtils.performPostRequest(GET_FACULTIES, request, status().isCreated());
 
+        FacultyDto expected = FacultyDto.builder().name("TestFaculty").build();
+
+        facultyDtoAssertions.assertDtoNoId(result, expected);
+    }
+    //endregion
 
 
 }

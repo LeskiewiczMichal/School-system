@@ -12,12 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/faculties")
@@ -47,7 +42,7 @@ public class FacultyController {
   }
 
   @PostMapping
-  public ResponseEntity<FacultyDto> createFaculty(@Valid CreateFacultyRequest request) {
+  public ResponseEntity<FacultyDto> createFaculty(@Valid @RequestBody CreateFacultyRequest request) {
     Faculty faculty = facultyService.createFaculty(request);
     FacultyDto facultyDto = facultyModelAssembler.toModel(faculty);
 

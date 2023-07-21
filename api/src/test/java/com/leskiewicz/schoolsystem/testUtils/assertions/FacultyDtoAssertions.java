@@ -2,6 +2,7 @@ package com.leskiewicz.schoolsystem.testUtils.assertions;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.mockito.ArgumentMatchers.any;
 
 import com.leskiewicz.schoolsystem.faculty.FacultyController;
 import com.leskiewicz.schoolsystem.testModels.FacultyDto;
@@ -29,5 +30,12 @@ public class FacultyDtoAssertions implements DtoAssertion<FacultyDto> {
         .andExpect(
             jsonPath(String.format("$._links.self.href")).value(WebMvcLinkBuilder.linkTo(
                 methodOn(FacultyController.class).getFacultyById(dto.getId())).toString()));
+  }
+
+  public void assertDtoNoId(ResultActions result, FacultyDto dto) throws Exception {
+    result.andExpect(jsonPath(String.format("$.id")).value(any(Long.class)))
+            .andExpect(jsonPath(String.format("$.name")).value(dto.getName()))
+            .andExpect(
+                    jsonPath(String.format("$._links.self.href")).value(any(String.class)));
   }
 }
