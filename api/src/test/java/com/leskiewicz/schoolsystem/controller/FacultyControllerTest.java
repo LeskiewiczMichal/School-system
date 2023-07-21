@@ -163,8 +163,11 @@ public class FacultyControllerTest extends GenericControllerTest<FacultyDto> {
     }
     //endregion
 
+    //region GetFacultyStudents and GetFacultyTeachers tests
     @Test
-    public void getFacultyUsersTestPagination() throws Exception {
+    public void getFacultyUsersAndGetFacultyTeachersTestPagination() throws Exception {
         CommonTests.paginationLinksTest(requestUtils, BASE_FACULTIES + "/101/students", 0);
+        CommonTests.paginationLinksTest(requestUtils, BASE_FACULTIES + "/101/teachers", 0);
     }
+    //endregion
 }
