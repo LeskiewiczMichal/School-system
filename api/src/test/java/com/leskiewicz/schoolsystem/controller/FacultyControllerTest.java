@@ -6,13 +6,14 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.leskiewicz.schoolsystem.faculty.FacultyRepository;
 import com.leskiewicz.schoolsystem.faculty.dto.CreateFacultyRequest;
 import com.leskiewicz.schoolsystem.faculty.dto.PatchFacultyRequest;
-import com.leskiewicz.schoolsystem.provider.FacultyTestProvider;
+import com.leskiewicz.schoolsystem.testModels.CustomLink;
 import com.leskiewicz.schoolsystem.testModels.FacultyDto;
 import com.leskiewicz.schoolsystem.testUtils.CommonTests;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtils;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtilsImpl;
 import com.leskiewicz.schoolsystem.testUtils.TestAssertions;
 import com.leskiewicz.schoolsystem.testUtils.assertions.FacultyDtoAssertions;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.provider.Arguments;
@@ -25,6 +26,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.Arrays;
 import java.util.stream.Stream;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -58,7 +60,24 @@ public class FacultyControllerTest extends GenericControllerTest<FacultyDto> {
 
     //region GetFaculties tests
     static Stream<Arguments> getApiCollectionResponsesProvider() {
-        return FacultyTestProvider.getFacultiesCollectionTest(BASE_FACULTIES);
+        // Variables needed for tests
+        FacultyDtoAssertions assertions = new FacultyDtoAssertions();
+        FacultyDto informatics = FacultyDto.builder().id(101L).name("Informatics").build();
+        FacultyDto biology = FacultyDto.builder().id(102L).name("Biology").build();
+        FacultyDto electronics = FacultyDto.builder().id(103L).name("Electronics").build();
+        FacultyDto chemistry = FacultyDto.builder().id(104L).name("Chemistry").build();
+        FacultyDto sociology = FacultyDto.builder().id(111L).name("Sociology").build();
+        FacultyDto law = FacultyDto.builder().id(112L).name("Law").build();
+        FacultyDto economics = FacultyDto.builder().id(113L).name("Economics").build();
+
+        // Arguments
+        Arguments noParams = Arguments.of(BASE_FACULTIES, Arrays.asList(informatics, biology, electronics), assertions);
+        Arguments pageOne = Arguments.of(BASE_FACULTIES + "?page=1", Arrays.asList(sociology, law, economics), assertions);
+        Arguments descending = Arguments.of(BASE_FACULTIES + "?direction=desc", Arrays.asList(economics, law, sociology), assertions);
+        Arguments sortByName = Arguments.of(BASE_FACULTIES + "?sort=name", Arrays.asList(biology, chemistry), assertions);
+        Arguments pageSize20 = Arguments.of(BASE_FACULTIES + "?size=20", Arrays.asList(informatics, biology, electronics, chemistry), assertions);
+
+        return Stream.of(noParams, pageOne, descending, sortByName, pageSize20);
     }
 
     @Test
@@ -144,5 +163,8 @@ public class FacultyControllerTest extends GenericControllerTest<FacultyDto> {
     }
     //endregion
 
-
+    @Test
+    public void getFacultyUsersTestPagination() throws Exception {
+        CommonTests.paginationLinksTest(requestUtils, BASE_FACULTIES + "/101/students", 0);
+    }
 }
