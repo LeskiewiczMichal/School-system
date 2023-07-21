@@ -24,4 +24,5 @@ public interface FacultyService {
   Faculty updateFaculty(PatchFacultyRequest request, Long facultyId);
 
   Page<User> getFacultyUsers(Long facultyId, Pageable pageable, Role role);
+  Page<Degree> getFacultyDegrees(Long facultyId, Pageable pageable);
 }

@@ -113,4 +113,9 @@ public class FacultyServiceImpl implements FacultyService {
   public Page<User> getFacultyUsers(Long facultyId, Pageable pageable, Role role) {
     return facultyRepository.findFacultyUsers(facultyId, pageable, role);
   }
+
+  @Override
+  public Page<Degree> getFacultyDegrees(Long facultyId, Pageable pageable) {
+    return facultyRepository.findFacultyDegrees(facultyId, pageable);
+  }
 }

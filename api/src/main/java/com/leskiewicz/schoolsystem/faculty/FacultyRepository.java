@@ -1,5 +1,6 @@
 package com.leskiewicz.schoolsystem.faculty;
 
+import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.security.Role;
 import com.leskiewicz.schoolsystem.user.User;
 import java.util.Optional;
@@ -16,4 +17,7 @@ public interface FacultyRepository extends JpaRepository<Faculty, Long> {
 
   @Query("SELECT u FROM User u WHERE u.faculty.id = :facultyId AND u.role = :role")
   Page<User> findFacultyUsers(Long facultyId, Pageable pageable, Role role);
+
+  @Query("SELECT d FROM Degree d WHERE d.faculty.id = :facultyId")
+  Page<Degree> findFacultyDegrees(Long facultyId, Pageable pageable);
 }
