@@ -7,6 +7,7 @@ import com.leskiewicz.schoolsystem.degree.DegreeRepository;
 import com.leskiewicz.schoolsystem.degree.DegreeServiceImpl;
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
+import jakarta.persistence.EntityNotFoundException;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,5 +52,14 @@ public class DegreeServiceTest {
 
     Assertions.assertEquals(degree, testDegree);
   }
+
+  @Test
+  public void getByIdThrowsEntityNotFoundExceptionWhenDegreeDoesNotExist() {
+    given(degreeRepository.findById(degree.getId())).willReturn(Optional.empty());
+
+    Assertions.assertThrows(
+        EntityNotFoundException.class, () -> degreeService.getById(degree.getId()));
+  }
+
   // endregion
 }
