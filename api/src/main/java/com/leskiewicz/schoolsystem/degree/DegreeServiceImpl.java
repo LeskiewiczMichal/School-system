@@ -14,6 +14,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class DegreeServiceImpl implements DegreeService {
@@ -36,17 +38,14 @@ public class DegreeServiceImpl implements DegreeService {
   }
 
   @Override
-  public Degree getByTitleAndFieldOfStudy(DegreeTitle title, String fieldOfStudy) {
+  public List<Degree> getByTitleAndFieldOfStudy(DegreeTitle title, String fieldOfStudy) {
     return degreeRepository
-        .findByTitleAndFieldOfStudy(title, fieldOfStudy)
-        .orElseThrow(
-            () ->
-                new EntityNotFoundException(
-                    "Degree with given title and field of study not found"));
+        .findByTitleAndFieldOfStudy(title, fieldOfStudy);
   }
 
   @Override
   public Degree createDegree(CreateDegreeRequest request) {
+//    if (degreeRepository.)
     Faculty faculty = facultyService.getByName(request.getFacultyName());
 
     Degree degree =

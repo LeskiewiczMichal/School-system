@@ -178,10 +178,8 @@ public class AuthenticationControllerTest {
   @Test
   public void authenticateHappyPath() throws Exception {
     // Query degree and faculty from provided sql
-    Degree degree = degreeRepository.findByTitleAndFieldOfStudy(DegreeTitle.BACHELOR_OF_SCIENCE,
-        "Computer Science").orElse(null);
     Faculty faculty = facultyRepository.findByName("Informatics").orElse(null);
-
+    Degree degree = Degree.builder().title(DegreeTitle.BACHELOR_OF_SCIENCE).fieldOfStudy("Computer Science").faculty(faculty).build();
     // Create and save user that we are going to log into
     User authenticationTestUser = User.builder()
         .id(99999L)

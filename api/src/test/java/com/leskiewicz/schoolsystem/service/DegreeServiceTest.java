@@ -12,11 +12,17 @@ import com.leskiewicz.schoolsystem.degree.dto.CreateDegreeRequest;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.FacultyServiceImpl;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.ConstraintViolationException;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -38,6 +44,16 @@ public class DegreeServiceTest {
 
   @InjectMocks private DegreeServiceImpl degreeService;
 
+  static Stream<Arguments> throwsConstraintViolationExceptionOnRequestInvalidProvider() {
+    return Stream.of(
+        Arguments.of(new CreateDegreeRequest(null, "Computer Science", "Software Engineering")),
+        Arguments.of(
+            new CreateDegreeRequest(DegreeTitle.BACHELOR_OF_SCIENCE, null, "Software Engineering")),
+        Arguments.of(
+            new CreateDegreeRequest(DegreeTitle.BACHELOR_OF_SCIENCE, "Computer Science", null)),
+        Arguments.of(new CreateDegreeRequest(null, null, null)));
+  }
+
   @BeforeEach
   public void setup() {
     faculty = Mockito.mock(Faculty.class);
@@ -52,6 +68,8 @@ public class DegreeServiceTest {
             .build();
   }
 
+  // endregion
+
   // region GetById tests
   @Test
   public void getByIdReturnsCorrectDegree() {
@@ -61,6 +79,7 @@ public class DegreeServiceTest {
 
     Assertions.assertEquals(degree, testDegree);
   }
+  // endregion
 
   @Test
   public void getByIdThrowsEntityNotFoundExceptionWhenDegreeDoesNotExist() {
@@ -69,8 +88,6 @@ public class DegreeServiceTest {
     Assertions.assertThrows(
         EntityNotFoundException.class, () -> degreeService.getById(degree.getId()));
   }
-
-  // endregion
 
   // region GetDegrees tests
   @Test
@@ -89,28 +106,18 @@ public class DegreeServiceTest {
   @Test
   public void getByTitleAndFieldOfStudyReturnsCorrectDegree() {
     given(degreeRepository.findByTitleAndFieldOfStudy(degree.getTitle(), degree.getFieldOfStudy()))
-        .willReturn(Optional.of(degree));
+        .willReturn(List.of(degree, Mockito.mock(Degree.class)));
 
-    Degree testDegree =
+    List<Degree> testDegree =
         degreeService.getByTitleAndFieldOfStudy(degree.getTitle(), degree.getFieldOfStudy());
 
-    Assertions.assertEquals(degree, testDegree);
+    Assertions.assertEquals(2, testDegree.size());
+    Assertions.assertEquals(degree, testDegree.get(0));
   }
-
-  @Test
-  public void getByTitleAndFieldOfStudyThrowsEntityNotFoundExceptionWhenDegreeDoesNotExist() {
-    given(degreeRepository.findByTitleAndFieldOfStudy(degree.getTitle(), degree.getFieldOfStudy()))
-        .willReturn(Optional.empty());
-
-    Assertions.assertThrows(
-        EntityNotFoundException.class,
-        () -> degreeService.getByTitleAndFieldOfStudy(degree.getTitle(), degree.getFieldOfStudy()));
-  }
-  // endregion
 
   // region CreateDegree tests
   @Test
-  public void createDegreeReturnsCreatedDegree() {
+  public void createDegreeReturnsCreatedDegreeAndSavesIt() {
     CreateDegreeRequest request =
         new CreateDegreeRequest(
             DegreeTitle.BACHELOR_OF_SCIENCE, "Computer Science", "Software Engineering");
@@ -126,6 +133,13 @@ public class DegreeServiceTest {
     verify(degreeRepository).save(argumentCaptor.capture());
     Degree capturedDegree = argumentCaptor.getValue();
     Assertions.assertEquals(degree.getFieldOfStudy(), capturedDegree.getFieldOfStudy());
+  }
+
+  @ParameterizedTest
+  @MethodSource("throwsConstraintViolationExceptionOnRequestInvalidProvider")
+  public void throwsConstraintViolationExceptionOnRequestInvalid(CreateDegreeRequest request) {
+    Assertions.assertThrows(
+        ConstraintViolationException.class, () -> degreeService.createDegree(request));
   }
   // region
 }
