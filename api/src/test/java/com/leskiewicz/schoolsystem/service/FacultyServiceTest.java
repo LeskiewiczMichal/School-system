@@ -187,5 +187,16 @@ public class FacultyServiceTest {
     Assertions.assertThrows(EntityNotFoundException.class, () ->
         facultyService.updateFaculty(request, faculty.getId()));
   }
+
+  @Test
+  public void updateFacultyThrowsEntityAlreadyExistsException() {
+    given(facultyRepository.findById(any(Long.class))).willReturn(Optional.of(faculty));
+    PatchFacultyRequest request = new PatchFacultyRequest("new name");
+    Faculty faculty2 = Faculty.builder().id(2L).name("new name").build();
+    given(facultyRepository.findByName(any(String.class))).willReturn(Optional.of(faculty2));
+
+    Assertions.assertThrows(EntityAlreadyExistsException.class, () ->
+        facultyService.updateFaculty(request, faculty.getId()));
+  }
   //endregion
 }
