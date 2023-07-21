@@ -41,6 +41,13 @@ public class FacultyControllerTest extends GenericControllerTest<FacultyDto> {
     private ObjectMapper mapper;
     private RequestUtils requestUtils;
 
+    @BeforeEach
+    public void setUp() {
+        mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false).registerModule(new JavaTimeModule());
+        requestUtils = new RequestUtilsImpl(mvc, mapper);
+    }
+
+
     //region GetFaculties tests
     static Stream<Arguments> getApiCollectionResponsesProvider() {
         FacultyDtoAssertions assertions = new FacultyDtoAssertions();
@@ -67,12 +74,12 @@ public class FacultyControllerTest extends GenericControllerTest<FacultyDto> {
 
         return Stream.of(noParams, pageOne, descending, sortByName, pageSize20);
     }
+    //endregion
 
     //region GetFacultyById
     static Stream<Arguments> getApiSingleItemResponsesProvider() {
         return Stream.of(Arguments.of("/api/faculties/1", status().isOk(), "application/hal+json", FacultyDto.builder().id(1L).name("Informatics").build(), new FacultyDtoAssertions()));
     }
-    //endregion
 
     static Stream<Arguments> getApiSingleItemErrorsProvider() {
         String apiPath = "/api/faculties/";
@@ -83,14 +90,9 @@ public class FacultyControllerTest extends GenericControllerTest<FacultyDto> {
 
         return Stream.of(status400OnStringProvided, status404OnFacultyNotFound);
     }
-
-    @BeforeEach
-    public void setUp() {
-        mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false).registerModule(new JavaTimeModule());
-        requestUtils = new RequestUtilsImpl(mvc, mapper);
-
-    }
     //endregion
+
+
 
 
 }
