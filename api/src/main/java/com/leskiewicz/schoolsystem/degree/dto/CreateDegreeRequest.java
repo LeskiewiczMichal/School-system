@@ -11,7 +11,7 @@ import lombok.Getter;
 @Builder
 public class CreateDegreeRequest {
 
-  @NotNull private final DegreeTitle title;
-  @NotNull private final String fieldOfStudy;
-  @NotNull private final String facultyName;
+  @NotNull(message = "Degree title required") private final DegreeTitle title;
+  @NotNull(message = "Degree field of study required") private final String fieldOfStudy;
+  @NotNull(message = "Faculty name required") private final String facultyName;
 }

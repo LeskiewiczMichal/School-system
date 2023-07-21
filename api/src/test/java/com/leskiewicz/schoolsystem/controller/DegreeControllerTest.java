@@ -11,12 +11,15 @@ import com.leskiewicz.schoolsystem.testModels.DegreeDto;
 import com.leskiewicz.schoolsystem.testUtils.CommonTests;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtils;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtilsImpl;
+import com.leskiewicz.schoolsystem.testUtils.TestAssertions;
 import com.leskiewicz.schoolsystem.testUtils.assertions.DegreeDtoAssertions;
 import java.util.Arrays;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -140,6 +143,26 @@ public class DegreeControllerTest extends GenericControllerTest<DegreeDto> {
             new DegreeDtoAssertions()));
   }
 
+  static Stream<Arguments> createDegreeReturns400OnWrongRequestProvider() {
+    Arguments nullTitle =
+        Arguments.of(new CreateDegreeRequest(null, "Test", "Law"), "Degree title required");
+
+    Arguments nullFieldOfStudy =
+        Arguments.of(
+            new CreateDegreeRequest(DegreeTitle.BACHELOR, null, "Law"),
+            "Degree field of study required");
+
+    Arguments nullFaculty =
+        Arguments.of(
+            new CreateDegreeRequest(DegreeTitle.BACHELOR, "Test", null),
+            "Faculty name required");
+
+    Arguments nullRequest =
+        Arguments.of(new CreateDegreeRequest(null, null, null), "Faculty name required; Degree field of study required; Degree title required");
+
+    return Stream.of(nullTitle, nullFieldOfStudy, nullFaculty, nullRequest);
+  }
+
   @BeforeEach
   public void setUp() {
     mapper =
@@ -175,5 +198,16 @@ public class DegreeControllerTest extends GenericControllerTest<DegreeDto> {
     // Assert correct location header
     String expectedLocation = "http://localhost/api/degrees/1";
     result.andExpect(MockMvcResultMatchers.header().string("Location", expectedLocation));
+  }
+
+  @ParameterizedTest
+  @MethodSource("createDegreeReturns400OnWrongRequestProvider")
+  public void createDegreeReturns400OnWrongRequest(
+      CreateDegreeRequest request, String expectedMessage) throws Exception {
+
+    ResultActions result =
+        requestUtils.performPostRequest(BASE_URL, request, status().isBadRequest());
+
+    TestAssertions.assertError(result, expectedMessage, BASE_URL, 400);
   }
 }
