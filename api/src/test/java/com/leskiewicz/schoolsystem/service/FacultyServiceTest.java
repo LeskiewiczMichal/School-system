@@ -218,5 +218,5 @@ public class FacultyServiceTest {
         EntityNotFoundException.class,
         () -> facultyService.getFacultyUsers(faculty.getId(), pageable, Role.ROLE_STUDENT));
   }
-  //endregion
+  // endregion
 }

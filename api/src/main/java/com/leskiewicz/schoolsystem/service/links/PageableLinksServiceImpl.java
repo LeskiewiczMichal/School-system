@@ -44,7 +44,7 @@ public class PageableLinksServiceImpl implements PageableLinksService {
       PageableRequest request,
       UriComponentsBuilder linkBuilder) {
 
-    // Request to modify the query parameters
+    // Request on witch will modify the query parameters
     PageableRequest req =
         PageableRequest.builder()
             .page(request.getPage())
@@ -58,8 +58,13 @@ public class PageableLinksServiceImpl implements PageableLinksService {
     Link selfLink = Link.of(linkBuilder.build().toUriString(), "self");
     resources.add(selfLink);
 
-    // First link
-    req.setPage(0);
+    // If there are no resources, there is no need to add other links
+    if (resources.getContent().isEmpty()) {
+      return;
+    }
+
+      // First link
+      req.setPage(0);
     linkBuilder.replaceQuery(req.toQueryParams());
     Link firstLink = Link.of(linkBuilder.build().toUriString(), "first");
     resources.add(firstLink);
