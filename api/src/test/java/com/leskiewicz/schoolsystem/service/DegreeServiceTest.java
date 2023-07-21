@@ -9,6 +9,7 @@ import com.leskiewicz.schoolsystem.degree.DegreeRepository;
 import com.leskiewicz.schoolsystem.degree.DegreeServiceImpl;
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
 import com.leskiewicz.schoolsystem.degree.dto.CreateDegreeRequest;
+import com.leskiewicz.schoolsystem.error.customexception.EntityAlreadyExistsException;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.FacultyServiceImpl;
 import jakarta.persistence.EntityNotFoundException;
@@ -141,5 +142,19 @@ public class DegreeServiceTest {
     Assertions.assertThrows(
         ConstraintViolationException.class, () -> degreeService.createDegree(request));
   }
+
+  @Test
+    public void throwsEntityAlreadyExistsExceptionWhenDegreeAlreadyExists() {
+        CreateDegreeRequest request =
+            new CreateDegreeRequest(
+                DegreeTitle.BACHELOR_OF_SCIENCE, "Computer Science", "Software Engineering");
+        given(degreeRepository
+                .findByFacultyNameAndTitleAndFieldOfStudy(
+                    request.getFacultyName(), request.getTitle(), request.getFieldOfStudy())
+                ).willReturn(Optional.of(degree));
+
+        Assertions.assertThrows(
+            EntityAlreadyExistsException.class, () -> degreeService.createDegree(request));
+    }
   // region
 }
