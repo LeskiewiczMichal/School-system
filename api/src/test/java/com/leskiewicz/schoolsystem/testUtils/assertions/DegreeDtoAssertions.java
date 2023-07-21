@@ -1,9 +1,13 @@
 package com.leskiewicz.schoolsystem.testUtils.assertions;
 
+import com.leskiewicz.schoolsystem.degree.DegreeController;
+import com.leskiewicz.schoolsystem.faculty.FacultyController;
 import com.leskiewicz.schoolsystem.testModels.DegreeDto;
 import com.leskiewicz.schoolsystem.testModels.FacultyDto;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.test.web.servlet.ResultActions;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 public class DegreeDtoAssertions implements DtoAssertion<DegreeDto> {
@@ -26,6 +30,18 @@ public class DegreeDtoAssertions implements DtoAssertion<DegreeDto> {
 
     @Override
     public void assertDto(ResultActions result, DegreeDto dto) throws Exception {
+        result
+                .andExpect(jsonPath("$.id").value(dto.getId()))
+                .andExpect(jsonPath("$.title").value(dto.getTitle()))
+                .andExpect(jsonPath("$.fieldOfStudy").value(dto.getFieldOfStudy()))
+                .andExpect(jsonPath("$.faculty").value(dto.getFaculty()))
+                .andExpect(
+                        jsonPath("$._links.self.href")
+                                .value(
+                                        WebMvcLinkBuilder.linkTo(
+                                                        methodOn(DegreeController.class).getDegreeById(dto.getId()))
+                                                .toString()));
 
+//                .andExpect(jsonPath("$._links.teachers.href").exists());
     }
 }
