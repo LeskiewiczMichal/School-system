@@ -8,6 +8,7 @@ import com.leskiewicz.schoolsystem.degree.DegreeServiceImpl;
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import jakarta.persistence.EntityNotFoundException;
+
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,6 +18,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 @ExtendWith(MockitoExtension.class)
 public class DegreeServiceTest {
@@ -62,4 +66,17 @@ public class DegreeServiceTest {
   }
 
   // endregion
+
+  //region GetDegrees tests
+  @Test
+  public void getDegreesReturnsPagedDegrees() {
+    Pageable pageable = Mockito.mock(PageRequest.class);
+    Page<Degree> mockPage = Mockito.mock(Page.class);
+
+    given(degreeRepository.findAll(pageable)).willReturn(mockPage);
+
+    Page<Degree> degrees = degreeService.getDegrees(pageable);
+    Assertions.assertEquals(mockPage, degrees);
+  }
+  //endregion
 }
