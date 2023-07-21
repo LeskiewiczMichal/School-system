@@ -1,8 +1,10 @@
 package com.leskiewicz.schoolsystem.degree;
 
+import com.leskiewicz.schoolsystem.degree.dto.CreateDegreeRequest;
 import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
 import com.leskiewicz.schoolsystem.degree.utils.DegreeModelAssembler;
 import com.leskiewicz.schoolsystem.dto.request.PageableRequest;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.hateoas.CollectionModel;
@@ -32,5 +34,13 @@ public class DegreeController {
     CollectionModel<DegreeDto> degreeDtos = degreeModelAssembler.toCollectionModel(degrees);
 
     return ResponseEntity.ok(degreeDtos);
+  }
+
+  @PostMapping
+  public ResponseEntity<DegreeDto> createDegree(@Valid @RequestBody CreateDegreeRequest request) {
+    Degree degree = degreeService.createDegree(request);
+    DegreeDto degreeDto = degreeModelAssembler.toModel(degree);
+
+    return ResponseEntity.created(degreeDto.getLink("self").get().toUri()).body(degreeDto);
   }
 }
