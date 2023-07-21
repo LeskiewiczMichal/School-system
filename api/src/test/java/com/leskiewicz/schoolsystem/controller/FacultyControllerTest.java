@@ -63,8 +63,9 @@ public class FacultyControllerTest extends GenericControllerTest<FacultyDto> {
         Arguments pageOne = Arguments.of(GET_FACULTIES + "?page=1", Arrays.asList(sociology, law, economics), Arrays.asList(selfLink.toBuilder().href(String.format(facultiesQuery, 1, 10, "id", "asc")).build(), prevLink, firstLink, lastLink), assertions);
         Arguments descending = Arguments.of(GET_FACULTIES + "?direction=desc", Arrays.asList(economics, law, sociology), Arrays.asList(selfLink.toBuilder().href(String.format(facultiesQuery, 0, 10, "id", "desc")).build(), nextLink.toBuilder().href(String.format(facultiesQuery, 1, 10, "id", "desc")).build()), assertions);
         Arguments sortByName = Arguments.of(GET_FACULTIES + "?sort=name", Arrays.asList(biology, chemistry), Arrays.asList(selfLink.toBuilder().href(String.format(facultiesQuery, 0, 10, "name", "asc")).build(), nextLink.toBuilder().href(String.format(facultiesQuery, 1, 10, "name", "asc")).build()), assertions);
+        Arguments pageSize20 = Arguments.of(GET_FACULTIES + "?size=20", Arrays.asList(informatics, biology, electronics, chemistry), Arrays.asList(selfLink.toBuilder().href(String.format(facultiesQuery, 0, 20, "id", "asc")).build(), firstLink.toBuilder().href(String.format(facultiesQuery, 0, 20, "id", "asc")).build(), lastLink.toBuilder().href(String.format(facultiesQuery, 0, 20, "id", "asc")).build()), assertions);
 
-        return Stream.of(noParams, pageOne, descending, sortByName);
+        return Stream.of(noParams, pageOne, descending, sortByName, pageSize20);
     }
 
     //region GetFacultyById
