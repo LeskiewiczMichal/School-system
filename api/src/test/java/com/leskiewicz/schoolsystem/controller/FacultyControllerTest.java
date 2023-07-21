@@ -48,6 +48,7 @@ public class FacultyControllerTest extends GenericControllerTest<FacultyDto> {
         FacultyDto informatics = FacultyDto.builder().id(1L).name("Informatics").build();
         FacultyDto biology = FacultyDto.builder().id(2L).name("Biology").build();
         FacultyDto electronics = FacultyDto.builder().id(3L).name("Electronics").build();
+        FacultyDto chemistry = FacultyDto.builder().id(4L).name("Chemistry").build();
         FacultyDto sociology = FacultyDto.builder().id(11L).name("Sociology").build();
         FacultyDto law = FacultyDto.builder().id(12L).name("Law").build();
         FacultyDto economics = FacultyDto.builder().id(13L).name("Economics").build();
@@ -61,9 +62,9 @@ public class FacultyControllerTest extends GenericControllerTest<FacultyDto> {
         Arguments noParams = Arguments.of(GET_FACULTIES, Arrays.asList(informatics, biology, electronics), Arrays.asList(selfLink, nextLink, firstLink, lastLink), assertions);
         Arguments pageOne = Arguments.of(GET_FACULTIES + "?page=1", Arrays.asList(sociology, law, economics), Arrays.asList(selfLink.toBuilder().href(String.format(facultiesQuery, 1, 10, "id", "asc")).build(), prevLink, firstLink, lastLink), assertions);
         Arguments descending = Arguments.of(GET_FACULTIES + "?direction=desc", Arrays.asList(economics, law, sociology), Arrays.asList(selfLink.toBuilder().href(String.format(facultiesQuery, 0, 10, "id", "desc")).build(), nextLink.toBuilder().href(String.format(facultiesQuery, 1, 10, "id", "desc")).build()), assertions);
+        Arguments sortByName = Arguments.of(GET_FACULTIES + "?sort=name", Arrays.asList(biology, chemistry), Arrays.asList(selfLink.toBuilder().href(String.format(facultiesQuery, 0, 10, "name", "asc")).build(), nextLink.toBuilder().href(String.format(facultiesQuery, 1, 10, "name", "asc")).build()), assertions);
 
-
-        return Stream.of(noParams, pageOne, descending);
+        return Stream.of(noParams, pageOne, descending, sortByName);
     }
 
     //region GetFacultyById
