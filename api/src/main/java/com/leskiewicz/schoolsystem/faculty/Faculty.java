@@ -30,12 +30,12 @@ public class Faculty extends RepresentationModel<Faculty> {
 
   @NotNull
   @Singular
-  @OneToMany(mappedBy = "faculty")
+  @OneToMany(mappedBy = "faculty", cascade = CascadeType.REMOVE)
   private List<Course> courses;
 
   @NotNull
   @Singular
-  @OneToMany(mappedBy = "faculty")
+  @OneToMany(mappedBy = "faculty", cascade = CascadeType.REMOVE)
   private List<Degree> degrees;
 
   @NotNull

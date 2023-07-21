@@ -73,4 +73,6 @@ public class DegreeServiceImpl implements DegreeService {
     logger.info("Created degree: {}", degree);
     return degree;
   }
+
+
 }
