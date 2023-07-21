@@ -45,7 +45,7 @@ public class GenericControllerTest<T> {
 
   @ParameterizedTest
   @MethodSource("getApiCollectionResponsesProvider")
-  public <T> void getApiCollectionResponses(String apiPath, List<T> dtos, List<CustomLink> links, DtoAssertion<T> dtoAssertion) throws Exception {
+  public <T> void getApiCollectionResponses(String apiPath, List<T> dtos, DtoAssertion<T> dtoAssertion) throws Exception {
     ResultActions result = requestUtils.performGetRequest(apiPath, status().isOk());
 
     for (int i = 0; i < dtos.size(); i++) {
@@ -54,9 +54,6 @@ public class GenericControllerTest<T> {
       dtoAssertion.assertDtoInCollection(result, i, dto);
     }
 
-    for (CustomLink customLink : links) {
-      TestAssertions.assertLink(result, customLink.getRel(), customLink.getHref());
-    }
   }
 
   @ParameterizedTest

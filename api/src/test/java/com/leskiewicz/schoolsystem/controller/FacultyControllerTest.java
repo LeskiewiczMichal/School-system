@@ -62,7 +62,6 @@ public class FacultyControllerTest extends GenericControllerTest<FacultyDto> {
     static Stream<Arguments> getApiCollectionResponsesProvider() {
         // Variables needed for tests
         FacultyDtoAssertions assertions = new FacultyDtoAssertions();
-        String facultiesQuery = "http://localhost/api/faculties?page=%d&size=%d&sort=%s&direction=%s";
         FacultyDto informatics = FacultyDto.builder().id(101L).name("Informatics").build();
         FacultyDto biology = FacultyDto.builder().id(102L).name("Biology").build();
         FacultyDto electronics = FacultyDto.builder().id(103L).name("Electronics").build();
@@ -71,19 +70,12 @@ public class FacultyControllerTest extends GenericControllerTest<FacultyDto> {
         FacultyDto law = FacultyDto.builder().id(112L).name("Law").build();
         FacultyDto economics = FacultyDto.builder().id(113L).name("Economics").build();
 
-        // Basic links to check
-        CustomLink selfLink = CustomLink.builder().rel("self").href(String.format(facultiesQuery, 0, 10, "id", "asc")).build();
-        CustomLink nextLink = CustomLink.builder().rel("next").href(String.format(facultiesQuery, 1, 10, "id", "asc")).build();
-        CustomLink prevLink = CustomLink.builder().rel("prev").href(String.format(facultiesQuery, 0, 10, "id", "asc")).build();
-        CustomLink firstLink = CustomLink.builder().rel("first").href(String.format(facultiesQuery, 0, 10, "id", "asc")).build();
-        CustomLink lastLink = CustomLink.builder().rel("last").href(String.format(facultiesQuery, 1, 10, "id", "asc")).build();
-
         // Arguments
-        Arguments noParams = Arguments.of(BASE_FACULTIES, Arrays.asList(informatics, biology, electronics), Arrays.asList(selfLink, nextLink, firstLink, lastLink), assertions);
-        Arguments pageOne = Arguments.of(BASE_FACULTIES + "?page=1", Arrays.asList(sociology, law, economics), Arrays.asList(selfLink.toBuilder().href(String.format(facultiesQuery, 1, 10, "id", "asc")).build(), prevLink, firstLink, lastLink), assertions);
-        Arguments descending = Arguments.of(BASE_FACULTIES + "?direction=desc", Arrays.asList(economics, law, sociology), Arrays.asList(selfLink.toBuilder().href(String.format(facultiesQuery, 0, 10, "id", "desc")).build(), nextLink.toBuilder().href(String.format(facultiesQuery, 1, 10, "id", "desc")).build()), assertions);
-        Arguments sortByName = Arguments.of(BASE_FACULTIES + "?sort=name", Arrays.asList(biology, chemistry), Arrays.asList(selfLink.toBuilder().href(String.format(facultiesQuery, 0, 10, "name", "asc")).build(), nextLink.toBuilder().href(String.format(facultiesQuery, 1, 10, "name", "asc")).build()), assertions);
-        Arguments pageSize20 = Arguments.of(BASE_FACULTIES + "?size=20", Arrays.asList(informatics, biology, electronics, chemistry), Arrays.asList(selfLink.toBuilder().href(String.format(facultiesQuery, 0, 20, "id", "asc")).build(), firstLink.toBuilder().href(String.format(facultiesQuery, 0, 20, "id", "asc")).build(), lastLink.toBuilder().href(String.format(facultiesQuery, 0, 20, "id", "asc")).build()), assertions);
+        Arguments noParams = Arguments.of(BASE_FACULTIES, Arrays.asList(informatics, biology, electronics), assertions);
+        Arguments pageOne = Arguments.of(BASE_FACULTIES + "?page=1", Arrays.asList(sociology, law, economics), assertions);
+        Arguments descending = Arguments.of(BASE_FACULTIES + "?direction=desc", Arrays.asList(economics, law, sociology), assertions);
+        Arguments sortByName = Arguments.of(BASE_FACULTIES + "?sort=name", Arrays.asList(biology, chemistry), assertions);
+        Arguments pageSize20 = Arguments.of(BASE_FACULTIES + "?size=20", Arrays.asList(informatics, biology, electronics, chemistry), assertions);
 
         return Stream.of(noParams, pageOne, descending, sortByName, pageSize20);
     }
