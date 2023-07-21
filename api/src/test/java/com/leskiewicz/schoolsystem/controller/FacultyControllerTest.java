@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.leskiewicz.schoolsystem.faculty.FacultyRepository;
 import com.leskiewicz.schoolsystem.faculty.dto.CreateFacultyRequest;
+import com.leskiewicz.schoolsystem.faculty.dto.PatchFacultyRequest;
 import com.leskiewicz.schoolsystem.testModels.CustomLink;
 import com.leskiewicz.schoolsystem.testModels.FacultyDto;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtils;
@@ -135,7 +136,26 @@ public class FacultyControllerTest extends GenericControllerTest<FacultyDto> {
     }
      //endregion
 
+    //region UpdateFaculty
+    @Test
+    public void updateFacultyReturnsCorrectFaculty() throws Exception {
+        PatchFacultyRequest request = new PatchFacultyRequest("New Name");
+        ResultActions result = requestUtils.performPatchRequest(BASE_FACULTIES + "/101", request, status().isOk());
 
+        FacultyDto expected = FacultyDto.builder().id(101L).name(request.getName()).build();
+
+        // Assert the facultyDto in response body
+        facultyDtoAssertions.assertDto(result, expected);
+    }
+
+    @Test
+    public void updateFacultyReturns404OnFacultyNotFound() throws Exception {
+        PatchFacultyRequest request = new PatchFacultyRequest("New Name");
+        ResultActions result = requestUtils.performPatchRequest(BASE_FACULTIES + "/999", request, status().isNotFound());
+
+        TestAssertions.assertError(result, "Faculty with ID: 999 not found", BASE_FACULTIES + "/999", 404);
+    }
+    //endregion
 
 
 }
