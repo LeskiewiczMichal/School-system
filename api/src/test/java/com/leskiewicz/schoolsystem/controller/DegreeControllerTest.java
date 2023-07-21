@@ -21,7 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @Sql(scripts = {"classpath:schema.sql", "classpath:facultyController.sql"})
 public class DegreeControllerTest extends GenericControllerTest<DegreeDto> {
 
-  private static final String BASE_URL = "/degrees";
+  private static final String BASE_URL = "/api/degrees";
   DegreeDtoAssertions degreeDtoAssertions;
   @Autowired private MockMvc mvc;
   // Variables
