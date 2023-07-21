@@ -32,7 +32,7 @@ public class DegreeDtoAssertions implements DtoAssertion<DegreeDto> {
   public void assertDto(ResultActions result, DegreeDto dto) throws Exception {
     result
         .andExpect(jsonPath("$.id").value(dto.getId()))
-        .andExpect(jsonPath("$.title").value(dto.getTitle()))
+        .andExpect(jsonPath("$.title").value(dto.getTitle().toString()))
         .andExpect(jsonPath("$.fieldOfStudy").value(dto.getFieldOfStudy()))
         .andExpect(jsonPath("$.faculty").value(dto.getFaculty()))
         .andExpect(

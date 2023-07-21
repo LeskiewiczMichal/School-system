@@ -122,6 +122,21 @@ public class DegreeControllerTest extends GenericControllerTest<DegreeDto> {
     return Stream.of(status400OnStringProvided, status404OnDegreeNotFound);
   }
 
+  static Stream<Arguments> getApiSingleItemResponsesProvider() {
+    return Stream.of(
+        Arguments.of(
+            SINGLE_URL + "101",
+            status().isOk(),
+            "application/hal+json",
+            DegreeDto.builder()
+                .id(101L)
+                .title(DegreeTitle.BACHELOR_OF_SCIENCE)
+                .fieldOfStudy("Computer Science")
+                .faculty("Informatics")
+                .build(),
+            new DegreeDtoAssertions()));
+  }
+
   @BeforeEach
   public void setUp() {
     mapper =
