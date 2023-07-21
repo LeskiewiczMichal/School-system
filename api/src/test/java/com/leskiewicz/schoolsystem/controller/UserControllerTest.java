@@ -174,24 +174,15 @@ public class UserControllerTest extends GenericControllerTest<UserDto> {
         400
     );
 
-    return Stream.of(status400OnStringProvided);
-  }
+    Arguments status404OnUserNotFound = Arguments.of(
+            apiPath + "9999",
+            status().isNotFound(),
+            MediaType.APPLICATION_JSON.toString(),
+            ErrorMessages.objectWithIdNotFound("User", 9999L),
+            404
+    );
 
-//  @Test
-//  public void getUserByIdReturnsStatus400OnStringProvided() throws Exception {
-//    ResultActions result = requestUtils.performGetRequest(GET_USER_BY_ID + "asdf",
-//        status().isBadRequest(), MediaType.APPLICATION_JSON.toString());
-//
-//    TestAssertions.assertError(result, "Wrong argument types provided", "/api/users/asdf", 400);
-//  }
-
-  @Test
-  public void getUserByIdReturnsStatus404OnUserNotFound() throws Exception {
-    ResultActions result = requestUtils.performGetRequest(GET_USER_BY_ID + "9999",
-        status().isNotFound(), MediaType.APPLICATION_JSON.toString());
-
-    TestAssertions.assertError(result, ErrorMessages.objectWithIdNotFound("User", 9999L),
-        GET_USER_BY_ID + "9999", 404);
+    return Stream.of(status400OnStringProvided, status404OnUserNotFound);
   }
   //endregion
 
