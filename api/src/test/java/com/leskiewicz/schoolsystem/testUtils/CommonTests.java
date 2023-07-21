@@ -40,5 +40,11 @@ public class CommonTests {
                 .andExpect(jsonPath("$._links.first").value(String.format(query, 0, 20, "id", "asc")))
                 .andExpect(jsonPath("$._links.last").value(String.format(query, lastPage, 20, "id", "asc")));
 
+        // Sort by id, descending and page 1
+        result = requestUtils.performGetRequest(baseApiPath + "?sort=id&direction=desc&page=1", status().isOk())
+                .andExpect(jsonPath("$._links.self").value(String.format(query, 1, 10, "id", "desc")))
+                .andExpect(jsonPath("$._links.prev").value(String.format(query, 0, 10, "id", "desc")))
+                .andExpect(jsonPath("$._links.first").value(String.format(query, 0, 10, "id", "desc")))
+                .andExpect(jsonPath("$._links.last").value(String.format(query, lastPage, 10, "id", "desc")));
     }
 }
