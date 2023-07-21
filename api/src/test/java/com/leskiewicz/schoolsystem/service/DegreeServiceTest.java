@@ -8,7 +8,6 @@ import com.leskiewicz.schoolsystem.degree.DegreeServiceImpl;
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import jakarta.persistence.EntityNotFoundException;
-
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -67,7 +66,7 @@ public class DegreeServiceTest {
 
   // endregion
 
-  //region GetDegrees tests
+  // region GetDegrees tests
   @Test
   public void getDegreesReturnsPagedDegrees() {
     Pageable pageable = Mockito.mock(PageRequest.class);
@@ -78,20 +77,28 @@ public class DegreeServiceTest {
     Page<Degree> degrees = degreeService.getDegrees(pageable);
     Assertions.assertEquals(mockPage, degrees);
   }
-  //endregion
+  // endregion
 
-    //region GetByTitleAndFieldOfStudy tests
-    @Test
-    public void getByTitleAndFieldOfStudyReturnsCorrectDegree() {
-      given(degreeRepository.findByTitleAndFieldOfStudy(degree.getTitle(), degree.getFieldOfStudy()))
-          .willReturn(Optional.of(degree));
+  // region GetByTitleAndFieldOfStudy tests
+  @Test
+  public void getByTitleAndFieldOfStudyReturnsCorrectDegree() {
+    given(degreeRepository.findByTitleAndFieldOfStudy(degree.getTitle(), degree.getFieldOfStudy()))
+        .willReturn(Optional.of(degree));
 
-      Degree testDegree =
-          degreeService.getByTitleAndFieldOfStudy(degree.getTitle(), degree.getFieldOfStudy());
+    Degree testDegree =
+        degreeService.getByTitleAndFieldOfStudy(degree.getTitle(), degree.getFieldOfStudy());
 
-      Assertions.assertEquals(degree, testDegree);
-    }
+    Assertions.assertEquals(degree, testDegree);
+  }
 
-    
-    //endregion
+  @Test
+  public void getByTitleAndFieldOfStudyThrowsEntityNotFoundExceptionWhenDegreeDoesNotExist() {
+    given(degreeRepository.findByTitleAndFieldOfStudy(degree.getTitle(), degree.getFieldOfStudy()))
+        .willReturn(Optional.empty());
+
+    Assertions.assertThrows(
+        EntityNotFoundException.class,
+        () -> degreeService.getByTitleAndFieldOfStudy(degree.getTitle(), degree.getFieldOfStudy()));
+  }
+  // endregion
 }
