@@ -4,10 +4,12 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.leskiewicz.schoolsystem.testModels.DegreeDto;
+import com.leskiewicz.schoolsystem.testUtils.CommonTests;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtils;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtilsImpl;
-import com.leskiewicz.schoolsystem.testUtils.assertions.FacultyDtoAssertions;
+import com.leskiewicz.schoolsystem.testUtils.assertions.DegreeDtoAssertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,23 +21,26 @@ import org.springframework.test.web.servlet.MockMvc;
 @Sql(scripts = {"classpath:schema.sql", "classpath:facultyController.sql"})
 public class DegreeControllerTest extends GenericControllerTest<DegreeDto> {
 
-    private static final String BASE_URL = "/degrees";
+  private static final String BASE_URL = "/degrees";
+  DegreeDtoAssertions degreeDtoAssertions;
+  @Autowired private MockMvc mvc;
+  // Variables
+  private ObjectMapper mapper;
+  private RequestUtils requestUtils;
 
-    @Autowired
-    private MockMvc mvc;
+  @BeforeEach
+  public void setUp() {
+    mapper =
+        new ObjectMapper()
+            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+            .registerModule(new JavaTimeModule());
+    requestUtils = new RequestUtilsImpl(mvc, mapper);
 
-    // Variables
-    private ObjectMapper mapper;
-    private RequestUtils requestUtils;
+    degreeDtoAssertions = new DegreeDtoAssertions();
+  }
 
-    @BeforeEach
-    public void setUp() {
-        mapper =
-                new ObjectMapper()
-                        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-                        .registerModule(new JavaTimeModule());
-        requestUtils = new RequestUtilsImpl(mvc, mapper);
-
-    }
-
+  @Test
+  public void getDegreesTestPagination() throws Exception {
+    CommonTests.paginationLinksTest(requestUtils, BASE_URL, 1);
+  }
 }

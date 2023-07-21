@@ -42,135 +42,130 @@ VALUES (113, 'Economics');
 -- Degrees
 
 INSERT INTO degree (id, title, field_of_study, faculty)
-VALUES (1, 'BACHELOR_OF_SCIENCE', 'Computer Science', 101);
+VALUES (101, 'BACHELOR_OF_SCIENCE', 'Computer Science', 101);
 
 INSERT INTO degree (id, title, field_of_study, faculty)
-VALUES (2, 'MASTER', 'Software Engineering', 101);
+VALUES (102, 'MASTER', 'Software Engineering', 101);
 
 INSERT INTO degree (id, title, field_of_study, faculty)
-VALUES (3, 'BACHELOR', 'Nano', 102);
+VALUES (103, 'BACHELOR', 'Nano', 102);
 
 INSERT INTO degree (id, title, field_of_study, faculty)
-VALUES (4, 'BACHELOR_OF_SCIENCE', 'Math', 102);
+VALUES (104, 'BACHELOR_OF_SCIENCE', 'Math', 102);
 
 INSERT INTO degree (id, title, field_of_study, faculty)
-VALUES (5, 'PROFESSOR', 'Computer Science', 103);
+VALUES (105, 'PROFESSOR', 'Computer Science', 103);
 
 INSERT INTO degree (id, title, field_of_study, faculty)
-VALUES (6, 'DOCTOR', 'Physics', 103);
+VALUES (106, 'DOCTOR', 'Physics', 103);
 
 INSERT INTO degree (id, title, field_of_study, faculty)
-VALUES (7, 'BACHELOR', 'Nano', 104);
+VALUES (107, 'BACHELOR', 'Nano', 104);
 
 INSERT INTO degree (id, title, field_of_study, faculty)
-VALUES (8, 'DOCTOR', 'Computer Science', 104);
+VALUES (108, 'DOCTOR', 'Computer Science', 104);
 
 INSERT INTO degree (id, title, field_of_study, faculty)
-VALUES (9, 'BACHELOR_OF_SCIENCE', 'Math', 105);
+VALUES (109, 'BACHELOR_OF_SCIENCE', 'Math', 105);
 
 INSERT INTO degree (id, title, field_of_study, faculty)
-VALUES (10, 'MASTER', 'Electronics', 105);
+VALUES (110, 'MASTER', 'Electronics', 105);
 
 INSERT INTO degree (id, title, field_of_study, faculty)
-VALUES (11, 'DOCTOR', 'Nano', 106);
+VALUES (111, 'DOCTOR', 'Nano', 106);
 
 INSERT INTO degree (id, title, field_of_study, faculty)
-VALUES (12, 'BACHELOR_OF_SCIENCE', 'Physics', 106);
+VALUES (112, 'BACHELOR_OF_SCIENCE', 'Physics', 106);
 
 INSERT INTO degree (id, title, field_of_study, faculty)
-VALUES (13, 'DOCTOR', 'Math', 107);
+VALUES (113, 'DOCTOR', 'Math', 107);
 
 INSERT INTO degree (id, title, field_of_study, faculty)
-VALUES (14, 'MASTER', 'Software Engineering', 107);
+VALUES (114, 'MASTER', 'Software Engineering', 107);
 
 INSERT INTO degree (id, title, field_of_study, faculty)
-VALUES (15, 'BACHELOR', 'Electronics', 108);
+VALUES (115, 'BACHELOR', 'Electronics', 108);
 
 INSERT INTO degree (id, title, field_of_study, faculty)
-VALUES (16, 'BACHELOR', 'Math', 108);
+VALUES (116, 'BACHELOR', 'Math', 108);
 
 INSERT INTO degree (id, title, field_of_study, faculty)
-VALUES (17, 'DOCTOR', 'Nano', 109);
+VALUES (117, 'DOCTOR', 'Nano', 109);
 
 INSERT INTO degree (id, title, field_of_study, faculty)
-VALUES (18, 'PROFESSOR', 'Electronics', 110);
+VALUES (118, 'PROFESSOR', 'Electronics', 110);
 
 INSERT INTO degree (id, title, field_of_study, faculty)
-VALUES (19, 'BACHELOR', 'Physics', 111);
+VALUES (119, 'BACHELOR', 'Physics', 111);
 
 INSERT INTO degree (id, title, field_of_study, faculty)
-VALUES (20, 'DOCTOR', 'Math', 112);
+VALUES (120, 'DOCTOR', 'Math', 112);
 
-INSERT INTO degree (id, title, field_of_study, faculty)
-VALUES (21, 'BACHELOR', 'Physics', 112);
-
-INSERT INTO degree (id, title, field_of_study, faculty)
-VALUES (22, 'PROFESSOR', 'Nano', 113);
 
 -- Users
 
 INSERT INTO users (first_name, last_name, email, password, faculty, degree, role)
-VALUES ('John', 'Doe', 'johndoe@example.com', '12345', 101, 1, 'ROLE_STUDENT');
+VALUES ('John', 'Doe', 'johndoe@example.com', '12345', 101, 101, 'ROLE_STUDENT');
 
 INSERT INTO users (first_name, last_name, email, password, faculty, degree, role)
-VALUES ('Jane', 'Smith', 'janesmith@example.com', 'password123', 102, 3, 'ROLE_STUDENT');
+VALUES ('Jane', 'Smith', 'janesmith@example.com', 'password123', 102, 103, 'ROLE_STUDENT');
 
 INSERT INTO users (first_name, last_name, email, password, faculty, degree, role)
-VALUES ('Michael', 'Johnson', 'michaeljohnson@example.com', 'test123', 103, 5, 'ROLE_STUDENT');
+VALUES ('Michael', 'Johnson', 'michaeljohnson@example.com', 'test123', 103, 105, 'ROLE_STUDENT');
 
 INSERT INTO users (first_name, last_name, email, password, faculty, degree, role)
-VALUES ('Emily', 'Anderson', 'emily.anderson@example.com', 'password123', 104, 7, 'ROLE_STUDENT');
+VALUES ('Emily', 'Anderson', 'emily.anderson@example.com', 'password123', 104, 107, 'ROLE_STUDENT');
 
 INSERT INTO users (first_name, last_name, email, password, faculty, degree, role)
-VALUES ('Daniel', 'Wilson', 'daniel.wilson@example.com', 'test123', 105, 10, 'ROLE_STUDENT');
+VALUES ('Daniel', 'Wilson', 'daniel.wilson@example.com', 'test123', 105, 110, 'ROLE_STUDENT');
 
 INSERT INTO users (first_name, last_name, email, password, faculty, degree, role)
-VALUES ('Olivia', 'Martinez', 'olivia.martinez@example.com', 'securepass', 106, 11, 'ROLE_TEACHER');
+VALUES ('Olivia', 'Martinez', 'olivia.martinez@example.com', 'securepass', 106, 111, 'ROLE_TEACHER');
 
 INSERT INTO users (first_name, last_name, email, password, faculty, degree, role)
-VALUES ('James', 'Garcia', 'james.garcia@example.com', 'mypassword', 107, 13, 'ROLE_TEACHER');
+VALUES ('James', 'Garcia', 'james.garcia@example.com', 'mypassword', 107, 113, 'ROLE_TEACHER');
 
 INSERT INTO users (first_name, last_name, email, password, faculty, degree, role)
-VALUES ('Ava', 'Thomas', 'ava.thomas@example.com', 'pass1234', 108, 15, 'ROLE_TEACHER');
+VALUES ('Ava', 'Thomas', 'ava.thomas@example.com', 'pass1234', 108, 115, 'ROLE_TEACHER');
 
 INSERT INTO users (first_name, last_name, email, password, faculty, degree, role)
-VALUES ('William', 'Robinson', 'william.robinson@example.com', 'myp@ssw0rd', 109, 17, 'ROLE_TEACHER');
+VALUES ('William', 'Robinson', 'william.robinson@example.com', 'myp@ssw0rd', 109, 117, 'ROLE_TEACHER');
 
 INSERT INTO users (first_name, last_name, email, password, faculty, degree, role)
-VALUES ('Sophia', 'Walker', 'sophia.walker@example.com', 'password123!', 110, 18, 'ROLE_TEACHER');
+VALUES ('Sophia', 'Walker', 'sophia.walker@example.com', 'password123!', 110, 118, 'ROLE_TEACHER');
 
 INSERT INTO users (first_name, last_name, email, password, faculty, degree, role)
-VALUES ('Benjamin', 'Young', 'benjamin.young@example.com', 'testpass', 111, 19, 'ROLE_ADMIN');
+VALUES ('Benjamin', 'Young', 'benjamin.young@example.com', 'testpass', 111, 119, 'ROLE_ADMIN');
 
 INSERT INTO users (first_name, last_name, email, password, faculty, degree, role)
-VALUES ('Isabella', 'Harris', 'isabella.harris@example.com', 'myp@ssword', 112, 20, 'ROLE_ADMIN');
+VALUES ('Isabella', 'Harris', 'isabella.harris@example.com', 'myp@ssword', 112, 120, 'ROLE_ADMIN');
 
 INSERT INTO users (first_name, last_name, email, password, faculty, degree, role)
-VALUES ('Elijah', 'Lee', 'elijah.lee@example.com', 'mypass123', 113, 22, 'ROLE_STUDENT');
+VALUES ('Elijah', 'Lee', 'elijah.lee@example.com', 'mypass123', 113, 120, 'ROLE_STUDENT');
 
 INSERT INTO users (first_name, last_name, email, password, faculty, degree, role)
-VALUES ('Mia', 'Wright', 'mia.wright@example.com', 'password1234', 101, 2, 'ROLE_STUDENT');
+VALUES ('Mia', 'Wright', 'mia.wright@example.com', 'password1234', 101, 102, 'ROLE_STUDENT');
 
 INSERT INTO users (first_name, last_name, email, password, faculty, degree, role)
-VALUES ('Oliver', 'Lopez', 'oliver.lopez@example.com', 'myp@ssword123', 102, 4, 'ROLE_STUDENT');
+VALUES ('Oliver', 'Lopez', 'oliver.lopez@example.com', 'myp@ssword123', 102, 104, 'ROLE_STUDENT');
 
 INSERT INTO users (first_name, last_name, email, password, faculty, degree, role)
-VALUES ('Amelia', 'Hall', 'amelia.hall@example.com', 'testpassword', 103, 6, 'ROLE_STUDENT');
+VALUES ('Amelia', 'Hall', 'amelia.hall@example.com', 'testpassword', 103, 106, 'ROLE_STUDENT');
 
 INSERT INTO users (first_name, last_name, email, password, faculty, degree, role)
-VALUES ('Lucas', 'Scott', 'lucas.scott@example.com', 'mypassword123', 104, 8, 'ROLE_STUDENT');
+VALUES ('Lucas', 'Scott', 'lucas.scott@example.com', 'mypassword123', 104, 108, 'ROLE_STUDENT');
 
 INSERT INTO users (first_name, last_name, email, password, faculty, degree, role)
-VALUES ('Aria', 'Perez', 'aria.perez@example.com', 'myp@ss123', 105, 10, 'ROLE_STUDENT');
+VALUES ('Aria', 'Perez', 'aria.perez@example.com', 'myp@ss123', 105, 110, 'ROLE_STUDENT');
 
 INSERT INTO users (first_name, last_name, email, password, faculty, degree, role)
-VALUES ('Alice', 'Smith', 'alicesmith@example.com', '54321', 101, 1, 'ROLE_STUDENT');
+VALUES ('Alice', 'Smith', 'alicesmith@example.com', '54321', 101, 101, 'ROLE_STUDENT');
 
 INSERT INTO users (first_name, last_name, email, password, faculty, role)
 VALUES ('Bob', 'Johnson', 'bobjohnson@example.com', 'abcde', 101, 'ROLE_TEACHER');
 
 INSERT INTO users (first_name, last_name, email, password, faculty, degree, role)
-VALUES ('Emily', 'Wilson', 'emilywilson@example.com', 'qwerty', 101, 2, 'ROLE_STUDENT');
+VALUES ('Emily', 'Wilson', 'emilywilson@example.com', 'qwerty', 101, 102, 'ROLE_STUDENT');
 
 
 -- Courses
@@ -321,61 +316,61 @@ VALUES (7, 1);
 -- Insert courses to degrees
 
 INSERT INTO degree_course (degree_id, course_id)
-VALUES (1, 1);
+VALUES (101, 1);
 
 INSERT INTO degree_course (degree_id, course_id)
-VALUES (2, 2);
+VALUES (102, 2);
 
 INSERT INTO degree_course (degree_id, course_id)
-VALUES (3, 3);
+VALUES (103, 3);
 
 INSERT INTO degree_course (degree_id, course_id)
-VALUES (4, 4);
+VALUES (104, 4);
 
 INSERT INTO degree_course (degree_id, course_id)
-VALUES (5, 5);
+VALUES (105, 5);
 
 INSERT INTO degree_course (degree_id, course_id)
-VALUES (6, 6);
+VALUES (106, 6);
 
 INSERT INTO degree_course (degree_id, course_id)
-VALUES (7, 7);
+VALUES (107, 7);
 
 INSERT INTO degree_course (degree_id, course_id)
-VALUES (8, 8);
+VALUES (108, 8);
 
 INSERT INTO degree_course (degree_id, course_id)
-VALUES (9, 9);
+VALUES (109, 9);
 
 INSERT INTO degree_course (degree_id, course_id)
-VALUES (10, 10);
+VALUES (110, 10);
 
 INSERT INTO degree_course (degree_id, course_id)
-VALUES (11, 11);
+VALUES (111, 11);
 
 INSERT INTO degree_course (degree_id, course_id)
-VALUES (12, 12);
+VALUES (112, 12);
 
 INSERT INTO degree_course (degree_id, course_id)
-VALUES (13, 13);
+VALUES (113, 13);
 
 INSERT INTO degree_course (degree_id, course_id)
-VALUES (14, 14);
+VALUES (114, 14);
 
 INSERT INTO degree_course (degree_id, course_id)
-VALUES (15, 15);
+VALUES (115, 15);
 
 INSERT INTO degree_course (degree_id, course_id)
-VALUES (16, 16);
+VALUES (116, 16);
 
 INSERT INTO degree_course (degree_id, course_id)
-VALUES (17, 17);
+VALUES (117, 17);
 
 INSERT INTO degree_course (degree_id, course_id)
-VALUES (18, 18);
+VALUES (118, 18);
 
 INSERT INTO degree_course (degree_id, course_id)
-VALUES (19, 19);
+VALUES (119, 19);
 
 INSERT INTO degree_course (degree_id, course_id)
-VALUES (20, 20);
+VALUES (120, 20);
