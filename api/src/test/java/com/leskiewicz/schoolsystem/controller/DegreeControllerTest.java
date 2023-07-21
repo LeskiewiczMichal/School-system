@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
+import com.leskiewicz.schoolsystem.degree.dto.CreateDegreeRequest;
 import com.leskiewicz.schoolsystem.testModels.DegreeDto;
 import com.leskiewicz.schoolsystem.testUtils.CommonTests;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtils;
@@ -22,6 +23,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -151,5 +154,26 @@ public class DegreeControllerTest extends GenericControllerTest<DegreeDto> {
   @Test
   public void getDegreesTestPagination() throws Exception {
     CommonTests.paginationLinksTest(requestUtils, BASE_URL, 1);
+  }
+
+  @Test
+  public void createDegreeReturnsCorrectDegreeAndLocationHeader() throws Exception {
+    CreateDegreeRequest request = new CreateDegreeRequest(DegreeTitle.BACHELOR, "Test", "Law");
+    ResultActions result = requestUtils.performPostRequest(BASE_URL, request, status().isCreated());
+
+    DegreeDto expected =
+        DegreeDto.builder()
+            .id(1L)
+            .title(DegreeTitle.BACHELOR)
+            .fieldOfStudy("Test")
+            .faculty("Law")
+            .build();
+
+    // Assert degreeDto in response body
+    degreeDtoAssertions.assertDto(result, expected);
+
+    // Assert correct location header
+    String expectedLocation = "http://localhost/api/degrees/1";
+    result.andExpect(MockMvcResultMatchers.header().string("Location", expectedLocation));
   }
 }
