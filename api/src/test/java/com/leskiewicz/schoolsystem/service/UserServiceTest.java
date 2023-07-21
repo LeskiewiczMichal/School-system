@@ -1,5 +1,9 @@
 package com.leskiewicz.schoolsystem.service;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
+
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.degree.DegreeService;
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
@@ -13,6 +17,8 @@ import com.leskiewicz.schoolsystem.user.UserRepository;
 import com.leskiewicz.schoolsystem.user.UserServiceImpl;
 import com.leskiewicz.schoolsystem.user.dto.PatchUserRequest;
 import jakarta.persistence.EntityNotFoundException;
+import java.util.Optional;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,34 +33,45 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.Optional;
-import java.util.stream.Stream;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
-
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
-
-  //region Mocks
-  @Mock
-  private UserRepository userRepository;
-  @Mock
-  private DegreeService degreeService;
-  @Mock
-  private FacultyService facultyService;
-  @Mock
-  private PasswordEncoder passwordEncoder;
-
-  @InjectMocks
-  private UserServiceImpl userService;
-  //endregion
 
   // Variables
   Faculty faculty;
   Degree degree;
   User user;
+  //region Mocks
+  @Mock
+  private UserRepository userRepository;
+  @Mock
+  private DegreeService degreeService;
+  //endregion
+  @Mock
+  private FacultyService facultyService;
+  @Mock
+  private PasswordEncoder passwordEncoder;
+  @InjectMocks
+  private UserServiceImpl userService;
+
+  static Stream<Arguments> updateUserWithDifferentFieldsSavesProperUserProvider() {
+    Faculty baseFaculty = Faculty.builder().name("Engineering").build();
+
+    Degree baseDegree = Degree.builder().title(DegreeTitle.BACHELOR)
+        .fieldOfStudy("Computer Science").faculty(baseFaculty).build();
+
+    User baseUser = User.builder().email("test@example.com").firstName("Tester").lastName("Testing")
+        .password("encoded_password").role(Role.ROLE_STUDENT).faculty(baseFaculty)
+        .degree(baseDegree).build();
+
+    return Stream.of(Arguments.of(PatchUserRequest.builder().firstName("Test").build(),
+            baseUser.toBuilder().build(), baseUser.toBuilder().firstName("Test").build()),
+        Arguments.of(PatchUserRequest.builder().lastName("Test").build(),
+            baseUser.toBuilder().build(), baseUser.toBuilder().lastName("Test").build()),
+        Arguments.of(PatchUserRequest.builder().email("test@example.com").build(),
+            baseUser.toBuilder().build(), baseUser.toBuilder().email("test@example.com").build()),
+        Arguments.of(PatchUserRequest.builder().password("Test").build(),
+            baseUser.toBuilder().build(), baseUser.toBuilder().password("encoded").build()));
+  }
 
   @BeforeEach
   public void setUp() {
@@ -73,6 +90,7 @@ public class UserServiceTest {
 
     Assertions.assertEquals(user, testUser);
   }
+  //endregion
 
   @Test
   public void getByIdThrowsEntityNotFound() {
@@ -80,7 +98,6 @@ public class UserServiceTest {
 
     Assertions.assertThrows(EntityNotFoundException.class, () -> userService.getById(1L));
   }
-  //endregion
 
   //region GetByEmail tests
   @Test
@@ -91,6 +108,7 @@ public class UserServiceTest {
 
     Assertions.assertEquals(user, testUser);
   }
+  //endregion
 
   @Test
   public void getByEmailThrowsEntityNotFound() {
@@ -112,7 +130,6 @@ public class UserServiceTest {
     Page<User> users = userService.getUsers(pageable);
     Assertions.assertEquals(users, mockPage);
   }
-  //endregion
 
   //region AddUser tests
   @Test
@@ -123,6 +140,7 @@ public class UserServiceTest {
 
     verify(userRepository).save(user);
   }
+  //endregion
 
   @Test
   public void throwsUserAlreadyExistsExceptionWhenUserWithGivenEmailAlreadyExists() {
@@ -130,7 +148,6 @@ public class UserServiceTest {
 
     Assertions.assertThrows(UserAlreadyExistsException.class, () -> userService.addUser(user));
   }
-  //endregion
 
   //region UpdateUser Tests
   @ParameterizedTest
@@ -163,7 +180,6 @@ public class UserServiceTest {
 
     verify(userRepository).save(expectedUser);
   }
-
 
   @Test
   public void updateUserFaculty() {
@@ -201,26 +217,6 @@ public class UserServiceTest {
         testUser.getId());
 
     verify(userRepository).save(expectedUser);
-  }
-
-  static Stream<Arguments> updateUserWithDifferentFieldsSavesProperUserProvider() {
-    Faculty baseFaculty = Faculty.builder().name("Engineering").build();
-
-    Degree baseDegree = Degree.builder().title(DegreeTitle.BACHELOR)
-        .fieldOfStudy("Computer Science").faculty(baseFaculty).build();
-
-    User baseUser = User.builder().email("test@example.com").firstName("Tester").lastName("Testing")
-        .password("encoded_password").role(Role.ROLE_STUDENT).faculty(baseFaculty)
-        .degree(baseDegree).build();
-
-    return Stream.of(Arguments.of(PatchUserRequest.builder().firstName("Test").build(),
-            baseUser.toBuilder().build(), baseUser.toBuilder().firstName("Test").build()),
-        Arguments.of(PatchUserRequest.builder().lastName("Test").build(),
-            baseUser.toBuilder().build(), baseUser.toBuilder().lastName("Test").build()),
-        Arguments.of(PatchUserRequest.builder().email("test@example.com").build(),
-            baseUser.toBuilder().build(), baseUser.toBuilder().email("test@example.com").build()),
-        Arguments.of(PatchUserRequest.builder().password("Test").build(),
-            baseUser.toBuilder().build(), baseUser.toBuilder().password("encoded").build()));
   }
   //endregion
 

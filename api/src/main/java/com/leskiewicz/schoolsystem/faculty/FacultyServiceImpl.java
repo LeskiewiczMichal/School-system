@@ -11,6 +11,8 @@ import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.utils.StringUtils;
 import com.leskiewicz.schoolsystem.utils.ValidationUtils;
 import jakarta.persistence.EntityNotFoundException;
+import java.util.List;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,87 +20,97 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-
 @Service
 @AllArgsConstructor
 public class FacultyServiceImpl implements FacultyService {
 
-    private final FacultyRepository facultyRepository;
-    private final Logger logger = LoggerFactory.getLogger(FacultyController.class);
+  private final FacultyRepository facultyRepository;
+  private final Logger logger = LoggerFactory.getLogger(FacultyController.class);
 
-    @Override
-    public Faculty getById(Long id) {
-        return facultyRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException(ErrorMessages.objectWithIdNotFound("Faculty", id)));
-    }
+  @Override
+  public Faculty getById(Long id) {
+    return facultyRepository
+        .findById(id)
+        .orElseThrow(
+            () -> new EntityNotFoundException(ErrorMessages.objectWithIdNotFound("Faculty", id)));
+  }
 
-    @Override
-    public Faculty getByName(String name) {
-        return facultyRepository.findByName(name).orElseThrow(
-                () -> new EntityNotFoundException(ErrorMessages.objectWithNameNotFound("Faculty", name)));
-    }
+  @Override
+  public Faculty getByName(String name) {
+    return facultyRepository
+        .findByName(name)
+        .orElseThrow(
+            () ->
+                new EntityNotFoundException(ErrorMessages.objectWithNameNotFound("Faculty", name)));
+  }
 
-    @Override
-    public Page<Faculty> getFaculties(Pageable pageable) {
-        return facultyRepository.findAll(pageable);
-    }
+  @Override
+  public Page<Faculty> getFaculties(Pageable pageable) {
+    return facultyRepository.findAll(pageable);
+  }
 
-    @Override
-    public Degree getDegreeByTitleAndFieldOfStudy(Faculty faculty, DegreeTitle title,
-                                                  String fieldOfStudy) {
-        List<Degree> degrees = faculty.getDegrees();
+  @Override
+  public Degree getDegreeByTitleAndFieldOfStudy(
+      Faculty faculty, DegreeTitle title, String fieldOfStudy) {
+    List<Degree> degrees = faculty.getDegrees();
 
-        // Get degree if it is in the faculty
-        Optional<Degree> degree = degrees.stream()
-                .filter(d -> d.getTitle().equals(title) && d.getFieldOfStudy().equals(fieldOfStudy))
-                .findFirst();
+    // Get degree if it is in the faculty
+    Optional<Degree> degree =
+        degrees.stream()
+            .filter(d -> d.getTitle().equals(title) && d.getFieldOfStudy().equals(fieldOfStudy))
+            .findFirst();
 
-        return degree.orElseThrow(() -> new EntityNotFoundException(
+    return degree.orElseThrow(
+        () ->
+            new EntityNotFoundException(
                 ErrorMessages.degreeNotOnFaculty(fieldOfStudy, title, faculty.getName())));
+  }
+
+  @Override
+  public Faculty createFaculty(CreateFacultyRequest request) {
+    if (facultyRepository.findByName(request.getName()).isPresent()) {
+      throw new EntityAlreadyExistsException(
+          ErrorMessages.objectWithPropertyAlreadyExists("Faculty", "name", request.getName()));
     }
 
-    @Override
-    public Faculty createFaculty(CreateFacultyRequest request) {
-        if (facultyRepository.findByName(request.getName()).isPresent()) {
-            throw new EntityAlreadyExistsException(
-                    ErrorMessages.objectWithPropertyAlreadyExists("Faculty", "name", request.getName()));
-        }
+    Faculty faculty =
+        Faculty.builder()
+            .name(StringUtils.capitalizeFirstLetterOfEveryWord(request.getName()))
+            .build();
+    ValidationUtils.validate(faculty);
+    facultyRepository.save(faculty);
+    logger.info("Created new faculty with name: {}", faculty.getName());
 
-        Faculty faculty = Faculty.builder()
-                .name(StringUtils.capitalizeFirstLetterOfEveryWord(request.getName())).build();
-        ValidationUtils.validate(faculty);
-        facultyRepository.save(faculty);
-        logger.info("Created new faculty with name: {}", faculty.getName());
+    return faculty;
+  }
 
-        return faculty;
+  @Override
+  public Faculty updateFaculty(PatchFacultyRequest request, Long facultyId) {
+    Faculty faculty =
+        facultyRepository
+            .findById(facultyId)
+            .orElseThrow(
+                () ->
+                    new EntityNotFoundException(
+                        ErrorMessages.objectWithIdNotFound("Faculty", facultyId)));
+
+    if (request.getName() != null) {
+      if (facultyRepository.findByName(request.getName()).isPresent()) {
+        throw new EntityAlreadyExistsException(
+            ErrorMessages.objectWithPropertyAlreadyExists("Faculty", "name", request.getName()));
+      }
+
+      logger.debug("Updating faculty name from {} to {}", faculty.getName(), request.getName());
+      faculty.setName(StringUtils.capitalizeFirstLetterOfEveryWord(request.getName()));
     }
 
-    @Override
-    public Faculty updateFaculty(PatchFacultyRequest request, Long facultyId) {
-        Faculty faculty = facultyRepository.findById(facultyId).orElseThrow(() ->
-                new EntityNotFoundException(ErrorMessages.objectWithIdNotFound("Faculty", facultyId)));
+    facultyRepository.save(faculty);
+    logger.info("Updated faculty with id: {}", facultyId);
+    return faculty;
+  }
 
-        if (request.getName() != null) {
-            if (facultyRepository.findByName(request.getName()).isPresent()) {
-                throw new EntityAlreadyExistsException(
-                        ErrorMessages.objectWithPropertyAlreadyExists("Faculty", "name", request.getName()));
-            }
-
-            logger.debug("Updating faculty name from {} to {}", faculty.getName(), request.getName());
-            faculty.setName(StringUtils.capitalizeFirstLetterOfEveryWord(request.getName()));
-        }
-
-        facultyRepository.save(faculty);
-        logger.info("Updated faculty with id: {}", facultyId);
-        return faculty;
-    }
-
-    @Override
-    public Page<User> getFacultyUsers(Long facultyId, Pageable pageable, Role role) {
-        return facultyRepository.findFacultyUsers(facultyId, pageable, role);
-    }
-
-
+  @Override
+  public Page<User> getFacultyUsers(Long facultyId, Pageable pageable, Role role) {
+    return facultyRepository.findFacultyUsers(facultyId, pageable, role);
+  }
 }

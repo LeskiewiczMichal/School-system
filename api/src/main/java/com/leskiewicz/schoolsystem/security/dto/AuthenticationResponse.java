@@ -10,6 +10,6 @@ import org.springframework.hateoas.RepresentationModel;
 @Setter
 public class AuthenticationResponse extends RepresentationModel<AuthenticationResponse> {
 
-    private String token;
-    private UserDto user;
+  private String token;
+  private UserDto user;
 }

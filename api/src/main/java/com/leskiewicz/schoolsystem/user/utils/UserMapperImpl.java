@@ -2,8 +2,8 @@ package com.leskiewicz.schoolsystem.user.utils;
 
 import com.leskiewicz.schoolsystem.error.ErrorMessages;
 import com.leskiewicz.schoolsystem.security.Role;
-import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.User;
+import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.utils.ValidationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,9 +23,13 @@ public class UserMapperImpl implements UserMapper {
     }
 
     // Create dto from user
-    UserDto.UserDtoBuilder userDto = UserDto.builder().id(user.getId())
-        .firstName(user.getFirstName()).lastName(user.getLastName()).email(user.getEmail())
-        .faculty(user.getFaculty().getName());
+    UserDto.UserDtoBuilder userDto =
+        UserDto.builder()
+            .id(user.getId())
+            .firstName(user.getFirstName())
+            .lastName(user.getLastName())
+            .email(user.getEmail())
+            .faculty(user.getFaculty().getName());
     if (user.getRole() == Role.ROLE_STUDENT) {
       userDto.degree(user.getDegree().getFieldOfStudy());
     } else {
@@ -35,5 +39,4 @@ public class UserMapperImpl implements UserMapper {
 
     return userDto.build();
   }
-
 }

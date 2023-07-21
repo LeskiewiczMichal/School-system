@@ -1,6 +1,5 @@
 package com.leskiewicz.schoolsystem.utils;
 
-import com.leskiewicz.schoolsystem.security.Role;
 import com.leskiewicz.schoolsystem.security.dto.AuthenticationRequest;
 import com.leskiewicz.schoolsystem.security.dto.AuthenticationResponse;
 import com.leskiewicz.schoolsystem.security.dto.RegisterRequest;
@@ -11,7 +10,6 @@ import java.util.stream.Collectors;
 import org.springframework.hateoas.CollectionModel;
 
 public class LoggingUtils {
-
 
   public static Object maskSensitiveInformation(Object obj) {
     if (obj instanceof AuthenticationRequest) {
@@ -36,33 +34,50 @@ public class LoggingUtils {
   }
 
   private static RegisterRequest maskRegisterRequest(RegisterRequest request) {
-    return new RegisterRequest(LoggingUtils.maskInfo(request.getFirstName()),
-        LoggingUtils.maskInfo(request.getLastName()), LoggingUtils.maskEmail(request.getEmail()),
-        "[PROVIDED]", request.getFacultyName(), request.getDegreeField(), request.getDegreeTitle());
+    return new RegisterRequest(
+        LoggingUtils.maskInfo(request.getFirstName()),
+        LoggingUtils.maskInfo(request.getLastName()),
+        LoggingUtils.maskEmail(request.getEmail()),
+        "[PROVIDED]",
+        request.getFacultyName(),
+        request.getDegreeField(),
+        request.getDegreeTitle());
   }
 
   private static AuthenticationResponse maskAuthenticationResponse(
       AuthenticationResponse response) {
     // mask sensitive information in response object
-    return new AuthenticationResponse(LoggingUtils.maskInfo(response.getToken()),
-        LoggingUtils.maskUserDto(response.getUser()));
+    return new AuthenticationResponse(
+        LoggingUtils.maskInfo(response.getToken()), LoggingUtils.maskUserDto(response.getUser()));
   }
 
   private static User maskUser(User user) {
-    return new User(user.getId(), LoggingUtils.maskInfo(user.getFirstName()),
-        LoggingUtils.maskInfo(user.getLastName()), LoggingUtils.maskEmail(user.getEmail()),
-        "[PROVIDED]", user.getFaculty(), user.getDegree(), user.getRole());
+    return new User(
+        user.getId(),
+        LoggingUtils.maskInfo(user.getFirstName()),
+        LoggingUtils.maskInfo(user.getLastName()),
+        LoggingUtils.maskEmail(user.getEmail()),
+        "[PROVIDED]",
+        user.getFaculty(),
+        user.getDegree(),
+        user.getRole());
   }
 
   private static UserDto maskUserDto(UserDto userDto) {
-    return new UserDto(userDto.getId(), LoggingUtils.maskInfo(userDto.getFirstName()),
-        LoggingUtils.maskInfo(userDto.getLastName()), LoggingUtils.maskEmail(userDto.getEmail()),
-        userDto.getFaculty(), userDto.getDegree());
+    return new UserDto(
+        userDto.getId(),
+        LoggingUtils.maskInfo(userDto.getFirstName()),
+        LoggingUtils.maskInfo(userDto.getLastName()),
+        LoggingUtils.maskEmail(userDto.getEmail()),
+        userDto.getFaculty(),
+        userDto.getDegree());
   }
 
   private static CollectionModel<?> maskCollectionModel(CollectionModel<?> collectionModel) {
-    List<?> content = collectionModel.getContent().stream()
-        .map(LoggingUtils::maskSensitiveInformation).collect(Collectors.toList());
+    List<?> content =
+        collectionModel.getContent().stream()
+            .map(LoggingUtils::maskSensitiveInformation)
+            .collect(Collectors.toList());
     return CollectionModel.of(content, collectionModel.getLinks());
   }
 
@@ -92,8 +107,6 @@ public class LoggingUtils {
       return info;
     }
     int length = info.length();
-    return info.substring(0, 1)
-        + "*".repeat(length - 2)
-        + info.substring(length - 1);
+    return info.substring(0, 1) + "*".repeat(length - 2) + info.substring(length - 1);
   }
 }

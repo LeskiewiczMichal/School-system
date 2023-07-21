@@ -1,5 +1,7 @@
 package com.leskiewicz.schoolsystem.user.utils;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import com.leskiewicz.schoolsystem.faculty.FacultyController;
 import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.UserController;
@@ -10,12 +12,11 @@ import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSuppor
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Component;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
 @Component
 public class UserModelAssembler extends RepresentationModelAssemblerSupport<User, UserDto> {
 
   private final UserMapper userMapper;
+
   public UserModelAssembler(UserMapper userMapper) {
     super(UserController.class, UserDto.class);
     this.userMapper = userMapper;
@@ -25,10 +26,13 @@ public class UserModelAssembler extends RepresentationModelAssemblerSupport<User
   public UserDto toModel(User entity) {
     UserDto userDto = userMapper.convertToDto(entity);
 
-    Link selfLink = WebMvcLinkBuilder.linkTo(
-        methodOn(UserController.class).getUserById(entity.getId())).withSelfRel();
-    Link facultyLink = WebMvcLinkBuilder.linkTo(
-        methodOn(FacultyController.class).getFacultyById(entity.getFaculty().getId())).withRel("faculty");
+    Link selfLink =
+        WebMvcLinkBuilder.linkTo(methodOn(UserController.class).getUserById(entity.getId()))
+            .withSelfRel();
+    Link facultyLink =
+        WebMvcLinkBuilder.linkTo(
+                methodOn(FacultyController.class).getFacultyById(entity.getFaculty().getId()))
+            .withRel("faculty");
 
     userDto.add(selfLink);
     userDto.add(facultyLink);

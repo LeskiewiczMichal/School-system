@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DegreeMapperImpl implements DegreeMapper{
+public class DegreeMapperImpl implements DegreeMapper {
 
   private final Logger logger = LoggerFactory.getLogger(DegreeMapperImpl.class);
 
@@ -22,8 +22,7 @@ public class DegreeMapperImpl implements DegreeMapper{
     }
 
     logger.debug("Converted Degree entity with ID: {} to DegreeDto", degree.getId());
-    return new DegreeDto(degree.getId(), degree.getTitle(), degree.getFieldOfStudy(),
-        degree.getFaculty().getName());
+    return new DegreeDto(
+        degree.getId(), degree.getTitle(), degree.getFieldOfStudy(), degree.getFaculty().getName());
   }
-
 }

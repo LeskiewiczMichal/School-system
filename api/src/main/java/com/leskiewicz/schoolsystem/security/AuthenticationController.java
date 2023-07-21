@@ -44,21 +44,25 @@ public class AuthenticationController {
 
   private void registrationAddLinks(RegisterRequest request, AuthenticationResponse response) {
     // Create links
-    Link selfLink = WebMvcLinkBuilder.linkTo(
-        methodOn(AuthenticationController.class).register(request)).withSelfRel();
-    Link authenticateLink = WebMvcLinkBuilder.linkTo(
-        methodOn(AuthenticationController.class).authenticate(null)).withRel("authenticate");
+    Link selfLink =
+        WebMvcLinkBuilder.linkTo(methodOn(AuthenticationController.class).register(request))
+            .withSelfRel();
+    Link authenticateLink =
+        WebMvcLinkBuilder.linkTo(methodOn(AuthenticationController.class).authenticate(null))
+            .withRel("authenticate");
     response.add(selfLink);
     response.add(authenticateLink);
   }
 
-  private void authenticationAddLinks(AuthenticationRequest request,
-      AuthenticationResponse response) {
+  private void authenticationAddLinks(
+      AuthenticationRequest request, AuthenticationResponse response) {
     // Create links
-    Link selfLink = WebMvcLinkBuilder.linkTo(
-        methodOn(AuthenticationController.class).authenticate(request)).withSelfRel();
-    Link authenticateLink = WebMvcLinkBuilder.linkTo(
-        methodOn(AuthenticationController.class).register(null)).withRel("register");
+    Link selfLink =
+        WebMvcLinkBuilder.linkTo(methodOn(AuthenticationController.class).authenticate(request))
+            .withSelfRel();
+    Link authenticateLink =
+        WebMvcLinkBuilder.linkTo(methodOn(AuthenticationController.class).register(null))
+            .withRel("register");
     response.add(selfLink);
     response.add(authenticateLink);
   }

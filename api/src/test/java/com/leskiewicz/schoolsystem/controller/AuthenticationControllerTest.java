@@ -1,23 +1,27 @@
 package com.leskiewicz.schoolsystem.controller;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.degree.DegreeRepository;
+import com.leskiewicz.schoolsystem.degree.DegreeTitle;
+import com.leskiewicz.schoolsystem.error.ApiError;
 import com.leskiewicz.schoolsystem.error.ErrorMessages;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.FacultyRepository;
 import com.leskiewicz.schoolsystem.security.Role;
 import com.leskiewicz.schoolsystem.security.dto.AuthenticationRequest;
-import com.leskiewicz.schoolsystem.security.dto.RegisterRequest;
 import com.leskiewicz.schoolsystem.security.dto.AuthenticationResponse;
-import com.leskiewicz.schoolsystem.error.ApiError;
-import com.leskiewicz.schoolsystem.degree.DegreeTitle;
+import com.leskiewicz.schoolsystem.security.dto.RegisterRequest;
 import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.UserRepository;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,11 +38,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultMatcher;
 
-import java.util.stream.Stream;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 @SpringBootTest
 @AutoConfigureMockMvc
 @Sql(scripts = {"classpath:schema.sql", "classpath:authentication.sql"})
@@ -46,10 +45,9 @@ public class AuthenticationControllerTest {
 
   private final String REGISTER_PATH = "/api/auth/register";
   private final String AUTHENTICATE_PATH = "/api/auth/authenticate";
-
+  RegisterRequest registerRequest;
   @Autowired
   private MockMvc mvc;
-
   @Autowired
   private PasswordEncoder passwordEncoder;
   @Autowired
@@ -58,11 +56,42 @@ public class AuthenticationControllerTest {
   private DegreeRepository degreeRepository;
   @Autowired
   private FacultyRepository facultyRepository;
-
   //    Variables
   private ObjectMapper mapper;
 
-  RegisterRequest registerRequest;
+  static Stream<Arguments> registerReturnsStatus400RequestProvider() {
+    // Each of requests has one different field missing
+    RegisterRequest baseRequest = RegisterRequest.builder()
+        .firstName("Happy")
+        .lastName("Path")
+        .email("happypath@example.com")
+        .facultyName("Informatics")
+        .degreeTitle(DegreeTitle.BACHELOR_OF_SCIENCE)
+        .degreeField("Computer Science")
+        .password("12345")
+        .build();
+
+    return Stream.of(
+        Arguments.of(baseRequest.toBuilder().firstName(null).build(), "First name required"),
+        Arguments.of(baseRequest.toBuilder().lastName(null).build(), "Last name required"),
+        Arguments.of(baseRequest.toBuilder().email(null).build(), "Email required"),
+        Arguments.of(baseRequest.toBuilder().facultyName(null).build(), "Faculty name required"),
+        Arguments.of(baseRequest.toBuilder().degreeTitle(null).build(), "Degree title required"),
+        Arguments.of(baseRequest.toBuilder().degreeField(null).build(),
+            "Degree field of study required"),
+        Arguments.of(baseRequest.toBuilder().password(null).build(), "Password required")
+    );
+  }
+
+  static Stream<Arguments> authenticationReturnsStatus400OnBodyNotProvidedProvider() {
+    AuthenticationRequest baseRequest = AuthenticationRequest.builder()
+        .email("johndoe@example.com")
+        .password("12345")
+        .build();
+
+    return Stream.of(Arguments.of(baseRequest.toBuilder().email(null).build(), "Email required"),
+        Arguments.of(baseRequest.toBuilder().password(null).build(), "Password required"));
+  }
 
   @BeforeEach
   public void setUp() {
@@ -129,6 +158,7 @@ public class AuthenticationControllerTest {
     Assertions.assertEquals(400, response.statusCode());
     Assertions.assertNotNull(response.localDateTime());
   }
+  //endregion
 
   @Test
   public void registerReturnsStatus400WhenUserWithGivenEmailAlreadyExists() throws Exception {
@@ -143,31 +173,6 @@ public class AuthenticationControllerTest {
     Assertions.assertEquals(400, response.statusCode());
     Assertions.assertNotNull(response.localDateTime());
   }
-
-  static Stream<Arguments> registerReturnsStatus400RequestProvider() {
-    // Each of requests has one different field missing
-    RegisterRequest baseRequest = RegisterRequest.builder()
-        .firstName("Happy")
-        .lastName("Path")
-        .email("happypath@example.com")
-        .facultyName("Informatics")
-        .degreeTitle(DegreeTitle.BACHELOR_OF_SCIENCE)
-        .degreeField("Computer Science")
-        .password("12345")
-        .build();
-
-    return Stream.of(
-        Arguments.of(baseRequest.toBuilder().firstName(null).build(), "First name required"),
-        Arguments.of(baseRequest.toBuilder().lastName(null).build(), "Last name required"),
-        Arguments.of(baseRequest.toBuilder().email(null).build(), "Email required"),
-        Arguments.of(baseRequest.toBuilder().facultyName(null).build(), "Faculty name required"),
-        Arguments.of(baseRequest.toBuilder().degreeTitle(null).build(), "Degree title required"),
-        Arguments.of(baseRequest.toBuilder().degreeField(null).build(),
-            "Degree field of study required"),
-        Arguments.of(baseRequest.toBuilder().password(null).build(), "Password required")
-    );
-  }
-  //endregion
 
   ///region Authentication tests
   @Test
@@ -251,16 +256,6 @@ public class AuthenticationControllerTest {
     Assertions.assertEquals(AUTHENTICATE_PATH, response.path());
     Assertions.assertEquals(401, response.statusCode());
     Assertions.assertNotNull(response.localDateTime());
-  }
-
-  static Stream<Arguments> authenticationReturnsStatus400OnBodyNotProvidedProvider() {
-    AuthenticationRequest baseRequest = AuthenticationRequest.builder()
-        .email("johndoe@example.com")
-        .password("12345")
-        .build();
-
-    return Stream.of(Arguments.of(baseRequest.toBuilder().email(null).build(), "Email required"),
-        Arguments.of(baseRequest.toBuilder().password(null).build(), "Password required"));
   }
   //endregion
 

@@ -19,7 +19,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtUtilsImpl implements JwtUtils {
 
-
   @Value("${jwt.secret.key}")
   private String JWT_SECRET;
 
@@ -32,10 +31,13 @@ public class JwtUtilsImpl implements JwtUtils {
   }
 
   public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
-    return Jwts.builder().setClaims(extraClaims).setSubject(userDetails.getUsername())
+    return Jwts.builder()
+        .setClaims(extraClaims)
+        .setSubject(userDetails.getUsername())
         .setIssuedAt(new Date(System.currentTimeMillis()))
         .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
-        .signWith(getSignInKey(), SignatureAlgorithm.HS256).compact();
+        .signWith(getSignInKey(), SignatureAlgorithm.HS256)
+        .compact();
   }
 
   public boolean isTokenValid(String token, UserDetails userDetails) {
@@ -51,14 +53,16 @@ public class JwtUtilsImpl implements JwtUtils {
     return extractClaim(token, Claims::getExpiration);
   }
 
-
   public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
     final Claims claims = extractAllClaims(token);
     return claimsResolver.apply(claims);
   }
 
   private Claims extractAllClaims(String token) {
-    return Jwts.parserBuilder().setSigningKey(getSignInKey()).build().parseClaimsJws(token)
+    return Jwts.parserBuilder()
+        .setSigningKey(getSignInKey())
+        .build()
+        .parseClaimsJws(token)
         .getBody();
   }
 

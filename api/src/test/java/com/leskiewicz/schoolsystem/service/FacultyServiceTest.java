@@ -1,5 +1,9 @@
 package com.leskiewicz.schoolsystem.service;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
+
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
 import com.leskiewicz.schoolsystem.error.customexception.EntityAlreadyExistsException;
@@ -8,15 +12,11 @@ import com.leskiewicz.schoolsystem.faculty.FacultyRepository;
 import com.leskiewicz.schoolsystem.faculty.FacultyServiceImpl;
 import com.leskiewicz.schoolsystem.faculty.dto.CreateFacultyRequest;
 import com.leskiewicz.schoolsystem.faculty.dto.PatchFacultyRequest;
-import com.leskiewicz.schoolsystem.faculty.utils.FacultyModelAssembler;
 import com.leskiewicz.schoolsystem.security.Role;
 import com.leskiewicz.schoolsystem.user.User;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,26 +30,16 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.util.Assert;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class FacultyServiceTest {
 
-  //region Mocks
-  @Mock
-  private FacultyRepository facultyRepository;
-
-  @InjectMocks
-  private FacultyServiceImpl facultyService;
-  //endregion
-
   // Variables
   Faculty faculty;
+  // region Mocks
+  @Mock private FacultyRepository facultyRepository;
+  // endregion
+  @InjectMocks private FacultyServiceImpl facultyService;
 
   @BeforeEach
   public void setup() {
@@ -58,7 +48,7 @@ public class FacultyServiceTest {
     faculty = Faculty.builder().id(1L).name("Software Engineering").build();
   }
 
-  //region GetById tests
+  // region GetById tests
   @Test
   public void getByIdReturnsCorrectFaculty() {
     given(facultyRepository.findById(faculty.getId())).willReturn(Optional.of(faculty));
@@ -72,12 +62,12 @@ public class FacultyServiceTest {
   public void getByIdThrowsEntityNotFound() {
     given(facultyRepository.findById(faculty.getId())).willReturn(Optional.empty());
 
-    Assertions.assertThrows(EntityNotFoundException.class,
-        () -> facultyService.getById(faculty.getId()));
+    Assertions.assertThrows(
+        EntityNotFoundException.class, () -> facultyService.getById(faculty.getId()));
   }
-  //endregion
+  // endregion
 
-  //region GetByEmail tests
+  // region GetByEmail tests
   @Test
   public void getByNameReturnsCorrectFaculty() {
     given(facultyRepository.findByName(faculty.getName())).willReturn(Optional.of(faculty));
@@ -91,12 +81,12 @@ public class FacultyServiceTest {
   public void getByNameThrowsEntityNotFound() {
     given(facultyRepository.findByName(faculty.getName())).willReturn(Optional.empty());
 
-    Assertions.assertThrows(EntityNotFoundException.class,
-        () -> facultyService.getByName(faculty.getName()));
+    Assertions.assertThrows(
+        EntityNotFoundException.class, () -> facultyService.getByName(faculty.getName()));
   }
-  //endregion
+  // endregion
 
-  //region GetFaculties tests
+  // region GetFaculties tests
   @Test
   public void getFacultiesReturnsPagedFaculties() {
     Pageable pageable = Mockito.mock(PageRequest.class);
@@ -107,30 +97,32 @@ public class FacultyServiceTest {
     Page<Faculty> faculties = facultyService.getFaculties(pageable);
     Assertions.assertEquals(faculties, mockPage);
   }
-  //endregion
+  // endregion
 
-  //region GetDegreeByTitleAndFieldOfStudy tests
+  // region GetDegreeByTitleAndFieldOfStudy tests
   @Test
   public void getDegreeByTitleAndFieldOfStudyReturnsCorrectDegree() {
-    Degree degree = Degree.builder().fieldOfStudy("Computer Science").title(DegreeTitle.BACHELOR)
-        .build();
+    Degree degree =
+        Degree.builder().fieldOfStudy("Computer Science").title(DegreeTitle.BACHELOR).build();
     faculty.setDegrees(Collections.singletonList(degree));
 
-    Degree testDegree = facultyService.getDegreeByTitleAndFieldOfStudy(faculty, degree.getTitle(),
-        degree.getFieldOfStudy());
+    Degree testDegree =
+        facultyService.getDegreeByTitleAndFieldOfStudy(
+            faculty, degree.getTitle(), degree.getFieldOfStudy());
 
     Assertions.assertEquals(degree, testDegree);
   }
 
   @Test
   public void getDegreeByTitleAndFieldOfStudyThrowEntityNotFound() {
-    Assertions.assertThrows(EntityNotFoundException.class,
-        () -> facultyService.getDegreeByTitleAndFieldOfStudy(faculty, DegreeTitle.BACHELOR,
-            "test"));
+    Assertions.assertThrows(
+        EntityNotFoundException.class,
+        () ->
+            facultyService.getDegreeByTitleAndFieldOfStudy(faculty, DegreeTitle.BACHELOR, "test"));
   }
-  //endregion
+  // endregion
 
-  //region CreateFaculty tests
+  // region CreateFaculty tests
   @Test
   public void createsAndReturnsFacultyAndOnProperRequest() {
     CreateFacultyRequest request = new CreateFacultyRequest(faculty.getName());
@@ -151,8 +143,8 @@ public class FacultyServiceTest {
   public void throwsConstraintViolationExceptionOnRequestInvalid() {
     CreateFacultyRequest request = new CreateFacultyRequest(null);
 
-    Assertions.assertThrows(ConstraintViolationException.class, () ->
-        facultyService.createFaculty(request));
+    Assertions.assertThrows(
+        ConstraintViolationException.class, () -> facultyService.createFaculty(request));
   }
 
   @Test
@@ -161,12 +153,12 @@ public class FacultyServiceTest {
 
     given(facultyRepository.findByName(any(String.class))).willReturn(Optional.of(faculty));
 
-    Assertions.assertThrows(EntityAlreadyExistsException.class, () ->
-        facultyService.createFaculty(request));
+    Assertions.assertThrows(
+        EntityAlreadyExistsException.class, () -> facultyService.createFaculty(request));
   }
-  //endregion
+  // endregion
 
-  //region UpdateFaculty tests
+  // region UpdateFaculty tests
   @Test
   public void updateFacultySavesCorrectFaculty() {
     given(facultyRepository.findById(any(Long.class))).willReturn(Optional.of(faculty));
@@ -185,8 +177,9 @@ public class FacultyServiceTest {
     given(facultyRepository.findById(any(Long.class))).willReturn(Optional.empty());
     PatchFacultyRequest request = new PatchFacultyRequest("new name");
 
-    Assertions.assertThrows(EntityNotFoundException.class, () ->
-        facultyService.updateFaculty(request, faculty.getId()));
+    Assertions.assertThrows(
+        EntityNotFoundException.class,
+        () -> facultyService.updateFaculty(request, faculty.getId()));
   }
 
   @Test
@@ -196,21 +189,22 @@ public class FacultyServiceTest {
     Faculty faculty2 = Faculty.builder().id(2L).name("new name").build();
     given(facultyRepository.findByName(any(String.class))).willReturn(Optional.of(faculty2));
 
-    Assertions.assertThrows(EntityAlreadyExistsException.class, () ->
-        facultyService.updateFaculty(request, faculty.getId()));
+    Assertions.assertThrows(
+        EntityAlreadyExistsException.class,
+        () -> facultyService.updateFaculty(request, faculty.getId()));
   }
-  //endregion
+  // endregion
 
-  //region GetFacultyUsers tests
+  // region GetFacultyUsers tests
   @Test
   public void getFacultyUsersReturnsPagedUsers() {
     Pageable pageable = Mockito.mock(PageRequest.class);
     Page<User> mockPage = Mockito.mock(Page.class);
 
-    given(facultyRepository.findFacultyUsers(faculty.getId(), pageable, Role.ROLE_STUDENT)).willReturn(mockPage);
+    given(facultyRepository.findFacultyUsers(faculty.getId(), pageable, Role.ROLE_STUDENT))
+        .willReturn(mockPage);
 
     Page<User> users = facultyService.getFacultyUsers(faculty.getId(), pageable, Role.ROLE_STUDENT);
     Assertions.assertEquals(users, mockPage);
   }
-
 }

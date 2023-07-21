@@ -1,23 +1,28 @@
 package com.leskiewicz.schoolsystem.service;
 
-import com.leskiewicz.schoolsystem.security.AuthenticationServiceImpl;
-import com.leskiewicz.schoolsystem.security.dto.AuthenticationRequest;
-import com.leskiewicz.schoolsystem.security.dto.RegisterRequest;
-import com.leskiewicz.schoolsystem.security.dto.AuthenticationResponse;
-import com.leskiewicz.schoolsystem.degree.DegreeService;
-import com.leskiewicz.schoolsystem.faculty.FacultyService;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
+
 import com.leskiewicz.schoolsystem.degree.Degree;
-import com.leskiewicz.schoolsystem.faculty.Faculty;
+import com.leskiewicz.schoolsystem.degree.DegreeService;
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
+import com.leskiewicz.schoolsystem.faculty.Faculty;
+import com.leskiewicz.schoolsystem.faculty.FacultyService;
+import com.leskiewicz.schoolsystem.security.AuthenticationServiceImpl;
 import com.leskiewicz.schoolsystem.security.Role;
-import com.leskiewicz.schoolsystem.user.User;
-import com.leskiewicz.schoolsystem.user.UserRepository;
+import com.leskiewicz.schoolsystem.security.dto.AuthenticationRequest;
+import com.leskiewicz.schoolsystem.security.dto.AuthenticationResponse;
+import com.leskiewicz.schoolsystem.security.dto.RegisterRequest;
 import com.leskiewicz.schoolsystem.security.utils.JwtUtils;
 import com.leskiewicz.schoolsystem.security.utils.JwtUtilsImpl;
+import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.UserService;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserModelAssembler;
 import jakarta.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,17 +37,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.ArrayList;
-import java.util.Optional;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.verify;
-
 @ExtendWith(MockitoExtension.class)
 public class AuthenticationServiceTest {
 
+    @InjectMocks
+    AuthenticationServiceImpl authenticationService;
     //region Mocks
     @Mock
     private UserService userService;
@@ -58,11 +57,7 @@ public class AuthenticationServiceTest {
     private DegreeService degreeService;
     @Mock
     private UserModelAssembler userModelAssembler;
-
-    @InjectMocks
-    AuthenticationServiceImpl authenticationService;
     //endregion
-
     // Variables
     private RegisterRequest request;
     private Faculty faculty;

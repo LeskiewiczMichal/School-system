@@ -5,7 +5,6 @@ import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
 import com.leskiewicz.schoolsystem.faculty.utils.FacultyMapperImpl;
 import com.leskiewicz.schoolsystem.testUtils.TestHelper;
-import com.leskiewicz.schoolsystem.user.User;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,11 +17,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 public class FacultyMapperTest {
 
-  @InjectMocks
-  private FacultyMapperImpl facultyMapper;
-
   Faculty faculty;
   Degree degree;
+  @InjectMocks
+  private FacultyMapperImpl facultyMapper;
 
   @BeforeEach
   public void setup() {

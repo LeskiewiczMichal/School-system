@@ -26,10 +26,13 @@ public class DegreeModelAssembler extends RepresentationModelAssemblerSupport<De
   public DegreeDto toModel(Degree entity) {
     DegreeDto degreeDto = degreeMapper.convertToDto(entity);
 
-    Link selfLink = WebMvcLinkBuilder.linkTo(
-        methodOn(DegreeController.class).getDegreeById(degreeDto.getId())).withSelfRel();
-    Link facultyLink = WebMvcLinkBuilder.linkTo(
-        methodOn(FacultyController.class).getFacultyById(entity.getFaculty().getId())).withRel("faculty");
+    Link selfLink =
+        WebMvcLinkBuilder.linkTo(methodOn(DegreeController.class).getDegreeById(degreeDto.getId()))
+            .withSelfRel();
+    Link facultyLink =
+        WebMvcLinkBuilder.linkTo(
+                methodOn(FacultyController.class).getFacultyById(entity.getFaculty().getId()))
+            .withRel("faculty");
 
     degreeDto.add(selfLink);
     degreeDto.add(facultyLink);

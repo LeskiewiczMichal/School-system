@@ -1,5 +1,9 @@
 package com.leskiewicz.schoolsystem.assembler;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.FacultyController;
@@ -9,6 +13,7 @@ import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserMapperImpl;
 import com.leskiewicz.schoolsystem.user.utils.UserModelAssembler;
 import io.jsonwebtoken.lang.Assert;
+import java.util.Collections;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,25 +26,15 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 
-import java.util.Collections;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
 @ExtendWith(MockitoExtension.class)
 public class UserModelAssemblerTest {
-
-  @Mock
-  private UserMapperImpl userMapper;
-
-  @InjectMocks
-  private UserModelAssembler userModelAssembler;
 
   // Variables
   User user;
   Faculty faculty;
   Degree degree;
+  @Mock private UserMapperImpl userMapper;
+  @InjectMocks private UserModelAssembler userModelAssembler;
 
   @BeforeEach
   public void setup() {
@@ -51,17 +46,25 @@ public class UserModelAssemblerTest {
     given(faculty.getId()).willReturn(1L);
     given(user.getFaculty()).willReturn(faculty);
 
-    given(userMapper.convertToDto(any(User.class))).willReturn(
-        UserDto.builder().id(1L).firstName("John").lastName("Doe").email("johndoe@example.com")
-            .faculty("Informatics").degree("Computer Science").build());
+    given(userMapper.convertToDto(any(User.class)))
+        .willReturn(
+            UserDto.builder()
+                .id(1L)
+                .firstName("John")
+                .lastName("Doe")
+                .email("johndoe@example.com")
+                .faculty("Informatics")
+                .degree("Computer Science")
+                .build());
   }
 
   @Test
   public void testToModel() {
-    Link selfLink = WebMvcLinkBuilder.linkTo(methodOn(UserController.class).getUserById(0L))
-        .withSelfRel();
-    Link facultyLink = WebMvcLinkBuilder.linkTo(
-        methodOn(FacultyController.class).getFacultyById(faculty.getId())).withRel("faculty");
+    Link selfLink =
+        WebMvcLinkBuilder.linkTo(methodOn(UserController.class).getUserById(0L)).withSelfRel();
+    Link facultyLink =
+        WebMvcLinkBuilder.linkTo(methodOn(FacultyController.class).getFacultyById(faculty.getId()))
+            .withRel("faculty");
 
     UserDto userDto = userModelAssembler.toModel(user);
 
@@ -77,13 +80,16 @@ public class UserModelAssemblerTest {
     CollectionModel<UserDto> userDtos = userModelAssembler.toCollectionModel(users);
 
     Assert.notEmpty(userDtos.getContent());
-    userDtos.getContent().forEach(dto -> {
-      // Assert every user has correct links
-      Link selfLink = dto.getLink("self").get();
-      Link facultyLink = dto.getLink("faculty").get();
+    userDtos
+        .getContent()
+        .forEach(
+            dto -> {
+              // Assert every user has correct links
+              Link selfLink = dto.getLink("self").get();
+              Link facultyLink = dto.getLink("faculty").get();
 
-      Assertions.assertNotNull(selfLink, "UserDto should have a self link");
-      Assertions.assertNotNull(facultyLink, "UserDto should have a faculty link");
-    });
+              Assertions.assertNotNull(selfLink, "UserDto should have a self link");
+              Assertions.assertNotNull(facultyLink, "UserDto should have a faculty link");
+            });
   }
 }

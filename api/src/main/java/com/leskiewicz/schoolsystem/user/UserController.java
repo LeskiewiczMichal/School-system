@@ -9,8 +9,6 @@ import com.leskiewicz.schoolsystem.user.dto.PatchUserRequest;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserModelAssembler;
 import lombok.AllArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
@@ -45,8 +43,8 @@ public class UserController {
   }
 
   @PatchMapping("/{id}")
-  public ResponseEntity<UserDto> patchUser(@RequestBody PatchUserRequest request,
-      @PathVariable Long id) {
+  public ResponseEntity<UserDto> patchUser(
+      @RequestBody PatchUserRequest request, @PathVariable Long id) {
     User user = userService.updateUser(request, id);
     UserDto userDto = userModelAssembler.toModel(user);
 
@@ -61,9 +59,9 @@ public class UserController {
     return ResponseEntity.ok(facultyDto);
   }
 
-//  @GetMapping("/{id}/degree")
-//  public ResponseEntity<DegreeDto> getUserDegree(@PathVariable Long id) {
-//
-//  }
+  //  @GetMapping("/{id}/degree")
+  //  public ResponseEntity<DegreeDto> getUserDegree(@PathVariable Long id) {
+  //
+  //  }
 
 }

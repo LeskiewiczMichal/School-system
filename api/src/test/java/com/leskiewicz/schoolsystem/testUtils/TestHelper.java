@@ -21,10 +21,7 @@ public class TestHelper {
   }
 
   public static Faculty createFaculty() {
-    return Faculty.builder()
-        .id(1L)
-        .name("TestFaculty")
-        .build();
+    return Faculty.builder().id(1L).name("TestFaculty").build();
   }
 
   public static Degree createDegree(Faculty faculty) {
@@ -34,7 +31,5 @@ public class TestHelper {
         .fieldOfStudy("Computer Science")
         .faculty(faculty)
         .build();
-
   }
-
 }

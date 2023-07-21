@@ -8,6 +8,6 @@ import lombok.Setter;
 @Setter
 @Builder(toBuilder = true)
 public class CustomLink {
-    private String href;
-    private String rel;
+  private String href;
+  private String rel;
 }

@@ -13,12 +13,10 @@ import org.springframework.hateoas.server.core.Relation;
 @Builder(toBuilder = true)
 @Relation(collectionRelation = "faculties")
 @AllArgsConstructor
-public class FacultyDto extends
-    RepresentationModel<com.leskiewicz.schoolsystem.faculty.dto.FacultyDto> {
+public class FacultyDto
+    extends RepresentationModel<com.leskiewicz.schoolsystem.faculty.dto.FacultyDto> {
 
-  @NonNull
-  private final Long id;
+  @NonNull private final Long id;
 
-  @NonNull
-  private final String name;
+  @NonNull private final String name;
 }

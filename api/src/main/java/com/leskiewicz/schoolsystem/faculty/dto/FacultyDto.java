@@ -13,9 +13,7 @@ import org.springframework.hateoas.server.core.Relation;
 @AllArgsConstructor
 public class FacultyDto extends RepresentationModel<FacultyDto> {
 
-    @NonNull
-    private final Long id;
+  @NonNull private final Long id;
 
-    @NonNull
-    private final String name;
+  @NonNull private final String name;
 }

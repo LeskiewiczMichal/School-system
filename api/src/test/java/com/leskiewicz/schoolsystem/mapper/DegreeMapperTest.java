@@ -20,28 +20,26 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 public class DegreeMapperTest {
 
-  @InjectMocks
-  private DegreeMapperImpl degreeMapper;
-
   // Variables
   Degree degree;
   Faculty faculty;
+  @InjectMocks private DegreeMapperImpl degreeMapper;
 
   @BeforeEach
   public void setup() {
     faculty = Mockito.mock(Faculty.class);
     degree = TestHelper.createDegree(faculty);
-
   }
 
   @Test
   public void convertToDtoCorrectForDegree() {
-    DegreeDto expectedDegreeDto = DegreeDto.builder()
-        .id(0L)
-        .fieldOfStudy("Computer Science")
-        .title(DegreeTitle.BACHELOR_OF_SCIENCE)
-        .faculty("DegreeTitle")
-        .build();
+    DegreeDto expectedDegreeDto =
+        DegreeDto.builder()
+            .id(0L)
+            .fieldOfStudy("Computer Science")
+            .title(DegreeTitle.BACHELOR_OF_SCIENCE)
+            .faculty("DegreeTitle")
+            .build();
 
     given(faculty.getName()).willReturn("DegreeTitle");
 
@@ -54,17 +52,15 @@ public class DegreeMapperTest {
   public void convertToDtoThrowsIllegalArgumentExceptionOnNoId() {
     degree.setId(null);
 
-    Assertions.assertThrows(IllegalArgumentException.class,
-        () -> degreeMapper.convertToDto(degree));
+    Assertions.assertThrows(
+        IllegalArgumentException.class, () -> degreeMapper.convertToDto(degree));
   }
 
   @Test
   public void throwsConstraintViolationExceptionOnInvalidDegree() {
     degree.setFieldOfStudy(null);
 
-    Assertions.assertThrows(ConstraintViolationException.class,
-        () -> degreeMapper.convertToDto(degree));
+    Assertions.assertThrows(
+        ConstraintViolationException.class, () -> degreeMapper.convertToDto(degree));
   }
-
-
 }

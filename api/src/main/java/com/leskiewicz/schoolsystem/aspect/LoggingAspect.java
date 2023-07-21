@@ -16,20 +16,22 @@ public class LoggingAspect {
 
   private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-  @Pointcut("within(com.leskiewicz.schoolsystem..*) && (@within(org.springframework.stereotype.Controller) || @within(org.springframework.web.bind.annotation.RestController))")
-    public void controllerMethodsPointcut() {
-  }
+  @Pointcut(
+      "within(com.leskiewicz.schoolsystem..*) && (@within(org.springframework.stereotype.Controller) || @within(org.springframework.web.bind.annotation.RestController))")
+  public void controllerMethodsPointcut() {}
 
-  @Pointcut("within(com.leskiewicz.schoolsystem..*) && @within(org.springframework.stereotype.Service)")
-  public void nonControllerMethodsPointcut() {
-  }
+  @Pointcut(
+      "within(com.leskiewicz.schoolsystem..*) && @within(org.springframework.stereotype.Service)")
+  public void nonControllerMethodsPointcut() {}
 
-  //region Controller logs
+  // region Controller logs
   @Before("controllerMethodsPointcut()")
   public void logInfoBefore(JoinPoint joinPoint) {
     // Mask each argument
     Object[] maskedArgs = maskArguments(joinPoint.getArgs());
-    logger.info("Entering method: {} with arguments: {}", joinPoint.getSignature().toShortString(),
+    logger.info(
+        "Entering method: {} with arguments: {}",
+        joinPoint.getSignature().toShortString(),
         maskedArgs);
   }
 
@@ -37,17 +39,21 @@ public class LoggingAspect {
   public void logInfoAfterReturning(JoinPoint joinPoint, Object result) {
     // Mask result
     Object maskedResult = LoggingUtils.maskSensitiveInformation(result);
-    logger.info("Exiting method: {} with result: {}", joinPoint.getSignature().toShortString(),
+    logger.info(
+        "Exiting method: {} with result: {}",
+        joinPoint.getSignature().toShortString(),
         maskedResult);
   }
-  //endregion
+  // endregion
 
-  //region Service logs
+  // region Service logs
   @Before("nonControllerMethodsPointcut()")
   public void logDebugBefore(JoinPoint joinPoint) {
     // Mask each argument
     Object[] maskedArgs = maskArguments(joinPoint.getArgs());
-    logger.debug("Entering method: {} with arguments: {}", joinPoint.getSignature().toShortString(),
+    logger.debug(
+        "Entering method: {} with arguments: {}",
+        joinPoint.getSignature().toShortString(),
         maskedArgs);
   }
 
@@ -55,10 +61,12 @@ public class LoggingAspect {
   public void logDebugAfterReturning(JoinPoint joinPoint, Object result) {
     // Mask result
     Object maskedResult = LoggingUtils.maskSensitiveInformation(result);
-    logger.debug("Exiting method: {} with result: {}", joinPoint.getSignature().toShortString(),
+    logger.debug(
+        "Exiting method: {} with result: {}",
+        joinPoint.getSignature().toShortString(),
         maskedResult);
   }
-  //endregion
+  // endregion
 
   private Object[] maskArguments(Object[] args) {
     Object[] maskedArgs = new Object[args.length];

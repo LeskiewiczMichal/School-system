@@ -11,7 +11,6 @@ import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.UserService;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserModelAssembler;
-import com.leskiewicz.schoolsystem.utils.ValidationUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -32,19 +31,20 @@ public class AuthenticationServiceImpl implements AuthenticationService {
   public AuthenticationResponse register(RegisterRequest request) {
     // Retrieve faculty and degree
     Faculty faculty = facultyService.getByName(request.getFacultyName());
-    Degree degree = facultyService.getDegreeByTitleAndFieldOfStudy(faculty,
-        request.getDegreeTitle(), request.getDegreeField());
+    Degree degree =
+        facultyService.getDegreeByTitleAndFieldOfStudy(
+            faculty, request.getDegreeTitle(), request.getDegreeField());
 
-    User user = new User(
-        null,
-        request.getFirstName(),
-        request.getLastName(),
-        request.getEmail(),
-        passwordEncoder.encode(request.getPassword()),
-        faculty,
-        degree,
-        Role.ROLE_STUDENT
-    );
+    User user =
+        new User(
+            null,
+            request.getFirstName(),
+            request.getLastName(),
+            request.getEmail(),
+            passwordEncoder.encode(request.getPassword()),
+            faculty,
+            degree,
+            Role.ROLE_STUDENT);
 
     // Save new user and generate jwt token
     userService.addUser(user);
@@ -56,11 +56,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
   public AuthenticationResponse authenticate(AuthenticationRequest request) {
     authenticationManager.authenticate(
-        new UsernamePasswordAuthenticationToken(
-            request.getEmail(),
-            request.getPassword()
-        )
-    );
+        new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
 
     User user = userService.getByEmail(request.getEmail());
     var jwtToken = jwtUtils.generateToken(user);

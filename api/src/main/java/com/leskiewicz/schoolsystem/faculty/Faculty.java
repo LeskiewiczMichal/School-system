@@ -19,54 +19,49 @@ import org.springframework.hateoas.RepresentationModel;
 @Table(name = "faculty")
 public class Faculty extends RepresentationModel<Faculty> {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id")
+  private Long id;
 
-    @NotNull
-    @Column(name = "name")
-    private String name;
+  @NotNull
+  @Column(name = "name")
+  private String name;
 
-    @NotNull
-    @Singular
-    @OneToMany(mappedBy = "faculty")
-    private List<Course> courses;
+  @NotNull
+  @Singular
+  @OneToMany(mappedBy = "faculty")
+  private List<Course> courses;
 
-    @NotNull
-    @Singular
-    @OneToMany(mappedBy = "faculty")
-    private List<Degree> degrees;
+  @NotNull
+  @Singular
+  @OneToMany(mappedBy = "faculty")
+  private List<Degree> degrees;
 
-    @NotNull
-    @Singular
-    @OneToMany(mappedBy = "faculty")
-    private List<User> users;
+  @NotNull
+  @Singular
+  @OneToMany(mappedBy = "faculty")
+  private List<User> users;
 
+  @Override
+  public String toString() {
+    return "Faculty{" + "id=" + id + ", name='" + name + '\'' + '}';
+  }
 
-    @Override
-    public String toString() {
-        return "Faculty{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
-    }
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Faculty faculty = (Faculty) o;
+    return Objects.equals(id, faculty.id)
+        && Objects.equals(name, faculty.name)
+        && Objects.equals(courses, faculty.courses)
+        && Objects.equals(degrees, faculty.degrees)
+        && Objects.equals(users, faculty.users);
+  }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Faculty faculty = (Faculty) o;
-        return Objects.equals(id, faculty.id) &&
-                Objects.equals(name, faculty.name) &&
-                Objects.equals(courses, faculty.courses) &&
-                Objects.equals(degrees, faculty.degrees) &&
-                Objects.equals(users, faculty.users);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, courses, degrees, users);
-    }
-
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, name, courses, degrees, users);
+  }
 }

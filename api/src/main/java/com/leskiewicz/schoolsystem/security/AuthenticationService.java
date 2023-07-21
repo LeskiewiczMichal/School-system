@@ -6,6 +6,7 @@ import com.leskiewicz.schoolsystem.security.dto.RegisterRequest;
 
 public interface AuthenticationService {
 
-    AuthenticationResponse register(RegisterRequest request);
-    AuthenticationResponse authenticate(AuthenticationRequest request);
+  AuthenticationResponse register(RegisterRequest request);
+
+  AuthenticationResponse authenticate(AuthenticationRequest request);
 }

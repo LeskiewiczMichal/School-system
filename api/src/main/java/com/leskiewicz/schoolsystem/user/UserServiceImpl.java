@@ -3,12 +3,13 @@ package com.leskiewicz.schoolsystem.user;
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.error.ErrorMessages;
 import com.leskiewicz.schoolsystem.error.MissingFieldException;
+import com.leskiewicz.schoolsystem.error.UserAlreadyExistsException;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.FacultyService;
-import com.leskiewicz.schoolsystem.error.UserAlreadyExistsException;
 import com.leskiewicz.schoolsystem.user.dto.PatchUserRequest;
 import com.leskiewicz.schoolsystem.utils.ValidationUtils;
 import jakarta.persistence.EntityNotFoundException;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,8 +17,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -30,14 +29,19 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public User getById(Long id) {
-    return userRepository.findById(id).orElseThrow(
-        () -> new EntityNotFoundException(ErrorMessages.objectWithIdNotFound("User", id)));
+    return userRepository
+        .findById(id)
+        .orElseThrow(
+            () -> new EntityNotFoundException(ErrorMessages.objectWithIdNotFound("User", id)));
   }
 
   @Override
   public User getByEmail(String email) {
-    return userRepository.findByEmail(email).orElseThrow(
-        () -> new EntityNotFoundException(ErrorMessages.objectWithEmailNotFound("User", email)));
+    return userRepository
+        .findByEmail(email)
+        .orElseThrow(
+            () ->
+                new EntityNotFoundException(ErrorMessages.objectWithEmailNotFound("User", email)));
   }
 
   @Override
@@ -60,18 +64,24 @@ public class UserServiceImpl implements UserService {
   @Override
   public User updateUser(PatchUserRequest request, Long userId) {
     // Find user
-    User user = userRepository.findById(userId).orElseThrow(
-        () -> new EntityNotFoundException(ErrorMessages.objectWithIdNotFound("User", userId)));
+    User user =
+        userRepository
+            .findById(userId)
+            .orElseThrow(
+                () ->
+                    new EntityNotFoundException(
+                        ErrorMessages.objectWithIdNotFound("User", userId)));
 
     // Update degree
     if (request.getDegreeField() != null || request.getDegreeTitle() != null) {
       logger.debug("Updating degree of user with ID: {}", userId);
 
       // If faculty data not complete, throw an error
-      if ((request.getDegreeField() != null && request.getDegreeTitle() == null) || (
-          request.getDegreeField() == null && request.getDegreeTitle() != null)) {
-        throw new MissingFieldException(ErrorMessages.objectWasNotUpdated("User")
-            + ". Required fields to update degree: title and field of study");
+      if ((request.getDegreeField() != null && request.getDegreeTitle() == null)
+          || (request.getDegreeField() == null && request.getDegreeTitle() != null)) {
+        throw new MissingFieldException(
+            ErrorMessages.objectWasNotUpdated("User")
+                + ". Required fields to update degree: title and field of study");
       }
 
       // If user is changing faculty, validate the new one
@@ -83,8 +93,9 @@ public class UserServiceImpl implements UserService {
       }
 
       try {
-        Degree degree = facultyService.getDegreeByTitleAndFieldOfStudy(userFaculty,
-            request.getDegreeTitle(), request.getDegreeField());
+        Degree degree =
+            facultyService.getDegreeByTitleAndFieldOfStudy(
+                userFaculty, request.getDegreeTitle(), request.getDegreeField());
         user.setDegree(degree);
       } catch (EntityNotFoundException e) {
         throw new EntityNotFoundException(
@@ -98,8 +109,9 @@ public class UserServiceImpl implements UserService {
       logger.debug("Updating faculty of user with ID: {}", userId);
       try {
         Faculty faculty = facultyService.getByName(request.getFacultyName());
-        Degree degree = facultyService.getDegreeByTitleAndFieldOfStudy(faculty,
-            user.getDegree().getTitle(), user.getDegree().getFieldOfStudy());
+        Degree degree =
+            facultyService.getDegreeByTitleAndFieldOfStudy(
+                faculty, user.getDegree().getTitle(), user.getDegree().getFieldOfStudy());
         user.setFaculty(faculty);
         user.setDegree(degree);
       } catch (EntityNotFoundException e) {
@@ -113,8 +125,10 @@ public class UserServiceImpl implements UserService {
       logger.debug("Updating email of user with ID: {}", userId);
       Optional<User> sameEmailUser = userRepository.findByEmail(request.getEmail());
       if (sameEmailUser.isPresent()) {
-        throw new UserAlreadyExistsException(ErrorMessages.objectWasNotUpdated("User") + ". "
-            + ErrorMessages.userWithEmailAlreadyExists(request.getEmail()));
+        throw new UserAlreadyExistsException(
+            ErrorMessages.objectWasNotUpdated("User")
+                + ". "
+                + ErrorMessages.userWithEmailAlreadyExists(request.getEmail()));
       }
       user.setEmail(request.getEmail());
     }
@@ -145,13 +159,21 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public Faculty getUserFaculty(Long userId) {
-    return userRepository.findFacultyByUserId(userId).orElseThrow(() -> new EntityNotFoundException(
-        "User with ID: " + userId + " does not have associated faculty"));
+    return userRepository
+        .findFacultyByUserId(userId)
+        .orElseThrow(
+            () ->
+                new EntityNotFoundException(
+                    "User with ID: " + userId + " does not have associated faculty"));
   }
 
   @Override
   public Degree getUserDegree(Long userId) {
-    return userRepository.findDegreeByUserId(userId).orElseThrow(() -> new EntityNotFoundException(
-        "User with ID: " + userId + " does not have associated degree"));
+    return userRepository
+        .findDegreeByUserId(userId)
+        .orElseThrow(
+            () ->
+                new EntityNotFoundException(
+                    "User with ID: " + userId + " does not have associated degree"));
   }
 }

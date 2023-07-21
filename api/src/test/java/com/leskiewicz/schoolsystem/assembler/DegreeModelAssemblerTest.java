@@ -9,7 +9,6 @@ import com.leskiewicz.schoolsystem.degree.DegreeController;
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
 import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
 import com.leskiewicz.schoolsystem.degree.utils.DegreeMapper;
-import com.leskiewicz.schoolsystem.degree.utils.DegreeMapperImpl;
 import com.leskiewicz.schoolsystem.degree.utils.DegreeModelAssembler;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.FacultyController;
@@ -30,16 +29,14 @@ import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 @ExtendWith(MockitoExtension.class)
 public class DegreeModelAssemblerTest {
 
-  @Mock
-  private DegreeMapper degreeMapper;
-
-  @InjectMocks
-  private DegreeModelAssembler degreeModelAssembler;
-
   // Variables
   Degree degree;
   Faculty faculty;
   DegreeDto degreeDto;
+  @Mock
+  private DegreeMapper degreeMapper;
+  @InjectMocks
+  private DegreeModelAssembler degreeModelAssembler;
 
   @BeforeEach
   public void setup() {

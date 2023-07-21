@@ -12,9 +12,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AuthenticationRequest {
 
-    @NotNull(message = "Email required")
-    private String email;
+  @NotNull(message = "Email required")
+  private String email;
 
-    @NotNull(message = "Password required")
-    private String password;
+  @NotNull(message = "Password required")
+  private String password;
 }
