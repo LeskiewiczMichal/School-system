@@ -11,7 +11,6 @@ import lombok.Getter;
 @Builder
 public class CreateDegreeRequest {
 
-  @NotNull private final Long id;
   @NotNull private final DegreeTitle title;
   @NotNull private final String fieldOfStudy;
   @NotNull private final String facultyName;

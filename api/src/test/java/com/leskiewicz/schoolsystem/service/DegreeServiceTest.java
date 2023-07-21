@@ -1,18 +1,23 @@
 package com.leskiewicz.schoolsystem.service;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.degree.DegreeRepository;
 import com.leskiewicz.schoolsystem.degree.DegreeServiceImpl;
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
+import com.leskiewicz.schoolsystem.degree.dto.CreateDegreeRequest;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
+import com.leskiewicz.schoolsystem.faculty.FacultyServiceImpl;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -29,6 +34,7 @@ public class DegreeServiceTest {
   Faculty faculty;
 
   @Mock private DegreeRepository degreeRepository;
+  @Mock private FacultyServiceImpl facultyService;
 
   @InjectMocks private DegreeServiceImpl degreeService;
 
@@ -101,4 +107,25 @@ public class DegreeServiceTest {
         () -> degreeService.getByTitleAndFieldOfStudy(degree.getTitle(), degree.getFieldOfStudy()));
   }
   // endregion
+
+  // region CreateDegree tests
+  @Test
+  public void createDegreeReturnsCreatedDegree() {
+    CreateDegreeRequest request =
+        new CreateDegreeRequest(
+            DegreeTitle.BACHELOR_OF_SCIENCE, "Computer Science", "Software Engineering");
+    given(facultyService.getByName(any(String.class))).willReturn(faculty);
+
+    Degree testDegree = degreeService.createDegree(request);
+
+    // Responded with proper degree
+    Assertions.assertEquals(degree.getFieldOfStudy(), testDegree.getFieldOfStudy());
+
+    // Proper degree was saved
+    ArgumentCaptor<Degree> argumentCaptor = ArgumentCaptor.forClass(Degree.class);
+    verify(degreeRepository).save(argumentCaptor.capture());
+    Degree capturedDegree = argumentCaptor.getValue();
+    Assertions.assertEquals(degree.getFieldOfStudy(), capturedDegree.getFieldOfStudy());
+  }
+  // region
 }
