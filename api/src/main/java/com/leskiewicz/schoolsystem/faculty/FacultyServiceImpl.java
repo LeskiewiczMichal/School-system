@@ -111,11 +111,19 @@ public class FacultyServiceImpl implements FacultyService {
 
   @Override
   public Page<User> getFacultyUsers(Long facultyId, Pageable pageable, Role role) {
+    facultyExistsCheck(facultyId);
     return facultyRepository.findFacultyUsers(facultyId, pageable, role);
   }
 
   @Override
   public Page<Degree> getFacultyDegrees(Long facultyId, Pageable pageable) {
+    facultyExistsCheck(facultyId);
     return facultyRepository.findFacultyDegrees(facultyId, pageable);
+  }
+
+  private void facultyExistsCheck(Long facultyId) {
+    if (!facultyRepository.existsById(facultyId)) {
+      throw new EntityNotFoundException(ErrorMessages.objectWithIdNotFound("Faculty", facultyId));
+    }
   }
 }

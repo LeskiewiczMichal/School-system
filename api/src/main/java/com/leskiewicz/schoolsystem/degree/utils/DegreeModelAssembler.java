@@ -12,6 +12,10 @@ import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSuppor
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
 @Component
 public class DegreeModelAssembler extends RepresentationModelAssemblerSupport<Degree, DegreeDto> {
 
@@ -41,8 +45,24 @@ public class DegreeModelAssembler extends RepresentationModelAssemblerSupport<De
   }
 
   @Override
-  public CollectionModel<DegreeDto> toCollectionModel(Iterable<? extends Degree> entites) {
+  public CollectionModel<DegreeDto> toCollectionModel(Iterable<? extends Degree> entities) {
 
-    return super.toCollectionModel(entites);
+    List<DegreeDto> dtos = StreamSupport.stream(entities.spliterator(), false)
+            .map(this::toModel)
+            .collect(Collectors.toList());
+
+    CollectionModel<DegreeDto> collectionModel;
+    if (dtos.isEmpty()) {
+      return CollectionModel.empty();
+    } else {
+      collectionModel = CollectionModel.of(dtos);
+    }
+
+    // Add any additional links to the collectionModel here
+    // For example, add self link and pagination links if needed
+
+    return collectionModel;
+
+//    return super.toCollectionModel(entities);
   }
 }

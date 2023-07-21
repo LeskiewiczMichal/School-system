@@ -1,5 +1,8 @@
 package com.leskiewicz.schoolsystem.faculty;
 
+import com.leskiewicz.schoolsystem.degree.Degree;
+import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
+import com.leskiewicz.schoolsystem.degree.utils.DegreeModelAssembler;
 import com.leskiewicz.schoolsystem.dto.request.PageableRequest;
 import com.leskiewicz.schoolsystem.faculty.dto.CreateFacultyRequest;
 import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
@@ -26,6 +29,7 @@ public class FacultyController {
   private final FacultyModelAssembler facultyModelAssembler;
   private final PageableLinksService pageableLinksService;
   private final UserModelAssembler userModelAssembler;
+  private final DegreeModelAssembler degreeModelAssembler;
 
   @GetMapping
   public ResponseEntity<CollectionModel<FacultyDto>> getFaculties(
@@ -84,4 +88,15 @@ public class FacultyController {
 
     return ResponseEntity.ok(userDtos);
   }
+
+  @GetMapping("/{id}/degrees")
+    public ResponseEntity<CollectionModel<DegreeDto>> getFacultyDegrees(
+        @PathVariable Long id, @ModelAttribute PageableRequest request) {
+        Page<Degree> degrees = facultyService.getFacultyDegrees(id, request.toPageable());
+        CollectionModel<DegreeDto> degreeDtos = degreeModelAssembler.toCollectionModel(degrees);
+        pageableLinksService.addLinks(
+            degreeDtos, degrees, FacultyController.class, request, "/" + id + "/degrees");
+
+        return ResponseEntity.ok(degreeDtos);
+    }
 }
