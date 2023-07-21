@@ -78,11 +78,19 @@ public class FacultyControllerTest extends GenericControllerTest<FacultyDto> {
     }
 
     static Stream<Arguments> getApiSingleItemErrorsProvider() {
-        String apiPath = "/api/users/";
+        String apiPath = "/api/faculties/";
 
         Arguments status400OnStringProvided = Arguments.of(apiPath + "asdf", status().isBadRequest(), MediaType.APPLICATION_JSON.toString(), "Wrong argument types provided", 400);
 
-        return Stream.of(status400OnStringProvided);
+        Arguments status404OnFacultyNotFound = Arguments.of(
+                apiPath + "999",
+                status().isNotFound(),
+                MediaType.APPLICATION_JSON.toString(),
+                "Faculty with ID: 999 not found",
+                404
+        );
+
+        return Stream.of(status400OnStringProvided, status404OnFacultyNotFound);
     }
     //endregion
 
