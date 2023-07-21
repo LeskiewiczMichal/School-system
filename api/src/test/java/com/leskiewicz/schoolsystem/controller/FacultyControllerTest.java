@@ -1,39 +1,106 @@
 package com.leskiewicz.schoolsystem.controller;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.leskiewicz.schoolsystem.faculty.FacultyRepository;
 import com.leskiewicz.schoolsystem.testModels.CustomLink;
 import com.leskiewicz.schoolsystem.testModels.FacultyDto;
 import com.leskiewicz.schoolsystem.testModels.UserDto;
+import com.leskiewicz.schoolsystem.testUtils.RequestUtils;
+import com.leskiewicz.schoolsystem.testUtils.RequestUtilsImpl;
 import com.leskiewicz.schoolsystem.testUtils.assertions.FacultyDtoAssertions;
 import java.util.Arrays;
 import java.util.stream.Stream;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.provider.Arguments;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.web.servlet.MockMvc;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@SpringBootTest
+@AutoConfigureMockMvc
 @Sql(scripts = {"classpath:schema.sql", "classpath:facultyController.sql"})
-public class FacultyControllerTest extends GenericControllerTest<UserDto> {
+public class FacultyControllerTest extends GenericControllerTest<FacultyDto> {
 
-  private final String GET_FACULTIES = "/api/faculties";
+  private static final String GET_FACULTIES = "/api/faculties";
   private final String GET_FACULTY_BY_ID = "/api/faculties/";
 
   @Autowired
   private FacultyRepository facultyRepository;
 
+  @Autowired
+  private MockMvc mvc;
 
-  //region GetUsers tests
+  // Variables
+  private ObjectMapper mapper;
+  private RequestUtils requestUtils;
+
+
+  @BeforeEach
+  public void setUp() {
+    mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+            .registerModule(new JavaTimeModule());
+    requestUtils = new RequestUtilsImpl(mvc, mapper);
+
+  }
+
+
+  //region GetFaculties tests
   static Stream<Arguments> getApiCollectionResponsesProvider() {
-    FacultyDto facultyDto = FacultyDto.builder().id(1L).name("Informatics").build();
+    FacultyDtoAssertions assertions = new FacultyDtoAssertions();
+    String facultiesQuery = "http://localhost/api/faculties?page=%d&size=%d&sort=%s&direction=%s";
+    FacultyDto informatics = FacultyDto.builder().id(1L).name("Informatics").build();
+    FacultyDto biology = FacultyDto.builder().id(2L).name("Biology").build();
+    FacultyDto electronics = FacultyDto.builder().id(3L).name("Electronics").build();
+    FacultyDto sociology = FacultyDto.builder().id(11L).name("Sociology").build();
+    FacultyDto law = FacultyDto.builder().id(12L).name("Law").build();
+    FacultyDto economics = FacultyDto.builder().id(13L).name("Economics").build();
 
-    Arguments noParams = Arguments.of("/api/faculties", Arrays.asList(facultyDto), Arrays.asList(
-            CustomLink.builder().rel("self")
-                .href("http://localhost/api/faculties?page=0&size=10&sort=id&direction=asc").build()),
-        new FacultyDtoAssertions()
+    CustomLink selfLink = CustomLink.builder().rel("self")
+        .href(String.format(facultiesQuery, 0, 10, "id", "asc")).build();
 
-    );
+    Arguments noParams = Arguments.of(GET_FACULTIES, Arrays.asList(informatics, biology, electronics),
+        Arrays.asList(selfLink), assertions);
 
-    return Stream.of(noParams);
+    Arguments pageOne = Arguments.of(GET_FACULTIES + "?page=1", Arrays.asList(sociology, law, economics),
+        Arrays.asList(selfLink.toBuilder().href(String.format(facultiesQuery, 1, 10, "id", "asc")).build()), assertions);
+
+    return Stream.of(noParams, pageOne);
   }
   //endregion
+
+  //region GetFacultyById
+  static Stream<Arguments> getApiSingleItemResponsesProvider() {
+    return Stream.of(Arguments.of(
+        "/api/faculties/1",
+        status().isOk(),
+        "application/hal+json",
+        facultyDto,
+        new FacultyDtoAssertions()
+    ));
+  }
+
+  static Stream<Arguments> getApiSingleItemErrorsProvider() {
+    String apiPath = "/api/users/";
+
+    Arguments status400OnStringProvided = Arguments.of(
+            apiPath + "asdf",
+            status().isBadRequest(),
+            MediaType.APPLICATION_JSON.toString(),
+            "Wrong argument types provided",
+            400
+    );
+
+    return Stream.of(status400OnStringProvided);
+  }
+    //
+
+
 }

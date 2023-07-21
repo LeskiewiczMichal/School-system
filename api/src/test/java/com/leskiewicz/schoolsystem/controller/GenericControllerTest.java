@@ -11,6 +11,8 @@ import com.leskiewicz.schoolsystem.testUtils.RequestUtilsImpl;
 import com.leskiewicz.schoolsystem.testUtils.TestAssertions;
 import com.leskiewicz.schoolsystem.testUtils.assertions.DtoAssertion;
 import java.util.List;
+
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -32,7 +34,7 @@ public class GenericControllerTest<T> {
   protected RequestUtils requestUtils;
 
   @BeforeEach
-  public void setup() {
+  public void setupTestUtils() {
     // Setting up my utils class for performing requests
     requestUtils = new RequestUtilsImpl(mvc,
         new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
@@ -57,7 +59,7 @@ public class GenericControllerTest<T> {
 
   @ParameterizedTest
   @MethodSource("getApiSingleItemResponsesProvider")
-  public <T> void getApiResponses(String apiPath, ResultMatcher status, String mediaType, T dto, DtoAssertion<T> dtoAssertion) throws Exception {
+  public <T> void getApiSinlgeItemResponses(String apiPath, ResultMatcher status, String mediaType, T dto, DtoAssertion<T> dtoAssertion) throws Exception {
     ResultActions result = requestUtils.performGetRequest(apiPath, status, mediaType);
 
     dtoAssertion.assertDto(result, dto);
@@ -70,5 +72,4 @@ public class GenericControllerTest<T> {
 
     TestAssertions.assertError(result, errorMessage, apiPath, apiErrorCode);
   }
-
 }
