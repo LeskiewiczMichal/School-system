@@ -105,3 +105,6 @@ VALUES ('Alice', 'Smith', 'alicesmith@example.com', '54321', 1, 1, 'ROLE_STUDENT
 
 INSERT INTO users (first_name, last_name, email, password, faculty, degree, role)
 VALUES ('Alice', 'Smith', 'alicesmith@example.com', '54321', 1, 1, 'ROLE_STUDENT');
+
+INSERT INTO users (first_name, last_name, email, password, faculty, degree, role)
+VALUES ('Abba', 'Smith', 'alicesmith@example.com', '54321', 1, 1, 'ROLE_STUDENT');

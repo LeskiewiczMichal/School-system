@@ -107,9 +107,9 @@ public class UserControllerTest extends GenericControllerTest<UserDto> {
         userDtoAssertions);
 
     Arguments descending = Arguments.of("/api/users?direction=desc", Arrays.asList(
-            baseUser.toBuilder().id(25L).firstName("Alice").lastName("Smith")
+            baseUser.toBuilder().id(26L).firstName("Abba").lastName("Smith")
                 .email("alicesmith@example.com").build(),
-            baseUser.toBuilder().id(24L).firstName("Alice").lastName("Smith")
+            baseUser.toBuilder().id(25L).firstName("Alice").lastName("Smith")
                 .email("alicesmith@example.com").build()), Arrays.asList(
             CustomLink.builder().rel("self")
                 .href("http://localhost/api/users?page=0&size=10&sort=id&direction=desc").build(),
@@ -122,7 +122,7 @@ public class UserControllerTest extends GenericControllerTest<UserDto> {
         userDtoAssertions);
 
     Arguments sortByName = Arguments.of("/api/users?sort=firstName", Arrays.asList(
-        baseUser.toBuilder().id(14L).firstName("Alice").lastName("Smith")
+        baseUser.toBuilder().id(26L).firstName("Abba").lastName("Smith")
             .email("alicesmith@example.com").build()), Arrays.asList(
         CustomLink.builder().rel("self")
             .href("http://localhost/api/users?page=0&size=10&sort=firstName&direction=asc").build(),
