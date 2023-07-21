@@ -10,6 +10,7 @@ import com.leskiewicz.schoolsystem.testModels.FacultyDto;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtils;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtilsImpl;
 import com.leskiewicz.schoolsystem.testUtils.assertions.FacultyDtoAssertions;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.provider.Arguments;
@@ -20,6 +21,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.Arrays;
 import java.util.stream.Stream;
@@ -99,14 +101,20 @@ public class FacultyControllerTest extends GenericControllerTest<FacultyDto> {
 
     //region CreateFaculty
     @Test
-    public void createFacultyReturnsCorrectFaculty() throws Exception {
+    public void createFacultyReturnsCorrectFacultyAndLocationHeader() throws Exception {
         CreateFacultyRequest request = new CreateFacultyRequest("Testfaculty");
         ResultActions result = requestUtils.performPostRequest(GET_FACULTIES, request, status().isCreated());
 
         FacultyDto expected = FacultyDto.builder().id(1L).name(request.getName()).build();
 
+        // Assert the facultyDto in response body
         facultyDtoAssertions.assertDto(result, expected);
+
+        // Assert correct location header
+        String expectedLocation = "http://localhost/api/faculties/1";
+        result.andExpect(MockMvcResultMatchers.header().string("Location", expectedLocation));
     }
+
     //endregion
 
 
