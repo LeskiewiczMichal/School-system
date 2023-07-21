@@ -9,6 +9,7 @@ import com.leskiewicz.schoolsystem.testModels.CustomLink;
 import com.leskiewicz.schoolsystem.testModels.FacultyDto;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtils;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtilsImpl;
+import com.leskiewicz.schoolsystem.testUtils.TestAssertions;
 import com.leskiewicz.schoolsystem.testUtils.assertions.FacultyDtoAssertions;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Sql(scripts = {"classpath:schema.sql", "classpath:facultyController.sql"})
 public class FacultyControllerTest extends GenericControllerTest<FacultyDto> {
 
-    private static final String GET_FACULTIES = "/api/faculties";
+    private static final String BASE_FACULTIES = "/api/faculties";
     private final String GET_FACULTY_BY_ID = "/api/faculties/";
 
     @Autowired
@@ -73,11 +74,11 @@ public class FacultyControllerTest extends GenericControllerTest<FacultyDto> {
         CustomLink firstLink = CustomLink.builder().rel("first").href(String.format(facultiesQuery, 0, 10, "id", "asc")).build();
         CustomLink lastLink = CustomLink.builder().rel("last").href(String.format(facultiesQuery, 1, 10, "id", "asc")).build();
 
-        Arguments noParams = Arguments.of(GET_FACULTIES, Arrays.asList(informatics, biology, electronics), Arrays.asList(selfLink, nextLink, firstLink, lastLink), assertions);
-        Arguments pageOne = Arguments.of(GET_FACULTIES + "?page=1", Arrays.asList(sociology, law, economics), Arrays.asList(selfLink.toBuilder().href(String.format(facultiesQuery, 1, 10, "id", "asc")).build(), prevLink, firstLink, lastLink), assertions);
-        Arguments descending = Arguments.of(GET_FACULTIES + "?direction=desc", Arrays.asList(economics, law, sociology), Arrays.asList(selfLink.toBuilder().href(String.format(facultiesQuery, 0, 10, "id", "desc")).build(), nextLink.toBuilder().href(String.format(facultiesQuery, 1, 10, "id", "desc")).build()), assertions);
-        Arguments sortByName = Arguments.of(GET_FACULTIES + "?sort=name", Arrays.asList(biology, chemistry), Arrays.asList(selfLink.toBuilder().href(String.format(facultiesQuery, 0, 10, "name", "asc")).build(), nextLink.toBuilder().href(String.format(facultiesQuery, 1, 10, "name", "asc")).build()), assertions);
-        Arguments pageSize20 = Arguments.of(GET_FACULTIES + "?size=20", Arrays.asList(informatics, biology, electronics, chemistry), Arrays.asList(selfLink.toBuilder().href(String.format(facultiesQuery, 0, 20, "id", "asc")).build(), firstLink.toBuilder().href(String.format(facultiesQuery, 0, 20, "id", "asc")).build(), lastLink.toBuilder().href(String.format(facultiesQuery, 0, 20, "id", "asc")).build()), assertions);
+        Arguments noParams = Arguments.of(BASE_FACULTIES, Arrays.asList(informatics, biology, electronics), Arrays.asList(selfLink, nextLink, firstLink, lastLink), assertions);
+        Arguments pageOne = Arguments.of(BASE_FACULTIES + "?page=1", Arrays.asList(sociology, law, economics), Arrays.asList(selfLink.toBuilder().href(String.format(facultiesQuery, 1, 10, "id", "asc")).build(), prevLink, firstLink, lastLink), assertions);
+        Arguments descending = Arguments.of(BASE_FACULTIES + "?direction=desc", Arrays.asList(economics, law, sociology), Arrays.asList(selfLink.toBuilder().href(String.format(facultiesQuery, 0, 10, "id", "desc")).build(), nextLink.toBuilder().href(String.format(facultiesQuery, 1, 10, "id", "desc")).build()), assertions);
+        Arguments sortByName = Arguments.of(BASE_FACULTIES + "?sort=name", Arrays.asList(biology, chemistry), Arrays.asList(selfLink.toBuilder().href(String.format(facultiesQuery, 0, 10, "name", "asc")).build(), nextLink.toBuilder().href(String.format(facultiesQuery, 1, 10, "name", "asc")).build()), assertions);
+        Arguments pageSize20 = Arguments.of(BASE_FACULTIES + "?size=20", Arrays.asList(informatics, biology, electronics, chemistry), Arrays.asList(selfLink.toBuilder().href(String.format(facultiesQuery, 0, 20, "id", "asc")).build(), firstLink.toBuilder().href(String.format(facultiesQuery, 0, 20, "id", "asc")).build(), lastLink.toBuilder().href(String.format(facultiesQuery, 0, 20, "id", "asc")).build()), assertions);
 
         return Stream.of(noParams, pageOne, descending, sortByName, pageSize20);
     }
@@ -103,7 +104,7 @@ public class FacultyControllerTest extends GenericControllerTest<FacultyDto> {
     @Test
     public void createFacultyReturnsCorrectFacultyAndLocationHeader() throws Exception {
         CreateFacultyRequest request = new CreateFacultyRequest("Testfaculty");
-        ResultActions result = requestUtils.performPostRequest(GET_FACULTIES, request, status().isCreated());
+        ResultActions result = requestUtils.performPostRequest(BASE_FACULTIES, request, status().isCreated());
 
         FacultyDto expected = FacultyDto.builder().id(1L).name(request.getName()).build();
 
@@ -115,7 +116,16 @@ public class FacultyControllerTest extends GenericControllerTest<FacultyDto> {
         result.andExpect(MockMvcResultMatchers.header().string("Location", expectedLocation));
     }
 
+    @Test
+    public void createFacultyReturns400OnEmptyName() throws Exception {
+        CreateFacultyRequest request = new CreateFacultyRequest();
+        ResultActions result = requestUtils.performPostRequest(BASE_FACULTIES, request, status().isBadRequest());
+
+        TestAssertions.assertError(result, "Faculty name required", BASE_FACULTIES, 400);
+    }
     //endregion
+
+
 
 
 }
