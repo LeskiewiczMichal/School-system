@@ -1,5 +1,6 @@
 package com.leskiewicz.schoolsystem.degree;
 
+import com.leskiewicz.schoolsystem.degree.dto.CreateDegreeRequest;
 import com.leskiewicz.schoolsystem.error.ErrorMessages;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
@@ -34,5 +35,10 @@ public class DegreeServiceImpl implements DegreeService {
             () ->
                 new EntityNotFoundException(
                     "Degree with given title and field of study not found"));
+  }
+
+  @Override
+  public Degree createDegree(CreateDegreeRequest request) {
+
   }
 }
