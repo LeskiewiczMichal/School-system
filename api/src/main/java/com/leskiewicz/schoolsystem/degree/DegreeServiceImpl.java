@@ -52,8 +52,12 @@ public class DegreeServiceImpl implements DegreeService {
       throw new EntityAlreadyExistsException(
           ErrorMessages.objectWithPropertyAlreadyExists(
               "Degree",
-              request.getTitle().toString() + " " + request.getFieldOfStudy(),
-              request.getFacultyName()));
+              "title",
+              request.getTitle().toString()
+                  + " in "
+                  + request.getFieldOfStudy()
+                  + " on faculty: "
+                  + request.getFacultyName()));
     }
     Faculty faculty = facultyService.getByName(request.getFacultyName());
 

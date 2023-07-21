@@ -210,4 +210,13 @@ public class DegreeControllerTest extends GenericControllerTest<DegreeDto> {
 
     TestAssertions.assertError(result, expectedMessage, BASE_URL, 400);
   }
+
+  @Test
+  public void createDegreeReturns400OnDegreeWithAlreadyExists() throws Exception {
+    CreateDegreeRequest request = new CreateDegreeRequest(DegreeTitle.BACHELOR_OF_SCIENCE, "Computer Science", "Informatics");
+//    requestUtils.performPostRequest(BASE_URL, request, status().isCreated());
+    ResultActions result = requestUtils.performPostRequest(BASE_URL, request, status().isBadRequest());
+
+    TestAssertions.assertError(result, "Degree with title: BACHELOR_OF_SCIENCE in Computer Science on faculty: Informatics already exists", BASE_URL, 400);
+  }
 }
