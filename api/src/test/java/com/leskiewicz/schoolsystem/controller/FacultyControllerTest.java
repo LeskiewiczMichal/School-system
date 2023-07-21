@@ -8,6 +8,7 @@ import com.leskiewicz.schoolsystem.faculty.dto.CreateFacultyRequest;
 import com.leskiewicz.schoolsystem.faculty.dto.PatchFacultyRequest;
 import com.leskiewicz.schoolsystem.testModels.CustomLink;
 import com.leskiewicz.schoolsystem.testModels.FacultyDto;
+import com.leskiewicz.schoolsystem.testUtils.CommonTests;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtils;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtilsImpl;
 import com.leskiewicz.schoolsystem.testUtils.TestAssertions;
@@ -85,6 +86,11 @@ public class FacultyControllerTest extends GenericControllerTest<FacultyDto> {
         Arguments pageSize20 = Arguments.of(BASE_FACULTIES + "?size=20", Arrays.asList(informatics, biology, electronics, chemistry), Arrays.asList(selfLink.toBuilder().href(String.format(facultiesQuery, 0, 20, "id", "asc")).build(), firstLink.toBuilder().href(String.format(facultiesQuery, 0, 20, "id", "asc")).build(), lastLink.toBuilder().href(String.format(facultiesQuery, 0, 20, "id", "asc")).build()), assertions);
 
         return Stream.of(noParams, pageOne, descending, sortByName, pageSize20);
+    }
+
+    @Test
+    public void getUsersTestPagination() throws Exception {
+        CommonTests.paginationLinksTest(requestUtils, BASE_FACULTIES, 1);
     }
     //endregion
 
