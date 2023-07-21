@@ -45,7 +45,7 @@ public class FacultyControllerTest extends GenericControllerTest<FacultyDto> {
   private RequestUtils requestUtils;
   private FacultyDtoAssertions facultyDtoAssertions;
 
-  // region GetFaculties tests
+  // region Providers
   static Stream<Arguments> getApiCollectionResponsesProvider() {
     // Variables needed for tests
     FacultyDtoAssertions assertions = new FacultyDtoAssertions();
@@ -79,7 +79,6 @@ public class FacultyControllerTest extends GenericControllerTest<FacultyDto> {
     return Stream.of(noParams, pageOne, descending, sortByName, pageSize20);
   }
 
-  // region GetFacultyById
   static Stream<Arguments> getApiSingleItemResponsesProvider() {
     return Stream.of(
         Arguments.of(

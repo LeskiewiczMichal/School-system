@@ -42,6 +42,7 @@ public class DegreeControllerTest extends GenericControllerTest<DegreeDto> {
   private ObjectMapper mapper;
   private RequestUtils requestUtils;
 
+  //region Providers
   static Stream<Arguments> getApiCollectionResponsesProvider() {
     // Variables to check
     DegreeDtoAssertions assertions = new DegreeDtoAssertions();
@@ -154,14 +155,16 @@ public class DegreeControllerTest extends GenericControllerTest<DegreeDto> {
 
     Arguments nullFaculty =
         Arguments.of(
-            new CreateDegreeRequest(DegreeTitle.BACHELOR, "Test", null),
-            "Faculty name required");
+            new CreateDegreeRequest(DegreeTitle.BACHELOR, "Test", null), "Faculty name required");
 
     Arguments nullRequest =
-        Arguments.of(new CreateDegreeRequest(null, null, null), "Faculty name required; Degree field of study required; Degree title required");
+        Arguments.of(
+            new CreateDegreeRequest(null, null, null),
+            "Faculty name required; Degree field of study required; Degree title required");
 
     return Stream.of(nullTitle, nullFieldOfStudy, nullFaculty, nullRequest);
   }
+  //endregion
 
   @BeforeEach
   public void setUp() {
@@ -174,6 +177,7 @@ public class DegreeControllerTest extends GenericControllerTest<DegreeDto> {
     degreeDtoAssertions = new DegreeDtoAssertions();
   }
 
+  //region CreateDegree tests
   @Test
   public void getDegreesTestPagination() throws Exception {
     CommonTests.paginationLinksTest(requestUtils, BASE_URL, 1);
@@ -213,10 +217,16 @@ public class DegreeControllerTest extends GenericControllerTest<DegreeDto> {
 
   @Test
   public void createDegreeReturns400OnDegreeWithAlreadyExists() throws Exception {
-    CreateDegreeRequest request = new CreateDegreeRequest(DegreeTitle.BACHELOR_OF_SCIENCE, "Computer Science", "Informatics");
-//    requestUtils.performPostRequest(BASE_URL, request, status().isCreated());
-    ResultActions result = requestUtils.performPostRequest(BASE_URL, request, status().isBadRequest());
+    CreateDegreeRequest request =
+        new CreateDegreeRequest(DegreeTitle.BACHELOR_OF_SCIENCE, "Computer Science", "Informatics");
+    ResultActions result =
+        requestUtils.performPostRequest(BASE_URL, request, status().isBadRequest());
 
-    TestAssertions.assertError(result, "Degree with title: BACHELOR_OF_SCIENCE in Computer Science on faculty: Informatics already exists", BASE_URL, 400);
+    TestAssertions.assertError(
+        result,
+        "Degree with title: BACHELOR_OF_SCIENCE in Computer Science on faculty: Informatics already exists",
+        BASE_URL,
+        400);
   }
+  //endregion
 }

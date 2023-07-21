@@ -51,6 +51,7 @@ public class UserControllerTest extends GenericControllerTest<UserDto> {
   private ObjectMapper mapper;
   private RequestUtils requestUtils;
 
+  //region Providers
   static Stream<Arguments> getApiCollectionResponsesProvider() {
     UserDto baseUser =
         UserDto.builder()
@@ -133,9 +134,6 @@ public class UserControllerTest extends GenericControllerTest<UserDto> {
     return Stream.of(noParams, pageOne, descending, sortByName, pageSize20);
   }
 
-  // region GetUsers tests
-
-  // region GetUserById Tests
   static Stream<Arguments> getApiSingleItemResponsesProvider() {
     Arguments happyPath =
         Arguments.of(
@@ -170,7 +168,6 @@ public class UserControllerTest extends GenericControllerTest<UserDto> {
 
     return Stream.of(status400OnStringProvided, status404OnUserNotFound);
   }
-  // endregion
 
   static Stream<Arguments> patchUserHappyPathProvider() {
     UserDto baseUser =
