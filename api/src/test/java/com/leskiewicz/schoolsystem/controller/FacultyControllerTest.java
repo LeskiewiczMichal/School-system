@@ -58,22 +58,25 @@ public class FacultyControllerTest extends GenericControllerTest<FacultyDto> {
 
     //region GetFaculties tests
     static Stream<Arguments> getApiCollectionResponsesProvider() {
+        // Variables needed for tests
         FacultyDtoAssertions assertions = new FacultyDtoAssertions();
         String facultiesQuery = "http://localhost/api/faculties?page=%d&size=%d&sort=%s&direction=%s";
-        FacultyDto informatics = FacultyDto.builder().id(1L).name("Informatics").build();
-        FacultyDto biology = FacultyDto.builder().id(2L).name("Biology").build();
-        FacultyDto electronics = FacultyDto.builder().id(3L).name("Electronics").build();
-        FacultyDto chemistry = FacultyDto.builder().id(4L).name("Chemistry").build();
-        FacultyDto sociology = FacultyDto.builder().id(11L).name("Sociology").build();
-        FacultyDto law = FacultyDto.builder().id(12L).name("Law").build();
-        FacultyDto economics = FacultyDto.builder().id(13L).name("Economics").build();
+        FacultyDto informatics = FacultyDto.builder().id(101L).name("Informatics").build();
+        FacultyDto biology = FacultyDto.builder().id(102L).name("Biology").build();
+        FacultyDto electronics = FacultyDto.builder().id(103L).name("Electronics").build();
+        FacultyDto chemistry = FacultyDto.builder().id(104L).name("Chemistry").build();
+        FacultyDto sociology = FacultyDto.builder().id(111L).name("Sociology").build();
+        FacultyDto law = FacultyDto.builder().id(112L).name("Law").build();
+        FacultyDto economics = FacultyDto.builder().id(113L).name("Economics").build();
 
+        // Basic links to check
         CustomLink selfLink = CustomLink.builder().rel("self").href(String.format(facultiesQuery, 0, 10, "id", "asc")).build();
         CustomLink nextLink = CustomLink.builder().rel("next").href(String.format(facultiesQuery, 1, 10, "id", "asc")).build();
         CustomLink prevLink = CustomLink.builder().rel("prev").href(String.format(facultiesQuery, 0, 10, "id", "asc")).build();
         CustomLink firstLink = CustomLink.builder().rel("first").href(String.format(facultiesQuery, 0, 10, "id", "asc")).build();
         CustomLink lastLink = CustomLink.builder().rel("last").href(String.format(facultiesQuery, 1, 10, "id", "asc")).build();
 
+        // Arguments
         Arguments noParams = Arguments.of(BASE_FACULTIES, Arrays.asList(informatics, biology, electronics), Arrays.asList(selfLink, nextLink, firstLink, lastLink), assertions);
         Arguments pageOne = Arguments.of(BASE_FACULTIES + "?page=1", Arrays.asList(sociology, law, economics), Arrays.asList(selfLink.toBuilder().href(String.format(facultiesQuery, 1, 10, "id", "asc")).build(), prevLink, firstLink, lastLink), assertions);
         Arguments descending = Arguments.of(BASE_FACULTIES + "?direction=desc", Arrays.asList(economics, law, sociology), Arrays.asList(selfLink.toBuilder().href(String.format(facultiesQuery, 0, 10, "id", "desc")).build(), nextLink.toBuilder().href(String.format(facultiesQuery, 1, 10, "id", "desc")).build()), assertions);
@@ -86,14 +89,13 @@ public class FacultyControllerTest extends GenericControllerTest<FacultyDto> {
 
     //region GetFacultyById
     static Stream<Arguments> getApiSingleItemResponsesProvider() {
-        return Stream.of(Arguments.of("/api/faculties/1", status().isOk(), "application/hal+json", FacultyDto.builder().id(1L).name("Informatics").build(), new FacultyDtoAssertions()));
+        return Stream.of(Arguments.of("/api/faculties/101", status().isOk(), "application/hal+json", FacultyDto.builder().id(101L).name("Informatics").build(), new FacultyDtoAssertions()));
     }
 
     static Stream<Arguments> getApiSingleItemErrorsProvider() {
         String apiPath = "/api/faculties/";
 
         Arguments status400OnStringProvided = Arguments.of(apiPath + "asdf", status().isBadRequest(), MediaType.APPLICATION_JSON.toString(), "Wrong argument types provided", 400);
-
         Arguments status404OnFacultyNotFound = Arguments.of(apiPath + "999", status().isNotFound(), MediaType.APPLICATION_JSON.toString(), "Faculty with ID: 999 not found", 404);
 
         return Stream.of(status400OnStringProvided, status404OnFacultyNotFound);
