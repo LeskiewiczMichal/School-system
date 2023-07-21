@@ -12,8 +12,8 @@ import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Component;
 
 @Component
-public class FacultyModelAssembler extends
-    RepresentationModelAssemblerSupport<Faculty, FacultyDto> {
+public class FacultyModelAssembler
+    extends RepresentationModelAssemblerSupport<Faculty, FacultyDto> {
 
   private final FacultyMapper facultyMapper;
 
@@ -26,13 +26,18 @@ public class FacultyModelAssembler extends
   public FacultyDto toModel(Faculty entity) {
     FacultyDto facultyDto = facultyMapper.convertToDto(entity);
 
-    Link selfLink = WebMvcLinkBuilder.linkTo(
-        methodOn(FacultyController.class).getFacultyById(entity.getId())).withSelfRel();
+    Link selfLink =
+        WebMvcLinkBuilder.linkTo(methodOn(FacultyController.class).getFacultyById(entity.getId()))
+            .withSelfRel();
 
-    Link studentsLink = WebMvcLinkBuilder.linkTo(
-            methodOn(FacultyController.class).getFacultyStudents(entity.getId(), null)).withRel("students");
-    Link teachersLink = WebMvcLinkBuilder.linkTo(
-            methodOn(FacultyController.class).getFacultyTeachers(entity.getId(), null)).withRel("teachers");
+    Link studentsLink =
+        WebMvcLinkBuilder.linkTo(
+                methodOn(FacultyController.class).getFacultyStudents(entity.getId(), null))
+            .withRel("students");
+    Link teachersLink =
+        WebMvcLinkBuilder.linkTo(
+                methodOn(FacultyController.class).getFacultyTeachers(entity.getId(), null))
+            .withRel("teachers");
 
     facultyDto.add(selfLink);
     facultyDto.add(studentsLink);

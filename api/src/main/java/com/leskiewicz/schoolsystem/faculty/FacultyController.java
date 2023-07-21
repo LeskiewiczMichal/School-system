@@ -14,7 +14,6 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,60 +22,66 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 public class FacultyController {
 
-    private final FacultyService facultyService;
-    private final FacultyModelAssembler facultyModelAssembler;
-    private final PageableLinksService pageableLinksService;
-    private final UserModelAssembler userModelAssembler;
+  private final FacultyService facultyService;
+  private final FacultyModelAssembler facultyModelAssembler;
+  private final PageableLinksService pageableLinksService;
+  private final UserModelAssembler userModelAssembler;
 
-    @GetMapping
-    public ResponseEntity<CollectionModel<FacultyDto>> getFaculties(@ModelAttribute PageableRequest request) {
-        Page<Faculty> faculties = facultyService.getFaculties(request.toPageable());
-        CollectionModel<FacultyDto> facultyDtos = facultyModelAssembler.toCollectionModel(faculties);
-        pageableLinksService.addLinks(facultyDtos, faculties, FacultyController.class, request);
+  @GetMapping
+  public ResponseEntity<CollectionModel<FacultyDto>> getFaculties(
+      @ModelAttribute PageableRequest request) {
+    Page<Faculty> faculties = facultyService.getFaculties(request.toPageable());
+    CollectionModel<FacultyDto> facultyDtos = facultyModelAssembler.toCollectionModel(faculties);
+    pageableLinksService.addLinks(facultyDtos, faculties, FacultyController.class, request);
 
-        return ResponseEntity.ok(facultyDtos);
-    }
+    return ResponseEntity.ok(facultyDtos);
+  }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<FacultyDto> getFacultyById(@PathVariable Long id) {
-        Faculty faculty = facultyService.getById(id);
-        FacultyDto facultyDto = facultyModelAssembler.toModel(faculty);
+  @GetMapping("/{id}")
+  public ResponseEntity<FacultyDto> getFacultyById(@PathVariable Long id) {
+    Faculty faculty = facultyService.getById(id);
+    FacultyDto facultyDto = facultyModelAssembler.toModel(faculty);
 
-        return ResponseEntity.ok(facultyDto);
-    }
+    return ResponseEntity.ok(facultyDto);
+  }
 
-    @PostMapping
-    public ResponseEntity<FacultyDto> createFaculty(@Valid @RequestBody CreateFacultyRequest request) {
-        Faculty faculty = facultyService.createFaculty(request);
-        FacultyDto facultyDto = facultyModelAssembler.toModel(faculty);
+  @PostMapping
+  public ResponseEntity<FacultyDto> createFaculty(
+      @Valid @RequestBody CreateFacultyRequest request) {
+    Faculty faculty = facultyService.createFaculty(request);
+    FacultyDto facultyDto = facultyModelAssembler.toModel(faculty);
 
-        return ResponseEntity.created(facultyDto.getLink("self").get().toUri()).body(facultyDto);
-    }
+    return ResponseEntity.created(facultyDto.getLink("self").get().toUri()).body(facultyDto);
+  }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<FacultyDto> updateFaculty(@RequestBody PatchFacultyRequest request, @PathVariable Long id) {
-        Faculty faculty = facultyService.updateFaculty(request, id);
-        FacultyDto facultyDto = facultyModelAssembler.toModel(faculty);
+  @PatchMapping("/{id}")
+  public ResponseEntity<FacultyDto> updateFaculty(
+      @RequestBody PatchFacultyRequest request, @PathVariable Long id) {
+    Faculty faculty = facultyService.updateFaculty(request, id);
+    FacultyDto facultyDto = facultyModelAssembler.toModel(faculty);
 
-        return ResponseEntity.ok(facultyDto);
-    }
+    return ResponseEntity.ok(facultyDto);
+  }
 
-    @GetMapping("/{id}/students")
-    public ResponseEntity<CollectionModel> getFacultyStudents(@PathVariable Long id, @ModelAttribute PageableRequest request) {
-        Page<User> users = facultyService.getFacultyUsers(id, request.toPageable(), Role.ROLE_STUDENT);
-        CollectionModel<UserDto> userDtos = userModelAssembler.toCollectionModel(users);
-        pageableLinksService.addLinks(userDtos, users, FacultyController.class, request, "/" + id + "/students");
+  @GetMapping("/{id}/students")
+  public ResponseEntity<CollectionModel> getFacultyStudents(
+      @PathVariable Long id, @ModelAttribute PageableRequest request) {
+    Page<User> users = facultyService.getFacultyUsers(id, request.toPageable(), Role.ROLE_STUDENT);
+    CollectionModel<UserDto> userDtos = userModelAssembler.toCollectionModel(users);
+    pageableLinksService.addLinks(
+        userDtos, users, FacultyController.class, request, "/" + id + "/students");
 
-        return ResponseEntity.ok(userDtos);
-    }
+    return ResponseEntity.ok(userDtos);
+  }
 
-    @GetMapping("/{id}/teachers")
-    public ResponseEntity<CollectionModel> getFacultyTeachers(@PathVariable Long id, @ModelAttribute PageableRequest request) {
-        Page<User> users = facultyService.getFacultyUsers(id, request.toPageable(), Role.ROLE_TEACHER);
-        CollectionModel<UserDto> userDtos = userModelAssembler.toCollectionModel(users);
-        pageableLinksService.addLinks(userDtos, users, FacultyController.class, request, "/" + id + "/teachers");
+  @GetMapping("/{id}/teachers")
+  public ResponseEntity<CollectionModel> getFacultyTeachers(
+      @PathVariable Long id, @ModelAttribute PageableRequest request) {
+    Page<User> users = facultyService.getFacultyUsers(id, request.toPageable(), Role.ROLE_TEACHER);
+    CollectionModel<UserDto> userDtos = userModelAssembler.toCollectionModel(users);
+    pageableLinksService.addLinks(
+        userDtos, users, FacultyController.class, request, "/" + id + "/teachers");
 
-        return ResponseEntity.ok(userDtos);
-    }
-
+    return ResponseEntity.ok(userDtos);
+  }
 }

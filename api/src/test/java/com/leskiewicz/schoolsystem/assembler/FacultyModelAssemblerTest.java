@@ -4,8 +4,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-import com.leskiewicz.schoolsystem.degree.Degree;
-import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.FacultyController;
 import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
@@ -28,15 +26,11 @@ import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 @ExtendWith(MockitoExtension.class)
 public class FacultyModelAssemblerTest {
 
-  @Mock
-  private FacultyMapper facultyMapper;
-
-  @InjectMocks
-  private FacultyModelAssembler facultyModelAssembler;
-
   // Variables
   Faculty faculty;
   FacultyDto facultyDto;
+  @Mock private FacultyMapper facultyMapper;
+  @InjectMocks private FacultyModelAssembler facultyModelAssembler;
 
   @BeforeEach
   public void setup() {
@@ -48,12 +42,15 @@ public class FacultyModelAssemblerTest {
 
   @Test
   public void testToModel() {
-    Link selfLink = WebMvcLinkBuilder.linkTo(methodOn(FacultyController.class).getFacultyById(0L))
-        .withSelfRel();
-    Link studentsLink = WebMvcLinkBuilder.linkTo(methodOn(FacultyController.class).getFacultyStudents(0L, null))
-        .withRel("students");
-    Link teachersLink = WebMvcLinkBuilder.linkTo(methodOn(FacultyController.class).getFacultyTeachers(0L, null))
-        .withRel("teachers");
+    Link selfLink =
+        WebMvcLinkBuilder.linkTo(methodOn(FacultyController.class).getFacultyById(0L))
+            .withSelfRel();
+    Link studentsLink =
+        WebMvcLinkBuilder.linkTo(methodOn(FacultyController.class).getFacultyStudents(0L, null))
+            .withRel("students");
+    Link teachersLink =
+        WebMvcLinkBuilder.linkTo(methodOn(FacultyController.class).getFacultyTeachers(0L, null))
+            .withRel("teachers");
 
     FacultyDto result = facultyModelAssembler.toModel(faculty);
 
@@ -71,15 +68,18 @@ public class FacultyModelAssemblerTest {
     CollectionModel<FacultyDto> facultyDtos = facultyModelAssembler.toCollectionModel(faculties);
 
     Assert.notEmpty(facultyDtos.getContent());
-    facultyDtos.getContent().forEach(dto -> {
-      // Assert every faculty has correct links
-      Link selfLink = dto.getLink("self").get();
-      Link studentsLink = dto.getLink("students").get();
-        Link teachersLink = dto.getLink("teachers").get();
+    facultyDtos
+        .getContent()
+        .forEach(
+            dto -> {
+              // Assert every faculty has correct links
+              Link selfLink = dto.getLink("self").get();
+              Link studentsLink = dto.getLink("students").get();
+              Link teachersLink = dto.getLink("teachers").get();
 
-      Assertions.assertNotNull(selfLink, "DegreeDto should have a self link");
-      Assertions.assertNotNull(studentsLink, "DegreeDto should have a students link");
-        Assertions.assertNotNull(teachersLink, "DegreeDto should have a teachers link");
-    });
+              Assertions.assertNotNull(selfLink, "DegreeDto should have a self link");
+              Assertions.assertNotNull(studentsLink, "DegreeDto should have a students link");
+              Assertions.assertNotNull(teachersLink, "DegreeDto should have a teachers link");
+            });
   }
 }
