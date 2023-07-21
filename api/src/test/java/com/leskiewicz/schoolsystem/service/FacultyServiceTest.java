@@ -178,5 +178,14 @@ public class FacultyServiceTest {
     verify(facultyRepository).save(faculty);
     Assertions.assertEquals(faculty, result);
   }
+
+  @Test
+  public void updateFacultyThrowsEntityNotFound() {
+    given(facultyRepository.findById(any(Long.class))).willReturn(Optional.empty());
+    PatchFacultyRequest request = new PatchFacultyRequest("new name");
+
+    Assertions.assertThrows(EntityNotFoundException.class, () ->
+        facultyService.updateFaculty(request, faculty.getId()));
+  }
   //endregion
 }
