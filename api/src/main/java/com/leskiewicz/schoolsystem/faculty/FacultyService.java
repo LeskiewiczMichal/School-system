@@ -6,6 +6,7 @@ import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.dto.CreateFacultyRequest;
 import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
 import com.leskiewicz.schoolsystem.faculty.dto.PatchFacultyRequest;
+import com.leskiewicz.schoolsystem.user.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -22,4 +23,6 @@ public interface FacultyService {
   Faculty createFaculty(CreateFacultyRequest request);
 
   Faculty updateFaculty(PatchFacultyRequest request, Long facultyId);
+
+  Page<User> getFacultyStudent(Long facultyId, Pageable pageable);
 }
