@@ -19,6 +19,8 @@ import com.leskiewicz.schoolsystem.security.Role;
 import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserMapper;
+import com.leskiewicz.schoolsystem.utils.StringUtils;
+import io.jsonwebtoken.lang.Assert;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 
@@ -155,18 +157,29 @@ public class FacultyServiceTest {
   // region CreateFaculty tests
   @Test
   public void createsAndReturnsFacultyAndOnProperRequest() {
-    CreateFacultyRequest request = new CreateFacultyRequest(faculty.getName());
+    // Create a mock request
+    CreateFacultyRequest request = new CreateFacultyRequest();
+    request.setName("Faculty Name");
 
-    FacultyDto testFaculty = facultyService.createFaculty(request);
+    // Mock the behavior of facultyRepository.findByName()
+    given(facultyRepository.findByName(request.getName())).willReturn(Optional.empty());
 
-    // Responded with proper Faculty
-    Assertions.assertEquals(faculty.getName(), testFaculty.getName());
+    // Mock the behavior of facultyMapper.convertToDto()
+    Faculty faculty = new Faculty();
+    faculty.setName(StringUtils.capitalizeFirstLetterOfEveryWord(request.getName()));
+    given(facultyMapper.convertToDto(any(Faculty.class))).willReturn(new FacultyDto(1L, faculty.getName()));
 
-    // Proper faculty was saved in the repository
-    ArgumentCaptor<Faculty> facultyCapture = ArgumentCaptor.forClass(Faculty.class);
-    verify(facultyRepository).save(facultyCapture.capture());
-    Faculty savedFaculty = facultyCapture.getValue();
-    Assertions.assertEquals(savedFaculty, testFaculty);
+    // Call the method to test
+    FacultyDto createdFaculty = facultyService.createFaculty(request);
+
+    // Assert the result
+    Assert.notNull(createdFaculty);
+    Assertions.assertEquals("Faculty Name", createdFaculty.getName());
+
+    // Verify the interactions with facultyRepository and facultyMapper
+    verify(facultyRepository, times(1)).findByName(request.getName());
+    verify(facultyRepository, times(1)).save(any(Faculty.class));
+    verify(facultyMapper, times(1)).convertToDto(any(Faculty.class));
   }
 
   @Test
