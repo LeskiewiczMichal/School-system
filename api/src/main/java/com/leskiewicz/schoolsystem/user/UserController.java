@@ -39,10 +39,10 @@ public class UserController {
 
   @GetMapping("/{id}")
   public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
-    User user = userService.getById(id);
-    UserDto userDto = userModelAssembler.toModel(user);
+    UserDto user = userService.getById(id);
+    user = userDtoAssembler.toModel(user);
 
-    return ResponseEntity.ok(userDto);
+    return ResponseEntity.ok(user);
   }
 
   @PatchMapping("/{id}")
