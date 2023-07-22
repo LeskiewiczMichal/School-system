@@ -22,7 +22,7 @@ public interface FacultyService {
 
   Degree getDegreeByTitleAndFieldOfStudy(Faculty faculty, DegreeTitle title, String fieldOfStudy);
 
-  Faculty createFaculty(CreateFacultyRequest request);
+  FacultyDto createFaculty(CreateFacultyRequest request);
 
   FacultyDto updateFaculty(PatchFacultyRequest request, Long facultyId);
 

@@ -78,7 +78,7 @@ public class FacultyServiceImpl implements FacultyService {
   }
 
   @Override
-  public Faculty createFaculty(CreateFacultyRequest request) {
+  public FacultyDto createFaculty(CreateFacultyRequest request) {
     if (facultyRepository.findByName(request.getName()).isPresent()) {
       throw new EntityAlreadyExistsException(
           ErrorMessages.objectWithPropertyAlreadyExists("Faculty", "name", request.getName()));
@@ -92,7 +92,7 @@ public class FacultyServiceImpl implements FacultyService {
     facultyRepository.save(faculty);
     logger.info("Created new faculty with name: {}", faculty.getName());
 
-    return faculty;
+    return facultyModelAssembler.toModel(faculty);
   }
 
   @Override

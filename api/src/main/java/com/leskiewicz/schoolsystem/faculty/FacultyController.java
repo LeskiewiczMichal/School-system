@@ -52,10 +52,9 @@ public class FacultyController {
   @PostMapping
   public ResponseEntity<FacultyDto> createFaculty(
       @Valid @RequestBody CreateFacultyRequest request) {
-    Faculty faculty = facultyService.createFaculty(request);
-    FacultyDto facultyDto = facultyModelAssembler.toModel(faculty);
+    FacultyDto faculty = facultyService.createFaculty(request);
 
-    return ResponseEntity.created(facultyDto.getLink("self").get().toUri()).body(facultyDto);
+    return ResponseEntity.created(faculty.getLink("self").get().toUri()).body(faculty);
   }
 
   @PatchMapping("/{id}")
