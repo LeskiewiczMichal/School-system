@@ -65,7 +65,7 @@ public class FacultyControllerTest extends GenericControllerTest<FacultyDto> {
             BASE_FACULTIES + "?page=1", Arrays.asList(sociology, law, economics), assertions);
     Arguments descending =
         Arguments.of(
-            BASE_FACULTIES + "?direction=desc",
+            BASE_FACULTIES + "?sort=id,desc",
             Arrays.asList(economics, law, sociology),
             assertions);
     Arguments sortByName =
