@@ -103,7 +103,7 @@ public class UserControllerTest extends GenericControllerTest<UserDto> {
             userDtoAssertions);
     Arguments descending =
         Arguments.of(
-            "/api/users?direction=desc",
+            "/api/users?sort=id,desc",
             Arrays.asList(
                 baseUser.toBuilder()
                     .id(26L)
