@@ -31,11 +31,11 @@ public class UserServiceImpl implements UserService {
   private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
   @Override
-  public User getById(Long id) {
-    return userRepository
+  public UserDto getById(Long id) {
+    return userMapper.convertToDto(userRepository
         .findById(id)
         .orElseThrow(
-            () -> new EntityNotFoundException(ErrorMessages.objectWithIdNotFound("User", id)));
+            () -> new EntityNotFoundException(ErrorMessages.objectWithIdNotFound("User", id))));
   }
 
   @Override
