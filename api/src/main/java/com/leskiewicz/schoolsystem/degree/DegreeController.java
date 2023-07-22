@@ -5,11 +5,12 @@ import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
 import com.leskiewicz.schoolsystem.degree.utils.DegreeDtoAssembler;
 import com.leskiewicz.schoolsystem.degree.utils.DegreeModelAssembler;
 import com.leskiewicz.schoolsystem.dto.request.PageableRequest;
-import com.leskiewicz.schoolsystem.service.links.PageableLinksService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.hateoas.CollectionModel;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,8 +21,8 @@ public class DegreeController {
 
   private final DegreeService degreeService;
   private final DegreeModelAssembler degreeModelAssembler;
-  private final PageableLinksService pageableLinksService;
   private final DegreeDtoAssembler degreeDtoAssembler;
+  private final PagedResourcesAssembler<DegreeDto> degreePagedResourcesAssembler;
 
   @GetMapping("/{id}")
   public ResponseEntity<DegreeDto> getDegreeById(@PathVariable Long id) {
@@ -32,13 +33,13 @@ public class DegreeController {
   }
 
   @GetMapping
-  public ResponseEntity<CollectionModel<DegreeDto>> getDegrees(
+  public ResponseEntity<RepresentationModel<DegreeDto>> getDegrees(
       @ModelAttribute PageableRequest request) {
-    Page<Degree> degrees = degreeService.getDegrees(request.toPageable());
-    CollectionModel<DegreeDto> degreeDtos = degreeModelAssembler.toCollectionModel(degrees);
-    pageableLinksService.addLinks(degreeDtos, degrees, DegreeController.class, request);
+    Page<DegreeDto> degrees = degreeService.getDegrees(request.toPageable());
+    degrees = degrees.map(degreeDtoAssembler::toModel);
 
-    return ResponseEntity.ok(degreeDtos);
+    return ResponseEntity.ok(
+        HalModelBuilder.halModelOf(degreePagedResourcesAssembler.toModel(degrees)).build());
   }
 
   @PostMapping
