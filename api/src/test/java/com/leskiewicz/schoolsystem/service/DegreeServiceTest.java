@@ -9,6 +9,7 @@ import com.leskiewicz.schoolsystem.degree.DegreeRepository;
 import com.leskiewicz.schoolsystem.degree.DegreeServiceImpl;
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
 import com.leskiewicz.schoolsystem.degree.dto.CreateDegreeRequest;
+import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
 import com.leskiewicz.schoolsystem.error.customexception.EntityAlreadyExistsException;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.FacultyServiceImpl;
@@ -76,7 +77,7 @@ public class DegreeServiceTest {
   public void getByIdReturnsCorrectDegree() {
     given(degreeRepository.findById(degree.getId())).willReturn(Optional.of(degree));
 
-    Degree testDegree = degreeService.getById(degree.getId());
+    DegreeDto testDegree = degreeService.getById(degree.getId());
 
     Assertions.assertEquals(degree, testDegree);
   }
@@ -98,7 +99,7 @@ public class DegreeServiceTest {
 
     given(degreeRepository.findAll(pageable)).willReturn(mockPage);
 
-    Page<Degree> degrees = degreeService.getDegrees(pageable);
+    Page<DegreeDto> degrees = degreeService.getDegrees(pageable);
     Assertions.assertEquals(mockPage, degrees);
   }
   // endregion
@@ -124,7 +125,7 @@ public class DegreeServiceTest {
             DegreeTitle.BACHELOR_OF_SCIENCE, "Computer Science", "Software Engineering");
     given(facultyService.getByName(any(String.class))).willReturn(faculty);
 
-    Degree testDegree = degreeService.createDegree(request);
+    DegreeDto testDegree = degreeService.createDegree(request);
 
     // Responded with proper degree
     Assertions.assertEquals(degree.getFieldOfStudy(), testDegree.getFieldOfStudy());

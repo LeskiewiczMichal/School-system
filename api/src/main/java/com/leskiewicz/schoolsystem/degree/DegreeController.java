@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 public class DegreeController {
 
   private final DegreeService degreeService;
-  private final DegreeModelAssembler degreeModelAssembler;
   private final DegreeDtoAssembler degreeDtoAssembler;
   private final PagedResourcesAssembler<DegreeDto> degreePagedResourcesAssembler;
 

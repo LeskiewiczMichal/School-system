@@ -2,6 +2,7 @@ package com.leskiewicz.schoolsystem.service;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import com.leskiewicz.schoolsystem.degree.Degree;
@@ -16,7 +17,12 @@ import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.UserRepository;
 import com.leskiewicz.schoolsystem.user.UserServiceImpl;
 import com.leskiewicz.schoolsystem.user.dto.PatchUserRequest;
+import com.leskiewicz.schoolsystem.user.dto.UserDto;
+import com.leskiewicz.schoolsystem.user.utils.UserMapper;
 import jakarta.persistence.EntityNotFoundException;
+
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
@@ -50,6 +56,8 @@ public class UserServiceTest {
   private FacultyService facultyService;
   @Mock
   private PasswordEncoder passwordEncoder;
+  @Mock
+  private UserMapper userMapper;
   @InjectMocks
   private UserServiceImpl userService;
 
@@ -84,11 +92,13 @@ public class UserServiceTest {
   //region GetById tests
   @Test
   public void getByIdHappyPath() {
+    UserDto dto = Mockito.mock(UserDto.class);
     given(userRepository.findById(any(Long.class))).willReturn(Optional.of(user));
+    given(userMapper.convertToDto(user)).willReturn(dto);
 
-    User testUser = userService.getById(1L);
+    UserDto testUser = userService.getById(1L);
 
-    Assertions.assertEquals(user, testUser);
+    Assertions.assertEquals(dto, testUser);
   }
   //endregion
 
@@ -122,13 +132,32 @@ public class UserServiceTest {
   //region GetUsers tests
   @Test
   public void getUsersReturnsPagedUsers() {
-    Pageable pageable = Mockito.mock(PageRequest.class);
-    Page<User> mockPage = Mockito.mock(Page.class);
+    Faculty faculty = Mockito.mock(Faculty.class);
+    Degree degree = Mockito.mock(Degree.class);
+    List<User> userList = Arrays.asList(
+            new User(1L, "John", "Doe", "john.doe@example.com", "12345", faculty, degree, Role.ROLE_STUDENT),
+            new User(2L, "Jane", "Smith", "jane.smith@example.com", "12345", faculty, degree, Role.ROLE_ADMIN)
+    );
+    Page<User> usersPage = new PageImpl<>(userList);
 
-    given(userRepository.findAll(pageable)).willReturn(mockPage);
+    given(userRepository.findAll(any(Pageable.class))).willReturn(usersPage);
 
-    Page<User> users = userService.getUsers(pageable);
-    Assertions.assertEquals(users, mockPage);
+    // Mock the behavior of the userMapper
+    UserDto userDto1 = new UserDto(1L, "John", "Doe", "john.doe@example.com", "Some Faculty", "Some Degree", 1L);
+    UserDto userDto2 = new UserDto(2L, "Jane", "Smith", "jane.smith@example.com", "Another Faculty", "Another Degree", 2L);
+    given(userMapper.convertToDto(any(User.class))).willReturn(userDto1, userDto2);
+
+    // Call the method to test
+    Page<UserDto> result = userService.getUsers(PageRequest.of(0, 10));
+
+    // Assert the result
+   Assertions.assertEquals(2, result.getTotalElements());
+    Assertions.assertEquals(userDto1, result.getContent().get(0));
+    Assertions.assertEquals(userDto2, result.getContent().get(1));
+
+    // Verify the interactions with userRepository and userMapper
+    verify(userRepository, times(1)).findAll(any(Pageable.class));
+    verify(userMapper, times(2)).convertToDto(any(User.class));
   }
 
   //region AddUser tests
