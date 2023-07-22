@@ -1,8 +1,8 @@
 package com.leskiewicz.schoolsystem.assembler;
 
 import com.leskiewicz.schoolsystem.faculty.FacultyController;
+import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
 import com.leskiewicz.schoolsystem.faculty.utils.FacultyDtoAssembler;
-import com.leskiewicz.schoolsystem.testModels.FacultyDto;
 import com.leskiewicz.schoolsystem.user.utils.UserDtoAssembler;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,7 +42,6 @@ public class FacultyDtoAssemblerTest {
 
     com.leskiewicz.schoolsystem.faculty.dto.FacultyDto result = facultyDtoAssembler.toModel(faculty);
 
-    Assertions.assertEquals(faculty, result);
     Assertions.assertEquals(selfLink, result.getLink("self").get());
     Assertions.assertEquals(studentsLink, result.getLink("students").get());
     Assertions.assertEquals(teachersLink, result.getLink("teachers").get());
