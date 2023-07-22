@@ -96,17 +96,14 @@ public class DegreeControllerTest extends GenericControllerTest<DegreeDto> {
             BASE_URL, Arrays.asList(computerScience, softwareEngineering, nano), assertions);
     Arguments pageOne = Arguments.of(BASE_URL + "?page=1", Arrays.asList(doctorNano), assertions);
     Arguments descending =
-        Arguments.of(BASE_URL + "?direction=desc", Arrays.asList(math, physics), assertions);
-    Arguments sortByIdDescending =
-        Arguments.of(
-            BASE_URL + "?sort=id&direction=desc", Arrays.asList(math, physics), assertions);
+        Arguments.of(BASE_URL + "?sort=id,desc", Arrays.asList(math, physics), assertions);
     Arguments pageSize20 =
         Arguments.of(
             BASE_URL + "?size=20",
             Arrays.asList(computerScience, softwareEngineering, nano),
             assertions);
 
-    return Stream.of(noParams, pageOne, descending, sortByIdDescending, pageSize20);
+    return Stream.of(noParams, pageOne, descending, pageSize20);
   }
 
   static Stream<Arguments> getApiSingleItemErrorsProvider() {
