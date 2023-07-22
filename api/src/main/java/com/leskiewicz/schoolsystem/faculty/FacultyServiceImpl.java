@@ -96,7 +96,7 @@ public class FacultyServiceImpl implements FacultyService {
   }
 
   @Override
-  public Faculty updateFaculty(PatchFacultyRequest request, Long facultyId) {
+  public FacultyDto updateFaculty(PatchFacultyRequest request, Long facultyId) {
     Faculty faculty =
         facultyRepository
             .findById(facultyId)
@@ -117,7 +117,7 @@ public class FacultyServiceImpl implements FacultyService {
 
     facultyRepository.save(faculty);
     logger.info("Updated faculty with id: {}", facultyId);
-    return faculty;
+    return facultyModelAssembler.toModel(faculty);
   }
 
   @Override

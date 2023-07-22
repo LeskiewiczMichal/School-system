@@ -61,10 +61,9 @@ public class FacultyController {
   @PatchMapping("/{id}")
   public ResponseEntity<FacultyDto> updateFaculty(
       @RequestBody PatchFacultyRequest request, @PathVariable Long id) {
-    Faculty faculty = facultyService.updateFaculty(request, id);
-    FacultyDto facultyDto = facultyModelAssembler.toModel(faculty);
+    FacultyDto faculty = facultyService.updateFaculty(request, id);
 
-    return ResponseEntity.ok(facultyDto);
+    return ResponseEntity.ok(faculty);
   }
 
   @GetMapping("/{id}/students")
