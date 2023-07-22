@@ -49,7 +49,7 @@ public class DegreeServiceImpl implements DegreeService {
   }
 
   @Override
-  public Degree createDegree(CreateDegreeRequest request) {
+  public DegreeDto createDegree(CreateDegreeRequest request) {
     // If the same degree already exist, throws error
     if (degreeRepository
         .findByFacultyNameAndTitleAndFieldOfStudy(
@@ -77,7 +77,7 @@ public class DegreeServiceImpl implements DegreeService {
     ValidationUtils.validate(degree);
     degreeRepository.save(degree);
     logger.info("Created degree: {}", degree);
-    return degree;
+    return degreeMapper.convertToDto(degree);
   }
 
 
