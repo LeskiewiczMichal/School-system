@@ -17,7 +17,7 @@ public interface UserService {
 
   User getByEmail(String email);
 
-  User updateUser(PatchUserRequest request, Long userId);
+  UserDto updateUser(PatchUserRequest request, Long userId);
 
   Faculty getUserFaculty(Long userId);
 

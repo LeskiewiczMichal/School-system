@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public User updateUser(PatchUserRequest request, Long userId) {
+  public UserDto updateUser(PatchUserRequest request, Long userId) {
     // Find user
     User user =
         userRepository
@@ -158,7 +158,7 @@ public class UserServiceImpl implements UserService {
 
     ValidationUtils.validate(user);
     userRepository.save(user);
-    return user;
+    return userMapper.convertToDto(user);
   }
 
   @Override
