@@ -2,6 +2,7 @@ package com.leskiewicz.schoolsystem.faculty;
 
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
+import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
 import com.leskiewicz.schoolsystem.faculty.dto.CreateFacultyRequest;
 import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
 import com.leskiewicz.schoolsystem.faculty.dto.PatchFacultyRequest;
@@ -25,5 +26,5 @@ public interface FacultyService {
   Faculty updateFaculty(PatchFacultyRequest request, Long facultyId);
 
   Page<User> getFacultyUsers(Long facultyId, Pageable pageable, Role role);
-  Page<Degree> getFacultyDegrees(Long facultyId, Pageable pageable);
+  Page<DegreeDto> getFacultyDegrees(Long facultyId, Pageable pageable);
 }

@@ -1,6 +1,5 @@
 package com.leskiewicz.schoolsystem.faculty;
 
-import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
 import com.leskiewicz.schoolsystem.degree.utils.DegreeMapper;
 import com.leskiewicz.schoolsystem.degree.utils.DegreeModelAssembler;
@@ -98,9 +97,9 @@ public class FacultyController {
   @GetMapping("/{id}/degrees")
   public ResponseEntity<RepresentationModel<DegreeDto>> getFacultyDegrees(
       @PathVariable Long id, @ModelAttribute PageableRequest request) {
-    Page<Degree> degrees = facultyService.getFacultyDegrees(id, request.toPageable());
-    Page<DegreeDto> dto = degrees.map(degreeMapper::convertToDto);
+    Page<DegreeDto> degrees = facultyService.getFacultyDegrees(id, request.toPageable());
 
-    return ResponseEntity.ok(HalModelBuilder.halModelOf(degreePagedResourcesAssembler.toModel(dto)).build());
+    return ResponseEntity.ok(
+        HalModelBuilder.halModelOf(degreePagedResourcesAssembler.toModel(degrees)).build());
   }
 }
