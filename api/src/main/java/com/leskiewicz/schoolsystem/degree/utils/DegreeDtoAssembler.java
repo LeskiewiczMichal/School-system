@@ -15,6 +15,10 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class DegreeDtoAssembler extends RepresentationModelAssemblerSupport<DegreeDto, DegreeDto> {
 
 
+    public DegreeDtoAssembler() {
+        super(DegreeController.class, DegreeDto.class);
+    }
+
     @Override
     public DegreeDto toModel(DegreeDto degree) {
         Link selfLink =
@@ -22,7 +26,7 @@ public class DegreeDtoAssembler extends RepresentationModelAssemblerSupport<Degr
                         .withSelfRel();
         Link facultyLink =
                 WebMvcLinkBuilder.linkTo(
-                                methodOn(FacultyController.class).getFacultyById(degree.g()))
+                                methodOn(FacultyController.class).getFacultyById(degree.getFacultyId()))
                         .withRel("faculty");
 
         degree.add(selfLink);
