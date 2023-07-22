@@ -64,11 +64,29 @@ public class FacultyServiceTest {
   // region GetById tests
   @Test
   public void getByIdReturnsCorrectFaculty() {
-    given(facultyRepository.findById(faculty.getId())).willReturn(Optional.of(faculty));
+    // Create a mock Faculty object and FacultyDto
+    Faculty faculty = new Faculty();
+    faculty.setId(1L);
+    faculty.setName("Faculty Name");
 
-    FacultyDto testFaculty = facultyService.getById(faculty.getId());
+    FacultyDto facultyDto = new FacultyDto(1L, "Faculty Name");
 
-    Assertions.assertEquals(faculty, testFaculty);
+    // Mock the behavior of facultyRepository.findById() to return the mock Faculty
+    given(facultyRepository.findById(1L)).willReturn(Optional.of(faculty));
+
+    // Mock the behavior of facultyMapper.convertToDto()
+    given(facultyMapper.convertToDto(any(Faculty.class))).willReturn(facultyDto);
+
+    // Call the method to test
+    FacultyDto result = facultyService.getById(1L);
+
+    // Assert the result
+    Assert.notNull(result);
+    Assertions.assertEquals("Faculty Name", result.getName());
+
+    // Verify the interactions with facultyRepository and facultyMapper
+    verify(facultyRepository, times(1)).findById(1L);
+    verify(facultyMapper, times(1)).convertToDto(any(Faculty.class));
   }
 
   @Test
