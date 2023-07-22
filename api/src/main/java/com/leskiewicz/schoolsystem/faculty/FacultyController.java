@@ -1,8 +1,6 @@
 package com.leskiewicz.schoolsystem.faculty;
 
 import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
-import com.leskiewicz.schoolsystem.degree.utils.DegreeMapper;
-import com.leskiewicz.schoolsystem.degree.utils.DegreeModelAssembler;
 import com.leskiewicz.schoolsystem.dto.request.PageableRequest;
 import com.leskiewicz.schoolsystem.faculty.dto.CreateFacultyRequest;
 import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
@@ -10,14 +8,12 @@ import com.leskiewicz.schoolsystem.faculty.dto.PatchFacultyRequest;
 import com.leskiewicz.schoolsystem.faculty.utils.FacultyModelAssembler;
 import com.leskiewicz.schoolsystem.security.Role;
 import com.leskiewicz.schoolsystem.service.links.PageableLinksService;
-import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserModelAssembler;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
 import org.springframework.http.ResponseEntity;
@@ -32,10 +28,9 @@ public class FacultyController {
   private final FacultyModelAssembler facultyModelAssembler;
   private final PageableLinksService pageableLinksService;
   private final UserModelAssembler userModelAssembler;
-  private final DegreeModelAssembler degreeModelAssembler;
-  private final DegreeMapper degreeMapper;
   PagedResourcesAssembler<FacultyDto> facultyPagedResourcesAssembler;
   PagedResourcesAssembler<DegreeDto> degreePagedResourcesAssembler;
+  PagedResourcesAssembler<UserDto> userPagedResourcesAssembler;
 
   @GetMapping
   public ResponseEntity<RepresentationModel<FacultyDto>> getFaculties(
@@ -73,25 +68,23 @@ public class FacultyController {
   }
 
   @GetMapping("/{id}/students")
-  public ResponseEntity<CollectionModel> getFacultyStudents(
+  public ResponseEntity<RepresentationModel<UserDto>> getFacultyStudents(
       @PathVariable Long id, @ModelAttribute PageableRequest request) {
-    Page<User> users = facultyService.getFacultyUsers(id, request.toPageable(), Role.ROLE_STUDENT);
-    CollectionModel<UserDto> userDtos = userModelAssembler.toCollectionModel(users);
-    pageableLinksService.addLinks(
-        userDtos, users, FacultyController.class, request, "/" + id + "/students");
+    Page<UserDto> users =
+        facultyService.getFacultyUsers(id, request.toPageable(), Role.ROLE_STUDENT);
 
-    return ResponseEntity.ok(userDtos);
+    return ResponseEntity.ok(
+        HalModelBuilder.halModelOf(userPagedResourcesAssembler.toModel(users)).build());
   }
 
   @GetMapping("/{id}/teachers")
-  public ResponseEntity<CollectionModel> getFacultyTeachers(
+  public ResponseEntity<RepresentationModel<UserDto>> getFacultyTeachers(
       @PathVariable Long id, @ModelAttribute PageableRequest request) {
-    Page<User> users = facultyService.getFacultyUsers(id, request.toPageable(), Role.ROLE_TEACHER);
-    CollectionModel<UserDto> userDtos = userModelAssembler.toCollectionModel(users);
-    pageableLinksService.addLinks(
-        userDtos, users, FacultyController.class, request, "/" + id + "/teachers");
+    Page<UserDto> users =
+        facultyService.getFacultyUsers(id, request.toPageable(), Role.ROLE_TEACHER);
 
-    return ResponseEntity.ok(userDtos);
+    return ResponseEntity.ok(
+        HalModelBuilder.halModelOf(userPagedResourcesAssembler.toModel(users)).build());
   }
 
   @GetMapping("/{id}/degrees")

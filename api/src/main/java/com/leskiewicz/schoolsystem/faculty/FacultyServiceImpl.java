@@ -12,12 +12,15 @@ import com.leskiewicz.schoolsystem.faculty.dto.PatchFacultyRequest;
 import com.leskiewicz.schoolsystem.faculty.utils.FacultyModelAssembler;
 import com.leskiewicz.schoolsystem.security.Role;
 import com.leskiewicz.schoolsystem.user.User;
+import com.leskiewicz.schoolsystem.user.dto.UserDto;
+import com.leskiewicz.schoolsystem.user.utils.UserModelAssembler;
 import com.leskiewicz.schoolsystem.utils.StringUtils;
 import com.leskiewicz.schoolsystem.utils.ValidationUtils;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
+import org.apache.catalina.UserDatabase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -31,6 +34,7 @@ public class FacultyServiceImpl implements FacultyService {
   private final FacultyRepository facultyRepository;
   private final FacultyModelAssembler facultyModelAssembler;
   private final DegreeModelAssembler degreeModelAssembler;
+  private final UserModelAssembler userModelAssembler;
   private final Logger logger = LoggerFactory.getLogger(FacultyController.class);
 
   @Override
@@ -117,9 +121,10 @@ public class FacultyServiceImpl implements FacultyService {
   }
 
   @Override
-  public Page<User> getFacultyUsers(Long facultyId, Pageable pageable, Role role) {
+  public Page<UserDto> getFacultyUsers(Long facultyId, Pageable pageable, Role role) {
     facultyExistsCheck(facultyId);
-    return facultyRepository.findFacultyUsers(facultyId, pageable, role);
+    Page<User> users = facultyRepository.findFacultyUsers(facultyId, pageable, role);
+    return users.map(userModelAssembler::toModel);
   }
 
   @Override
