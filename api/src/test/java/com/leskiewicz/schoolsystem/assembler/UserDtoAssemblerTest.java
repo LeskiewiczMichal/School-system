@@ -22,7 +22,6 @@ public class UserDtoAssemblerTest {
 
   // Variables
   UserDto user;
-  @Mock private UserMapperImpl userMapper;
   @InjectMocks private UserDtoAssembler userDtoAssembler;
 
   @BeforeEach
