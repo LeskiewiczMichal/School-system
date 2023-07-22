@@ -9,6 +9,7 @@ import com.leskiewicz.schoolsystem.error.customexception.EntityAlreadyExistsExce
 import com.leskiewicz.schoolsystem.faculty.dto.CreateFacultyRequest;
 import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
 import com.leskiewicz.schoolsystem.faculty.dto.PatchFacultyRequest;
+import com.leskiewicz.schoolsystem.faculty.utils.FacultyMapper;
 import com.leskiewicz.schoolsystem.faculty.utils.FacultyModelAssembler;
 import com.leskiewicz.schoolsystem.security.Role;
 import com.leskiewicz.schoolsystem.user.User;
@@ -35,6 +36,7 @@ public class FacultyServiceImpl implements FacultyService {
   private final FacultyModelAssembler facultyModelAssembler;
   private final DegreeModelAssembler degreeModelAssembler;
   private final UserModelAssembler userModelAssembler;
+  private final FacultyMapper facultyMapper;
   private final Logger logger = LoggerFactory.getLogger(FacultyController.class);
 
   @Override
@@ -92,7 +94,7 @@ public class FacultyServiceImpl implements FacultyService {
     facultyRepository.save(faculty);
     logger.info("Created new faculty with name: {}", faculty.getName());
 
-    return facultyModelAssembler.toModel(faculty);
+    return facultyMapper.convertToDto(faculty);
   }
 
   @Override

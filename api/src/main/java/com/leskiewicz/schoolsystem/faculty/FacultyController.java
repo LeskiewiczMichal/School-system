@@ -53,6 +53,7 @@ public class FacultyController {
   public ResponseEntity<FacultyDto> createFaculty(
       @Valid @RequestBody CreateFacultyRequest request) {
     FacultyDto faculty = facultyService.createFaculty(request);
+    faculty = facultyDtoAssembler.toModel(faculty);
 
     return ResponseEntity.created(faculty.getLink("self").get().toUri()).body(faculty);
   }
@@ -61,6 +62,7 @@ public class FacultyController {
   public ResponseEntity<FacultyDto> updateFaculty(
       @RequestBody PatchFacultyRequest request, @PathVariable Long id) {
     FacultyDto faculty = facultyService.updateFaculty(request, id);
+    faculty = facultyDtoAssembler.toModel(faculty);
 
     return ResponseEntity.ok(faculty);
   }
