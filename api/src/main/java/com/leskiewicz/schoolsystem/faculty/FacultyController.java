@@ -5,6 +5,7 @@ import com.leskiewicz.schoolsystem.dto.request.PageableRequest;
 import com.leskiewicz.schoolsystem.faculty.dto.CreateFacultyRequest;
 import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
 import com.leskiewicz.schoolsystem.faculty.dto.PatchFacultyRequest;
+import com.leskiewicz.schoolsystem.faculty.utils.FacultyDtoAssembler;
 import com.leskiewicz.schoolsystem.faculty.utils.FacultyModelAssembler;
 import com.leskiewicz.schoolsystem.security.Role;
 import com.leskiewicz.schoolsystem.service.links.PageableLinksService;
@@ -26,11 +27,10 @@ public class FacultyController {
 
   private final FacultyService facultyService;
   private final FacultyModelAssembler facultyModelAssembler;
-  private final PageableLinksService pageableLinksService;
-  private final UserModelAssembler userModelAssembler;
-  PagedResourcesAssembler<FacultyDto> facultyPagedResourcesAssembler;
-  PagedResourcesAssembler<DegreeDto> degreePagedResourcesAssembler;
-  PagedResourcesAssembler<UserDto> userPagedResourcesAssembler;
+  private final FacultyDtoAssembler facultyDtoAssembler;
+  private final PagedResourcesAssembler<FacultyDto> facultyPagedResourcesAssembler;
+  private final PagedResourcesAssembler<DegreeDto> degreePagedResourcesAssembler;
+  private final PagedResourcesAssembler<UserDto> userPagedResourcesAssembler;
 
   @GetMapping
   public ResponseEntity<RepresentationModel<FacultyDto>> getFaculties(
