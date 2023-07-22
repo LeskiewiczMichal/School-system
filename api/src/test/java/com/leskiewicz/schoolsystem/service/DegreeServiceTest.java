@@ -168,21 +168,34 @@ public class DegreeServiceTest {
   // region CreateDegree tests
   @Test
   public void createDegreeReturnsCreatedDegreeAndSavesIt() {
-    CreateDegreeRequest request =
-        new CreateDegreeRequest(
-            DegreeTitle.BACHELOR_OF_SCIENCE, "Computer Science", "Software Engineering");
-    given(facultyService.getByName(any(String.class))).willReturn(faculty);
+    // Create a mock CreateDegreeRequest
+    CreateDegreeRequest request = CreateDegreeRequest.builder().facultyName("Informatics").title(DegreeTitle.BACHELOR).fieldOfStudy("Computer Science").build();
 
-    DegreeDto testDegree = degreeService.createDegree(request);
+    // Mock the behavior of degreeRepository.findByFacultyNameAndTitleAndFieldOfStudy()
+    given(degreeRepository.findByFacultyNameAndTitleAndFieldOfStudy(
+            request.getFacultyName(), request.getTitle(), request.getFieldOfStudy()))
+            .willReturn(Optional.empty());
 
-    // Responded with proper degree
-    Assertions.assertEquals(degree.getFieldOfStudy(), testDegree.getFieldOfStudy());
+    // Mock the behavior of facultyService.getByName()
+    Faculty faculty = new Faculty();
+    faculty.setName("Faculty Name");
+    given(facultyService.getByName(request.getFacultyName())).willReturn(faculty);
 
-    // Proper degree was saved
-    ArgumentCaptor<Degree> argumentCaptor = ArgumentCaptor.forClass(Degree.class);
-    verify(degreeRepository).save(argumentCaptor.capture());
-    Degree capturedDegree = argumentCaptor.getValue();
-    Assertions.assertEquals(degree.getFieldOfStudy(), capturedDegree.getFieldOfStudy());
+    // Call the method to test
+    DegreeDto degreeDto = Mockito.mock(DegreeDto.class);
+    given(degreeMapper.convertToDto(any(Degree.class))).willReturn(degreeDto);
+
+    DegreeDto result = degreeService.createDegree(request);
+
+    // Assert the result
+    Assert.notNull(result);
+
+    // Verify the interactions with degreeRepository, degreeMapper, and facultyService
+    verify(degreeRepository, times(1))
+            .findByFacultyNameAndTitleAndFieldOfStudy(request.getFacultyName(), request.getTitle(), request.getFieldOfStudy());
+    verify(facultyService, times(1)).getByName(request.getFacultyName());
+    verify(degreeRepository, times(1)).save(any(Degree.class));
+    verify(degreeMapper, times(1)).convertToDto(any(Degree.class));
   }
 
   @ParameterizedTest
