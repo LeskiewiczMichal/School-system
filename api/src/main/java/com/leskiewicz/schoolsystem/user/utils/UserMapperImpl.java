@@ -24,6 +24,7 @@ public class UserMapperImpl implements UserMapper {
     }
 
     Faculty userFaculty = user.getFaculty();
+    logger.debug("User with ID: {} registered into faculty: {}", user.getId(), userFaculty.getName());
 
     // Create dto from user
     UserDto.UserDtoBuilder userDto =

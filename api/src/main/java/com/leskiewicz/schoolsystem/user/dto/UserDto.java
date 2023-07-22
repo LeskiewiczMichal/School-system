@@ -21,5 +21,5 @@ public class UserDto extends RepresentationModel<UserDto> {
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private final String degree;
 
-  @JsonIgnore @NonNull private final Long facultyId;
+  @JsonIgnore private final Long facultyId;
 }
