@@ -2,6 +2,7 @@ package com.leskiewicz.schoolsystem.service;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import com.leskiewicz.schoolsystem.degree.Degree;
@@ -10,9 +11,11 @@ import com.leskiewicz.schoolsystem.degree.DegreeServiceImpl;
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
 import com.leskiewicz.schoolsystem.degree.dto.CreateDegreeRequest;
 import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
+import com.leskiewicz.schoolsystem.degree.utils.DegreeMapper;
 import com.leskiewicz.schoolsystem.error.customexception.EntityAlreadyExistsException;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.FacultyServiceImpl;
+import io.jsonwebtoken.lang.Assert;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import java.util.List;
@@ -43,6 +46,7 @@ public class DegreeServiceTest {
 
   @Mock private DegreeRepository degreeRepository;
   @Mock private FacultyServiceImpl facultyService;
+  @Mock private DegreeMapper degreeMapper;
 
   @InjectMocks private DegreeServiceImpl degreeService;
 
@@ -75,11 +79,30 @@ public class DegreeServiceTest {
   // region GetById tests
   @Test
   public void getByIdReturnsCorrectDegree() {
-    given(degreeRepository.findById(degree.getId())).willReturn(Optional.of(degree));
+    // Create a mock Degree object and DegreeDto
+    Degree degree = new Degree();
+    degree.setId(1L);
+    degree.setTitle(DegreeTitle.BACHELOR_OF_SCIENCE);
 
-    DegreeDto testDegree = degreeService.getById(degree.getId());
+    DegreeDto degreeDto = DegreeDto.builder().id(1L).title(DegreeTitle.BACHELOR_OF_SCIENCE).build();
 
-    Assertions.assertEquals(degree, testDegree);
+
+    // Mock the behavior of degreeRepository.findById() to return the mock Degree
+    given(degreeRepository.findById(1L)).willReturn(Optional.of(degree));
+
+    // Mock the behavior of degreeMapper.convertToDto()
+    given(degreeMapper.convertToDto(any(Degree.class))).willReturn(degreeDto);
+
+    // Call the method to test
+    DegreeDto result = degreeService.getById(1L);
+
+    // Assert the result
+    Assert.notNull(result);
+    Assertions.assertEquals(DegreeTitle.BACHELOR_OF_SCIENCE, result.getTitle());
+
+    // Verify the interactions with degreeRepository and degreeMapper
+    verify(degreeRepository, times(1)).findById(1L);
+    verify(degreeMapper, times(1)).convertToDto(any(Degree.class));
   }
   // endregion
 
