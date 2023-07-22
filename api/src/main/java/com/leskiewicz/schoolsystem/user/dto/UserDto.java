@@ -1,5 +1,6 @@
 package com.leskiewicz.schoolsystem.user.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
@@ -16,6 +17,7 @@ public class UserDto extends RepresentationModel<UserDto> {
   @NonNull private final String lastName;
   @NonNull private final String email;
   @NonNull private final String faculty;
+  @JsonIgnore @NonNull private final Long facultyId;
 
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private final String degree;
@@ -26,12 +28,14 @@ public class UserDto extends RepresentationModel<UserDto> {
       @JsonProperty("lastName") String lastName,
       @JsonProperty("email") String email,
       @JsonProperty("faculty") String faculty,
-      @JsonProperty("degree") String degree) {
+      @JsonProperty("degree") String degree,
+      @JsonProperty("facultyId") Long facultyId) {
     this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
     this.email = email;
     this.faculty = faculty;
     this.degree = degree;
+    this.facultyId = facultyId;
   }
 }

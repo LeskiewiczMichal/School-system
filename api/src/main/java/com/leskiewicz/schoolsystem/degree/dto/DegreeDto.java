@@ -19,5 +19,5 @@ public class DegreeDto extends RepresentationModel<DegreeDto> {
   @NotNull private final DegreeTitle title;
   @NotNull private final String fieldOfStudy;
   @NotNull private final String faculty;
-  @JsonIgnore private final Long facultyId;
+  @JsonIgnore @NotNull private final Long facultyId;
 }
