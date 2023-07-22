@@ -44,9 +44,9 @@ public class DegreeController {
 
   @PostMapping
   public ResponseEntity<DegreeDto> createDegree(@Valid @RequestBody CreateDegreeRequest request) {
-    Degree degree = degreeService.createDegree(request);
-    DegreeDto degreeDto = degreeModelAssembler.toModel(degree);
+    DegreeDto degree = degreeService.createDegree(request);
+    degree = degreeDtoAssembler.toModel(degree);
 
-    return ResponseEntity.created(degreeDto.getLink("self").get().toUri()).body(degreeDto);
+    return ResponseEntity.created(degree.getLink("self").get().toUri()).body(degree);
   }
 }
