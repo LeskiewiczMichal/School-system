@@ -14,7 +14,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface FacultyService {
 
-  Faculty getById(Long id);
+  FacultyDto getById(Long id);
 
   Faculty getByName(String name);
 

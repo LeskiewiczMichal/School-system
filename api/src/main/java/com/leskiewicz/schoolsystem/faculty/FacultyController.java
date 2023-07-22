@@ -40,6 +40,7 @@ public class FacultyController {
   public ResponseEntity<RepresentationModel<FacultyDto>> getFaculties(
       @ModelAttribute PageableRequest request) {
     Page<FacultyDto> faculties = facultyService.getFaculties(request.toPageable());
+    faculties = faculties.map(facultyDtoAssembler::toModel);
 
     return ResponseEntity.ok(
         HalModelBuilder.halModelOf(facultyPagedResourcesAssembler.toModel(faculties)).build());
@@ -47,10 +48,10 @@ public class FacultyController {
 
   @GetMapping("/{id}")
   public ResponseEntity<FacultyDto> getFacultyById(@PathVariable Long id) {
-    Faculty faculty = facultyService.getById(id);
-    FacultyDto facultyDto = facultyModelAssembler.toModel(faculty);
+    FacultyDto faculty = facultyService.getById(id);
+    faculty = facultyDtoAssembler.toModel(faculty);
 
-    return ResponseEntity.ok(facultyDto);
+    return ResponseEntity.ok(faculty);
   }
 
   @PostMapping
