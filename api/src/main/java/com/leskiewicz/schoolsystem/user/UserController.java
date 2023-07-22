@@ -4,14 +4,13 @@ import com.leskiewicz.schoolsystem.dto.request.PageableRequest;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
 import com.leskiewicz.schoolsystem.faculty.utils.FacultyModelAssembler;
-import com.leskiewicz.schoolsystem.service.links.PageableLinksService;
 import com.leskiewicz.schoolsystem.user.dto.PatchUserRequest;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserDtoAssembler;
 import com.leskiewicz.schoolsystem.user.utils.UserModelAssembler;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.hateoas.CollectionModel;
+import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
 import org.springframework.http.ResponseEntity;
@@ -25,8 +24,8 @@ public class UserController {
   private final UserService userService;
   private final UserModelAssembler userModelAssembler;
   private final FacultyModelAssembler facultyModelAssembler;
-  private final PageableLinksService pageableLinksService;
   private final UserDtoAssembler userDtoAssembler;
+  private final PagedResourcesAssembler<UserDto> userPagedResourcesAssembler;
 
   @GetMapping
   public ResponseEntity<RepresentationModel<UserDto>> getUsers(
@@ -34,7 +33,8 @@ public class UserController {
     Page<UserDto> users = userService.getUsers(request.toPageable());
     users = users.map(userDtoAssembler::toModel);
 
-    return ResponseEntity.ok(HalModelBuilder.halModelOf(users).build());
+    return ResponseEntity.ok(
+        HalModelBuilder.halModelOf(userPagedResourcesAssembler.toModel(users)).build());
   }
 
   @GetMapping("/{id}")
