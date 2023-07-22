@@ -194,15 +194,15 @@ public class FacultyServiceTest {
     given(facultyRepository.findById(any(Long.class))).willReturn(Optional.of(faculty));
     PatchFacultyRequest request = new PatchFacultyRequest("new name");
 
-    FacultyDto mockDto 
-    given(facultyMapper.convertToDto(any(Faculty.class))).willReturn(faculty);
+    FacultyDto mockDto = Mockito.mock(FacultyDto.class);
+    given(facultyMapper.convertToDto(any(Faculty.class))).willReturn(mockDto);
 
     FacultyDto result = facultyService.updateFaculty(request, faculty.getId());
 
     faculty.setName("New name");
 
     verify(facultyRepository).save(faculty);
-    Assertions.assertEquals(faculty, result);
+    Assertions.assertEquals(mockDto, result);
   }
 
   @Test
