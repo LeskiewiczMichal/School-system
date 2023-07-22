@@ -48,10 +48,10 @@ public class UserController {
   @PatchMapping("/{id}")
   public ResponseEntity<UserDto> patchUser(
       @RequestBody PatchUserRequest request, @PathVariable Long id) {
-    User user = userService.updateUser(request, id);
-    UserDto userDto = userModelAssembler.toModel(user);
+    UserDto user = userService.updateUser(request, id);
+    user = userDtoAssembler.toModel(user);
 
-    return ResponseEntity.ok(userDto);
+    return ResponseEntity.ok(user);
   }
 
   @GetMapping("/{id}/faculty")
