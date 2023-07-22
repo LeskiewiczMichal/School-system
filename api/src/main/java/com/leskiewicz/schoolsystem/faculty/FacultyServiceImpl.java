@@ -2,10 +2,14 @@ package com.leskiewicz.schoolsystem.faculty;
 
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
+import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
+import com.leskiewicz.schoolsystem.degree.utils.DegreeModelAssembler;
 import com.leskiewicz.schoolsystem.error.ErrorMessages;
 import com.leskiewicz.schoolsystem.error.customexception.EntityAlreadyExistsException;
 import com.leskiewicz.schoolsystem.faculty.dto.CreateFacultyRequest;
+import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
 import com.leskiewicz.schoolsystem.faculty.dto.PatchFacultyRequest;
+import com.leskiewicz.schoolsystem.faculty.utils.FacultyModelAssembler;
 import com.leskiewicz.schoolsystem.security.Role;
 import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.utils.StringUtils;
@@ -25,6 +29,8 @@ import org.springframework.stereotype.Service;
 public class FacultyServiceImpl implements FacultyService {
 
   private final FacultyRepository facultyRepository;
+  private final FacultyModelAssembler facultyModelAssembler;
+  private final DegreeModelAssembler degreeModelAssembler;
   private final Logger logger = LoggerFactory.getLogger(FacultyController.class);
 
   @Override
@@ -45,8 +51,9 @@ public class FacultyServiceImpl implements FacultyService {
   }
 
   @Override
-  public Page<Faculty> getFaculties(Pageable pageable) {
-    return facultyRepository.findAll(pageable);
+  public Page<FacultyDto> getFaculties(Pageable pageable) {
+    Page<Faculty> faculties = facultyRepository.findAll(pageable);
+    return faculties.map(facultyModelAssembler::toModel);
   }
 
   @Override
@@ -116,9 +123,10 @@ public class FacultyServiceImpl implements FacultyService {
   }
 
   @Override
-  public Page<Degree> getFacultyDegrees(Long facultyId, Pageable pageable) {
+  public Page<DegreeDto> getFacultyDegrees(Long facultyId, Pageable pageable) {
     facultyExistsCheck(facultyId);
-    return facultyRepository.findFacultyDegrees(facultyId, pageable);
+    Page<Degree> degrees = facultyRepository.findFacultyDegrees(facultyId, pageable);
+    return degrees.map(degreeModelAssembler::toModel);
   }
 
   private void facultyExistsCheck(Long facultyId) {

@@ -3,6 +3,7 @@ package com.leskiewicz.schoolsystem.faculty;
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
 import com.leskiewicz.schoolsystem.faculty.dto.CreateFacultyRequest;
+import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
 import com.leskiewicz.schoolsystem.faculty.dto.PatchFacultyRequest;
 import com.leskiewicz.schoolsystem.security.Role;
 import com.leskiewicz.schoolsystem.user.User;
@@ -15,7 +16,7 @@ public interface FacultyService {
 
   Faculty getByName(String name);
 
-  Page<Faculty> getFaculties(Pageable pageable);
+  Page<FacultyDto> getFaculties(Pageable pageable);
 
   Degree getDegreeByTitleAndFieldOfStudy(Faculty faculty, DegreeTitle title, String fieldOfStudy);
 

@@ -4,8 +4,11 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.degree.DegreeController;
+import com.leskiewicz.schoolsystem.degree.DegreeTitle;
 import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
 import com.leskiewicz.schoolsystem.faculty.FacultyController;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
@@ -43,6 +46,22 @@ public class DegreeModelAssembler extends RepresentationModelAssemblerSupport<De
   @Override
   public CollectionModel<DegreeDto> toCollectionModel(Iterable<? extends Degree> entites) {
 
-    return super.toCollectionModel(entites);
+    CollectionModel<DegreeDto> collection = super.toCollectionModel(entites).withFallbackType(DegreeDto.class);
+
+//    if (collection.getContent().isEmpty()) {
+//      // Creating an empty list of DegreeDto
+////      List<DegreeDto> emptyList = new ArrayList<>();
+//
+//      // Converting the empty list to a CollectionModel
+////      CollectionModel<DegreeDto> emptyCollection = CollectionModel.of(emptyList);
+//
+//      // Setting the emptyCollection to _embedded.degrees field
+////      collection
+////          .getContent()
+////          .add(new DegreeDto(1L, DegreeTitle.BACHELOR_OF_SCIENCE, "empty", "empty"));
+//      collection.getContent().addAll(new ArrayList<DegreeDto>());
+//    }
+
+    return collection.withFallbackType(DegreeDto.class);
   }
 }
