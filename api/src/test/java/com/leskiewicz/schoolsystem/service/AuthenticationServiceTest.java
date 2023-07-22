@@ -157,8 +157,16 @@ public class AuthenticationServiceTest {
         given(userService.getByEmail(newUser.getEmail())).willReturn(newUser);
         given(jwtUtils.generateToken(any(User.class))).willReturn("jwtToken");
 
-        UserDto mockUserDto = Mockito.mock(UserDto.class);
-        given(userModelAssembler.toModel(any(User.class))).willReturn(mockUserDto);
+        UserDto mockUserDto = UserDto.builder()
+                .id(8L)
+                .firstName(newUser.getFirstName())
+                .lastName(newUser.getLastName())
+                .faculty(newUser.getFaculty().getName())
+                .degree(newUser.getDegree().getFieldOfStudy())
+                .email(newUser.getEmail())
+                .facultyId(10L)
+                .build();
+        given(userMapper.convertToDto(any(User.class))).willReturn(mockUserDto);
 
         AuthenticationResponse response = authenticationService.authenticate(request);
 
@@ -169,6 +177,7 @@ public class AuthenticationServiceTest {
                 .faculty(newUser.getFaculty().getName())
                 .degree(newUser.getDegree().getFieldOfStudy())
                 .email(newUser.getEmail())
+                .facultyId(10L)
                 .build();
         // Proper response
         Assertions.assertEquals("jwtToken", response.getToken());
