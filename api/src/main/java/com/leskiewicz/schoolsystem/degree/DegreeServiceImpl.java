@@ -1,6 +1,8 @@
 package com.leskiewicz.schoolsystem.degree;
 
 import com.leskiewicz.schoolsystem.degree.dto.CreateDegreeRequest;
+import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
+import com.leskiewicz.schoolsystem.degree.utils.DegreeMapper;
 import com.leskiewicz.schoolsystem.error.ErrorMessages;
 import com.leskiewicz.schoolsystem.error.customexception.EntityAlreadyExistsException;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
@@ -24,14 +26,15 @@ public class DegreeServiceImpl implements DegreeService {
   private final DegreeRepository degreeRepository;
   private final FacultyService facultyService;
   private final UserMapper userMapper;
+  private final DegreeMapper degreeMapper;
   private final Logger logger = LoggerFactory.getLogger(DegreeServiceImpl.class);
 
   @Override
-  public Degree getById(Long id) {
-    return degreeRepository
+  public DegreeDto getById(Long id) {
+    return degreeMapper.convertToDto(degreeRepository
         .findById(id)
         .orElseThrow(
-            () -> new EntityNotFoundException(ErrorMessages.objectWithIdNotFound("Degree", id)));
+            () -> new EntityNotFoundException(ErrorMessages.objectWithIdNotFound("Degree", id))));
   }
 
   @Override
