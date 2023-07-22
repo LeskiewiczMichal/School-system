@@ -10,6 +10,7 @@ import com.leskiewicz.schoolsystem.security.utils.JwtUtils;
 import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.UserService;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
+import com.leskiewicz.schoolsystem.user.utils.UserMapper;
 import com.leskiewicz.schoolsystem.user.utils.UserModelAssembler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,7 +27,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
   private final PasswordEncoder passwordEncoder;
   private final JwtUtils jwtUtils;
   private final AuthenticationManager authenticationManager;
-  private final UserModelAssembler userModelAssembler;
+  private final UserMapper userMapper;
 
   public AuthenticationResponse register(RegisterRequest request) {
     // Retrieve faculty and degree
@@ -49,7 +50,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     // Save new user and generate jwt token
     userService.addUser(user);
     var jwtToken = jwtUtils.generateToken(user);
-    UserDto userDto = userModelAssembler.toModel(user);
+    UserDto userDto = userMapper.convertToDto(user);
 
     return new AuthenticationResponse(jwtToken, userDto);
   }
@@ -60,7 +61,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     User user = userService.getByEmail(request.getEmail());
     var jwtToken = jwtUtils.generateToken(user);
-    UserDto userDto = userModelAssembler.toModel(user);
+    UserDto userDto = userMapper.convertToDto(user);
 
     return new AuthenticationResponse(jwtToken, userDto);
   }

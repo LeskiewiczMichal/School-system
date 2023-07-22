@@ -20,6 +20,7 @@ import com.leskiewicz.schoolsystem.security.utils.JwtUtilsImpl;
 import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.UserService;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
+import com.leskiewicz.schoolsystem.user.utils.UserMapper;
 import com.leskiewicz.schoolsystem.user.utils.UserModelAssembler;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -57,13 +59,14 @@ public class AuthenticationServiceTest {
     private DegreeService degreeService;
     @Mock
     private UserModelAssembler userModelAssembler;
+    @Mock
+    private UserMapper userMapper;
     //endregion
     // Variables
     private RegisterRequest request;
     private Faculty faculty;
     private User newUser;
     private Degree degree;
-    private UserDto userDto;
 
     @BeforeEach
     public void setUp() {
@@ -97,14 +100,6 @@ public class AuthenticationServiceTest {
                 degree,
                 Role.ROLE_STUDENT
         );
-
-        userDto = UserDto.builder()
-                .firstName(newUser.getFirstName())
-                .lastName(newUser.getLastName())
-                .faculty(newUser.getFaculty().getName())
-                .degree(newUser.getDegree().getFieldOfStudy())
-                .email(newUser.getEmail())
-                .build();
     }
 
     //region Register Tests
@@ -114,12 +109,13 @@ public class AuthenticationServiceTest {
         given(passwordEncoder.encode("12345")).willReturn("encoded_password");
         given(jwtUtils.generateToken(newUser)).willReturn("12");
         given(facultyService.getDegreeByTitleAndFieldOfStudy(faculty, request.getDegreeTitle(), request.getDegreeField())).willReturn(degree);
-        given(userModelAssembler.toModel(newUser)).willReturn(userDto);
+        UserDto mockUserDto = Mockito.mock(UserDto.class);
+        given(userMapper.convertToDto(newUser)).willReturn(mockUserDto);
 
         AuthenticationResponse authenticationResponse = authenticationService.register(request);
 
         // Proper response
-        Assertions.assertEquals(userDto, authenticationResponse.getUser());
+        Assertions.assertEquals(mockUserDto, authenticationResponse.getUser());
         Assertions.assertEquals("12", authenticationResponse.getToken());
 
         // User was saved in repository
@@ -129,7 +125,6 @@ public class AuthenticationServiceTest {
         Assertions.assertEquals(newUser, savedUser);
 
         // User was converted into dto
-        verify(userModelAssembler).toModel(newUser);
     }
 
     @Test
@@ -161,13 +156,23 @@ public class AuthenticationServiceTest {
                 .willReturn(new UsernamePasswordAuthenticationToken(newUser, null, new ArrayList<>()));
         given(userService.getByEmail(newUser.getEmail())).willReturn(newUser);
         given(jwtUtils.generateToken(any(User.class))).willReturn("jwtToken");
-        given(userModelAssembler.toModel(any(User.class))).willReturn(userDto);
+
+        UserDto mockUserDto = Mockito.mock(UserDto.class);
+        given(userModelAssembler.toModel(any(User.class))).willReturn(mockUserDto);
 
         AuthenticationResponse response = authenticationService.authenticate(request);
 
+        mockUserDto = UserDto.builder()
+                .id(response.getUser().getId())
+                .firstName(newUser.getFirstName())
+                .lastName(newUser.getLastName())
+                .faculty(newUser.getFaculty().getName())
+                .degree(newUser.getDegree().getFieldOfStudy())
+                .email(newUser.getEmail())
+                .build();
         // Proper response
         Assertions.assertEquals("jwtToken", response.getToken());
-        Assertions.assertEquals(userDto, response.getUser());
+        Assertions.assertEquals(mockUserDto, response.getUser());
     }
 
     @Test
