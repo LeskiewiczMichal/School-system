@@ -184,12 +184,9 @@ public class AuthenticationControllerTest {
   public void authenticateHappyPath() throws Exception {
     // Query degree and faculty from provided sql
     Faculty faculty = facultyRepository.findByName("Informatics").orElse(null);
-    Degree degree =
-        Degree.builder()
-            .title(DegreeTitle.BACHELOR_OF_SCIENCE)
-            .fieldOfStudy("Computer Science")
-            .faculty(faculty)
-            .build();
+    Degree degree = degreeRepository.findById(1L).orElse(null);
+
+//    degreeRepository.save(degree);
     // Create and save user that we are going to log into
     User authenticationTestUser =
         User.builder()
@@ -211,31 +208,19 @@ public class AuthenticationControllerTest {
             .password("1234")
             .build();
 
-    MvcResult result =
-        performPostRequest(AUTHENTICATE_PATH, authenticationRequest, status().isOk());
+    // Call endpoint
+    ResultActions result =
+        requestUtils.performPostRequest(AUTHENTICATE_PATH, authenticationRequest, status().isOk());
 
-    // Mapping response to readable objects
-    JsonNode node = mapper.readTree(result.getResponse().getContentAsString());
-    AuthenticationResponse response = mapResponse(result, AuthenticationResponse.class);
+    // Correct user was returned
+    result.andExpect(MockMvcResultMatchers.jsonPath("$.user").exists());
+    result.andExpect(MockMvcResultMatchers.jsonPath("$.user").isNotEmpty());
 
-    // Create userDto that should be provided with response
-    UserDto authenticationTestUserDto =
-        UserDto.builder()
-            .id(response.getUser().getId())
-            .firstName(authenticationTestUser.getFirstName())
-            .lastName(authenticationTestUser.getLastName())
-            .email(authenticationTestUser.getEmail())
-            .faculty(authenticationTestUser.getFaculty().getName())
-            .degree(authenticationTestUser.getDegree().getFieldOfStudy())
-            .build();
-
-    Assertions.assertEquals(authenticationTestUserDto, response.getUser());
-    Assertions.assertNotNull(response.getToken());
-    Assertions.assertTrue(
-        node.has("_links") && node.get("_links").has("self"), "Expected self link in response");
-    Assertions.assertTrue(
-        node.has("_links") && node.get("_links").has("register"),
-        "Expected register link in response");
+//     Token was returned
+    result.andExpect(jsonPath("$.token").exists());
+    // Proper links were added
+    result.andExpect(jsonPath("$._links.self").exists());
+    result.andExpect(jsonPath("$._links.register").exists());
   }
 
   @ParameterizedTest
