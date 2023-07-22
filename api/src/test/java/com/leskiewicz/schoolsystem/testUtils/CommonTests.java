@@ -17,15 +17,16 @@ public class CommonTests {
         requestUtils
             .performGetRequest(baseApiPath, status().isOk())
             .andExpect(
-                jsonPath("$._links.self.href").value(String.format(query, 0, 10, "id", "asc")))
-            .andExpect(
-                jsonPath("$._links.first.href").value(String.format(query, 0, 10, "id", "asc")))
-            .andExpect(
-                jsonPath("$._links.last.href")
-                    .value(String.format(query, lastPage, 10, "id", "asc")));
+                jsonPath("$._links.self.href").value(String.format(query, 0, 10, "id", "asc")));
+
     if (lastPage != 0) {
-      result.andExpect(
-          jsonPath("$._links.next.href").value(String.format(query, 1, 10, "id", "asc")));
+      result
+          .andExpect(jsonPath("$._links.next.href").value(String.format(query, 1, 10, "id", "asc")))
+          .andExpect(
+              jsonPath("$._links.first.href").value(String.format(query, 0, 10, "id", "asc")))
+          .andExpect(
+              jsonPath("$._links.last.href")
+                  .value(String.format(query, lastPage, 10, "id", "asc")));
     }
 
     // Page 1
@@ -49,15 +50,16 @@ public class CommonTests {
         requestUtils
             .performGetRequest(baseApiPath + "?sort=id,desc", status().isOk())
             .andExpect(
-                jsonPath("$._links.self.href").value(String.format(query, 0, 10, "id", "desc")))
-            .andExpect(
-                jsonPath("$._links.first.href").value(String.format(query, 0, 10, "id", "desc")))
-            .andExpect(
-                jsonPath("$._links.last.href")
-                    .value(String.format(query, lastPage, 10, "id", "desc")));
+                jsonPath("$._links.self.href").value(String.format(query, 0, 10, "id", "desc")));
     if (lastPage != 0) {
-      result.andExpect(
-          jsonPath("$._links.next.href").value(String.format(query, 1, 10, "id", "desc")));
+      result
+          .andExpect(
+              jsonPath("$._links.next.href").value(String.format(query, 1, 10, "id", "desc")))
+          .andExpect(
+              jsonPath("$._links.first.href").value(String.format(query, 0, 10, "id", "desc")))
+          .andExpect(
+              jsonPath("$._links.last.href")
+                  .value(String.format(query, lastPage, 10, "id", "desc")));
     }
 
     // Page size 20
