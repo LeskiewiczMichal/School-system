@@ -92,6 +92,7 @@ public class FacultyController {
       @PathVariable Long id, @ModelAttribute PageableRequest request) {
     Page<DegreeDto> degrees = facultyService.getFacultyDegrees(id, request.toPageable());
 
+
     return ResponseEntity.ok(
         HalModelBuilder.halModelOf(degreePagedResourcesAssembler.toModel(degrees)).build());
   }

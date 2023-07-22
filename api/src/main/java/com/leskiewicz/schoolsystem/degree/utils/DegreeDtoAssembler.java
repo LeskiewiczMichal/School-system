@@ -1,0 +1,33 @@
+package com.leskiewicz.schoolsystem.degree.utils;
+
+import com.leskiewicz.schoolsystem.degree.Degree;
+import com.leskiewicz.schoolsystem.degree.DegreeController;
+import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
+import com.leskiewicz.schoolsystem.faculty.FacultyController;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.stereotype.Component;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
+@Component
+public class DegreeDtoAssembler extends RepresentationModelAssemblerSupport<DegreeDto, DegreeDto> {
+
+
+    @Override
+    public DegreeDto toModel(DegreeDto degree) {
+        Link selfLink =
+                WebMvcLinkBuilder.linkTo(methodOn(DegreeController.class).getDegreeById(degree.getId()))
+                        .withSelfRel();
+        Link facultyLink =
+                WebMvcLinkBuilder.linkTo(
+                                methodOn(FacultyController.class).getFacultyById(degree.g()))
+                        .withRel("faculty");
+
+        degree.add(selfLink);
+        degree.add(facultyLink);
+
+        return degree;
+    }
+}

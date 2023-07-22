@@ -3,6 +3,7 @@ package com.leskiewicz.schoolsystem.faculty;
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
 import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
+import com.leskiewicz.schoolsystem.degree.utils.DegreeMapper;
 import com.leskiewicz.schoolsystem.degree.utils.DegreeModelAssembler;
 import com.leskiewicz.schoolsystem.error.ErrorMessages;
 import com.leskiewicz.schoolsystem.error.customexception.EntityAlreadyExistsException;
@@ -36,6 +37,7 @@ public class FacultyServiceImpl implements FacultyService {
   private final FacultyModelAssembler facultyModelAssembler;
   private final DegreeModelAssembler degreeModelAssembler;
   private final UserModelAssembler userModelAssembler;
+  private final DegreeMapper degreeMapper;
   private final FacultyMapper facultyMapper;
   private final Logger logger = LoggerFactory.getLogger(FacultyController.class);
 
@@ -133,7 +135,7 @@ public class FacultyServiceImpl implements FacultyService {
   public Page<DegreeDto> getFacultyDegrees(Long facultyId, Pageable pageable) {
     facultyExistsCheck(facultyId);
     Page<Degree> degrees = facultyRepository.findFacultyDegrees(facultyId, pageable);
-    return degrees.map(degreeModelAssembler::toModel);
+    return degrees.map(degreeMapper::convertToDto);
   }
 
   private void facultyExistsCheck(Long facultyId) {

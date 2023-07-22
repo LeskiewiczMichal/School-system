@@ -1,5 +1,6 @@
 package com.leskiewicz.schoolsystem.faculty.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,4 +17,5 @@ public class FacultyDto extends RepresentationModel<FacultyDto> {
   @NonNull private final Long id;
 
   @NonNull private final String name;
+
 }
