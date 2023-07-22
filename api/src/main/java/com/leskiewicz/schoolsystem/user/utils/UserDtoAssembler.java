@@ -15,7 +15,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class UserDtoAssembler extends RepresentationModelAssemblerSupport<UserDto, UserDto> {
 
 
-    public UserDtoAssembler(Class<?> controllerClass, Class<UserDto> resourceType) {
+    public UserDtoAssembler() {
         super(UserController.class, UserDto.class);
     }
 

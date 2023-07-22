@@ -10,6 +10,7 @@ import org.springframework.hateoas.server.core.Relation;
 @Getter
 @Builder
 @Relation(collectionRelation = "users")
+@AllArgsConstructor
 public class UserDto extends RepresentationModel<UserDto> {
 
   @NonNull private final Long id;
@@ -17,25 +18,8 @@ public class UserDto extends RepresentationModel<UserDto> {
   @NonNull private final String lastName;
   @NonNull private final String email;
   @NonNull private final String faculty;
-  @JsonIgnore @NonNull private final Long facultyId;
-
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private final String degree;
 
-  public UserDto(
-      @JsonProperty("id") Long id,
-      @JsonProperty("firstName") String firstName,
-      @JsonProperty("lastName") String lastName,
-      @JsonProperty("email") String email,
-      @JsonProperty("faculty") String faculty,
-      @JsonProperty("degree") String degree,
-      @JsonProperty("facultyId") Long facultyId) {
-    this.id = id;
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.email = email;
-    this.faculty = faculty;
-    this.degree = degree;
-    this.facultyId = facultyId;
-  }
+  @JsonIgnore @NonNull private final Long facultyId;
 }

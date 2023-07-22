@@ -15,6 +15,7 @@ import com.leskiewicz.schoolsystem.faculty.utils.FacultyModelAssembler;
 import com.leskiewicz.schoolsystem.security.Role;
 import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
+import com.leskiewicz.schoolsystem.user.utils.UserMapper;
 import com.leskiewicz.schoolsystem.user.utils.UserModelAssembler;
 import com.leskiewicz.schoolsystem.utils.StringUtils;
 import com.leskiewicz.schoolsystem.utils.ValidationUtils;
@@ -34,11 +35,9 @@ import org.springframework.stereotype.Service;
 public class FacultyServiceImpl implements FacultyService {
 
   private final FacultyRepository facultyRepository;
-  private final FacultyModelAssembler facultyModelAssembler;
-  private final DegreeModelAssembler degreeModelAssembler;
-  private final UserModelAssembler userModelAssembler;
   private final DegreeMapper degreeMapper;
   private final FacultyMapper facultyMapper;
+  private final UserMapper userMapper;
   private final Logger logger = LoggerFactory.getLogger(FacultyController.class);
 
   @Override
@@ -61,7 +60,7 @@ public class FacultyServiceImpl implements FacultyService {
   @Override
   public Page<FacultyDto> getFaculties(Pageable pageable) {
     Page<Faculty> faculties = facultyRepository.findAll(pageable);
-    return faculties.map(facultyModelAssembler::toModel);
+    return faculties.map(facultyMapper::convertToDto);
   }
 
   @Override
@@ -121,14 +120,14 @@ public class FacultyServiceImpl implements FacultyService {
 
     facultyRepository.save(faculty);
     logger.info("Updated faculty with id: {}", facultyId);
-    return facultyModelAssembler.toModel(faculty);
+    return facultyMapper.convertToDto(faculty);
   }
 
   @Override
   public Page<UserDto> getFacultyUsers(Long facultyId, Pageable pageable, Role role) {
     facultyExistsCheck(facultyId);
     Page<User> users = facultyRepository.findFacultyUsers(facultyId, pageable, role);
-    return users.map(userModelAssembler::toModel);
+    return users.map(userMapper::convertToDto);
   }
 
   @Override

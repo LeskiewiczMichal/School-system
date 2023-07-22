@@ -5,6 +5,7 @@ import com.leskiewicz.schoolsystem.error.ErrorMessages;
 import com.leskiewicz.schoolsystem.error.customexception.EntityAlreadyExistsException;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.FacultyService;
+import com.leskiewicz.schoolsystem.user.utils.UserMapper;
 import com.leskiewicz.schoolsystem.utils.StringUtils;
 import com.leskiewicz.schoolsystem.utils.ValidationUtils;
 import jakarta.persistence.EntityNotFoundException;
@@ -22,6 +23,7 @@ public class DegreeServiceImpl implements DegreeService {
 
   private final DegreeRepository degreeRepository;
   private final FacultyService facultyService;
+  private final UserMapper userMapper;
   private final Logger logger = LoggerFactory.getLogger(DegreeServiceImpl.class);
 
   @Override

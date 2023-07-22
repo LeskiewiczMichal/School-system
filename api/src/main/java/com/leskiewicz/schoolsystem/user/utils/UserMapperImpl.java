@@ -1,6 +1,7 @@
 package com.leskiewicz.schoolsystem.user.utils;
 
 import com.leskiewicz.schoolsystem.error.ErrorMessages;
+import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.security.Role;
 import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
@@ -22,6 +23,8 @@ public class UserMapperImpl implements UserMapper {
       throw new IllegalArgumentException(ErrorMessages.objectInvalidPropertyMissing("User", "id"));
     }
 
+    Faculty userFaculty = user.getFaculty();
+
     // Create dto from user
     UserDto.UserDtoBuilder userDto =
         UserDto.builder()
@@ -29,7 +32,8 @@ public class UserMapperImpl implements UserMapper {
             .firstName(user.getFirstName())
             .lastName(user.getLastName())
             .email(user.getEmail())
-            .faculty(user.getFaculty().getName());
+            .faculty(userFaculty.getName())
+            .facultyId(userFaculty.getId());
     if (user.getRole() == Role.ROLE_STUDENT) {
       userDto.degree(user.getDegree().getFieldOfStudy());
     } else {

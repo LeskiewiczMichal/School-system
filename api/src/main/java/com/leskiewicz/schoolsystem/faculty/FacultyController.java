@@ -11,6 +11,7 @@ import com.leskiewicz.schoolsystem.faculty.utils.FacultyModelAssembler;
 import com.leskiewicz.schoolsystem.security.Role;
 import com.leskiewicz.schoolsystem.service.links.PageableLinksService;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
+import com.leskiewicz.schoolsystem.user.utils.UserDtoAssembler;
 import com.leskiewicz.schoolsystem.user.utils.UserModelAssembler;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -30,6 +31,7 @@ public class FacultyController {
   private final FacultyModelAssembler facultyModelAssembler;
   private final FacultyDtoAssembler facultyDtoAssembler;
   private final DegreeDtoAssembler degreeDtoAssembler;
+  private final UserDtoAssembler userDtoAssembler;
   private final PagedResourcesAssembler<FacultyDto> facultyPagedResourcesAssembler;
   private final PagedResourcesAssembler<DegreeDto> degreePagedResourcesAssembler;
   private final PagedResourcesAssembler<UserDto> userPagedResourcesAssembler;
@@ -74,6 +76,7 @@ public class FacultyController {
       @PathVariable Long id, @ModelAttribute PageableRequest request) {
     Page<UserDto> users =
         facultyService.getFacultyUsers(id, request.toPageable(), Role.ROLE_STUDENT);
+    users = users.map(userDtoAssembler::toModel);
 
     return ResponseEntity.ok(
         HalModelBuilder.halModelOf(userPagedResourcesAssembler.toModel(users)).build());
@@ -84,6 +87,7 @@ public class FacultyController {
       @PathVariable Long id, @ModelAttribute PageableRequest request) {
     Page<UserDto> users =
         facultyService.getFacultyUsers(id, request.toPageable(), Role.ROLE_TEACHER);
+    users = users.map(userDtoAssembler::toModel);
 
     return ResponseEntity.ok(
         HalModelBuilder.halModelOf(userPagedResourcesAssembler.toModel(users)).build());

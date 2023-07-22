@@ -70,7 +70,8 @@ public class LoggingUtils {
         LoggingUtils.maskInfo(userDto.getLastName()),
         LoggingUtils.maskEmail(userDto.getEmail()),
         userDto.getFaculty(),
-        userDto.getDegree());
+        userDto.getDegree(),
+            null);
   }
 
   private static CollectionModel<?> maskCollectionModel(CollectionModel<?> collectionModel) {
