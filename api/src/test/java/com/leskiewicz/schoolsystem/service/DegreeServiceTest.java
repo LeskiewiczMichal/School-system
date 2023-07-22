@@ -18,6 +18,8 @@ import com.leskiewicz.schoolsystem.faculty.FacultyServiceImpl;
 import io.jsonwebtoken.lang.Assert;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
+
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -34,6 +36,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
@@ -117,13 +120,35 @@ public class DegreeServiceTest {
   // region GetDegrees tests
   @Test
   public void getDegreesReturnsPagedDegrees() {
-    Pageable pageable = Mockito.mock(PageRequest.class);
-    Page<Degree> mockPage = Mockito.mock(Page.class);
+    // Create some test data for Degree and DegreeDto
+    List<Degree> degreeList = Arrays.asList(
+            Degree.builder().id(1L).title(DegreeTitle.BACHELOR_OF_SCIENCE).build(),
+            Degree.builder().id(2L).title(DegreeTitle.BACHELOR_OF_SCIENCE).build()
+    );
+    Page<Degree> degreesPage = new PageImpl<>(degreeList);
 
-    given(degreeRepository.findAll(pageable)).willReturn(mockPage);
+    // Mock the behavior of degreeRepository.findAll()
+    given(degreeRepository.findAll(any(Pageable.class))).willReturn(degreesPage);
 
-    Page<DegreeDto> degrees = degreeService.getDegrees(pageable);
-    Assertions.assertEquals(mockPage, degrees);
+    // Mock the behavior of degreeMapper.convertToDto()
+    List<DegreeDto> degreeDtoList = Arrays.asList(
+            DegreeDto.builder().id(1L).title(DegreeTitle.BACHELOR_OF_SCIENCE).build(),
+            DegreeDto.builder().id(2L).title(DegreeTitle.BACHELOR_OF_SCIENCE).build()
+    );
+    given(degreeMapper.convertToDto(any(Degree.class))).willReturn(degreeDtoList.get(0), degreeDtoList.get(1));
+
+    // Call the method to test
+    Page<DegreeDto> result = degreeService.getDegrees(PageRequest.of(0, 10));
+
+    // Assert the result
+    Assert.notNull(result);
+    Assertions.assertEquals(2, result.getTotalElements());
+    Assertions.assertEquals(DegreeTitle.BACHELOR_OF_SCIENCE, result.getContent().get(0).getTitle());
+    Assertions.assertEquals(DegreeTitle.BACHELOR_OF_SCIENCE, result.getContent().get(1).getTitle());
+
+    // Verify the interactions with degreeRepository and degreeMapper
+    verify(degreeRepository, times(1)).findAll(any(Pageable.class));
+    verify(degreeMapper, times(2)).convertToDto(any(Degree.class));
   }
   // endregion
 
