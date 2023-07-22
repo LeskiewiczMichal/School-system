@@ -7,6 +7,8 @@ import com.leskiewicz.schoolsystem.error.UserAlreadyExistsException;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.FacultyService;
 import com.leskiewicz.schoolsystem.user.dto.PatchUserRequest;
+import com.leskiewicz.schoolsystem.user.dto.UserDto;
+import com.leskiewicz.schoolsystem.user.utils.UserMapper;
 import com.leskiewicz.schoolsystem.utils.ValidationUtils;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.Optional;
@@ -25,6 +27,7 @@ public class UserServiceImpl implements UserService {
   private final UserRepository userRepository;
   private final FacultyService facultyService;
   private final PasswordEncoder passwordEncoder;
+  private final UserMapper userMapper;
   private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
   @Override
@@ -45,8 +48,9 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public Page<User> getUsers(Pageable pageable) {
-    return userRepository.findAll(pageable);
+  public Page<UserDto> getUsers(Pageable pageable) {
+    Page<User> users = userRepository.findAll(pageable);
+    return users.map(userMapper::convertToDto);
   }
 
   @Override

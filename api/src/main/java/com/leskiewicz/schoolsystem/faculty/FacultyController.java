@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.*;
 public class FacultyController {
 
   private final FacultyService facultyService;
-  private final FacultyModelAssembler facultyModelAssembler;
   private final FacultyDtoAssembler facultyDtoAssembler;
   private final DegreeDtoAssembler degreeDtoAssembler;
   private final UserDtoAssembler userDtoAssembler;
