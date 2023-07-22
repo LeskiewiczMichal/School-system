@@ -1,6 +1,7 @@
 package com.leskiewicz.schoolsystem.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -18,6 +19,9 @@ import com.leskiewicz.schoolsystem.security.Role;
 import com.leskiewicz.schoolsystem.security.dto.AuthenticationRequest;
 import com.leskiewicz.schoolsystem.security.dto.AuthenticationResponse;
 import com.leskiewicz.schoolsystem.security.dto.RegisterRequest;
+import com.leskiewicz.schoolsystem.testUtils.RequestUtils;
+import com.leskiewicz.schoolsystem.testUtils.RequestUtilsImpl;
+import com.leskiewicz.schoolsystem.testUtils.assertions.UserDtoAssertions;
 import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.UserRepository;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
@@ -36,7 +40,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.ResultMatcher;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -53,6 +59,7 @@ public class AuthenticationControllerTest {
   @Autowired private FacultyRepository facultyRepository;
   //    Variables
   private ObjectMapper mapper;
+  private RequestUtils requestUtils;
 
   // region Providers
   static Stream<Arguments> registerReturnsStatus400RequestProvider() {
@@ -107,21 +114,19 @@ public class AuthenticationControllerTest {
             .degreeField("Computer Science")
             .password("12345")
             .build();
+
+    requestUtils = new RequestUtilsImpl(mvc, mapper);
   }
 
   // region Registration Tests
   @Test
   public void registrationHappyPath() throws Exception {
-    MvcResult result = performPostRequest(REGISTER_PATH, registerRequest, status().isCreated());
-
-    // Mapping response to readable objects
-    JsonNode node = mapper.readTree(result.getResponse().getContentAsString());
-    AuthenticationResponse response = mapResponse(result, AuthenticationResponse.class);
+    ResultActions result = requestUtils.performPostRequest(REGISTER_PATH, registerRequest, status().isCreated());
 
     // Create userDto that should be provided with response
-    UserDto registerTestUserDto =
-        UserDto.builder()
-            .id(response.getUser().getId())
+    com.leskiewicz.schoolsystem.testModels.UserDto registerTestUserDto =
+        com.leskiewicz.schoolsystem.testModels.UserDto.builder()
+            .id(5L)
             .firstName(registerRequest.getFirstName())
             .lastName(registerRequest.getLastName())
             .email(registerRequest.getEmail())
@@ -130,18 +135,19 @@ public class AuthenticationControllerTest {
             .build();
 
     // Check if Location header was added
-    String locationHeader = result.getResponse().getHeader("Location");
-    Assertions.assertNotNull(locationHeader, "Expected Location header in response");
+    String expectedLocation = "http://localhost/api/users/5";
+    result.andExpect(MockMvcResultMatchers.header().string("Location", expectedLocation));
+
     // Correct user was returned
-    Assertions.assertEquals(registerTestUserDto, response.getUser());
-    // Token was returned
-    Assertions.assertNotNull(response.getToken());
+    result.andExpect(MockMvcResultMatchers.jsonPath("$.user").exists());
+    result.andExpect(MockMvcResultMatchers.jsonPath("$.user").isNotEmpty());
+
+//     Token was returned
+    result.andExpect(jsonPath("$.token").exists());
     // Proper links were added
-    Assertions.assertTrue(
-        node.has("_links") && node.get("_links").has("self"), "Expected self link in response");
-    Assertions.assertTrue(
-        node.has("_links") && node.get("_links").has("authenticate"),
-        "Expected authenticate link in response");
+    result.andExpect(jsonPath("$._links.self").exists());
+    result.andExpect(jsonPath("$._links.authenticate").exists());
+
   }
 
   @ParameterizedTest
