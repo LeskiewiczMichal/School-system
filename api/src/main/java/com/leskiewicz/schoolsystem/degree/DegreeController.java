@@ -14,7 +14,11 @@ import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-/** REST controller for managing degrees. */
+/**
+ * REST controller for managing degrees.
+ *
+ * <p>All endpoints return responses formatted as HAL representations with _links.
+ */
 @RestController
 @RequestMapping("/api/degrees")
 @AllArgsConstructor
@@ -28,7 +32,7 @@ public class DegreeController {
    * Get a degree by ID .
    *
    * @param id the ID of the degree to retrieve
-   * @return the ResponseEntity with status 200 (OK) and degree in body, or with status 404
+   * @return status 200 and the DegreeDto representing the degree with the given ID in the body
    * @throws EntityNotFoundException if the degree does not exist, returning status 404
    * @throws IllegalArgumentException if the ID is a string, returning status 400
    */
@@ -40,6 +44,13 @@ public class DegreeController {
     return ResponseEntity.ok(degree);
   }
 
+  /**
+   * Get all degrees.
+   *
+   * @param request the pageable request containing sorting, pagination, etc.
+   * @return status 200 (OK) and in body the paged list of DegreeDto objects, page metadata. If
+   *     there are no degrees, an empty page is returned (with no _embedded.degrees field).
+   */
   @GetMapping
   public ResponseEntity<RepresentationModel<DegreeDto>> getDegrees(
       @ModelAttribute PageableRequest request) {
