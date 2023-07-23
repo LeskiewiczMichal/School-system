@@ -6,6 +6,7 @@ import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
 import com.leskiewicz.schoolsystem.user.dto.PatchUserRequest;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserDtoAssembler;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -50,6 +51,14 @@ public class UserController {
         HalModelBuilder.halModelOf(userPagedResourcesAssembler.toModel(users)).build());
   }
 
+  /**
+   * Get a user by its ID.
+   *
+   * @param id the ID of the user to retrieve.
+   * @return status 200 and the UserDto representing the user with the given ID in the body.
+   * @throws EntityNotFoundException if the user does not exist, returns status 404.
+   * @throws IllegalArgumentException if the ID is a string, returns status 400.
+   */
   @GetMapping("/{id}")
   public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
     UserDto user = userService.getById(id);
