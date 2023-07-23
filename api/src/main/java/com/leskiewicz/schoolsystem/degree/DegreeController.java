@@ -26,16 +26,20 @@ import org.springframework.web.bind.annotation.*;
 public class DegreeController {
 
   private final DegreeService degreeService;
+
+  // Used to convert DTOs to HAL representations
   private final DegreeDtoAssembler degreeDtoAssembler;
+
+  // Used to add links to paged resources
   private final PagedResourcesAssembler<DegreeDto> degreePagedResourcesAssembler;
 
   /**
-   * Get a degree by ID.
+   * Get a degree by its ID.
    *
    * @param id the ID of the degree to retrieve.
    * @return status 200 and the DegreeDto representing the degree with the given ID in the body.
-   * @throws EntityNotFoundException if the degree does not exist, returning status 404.
-   * @throws IllegalArgumentException if the ID is a string, returning status 400.
+   * @throws EntityNotFoundException if the degree does not exist, returns status 404.
+   * @throws IllegalArgumentException if the ID is a string, returns status 400.
    */
   @GetMapping("/{id}")
   public ResponseEntity<DegreeDto> getDegreeById(@PathVariable Long id) {

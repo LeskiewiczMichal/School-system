@@ -1,5 +1,6 @@
 package com.leskiewicz.schoolsystem.faculty;
 
+import com.leskiewicz.schoolsystem.authentication.Role;
 import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
 import com.leskiewicz.schoolsystem.degree.utils.DegreeDtoAssembler;
 import com.leskiewicz.schoolsystem.dto.request.PageableRequest;
@@ -7,9 +8,9 @@ import com.leskiewicz.schoolsystem.faculty.dto.CreateFacultyRequest;
 import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
 import com.leskiewicz.schoolsystem.faculty.dto.PatchFacultyRequest;
 import com.leskiewicz.schoolsystem.faculty.utils.FacultyDtoAssembler;
-import com.leskiewicz.schoolsystem.authentication.Role;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserDtoAssembler;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,15 +20,24 @@ import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * REST controller for managing faculties.
+ *
+ * <p>All endpoints return responses formatted as HAL representations with _links.
+ */
 @RestController
 @RequestMapping("/api/faculties")
 @AllArgsConstructor
 public class FacultyController {
 
   private final FacultyService facultyService;
+
+  // Used to convert DTOs to HAL representations
   private final FacultyDtoAssembler facultyDtoAssembler;
   private final DegreeDtoAssembler degreeDtoAssembler;
   private final UserDtoAssembler userDtoAssembler;
+
+  // Used to add links to paged resources
   private final PagedResourcesAssembler<FacultyDto> facultyPagedResourcesAssembler;
   private final PagedResourcesAssembler<DegreeDto> degreePagedResourcesAssembler;
   private final PagedResourcesAssembler<UserDto> userPagedResourcesAssembler;
@@ -42,6 +52,14 @@ public class FacultyController {
         HalModelBuilder.halModelOf(facultyPagedResourcesAssembler.toModel(faculties)).build());
   }
 
+  /**
+   * Get a faculty by its ID.
+   *
+   * @param id the ID of the faculty to retrieve.
+   * @return status 200 and the FacultyDto representing the faculty with the given ID in the body.
+   * @throws EntityNotFoundException if the faculty does not exist, returns status 404.
+   * @throws IllegalArgumentException if the ID is a string, returns status 400.
+   */
   @GetMapping("/{id}")
   public ResponseEntity<FacultyDto> getFacultyById(@PathVariable Long id) {
     FacultyDto faculty = facultyService.getById(id);
