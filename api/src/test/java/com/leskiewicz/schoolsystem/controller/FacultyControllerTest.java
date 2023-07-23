@@ -8,6 +8,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.leskiewicz.schoolsystem.faculty.FacultyRepository;
 import com.leskiewicz.schoolsystem.faculty.dto.CreateFacultyRequest;
 import com.leskiewicz.schoolsystem.faculty.dto.PatchFacultyRequest;
+import com.leskiewicz.schoolsystem.generic.GenericControllerTest;
 import com.leskiewicz.schoolsystem.testModels.FacultyDto;
 import com.leskiewicz.schoolsystem.testUtils.CommonTests;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtils;

@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
 import com.leskiewicz.schoolsystem.degree.dto.CreateDegreeRequest;
+import com.leskiewicz.schoolsystem.generic.GenericControllerTest;
 import com.leskiewicz.schoolsystem.testModels.DegreeDto;
 import com.leskiewicz.schoolsystem.testUtils.CommonTests;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtils;
