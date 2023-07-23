@@ -36,7 +36,7 @@ public class UpdateFacultyApiTest {
   private RequestUtils requestUtils;
   private FacultyDtoAssertions facultyDtoAssertions;
   private Faculty faculty;
-  
+
   @BeforeAll
   public void setUp() {
     mapper =
