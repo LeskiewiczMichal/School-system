@@ -27,11 +27,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 public class GetFacultyByTests {
 
-  Faculty faculty;
   // Mocks
   @Mock private FacultyRepository facultyRepository;
   @Mock private FacultyMapper facultyMapper;
   @InjectMocks private FacultyServiceImpl facultyService;
+
+  // Variables
+  Faculty faculty;
 
   @BeforeEach
   public void setup() {
