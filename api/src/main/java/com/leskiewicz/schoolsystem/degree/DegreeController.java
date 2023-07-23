@@ -76,7 +76,8 @@ public class DegreeController {
    * @throws EntityAlreadyExistsException and returns status 400 if a degree with the same title,
    *     field of study, and faculty already exists.
    * @throws EntityNotFoundException and returns status 404 if provided faculty does not exist.
-   * @throws MethodArgumentNotValidException and returns status 400 if the request is invalid.
+   * @throws MethodArgumentNotValidException, returns status 400 and body with path, message about
+   *     missing fields, statusCode if the request is invalid.
    */
   @PostMapping
   public ResponseEntity<DegreeDto> createDegree(@Valid @RequestBody CreateDegreeRequest request) {

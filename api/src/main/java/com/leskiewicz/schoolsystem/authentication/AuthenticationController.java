@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,9 +39,10 @@ public class AuthenticationController {
    *
    * @param request The request containing the data to create the user.
    * @return status 201 with created UserDto and authentication token in the body.
-   * @throws EntityAlreadyExistsException and returns status 400 if user with the same email
-   *     already exists.
-   * @throws MethodArgumentNotValidException and returns status 400 if the request is invalid.
+   * @throws EntityAlreadyExistsException and returns status 400 if user with the same email already
+   *     exists.
+   * @throws MethodArgumentNotValidException, returns status 400 and body with path, message about
+   *     missing fields, statusCode if the request is invalid.
    */
   @PostMapping("/register")
   public ResponseEntity<AuthenticationResponse> register(
@@ -53,7 +55,15 @@ public class AuthenticationController {
     return ResponseEntity.created(response.getUser().getLink("self").get().toUri()).body(response);
   }
 
-  
+  /**
+   * Authenticates the user based on the given request.
+   *
+   * @param request The request containing the data to authenticate the user (email and password).
+   * @return status 200 with authenticated UserDto and authentication token in the body.
+   * @throws BadCredentialsException and returns status 401 if the credentials are invalid.
+   * @throws MethodArgumentNotValidException, returns status 400 and body with path, message about
+   *     missing fields, statusCode if the request is invalid.
+   */
   @PostMapping("/authenticate")
   public ResponseEntity<AuthenticationResponse> authenticate(
       @Valid @RequestBody AuthenticationRequest request) {

@@ -85,8 +85,8 @@ public class FacultyController {
    * @return status 201 with created FacultyDto in the body.
    * @throws EntityAlreadyExistsException and returns status 400 if faculty with the same name
    *     already exists.
-   * @throws MethodArgumentNotValidException and returns status 400 if the request is invalid.
-   */
+   * @throws MethodArgumentNotValidException, returns status 400 and body with path, message about
+   *     missing fields, statusCode if the request is invalid.   */
   @PostMapping
   public ResponseEntity<FacultyDto> createFaculty(
       @Valid @RequestBody CreateFacultyRequest request) {
