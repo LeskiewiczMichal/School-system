@@ -5,9 +5,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.leskiewicz.schoolsystem.error.ErrorMessages;
 import com.leskiewicz.schoolsystem.generic.GenericControllerTest;
 import com.leskiewicz.schoolsystem.testModels.UserDto;
+import com.leskiewicz.schoolsystem.testUtils.CommonTests;
 import com.leskiewicz.schoolsystem.testUtils.assertions.UserDtoAssertions;
 import java.util.Arrays;
 import java.util.stream.Stream;
+
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.provider.Arguments;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -99,6 +102,11 @@ public class UserGenericControllerProviderTest extends GenericControllerTest<Use
     Arguments pageSize20 = Arguments.of("/api/users?size=20", Arrays.asList(), userDtoAssertions);
 
     return Stream.of(noParams, pageOne, descending, sortByName, pageSize20);
+  }
+
+  @Test
+  public void getUsersTestPagination() throws Exception {
+    CommonTests.paginationLinksTest(requestUtils, "/api/users", 2);
   }
 
   static Stream<Arguments> getApiSingleItemResponsesProvider() {

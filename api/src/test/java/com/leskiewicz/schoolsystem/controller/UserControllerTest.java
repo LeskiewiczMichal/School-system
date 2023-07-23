@@ -189,10 +189,6 @@ public class UserControllerTest extends GenericControllerTest<UserDto> {
     requestUtils = new RequestUtilsImpl(mvc, mapper);
   }
 
-  @Test
-  public void getUsersTestPagination() throws Exception {
-    CommonTests.paginationLinksTest(requestUtils, GET_USERS_PATH, 2);
-  }
 
   // region PatchUser tests
   @DisplayName("Patch user API with different params")
