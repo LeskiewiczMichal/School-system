@@ -1,8 +1,7 @@
 package com.leskiewicz.schoolsystem.user;
 
 import com.leskiewicz.schoolsystem.dto.request.PageableRequest;
-import com.leskiewicz.schoolsystem.faculty.Faculty;
-import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
+import com.leskiewicz.schoolsystem.error.customexception.EntityAlreadyExistsException;
 import com.leskiewicz.schoolsystem.user.dto.PatchUserRequest;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserDtoAssembler;
@@ -67,6 +66,16 @@ public class UserController {
     return ResponseEntity.ok(user);
   }
 
+  /**
+   * Updates a user based on the given request.
+   *
+   * @param request The request containing the data to update in the user.
+   * @param id The ID of the user to update.
+   * @return status 200 with modified UserDto in the body.
+   * @throws EntityNotFoundException and returns status 404 if the user does not exist.
+   * @throws EntityAlreadyExistsException and returns status 400 if user with the same email as
+   *     provided already exists.
+   */
   @PatchMapping("/{id}")
   public ResponseEntity<UserDto> patchUser(
       @RequestBody PatchUserRequest request, @PathVariable Long id) {
@@ -76,12 +85,12 @@ public class UserController {
     return ResponseEntity.ok(user);
   }
 
-//  @GetMapping("/{id}/faculty")
-//  public ResponseEntity<FacultyDto> getUserFaculty(@PathVariable Long id) {
-//    Faculty faculty = userService.getUserFaculty(id);
-//    FacultyDto facultyDto = facultyModelAssembler.toModel(faculty);
-//
-//    return ResponseEntity.ok(facultyDto);
-//  }
+  //  @GetMapping("/{id}/faculty")
+  //  public ResponseEntity<FacultyDto> getUserFaculty(@PathVariable Long id) {
+  //    Faculty faculty = userService.getUserFaculty(id);
+  //    FacultyDto facultyDto = facultyModelAssembler.toModel(faculty);
+  //
+  //    return ResponseEntity.ok(facultyDto);
+  //  }
 
 }
