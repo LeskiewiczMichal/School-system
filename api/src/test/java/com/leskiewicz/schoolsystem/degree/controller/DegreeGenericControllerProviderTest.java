@@ -5,9 +5,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
 import com.leskiewicz.schoolsystem.generic.GenericControllerTest;
 import com.leskiewicz.schoolsystem.testModels.DegreeDto;
+import com.leskiewicz.schoolsystem.testUtils.CommonTests;
 import com.leskiewicz.schoolsystem.testUtils.assertions.DegreeDtoAssertions;
 import java.util.Arrays;
 import java.util.stream.Stream;
+
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.provider.Arguments;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -120,5 +123,10 @@ public class DegreeGenericControllerProviderTest extends GenericControllerTest<D
                 .faculty("Informatics")
                 .build(),
             new DegreeDtoAssertions()));
+  }
+
+  @Test
+  public void getDegreesTestPagination() throws Exception {
+    CommonTests.paginationLinksTest(requestUtils, BASE_URL, 1);
   }
 }
