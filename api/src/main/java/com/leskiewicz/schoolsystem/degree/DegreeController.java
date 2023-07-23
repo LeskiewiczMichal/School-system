@@ -53,8 +53,8 @@ public class DegreeController {
    * Get all degrees.
    *
    * @param request the pageable request containing sorting, pagination, etc.
-   * @return status 200 (OK) and in body the paged list of DegreeDto objects, page metadata. If
-   *     there are no degrees, an empty page is returned (with no _embedded.degrees field).
+   * @return status 200 (OK) and in body the paged list of DegreeDto objects and page metadata. If
+   *     there are no degrees, an empty page is returned (without _embedded.degrees field).
    */
   @GetMapping
   public ResponseEntity<RepresentationModel<DegreeDto>> getDegrees(

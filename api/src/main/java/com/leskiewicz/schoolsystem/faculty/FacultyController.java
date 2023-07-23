@@ -42,6 +42,13 @@ public class FacultyController {
   private final PagedResourcesAssembler<DegreeDto> degreePagedResourcesAssembler;
   private final PagedResourcesAssembler<UserDto> userPagedResourcesAssembler;
 
+  /**
+   * Get all faculties.
+   *
+   * @param request the pageable request containing sorting, pagination, etc.
+   * @return status 200 (OK) and in body the paged list of FacultyDto objects and page metadata. If
+   *     there are no faculties, an empty page is returned (without _embedded.faculties field).
+   */
   @GetMapping
   public ResponseEntity<RepresentationModel<FacultyDto>> getFaculties(
       @ModelAttribute PageableRequest request) {
@@ -67,6 +74,7 @@ public class FacultyController {
 
     return ResponseEntity.ok(faculty);
   }
+
 
   @PostMapping
   public ResponseEntity<FacultyDto> createFaculty(
