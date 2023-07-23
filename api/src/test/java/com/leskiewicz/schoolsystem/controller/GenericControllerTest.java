@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtils;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtilsImpl;
-import com.leskiewicz.schoolsystem.testUtils.TestAssertions;
+import com.leskiewicz.schoolsystem.testUtils.assertions.TestAssertions;
 import com.leskiewicz.schoolsystem.testUtils.assertions.DtoAssertion;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;

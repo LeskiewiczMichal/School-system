@@ -1,4 +1,4 @@
-package com.leskiewicz.schoolsystem.testUtils;
+package com.leskiewicz.schoolsystem.testUtils.assertions;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;

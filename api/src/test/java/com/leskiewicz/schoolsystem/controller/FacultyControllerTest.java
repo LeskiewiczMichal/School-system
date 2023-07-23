@@ -12,7 +12,7 @@ import com.leskiewicz.schoolsystem.testModels.FacultyDto;
 import com.leskiewicz.schoolsystem.testUtils.CommonTests;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtils;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtilsImpl;
-import com.leskiewicz.schoolsystem.testUtils.TestAssertions;
+import com.leskiewicz.schoolsystem.testUtils.assertions.TestAssertions;
 import com.leskiewicz.schoolsystem.testUtils.assertions.FacultyDtoAssertions;
 import java.util.Arrays;
 import java.util.stream.Stream;

@@ -11,7 +11,7 @@ import com.leskiewicz.schoolsystem.testModels.DegreeDto;
 import com.leskiewicz.schoolsystem.testUtils.CommonTests;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtils;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtilsImpl;
-import com.leskiewicz.schoolsystem.testUtils.TestAssertions;
+import com.leskiewicz.schoolsystem.testUtils.assertions.TestAssertions;
 import com.leskiewicz.schoolsystem.testUtils.assertions.DegreeDtoAssertions;
 import java.util.Arrays;
 import java.util.stream.Stream;
