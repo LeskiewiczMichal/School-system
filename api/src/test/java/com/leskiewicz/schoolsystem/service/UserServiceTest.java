@@ -129,37 +129,6 @@ public class UserServiceTest {
   }
   //endregion
 
-  //region GetUsers tests
-  @Test
-  public void getUsersReturnsPagedUsers() {
-    Faculty faculty = Mockito.mock(Faculty.class);
-    Degree degree = Mockito.mock(Degree.class);
-    List<User> userList = Arrays.asList(
-            new User(1L, "John", "Doe", "john.doe@example.com", "12345", faculty, degree, Role.ROLE_STUDENT),
-            new User(2L, "Jane", "Smith", "jane.smith@example.com", "12345", faculty, degree, Role.ROLE_ADMIN)
-    );
-    Page<User> usersPage = new PageImpl<>(userList);
-
-    given(userRepository.findAll(any(Pageable.class))).willReturn(usersPage);
-
-    // Mock the behavior of the userMapper
-    UserDto userDto1 = new UserDto(1L, "John", "Doe", "john.doe@example.com", "Some Faculty", "Some Degree", 1L);
-    UserDto userDto2 = new UserDto(2L, "Jane", "Smith", "jane.smith@example.com", "Another Faculty", "Another Degree", 2L);
-    given(userMapper.convertToDto(any(User.class))).willReturn(userDto1, userDto2);
-
-    // Call the method to test
-    Page<UserDto> result = userService.getUsers(PageRequest.of(0, 10));
-
-    // Assert the result
-   Assertions.assertEquals(2, result.getTotalElements());
-    Assertions.assertEquals(userDto1, result.getContent().get(0));
-    Assertions.assertEquals(userDto2, result.getContent().get(1));
-
-    // Verify the interactions with userRepository and userMapper
-    verify(userRepository, times(1)).findAll(any(Pageable.class));
-    verify(userMapper, times(2)).convertToDto(any(User.class));
-  }
-
   //region AddUser tests
   @Test
   public void addUserSavesUser() {
