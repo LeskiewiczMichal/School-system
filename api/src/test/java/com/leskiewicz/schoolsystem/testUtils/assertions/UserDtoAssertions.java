@@ -45,4 +45,20 @@ public class UserDtoAssertions implements DtoAssertion<UserDto> {
       result.andExpect(jsonPath(String.format("$.degree")).value(dto.getDegree()));
     }
   }
+
+  @Override
+  public void assertDtoWithAnyId(ResultActions result, UserDto dto) throws Exception {
+    result
+            .andExpect(jsonPath(String.format("$.id")).exists())
+            .andExpect(jsonPath(String.format("$.firstName")).value(dto.getFirstName()))
+            .andExpect(jsonPath(String.format("$.lastName")).value(dto.getLastName()))
+            .andExpect(jsonPath(String.format("$.email")).value(dto.getEmail()))
+            .andExpect(jsonPath(String.format("$.faculty")).value(dto.getFaculty()))
+            .andExpect(
+                    jsonPath(String.format("$._links.self.href"))
+                            .exists());
+    if (dto.getDegree() != null) {
+      result.andExpect(jsonPath(String.format("$.degree")).value(dto.getDegree()));
+    }
+  }
 }

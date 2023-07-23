@@ -45,6 +45,7 @@ public class DegreeDtoAssertions implements DtoAssertion<DegreeDto> {
     //                .andExpect(jsonPath("$._links.teachers.href").exists());
   }
 
+  @Override
   public void assertDtoWithAnyId(ResultActions result, DegreeDto dto) throws Exception {
     result
             .andExpect(jsonPath("$.id").exists())
