@@ -1,11 +1,11 @@
 package com.leskiewicz.schoolsystem.user.utils;
 
+import com.leskiewicz.schoolsystem.authentication.Role;
+import com.leskiewicz.schoolsystem.authentication.utils.ValidationUtils;
 import com.leskiewicz.schoolsystem.error.ErrorMessages;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
-import com.leskiewicz.schoolsystem.authentication.Role;
 import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
-import com.leskiewicz.schoolsystem.authentication.utils.ValidationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -24,7 +24,8 @@ public class UserMapperImpl implements UserMapper {
     }
 
     Faculty userFaculty = user.getFaculty();
-    logger.debug("User with ID: {} registered into faculty: {}", user.getId(), userFaculty.getName());
+    logger.debug(
+        "User with ID: {} registered into faculty: {}", user.getId(), userFaculty.getName());
 
     // Create dto from user
     UserDto.UserDtoBuilder userDto =
@@ -34,7 +35,9 @@ public class UserMapperImpl implements UserMapper {
             .lastName(user.getLastName())
             .email(user.getEmail())
             .faculty(userFaculty.getName())
-            .facultyId(userFaculty.getId());
+            .facultyId(userFaculty.getId())
+            .degreeId(user.getDegree().getId());
+
     if (user.getRole() == Role.ROLE_STUDENT) {
       userDto.degree(user.getDegree().getFieldOfStudy());
     } else {
