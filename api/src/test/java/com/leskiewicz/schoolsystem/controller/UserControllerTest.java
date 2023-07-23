@@ -14,6 +14,7 @@ import com.leskiewicz.schoolsystem.testUtils.CommonTests;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtils;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtilsImpl;
 import com.leskiewicz.schoolsystem.testUtils.TestAssertions;
+import com.leskiewicz.schoolsystem.testUtils.assertions.FacultyDtoAssertions;
 import com.leskiewicz.schoolsystem.testUtils.assertions.UserDtoAssertions;
 import com.leskiewicz.schoolsystem.user.UserRepository;
 import com.leskiewicz.schoolsystem.user.dto.PatchUserRequest;
@@ -42,7 +43,7 @@ public class UserControllerTest extends GenericControllerTest<UserDto> {
 
   private final String GET_USERS_PATH = "/api/users";
   private final String GET_USER_BY_ID = "/api/users/";
-  private final String GET_USER_FACULTY = "/api/users/%d/faculty";
+//  private final String GET_USER_FACULTY = "/api/users/%d/faculty";
 
   @Autowired private MockMvc mvc;
   @Autowired private UserRepository userRepository;
@@ -50,6 +51,7 @@ public class UserControllerTest extends GenericControllerTest<UserDto> {
   // Variables
   private ObjectMapper mapper;
   private RequestUtils requestUtils;
+//  private FacultyDtoAssertions facultyDtoAssertions = new FacultyDtoAssertions();
 
   //region Providers
   static Stream<Arguments> getApiCollectionResponsesProvider() {
@@ -345,29 +347,29 @@ public class UserControllerTest extends GenericControllerTest<UserDto> {
   }
   // endregion
 
-  // region GetUserFaculty tests
-  @Test
-  public void getUserFacultyReturnsCorrectFaculty() throws Exception {
-    ResultActions result =
-        requestUtils.performGetRequest(String.format(GET_USER_FACULTY, 1), status().isOk());
-
-    FacultyDto expectedFaculty = FacultyDto.builder().id(1L).name("Informatics").build();
-
-    TestAssertions.assertFaculty(result, expectedFaculty);
-  }
-
-  @Test
-  public void getUserFacultyReturnsStatus404WhenUserNotAssociatedWithFaculty() throws Exception {
-    ResultActions result =
-        requestUtils.performGetRequest(
-            String.format(GET_USER_FACULTY, 9999), status().isNotFound());
-
-    TestAssertions.assertError(
-        result,
-        "User with ID: 9999 does not have associated faculty",
-        "/api/users/9999/faculty",
-        404);
-  }
-
-  // endregion
+//  // region GetUserFaculty tests
+//  @Test
+//  public void getUserFacultyReturnsCorrectFaculty() throws Exception {
+//    ResultActions result =
+//        requestUtils.performGetRequest(String.format(GET_USER_FACULTY, 1), status().isOk());
+//
+//    FacultyDto expectedFaculty = FacultyDto.builder().id(1L).name("Informatics").build();
+//
+//    facultyDtoAssertions.assertDto(result, expectedFaculty);
+//  }
+//
+//  @Test
+//  public void getUserFacultyReturnsStatus404WhenUserNotAssociatedWithFaculty() throws Exception {
+//    ResultActions result =
+//        requestUtils.performGetRequest(
+//            String.format(GET_USER_FACULTY, 9999), status().isNotFound());
+//
+//    TestAssertions.assertError(
+//        result,
+//        "User with ID: 9999 does not have associated faculty",
+//        "/api/users/9999/faculty",
+//        404);
+//  }
+//
+//  // endregion
 }

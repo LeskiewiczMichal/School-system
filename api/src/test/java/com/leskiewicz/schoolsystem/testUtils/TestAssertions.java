@@ -79,33 +79,6 @@ public class TestAssertions {
 
   // endregion
 
-  // region Faculty
-  public static void assertFacultyInCollection(
-      ResultActions matchers, FacultyDto faculty, Integer index) throws Exception {
-    matchers
-        .andExpect(
-            jsonPath(String.format("$._embedded.faculties[%d].id", index)).value(faculty.getId()))
-        .andExpect(
-            jsonPath(String.format("$._embedded.faculties[%d].name", index))
-                .value(faculty.getName()))
-        .andExpect(
-            jsonPath(String.format("$._embedded.faculties[%d]._links.self.href", index))
-                .value(String.format("http://localhost/api/users/%d", faculty.getId())));
-  }
-
-  public static void assertFaculty(ResultActions matchers, FacultyDto faculty) throws Exception {
-    matchers
-        .andExpect(jsonPath(String.format("$.id")).value(faculty.getId()))
-        .andExpect(jsonPath(String.format("$.name")).value(faculty.getName()))
-        .andExpect(
-            jsonPath(String.format("$._links.self.href"))
-                .value(
-                    WebMvcLinkBuilder.linkTo(
-                            methodOn(FacultyController.class).getFacultyById(faculty.getId()))
-                        .toString()));
-  }
-  //
-
   public static void assertLink(ResultActions matchers, String rel, String href) throws Exception {
     matchers.andExpect(jsonPath(String.format("$._links.%s.href", rel)).value(href));
   }
