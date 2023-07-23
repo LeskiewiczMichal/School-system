@@ -100,7 +100,6 @@ public class UserServiceTest {
 
     Assertions.assertEquals(dto, testUser);
   }
-  //endregion
 
   @Test
   public void getByIdThrowsEntityNotFound() {
