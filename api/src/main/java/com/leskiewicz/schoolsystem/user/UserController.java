@@ -14,15 +14,32 @@ import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * REST controller for managing faculties.
+ *
+ * <p>All endpoints return responses formatted as HAL representations with _links. Collections are
+ * return inside _embedded field.
+ */
 @RestController
 @RequestMapping("/api/users")
 @AllArgsConstructor
 public class UserController {
 
   private final UserService userService;
+
+  // Used to convert DTOs to HAL representations
   private final UserDtoAssembler userDtoAssembler;
+
+  // Used to add links to paged resources
   private final PagedResourcesAssembler<UserDto> userPagedResourcesAssembler;
 
+  /**
+   * Get all users.
+   *
+   * @param request the pageable request containing sorting, pagination, etc.
+   * @return status 200 (OK) and in body the paged list of UserDto objects and page metadata. If
+   *     there are no users, an empty page is returned (without _embedded.users field).
+   */
   @GetMapping
   public ResponseEntity<RepresentationModel<UserDto>> getUsers(
       @ModelAttribute PageableRequest request) {
