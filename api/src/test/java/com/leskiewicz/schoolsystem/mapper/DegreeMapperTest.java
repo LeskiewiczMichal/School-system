@@ -33,18 +33,24 @@ public class DegreeMapperTest {
 
   @Test
   public void convertToDtoCorrectForDegree() {
+    // Setup
     DegreeDto expectedDegreeDto =
         DegreeDto.builder()
             .id(0L)
             .fieldOfStudy("Computer Science")
             .title(DegreeTitle.BACHELOR_OF_SCIENCE)
             .faculty("DegreeTitle")
+            .facultyId(0L)
             .build();
 
+    // Mocking
     given(faculty.getName()).willReturn("DegreeTitle");
+    given(faculty.getId()).willReturn(0L);
 
+    // Call function
     DegreeDto result = degreeMapper.convertToDto(degree);
 
+    // Assertions
     Assertions.assertEquals(expectedDegreeDto, result);
   }
 
