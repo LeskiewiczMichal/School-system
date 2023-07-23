@@ -134,6 +134,14 @@ public class FacultyController {
         HalModelBuilder.halModelOf(userPagedResourcesAssembler.toModel(users)).build());
   }
 
+  /**
+   * Get all teachers of faculty with provided ID.
+   *
+   * @param id the ID of the faculty to retrieve teachers from.
+   * @param request the pageable request containing sorting, pagination, etc.
+   * @return status 200 (OK) and in body the paged list of UserDto objects and page metadata. If
+   *     there are no teachers, an empty page is returned (without _embedded.users field).
+   */
   @GetMapping("/{id}/teachers")
   public ResponseEntity<RepresentationModel<UserDto>> getFacultyTeachers(
       @PathVariable Long id, @ModelAttribute PageableRequest request) {
@@ -145,6 +153,14 @@ public class FacultyController {
         HalModelBuilder.halModelOf(userPagedResourcesAssembler.toModel(users)).build());
   }
 
+  /**
+   * Get all degrees of faculty with provided ID.
+   *
+   * @param id the ID of the faculty to retrieve degrees from.
+   * @param request the pageable request containing sorting, pagination, etc.
+   * @return status 200 (OK) and in body the paged list of UserDto objects and page metadata. If
+   *     there are no degrees, an empty page is returned (without _embedded.degrees field).
+   */
   @GetMapping("/{id}/degrees")
   public ResponseEntity<RepresentationModel<DegreeDto>> getFacultyDegrees(
       @PathVariable Long id, @ModelAttribute PageableRequest request) {
