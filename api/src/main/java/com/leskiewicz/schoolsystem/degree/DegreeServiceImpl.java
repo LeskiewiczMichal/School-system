@@ -59,14 +59,17 @@ public class DegreeServiceImpl implements DegreeService {
           ErrorMessages.objectWithPropertyAlreadyExists(
               "Degree",
               "title",
-              request.getTitle().toString()
+              request.getTitle()
                   + " in "
                   + request.getFieldOfStudy()
                   + " on faculty: "
                   + request.getFacultyName()));
     }
+
+    // Retrieves faculty from database
     Faculty faculty = facultyService.getByName(request.getFacultyName());
 
+    // Creates degree
     Degree degree =
         Degree.builder()
             .title(request.getTitle())
@@ -77,6 +80,7 @@ public class DegreeServiceImpl implements DegreeService {
     ValidationUtils.validate(degree);
     degreeRepository.save(degree);
     logger.info("Created degree: {}", degree);
+
     return degreeMapper.convertToDto(degree);
   }
 
