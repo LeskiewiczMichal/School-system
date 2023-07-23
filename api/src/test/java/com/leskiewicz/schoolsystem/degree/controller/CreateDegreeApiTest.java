@@ -110,7 +110,6 @@ public class CreateDegreeApiTest {
   }
 
   @Test
-  @Transactional
   public void createDegreeReturns400OnDegreeWithAlreadyExists() throws Exception {
     // Save the same degree that we want to create
     Degree degree =

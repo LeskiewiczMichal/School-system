@@ -5,6 +5,8 @@ import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import lombok.*;

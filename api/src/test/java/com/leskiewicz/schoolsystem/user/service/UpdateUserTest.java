@@ -16,6 +16,8 @@ import com.leskiewicz.schoolsystem.user.UserRepository;
 import com.leskiewicz.schoolsystem.user.UserServiceImpl;
 import com.leskiewicz.schoolsystem.user.dto.PatchUserRequest;
 import com.leskiewicz.schoolsystem.user.utils.UserMapper;
+
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
@@ -137,7 +139,7 @@ public class UpdateUserTest {
 
   @Test
   public void updateUserFaculty() {
-    Faculty testFaculty = Faculty.builder().name("test").degree(degree).build();
+    Faculty testFaculty = Faculty.builder().name("test").degrees(Arrays.asList(degree)).build();
     User testUser = user.toBuilder().build();
     User expectedUser = user.toBuilder().faculty(testFaculty).build();
 
