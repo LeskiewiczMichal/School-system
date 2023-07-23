@@ -7,6 +7,8 @@ import static org.mockito.Mockito.verify;
 
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
+import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
+import com.leskiewicz.schoolsystem.degree.utils.DegreeMapper;
 import com.leskiewicz.schoolsystem.error.customexception.EntityAlreadyExistsException;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.FacultyRepository;
@@ -50,6 +52,7 @@ public class FacultyServiceTest {
   @Mock private FacultyRepository facultyRepository;
   @Mock private FacultyMapper facultyMapper;
   @Mock private UserMapper userMapper;
+  @Mock private DegreeMapper degreeMapper;
   // endregion
   @InjectMocks private FacultyServiceImpl facultyService;
 
@@ -300,4 +303,47 @@ public class FacultyServiceTest {
         () -> facultyService.getFacultyUsers(faculty.getId(), pageable, Role.ROLE_STUDENT));
   }
   // endregion
+
+  //region GetFacultyDegrees tests
+  @Test
+  public void getFacultyDegreesReturnsPagedDegrees() {
+    List<Degree> facultyList = Arrays.asList(
+            Degree.builder().id(1L).title(DegreeTitle.BACHELOR).fieldOfStudy("Computer Science").faculty(faculty).build(),
+            Degree.builder().id(2L).title(DegreeTitle.MASTER).fieldOfStudy("Computer Science").faculty(faculty).build()
+    );
+    Page<Degree> facultyPage = new PageImpl<>(facultyList);
+
+    given(facultyRepository.findFacultyDegrees(any(Long.class), any(Pageable.class))).willReturn(facultyPage);
+
+    // Mock the behavior of the userMapper
+    DegreeDto degreeDto1 = new DegreeDto(1L, DegreeTitle.BACHELOR, "Computer Science", "Some faculty", 1L);
+    DegreeDto degreeDto2 = new DegreeDto(2L, DegreeTitle.MASTER, "Computer Science", "Some faculty", 1L);
+
+
+    given(degreeMapper.convertToDto(any(Degree.class))).willReturn(degreeDto1, degreeDto2);
+    given(facultyRepository.existsById(any(Long.class))).willReturn(true);
+    // Call the method to test
+    Page<DegreeDto> result = facultyService.getFacultyDegrees(1L, PageRequest.of(0, 10));
+
+    // Assert the result
+    Assertions.assertEquals(2, result.getTotalElements());
+    Assertions.assertEquals(degreeDto1, result.getContent().get(0));
+    Assertions.assertEquals(degreeDto2, result.getContent().get(1));
+
+    // Verify the interactions with userRepository and userMapper
+    verify(facultyRepository, times(1)).findFacultyDegrees(any(Long.class), any(Pageable.class));
+    verify(degreeMapper, times(2)).convertToDto(any(Degree.class));
+  }
+
+  @Test
+  public void getFacultyDegreesReturns404IfFacultyDoesntExist() {
+    Pageable pageable = Mockito.mock(PageRequest.class);
+
+    given(facultyRepository.existsById(any(Long.class))).willReturn(false);
+
+    Assertions.assertThrows(
+            EntityNotFoundException.class,
+            () -> facultyService.getFacultyDegrees(faculty.getId(), pageable));
+  }
+  //endregion
 }
