@@ -242,4 +242,29 @@ public class FacultyControllerTest extends GenericControllerTest<FacultyDto> {
     CommonTests.paginationLinksTest(requestUtils, BASE_FACULTIES + "/101/teachers", 0);
   }
   // endregion
+
+  //region GetFacultyDegrees tests
+  @Test
+  public void getFacultyDegreesReturnsCorrectStudents() throws Exception {
+    ResultActions result =
+            requestUtils.performGetRequest(BASE_FACULTIES + "/101/degrees", status().isOk());
+
+    result
+            .andExpect(MockMvcResultMatchers.jsonPath("$._links").exists())
+            .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.degrees").exists())
+            .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.degrees").isArray())
+            .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.degrees").isNotEmpty())
+            .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.degrees[0].id").value(101))
+            .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.degrees[0].title").value("BACHELOR_OF_SCIENCE"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.degrees[0].fieldOfStudy").value("Computer Science"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.degrees[1].id").value(102))
+            .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.degrees[1].title").value("MASTER"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.degrees[1].fieldOfStudy").value("Software Engineering"));
+  }
+
+    @Test
+    public void getFacultyDegreesTestPagination() throws Exception {
+        CommonTests.paginationLinksTest(requestUtils, BASE_FACULTIES + "/101/degrees", 0);
+    }
+  //endregion
 }

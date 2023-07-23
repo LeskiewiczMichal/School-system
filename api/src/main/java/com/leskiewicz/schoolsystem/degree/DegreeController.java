@@ -86,4 +86,6 @@ public class DegreeController {
 
     return ResponseEntity.created(degree.getLink("self").get().toUri()).body(degree);
   }
+
+
 }
