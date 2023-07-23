@@ -49,6 +49,7 @@ public class UserControllerTest extends GenericControllerTest<UserDto> {
   // Variables
   private ObjectMapper mapper;
   private RequestUtils requestUtils;
+  private final UserDtoAssertions userDtoAssertions = new UserDtoAssertions();
 //  private FacultyDtoAssertions facultyDtoAssertions = new FacultyDtoAssertions();
 
   //region Providers
@@ -317,7 +318,7 @@ public class UserControllerTest extends GenericControllerTest<UserDto> {
     ResultActions result =
         requestUtils.performPatchRequest(GET_USER_BY_ID + "20", request, status().isOk());
 
-    TestAssertions.assertUser(result, expectedUser);
+    userDtoAssertions.assertDto(result, expectedUser);
   }
 
   @Test
