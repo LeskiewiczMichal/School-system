@@ -1,4 +1,4 @@
-package com.leskiewicz.schoolsystem.controller;
+package com.leskiewicz.schoolsystem.authentication.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -7,6 +7,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.leskiewicz.schoolsystem.authentication.Role;
+import com.leskiewicz.schoolsystem.authentication.dto.AuthenticationRequest;
+import com.leskiewicz.schoolsystem.authentication.dto.RegisterRequest;
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.degree.DegreeRepository;
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
@@ -14,14 +17,10 @@ import com.leskiewicz.schoolsystem.error.ApiError;
 import com.leskiewicz.schoolsystem.error.ErrorMessages;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.FacultyRepository;
-import com.leskiewicz.schoolsystem.authentication.Role;
-import com.leskiewicz.schoolsystem.authentication.dto.AuthenticationRequest;
-import com.leskiewicz.schoolsystem.authentication.dto.RegisterRequest;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtils;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtilsImpl;
 import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.UserRepository;
-
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -118,11 +117,16 @@ public class AuthenticationControllerTest {
   // region Registration Tests
   @Test
   public void registrationHappyPath() throws Exception {
-    ResultActions result = requestUtils.performPostRequest(REGISTER_PATH, registerRequest, status().isCreated());
+    ResultActions result =
+        requestUtils.performPostRequest(REGISTER_PATH, registerRequest, status().isCreated());
 
     // Create userDto that should be provided with response
     com.leskiewicz.schoolsystem.testModels.UserDto registerTestUserDto =
-        com.leskiewicz.schoolsystem.testModels.UserDto.builder()
+        com.leskiewicz
+            .schoolsystem
+            .testModels
+            .UserDto
+            .builder()
             .id(5L)
             .firstName(registerRequest.getFirstName())
             .lastName(registerRequest.getLastName())
@@ -139,12 +143,11 @@ public class AuthenticationControllerTest {
     result.andExpect(MockMvcResultMatchers.jsonPath("$.user").exists());
     result.andExpect(MockMvcResultMatchers.jsonPath("$.user").isNotEmpty());
 
-//     Token was returned
+    //     Token was returned
     result.andExpect(jsonPath("$.token").exists());
     // Proper links were added
     result.andExpect(jsonPath("$._links.self").exists());
     result.andExpect(jsonPath("$._links.authenticate").exists());
-
   }
 
   @ParameterizedTest
@@ -183,7 +186,7 @@ public class AuthenticationControllerTest {
     Faculty faculty = facultyRepository.findByName("Informatics").orElse(null);
     Degree degree = degreeRepository.findById(1L).orElse(null);
 
-//    degreeRepository.save(degree);
+    //    degreeRepository.save(degree);
     // Create and save user that we are going to log into
     User authenticationTestUser =
         User.builder()
@@ -213,7 +216,7 @@ public class AuthenticationControllerTest {
     result.andExpect(MockMvcResultMatchers.jsonPath("$.user").exists());
     result.andExpect(MockMvcResultMatchers.jsonPath("$.user").isNotEmpty());
 
-//     Token was returned
+    //     Token was returned
     result.andExpect(jsonPath("$.token").exists());
     // Proper links were added
     result.andExpect(jsonPath("$._links.self").exists());
