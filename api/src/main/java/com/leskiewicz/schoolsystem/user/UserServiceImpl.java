@@ -2,8 +2,8 @@ package com.leskiewicz.schoolsystem.user;
 
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.error.ErrorMessages;
-import com.leskiewicz.schoolsystem.error.MissingFieldException;
-import com.leskiewicz.schoolsystem.error.UserAlreadyExistsException;
+import com.leskiewicz.schoolsystem.error.customexception.MissingFieldException;
+import com.leskiewicz.schoolsystem.error.customexception.UserAlreadyExistsException;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.FacultyService;
 import com.leskiewicz.schoolsystem.user.dto.PatchUserRequest;

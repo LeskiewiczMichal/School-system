@@ -1,6 +1,8 @@
 package com.leskiewicz.schoolsystem.error;
 
 import com.leskiewicz.schoolsystem.error.customexception.EntityAlreadyExistsException;
+import com.leskiewicz.schoolsystem.error.customexception.MissingFieldException;
+import com.leskiewicz.schoolsystem.error.customexception.UserAlreadyExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;

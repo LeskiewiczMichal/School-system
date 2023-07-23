@@ -8,7 +8,7 @@ import static org.mockito.Mockito.verify;
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.degree.DegreeService;
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
-import com.leskiewicz.schoolsystem.error.UserAlreadyExistsException;
+import com.leskiewicz.schoolsystem.error.customexception.UserAlreadyExistsException;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.FacultyService;
 import com.leskiewicz.schoolsystem.security.Role;

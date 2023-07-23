@@ -1,4 +1,4 @@
-package com.leskiewicz.schoolsystem.error;
+package com.leskiewicz.schoolsystem.error.customexception;
 
 public class UserAlreadyExistsException extends RuntimeException {
 
