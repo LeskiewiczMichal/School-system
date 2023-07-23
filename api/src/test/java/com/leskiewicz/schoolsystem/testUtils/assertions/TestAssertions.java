@@ -12,56 +12,6 @@ import org.springframework.test.web.servlet.ResultActions;
 
 public class TestAssertions {
 
-  // region User
-  public static void assertUserInCollection(
-      ResultActions matchers,
-      int index,
-      long id,
-      String firstName,
-      String lastName,
-      String email,
-      String faculty,
-      String degree)
-      throws Exception {
-    matchers
-        .andExpect(jsonPath(String.format("$._embedded.users[%d].id", index)).value(id))
-        .andExpect(
-            jsonPath(String.format("$._embedded.users[%d].firstName", index)).value(firstName))
-        .andExpect(jsonPath(String.format("$._embedded.users[%d].lastName", index)).value(lastName))
-        .andExpect(jsonPath(String.format("$._embedded.users[%d].email", index)).value(email))
-        .andExpect(jsonPath(String.format("$._embedded.users[%d].faculty", index)).value(faculty))
-        .andExpect(
-            jsonPath(String.format("$._embedded.users[%d]._links.self.href", index))
-                .value(String.format("http://localhost/api/users/%d", id)));
-    if (degree != null) {
-      matchers.andExpect(
-          jsonPath(String.format("$._embedded.users[%d].degree", index)).value(degree));
-    }
-  }
-
-  public static void assertUser(
-      ResultActions matchers,
-      long id,
-      String firstName,
-      String lastName,
-      String email,
-      String faculty,
-      String degree)
-      throws Exception {
-    matchers
-        .andExpect(jsonPath(String.format("$.id")).value(id))
-        .andExpect(jsonPath(String.format("$.firstName")).value(firstName))
-        .andExpect(jsonPath(String.format("$.lastName")).value(lastName))
-        .andExpect(jsonPath(String.format("$.email")).value(email))
-        .andExpect(jsonPath(String.format("$.faculty")).value(faculty))
-        .andExpect(
-            jsonPath(String.format("$._links.self.href"))
-                .value(String.format("http://localhost/api/users/%d", id)));
-    if (degree != null) {
-      matchers.andExpect(jsonPath(String.format("$.degree")).value(degree));
-    }
-  }
-
   public static void assertUser(ResultActions matchers, UserDto userDto) throws Exception {
     matchers
         .andExpect(jsonPath(String.format("$.id")).value(userDto.getId()))
@@ -78,10 +28,6 @@ public class TestAssertions {
   }
 
   // endregion
-
-  public static void assertLink(ResultActions matchers, String rel, String href) throws Exception {
-    matchers.andExpect(jsonPath(String.format("$._links.%s.href", rel)).value(href));
-  }
 
   public static void assertError(ResultActions matchers, String message, String path, int status)
       throws Exception {
