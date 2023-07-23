@@ -1,4 +1,4 @@
-package com.leskiewicz.schoolsystem.mapper;
+package com.leskiewicz.schoolsystem.user;
 
 import static org.mockito.BDDMockito.given;
 

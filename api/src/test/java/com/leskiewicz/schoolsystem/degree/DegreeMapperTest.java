@@ -1,4 +1,4 @@
-package com.leskiewicz.schoolsystem.mapper;
+package com.leskiewicz.schoolsystem.degree;
 
 import static org.mockito.BDDMockito.given;
 

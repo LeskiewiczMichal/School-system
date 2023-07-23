@@ -1,4 +1,4 @@
-package com.leskiewicz.schoolsystem.mapper;
+package com.leskiewicz.schoolsystem.faculty;
 
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.faculty.Faculty;

@@ -1,4 +1,4 @@
-package com.leskiewicz.schoolsystem.assembler;
+package com.leskiewicz.schoolsystem.faculty;
 
 import com.leskiewicz.schoolsystem.faculty.FacultyController;
 import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;

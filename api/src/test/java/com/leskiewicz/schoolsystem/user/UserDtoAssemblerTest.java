@@ -1,4 +1,4 @@
-package com.leskiewicz.schoolsystem.assembler;
+package com.leskiewicz.schoolsystem.user;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
