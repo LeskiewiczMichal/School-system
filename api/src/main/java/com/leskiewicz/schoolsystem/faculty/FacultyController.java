@@ -95,6 +95,16 @@ public class FacultyController {
     return ResponseEntity.created(faculty.getLink("self").get().toUri()).body(faculty);
   }
 
+  /**
+   * Updates a new faculty based on the given request.
+   *
+   * @param request The request containing the data to update in the faculty.
+   * @param id The ID of the faculty to update.
+   * @return status 200 with modified FacultyDto in the body.
+   * @throws EntityNotFoundException and returns status 404 if the faculty does not exist.
+   * @throws EntityAlreadyExistsException and returns status 400 if faculty with the same name as
+   *     provided to the request already exists.
+   */
   @PatchMapping("/{id}")
   public ResponseEntity<FacultyDto> updateFaculty(
       @RequestBody PatchFacultyRequest request, @PathVariable Long id) {
