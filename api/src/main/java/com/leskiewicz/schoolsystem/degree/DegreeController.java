@@ -19,7 +19,8 @@ import org.springframework.web.bind.annotation.*;
 /**
  * REST controller for managing degrees.
  *
- * <p>All endpoints return responses formatted as HAL representations with _links.
+ * <p>All endpoints return responses formatted as HAL representations with _links. Collections are
+ * return inside _embedded field.
  */
 @RestController
 @RequestMapping("/api/degrees")

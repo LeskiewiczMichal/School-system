@@ -25,7 +25,8 @@ import org.springframework.web.bind.annotation.*;
 /**
  * REST controller for managing faculties.
  *
- * <p>All endpoints return responses formatted as HAL representations with _links.
+ * <p>All endpoints return responses formatted as HAL representations with _links. Collections are
+ * return inside _embedded field.
  */
 @RestController
 @RequestMapping("/api/faculties")
@@ -96,7 +97,7 @@ public class FacultyController {
   }
 
   /**
-   * Updates a new faculty based on the given request.
+   * Updates a faculty based on the given request.
    *
    * @param request The request containing the data to update in the faculty.
    * @param id The ID of the faculty to update.
@@ -114,6 +115,14 @@ public class FacultyController {
     return ResponseEntity.ok(faculty);
   }
 
+  /**
+   * Get all students of faculty with provided ID.
+   *
+   * @param id the ID of the faculty to retrieve students from.
+   * @param request the pageable request containing sorting, pagination, etc.
+   * @return status 200 (OK) and in body the paged list of UserDto objects and page metadata. If
+   *     there are no students, an empty page is returned (without _embedded.users field).
+   */
   @GetMapping("/{id}/students")
   public ResponseEntity<RepresentationModel<UserDto>> getFacultyStudents(
       @PathVariable Long id, @ModelAttribute PageableRequest request) {
