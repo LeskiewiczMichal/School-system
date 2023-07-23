@@ -12,6 +12,7 @@ public class CourseServiceImpl implements CourseService {
 
   private CourseRepository courseRepository;
 
+  @Override
   public Course getById(Long id) {
     return courseRepository
         .findById(id)
