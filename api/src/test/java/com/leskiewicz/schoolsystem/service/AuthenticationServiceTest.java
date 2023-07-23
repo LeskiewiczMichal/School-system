@@ -21,7 +21,6 @@ import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.UserService;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserMapper;
-import com.leskiewicz.schoolsystem.user.utils.UserModelAssembler;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import org.junit.jupiter.api.Assertions;
@@ -58,10 +57,9 @@ public class AuthenticationServiceTest {
     @Mock
     private DegreeService degreeService;
     @Mock
-    private UserModelAssembler userModelAssembler;
-    @Mock
     private UserMapper userMapper;
     //endregion
+
     // Variables
     private RegisterRequest request;
     private Faculty faculty;

@@ -3,7 +3,6 @@ package com.leskiewicz.schoolsystem.degree;
 import com.leskiewicz.schoolsystem.degree.dto.CreateDegreeRequest;
 import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
 import com.leskiewicz.schoolsystem.degree.utils.DegreeDtoAssembler;
-import com.leskiewicz.schoolsystem.degree.utils.DegreeModelAssembler;
 import com.leskiewicz.schoolsystem.dto.request.PageableRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;

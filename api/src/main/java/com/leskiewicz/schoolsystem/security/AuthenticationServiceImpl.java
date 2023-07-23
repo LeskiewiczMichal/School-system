@@ -11,7 +11,6 @@ import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.UserService;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserMapper;
-import com.leskiewicz.schoolsystem.user.utils.UserModelAssembler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

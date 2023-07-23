@@ -3,11 +3,9 @@ package com.leskiewicz.schoolsystem.user;
 import com.leskiewicz.schoolsystem.dto.request.PageableRequest;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
-import com.leskiewicz.schoolsystem.faculty.utils.FacultyModelAssembler;
 import com.leskiewicz.schoolsystem.user.dto.PatchUserRequest;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserDtoAssembler;
-import com.leskiewicz.schoolsystem.user.utils.UserModelAssembler;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -22,8 +20,6 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
   private final UserService userService;
-  private final UserModelAssembler userModelAssembler;
-  private final FacultyModelAssembler facultyModelAssembler;
   private final UserDtoAssembler userDtoAssembler;
   private final PagedResourcesAssembler<UserDto> userPagedResourcesAssembler;
 
@@ -54,12 +50,12 @@ public class UserController {
     return ResponseEntity.ok(user);
   }
 
-  @GetMapping("/{id}/faculty")
-  public ResponseEntity<FacultyDto> getUserFaculty(@PathVariable Long id) {
-    Faculty faculty = userService.getUserFaculty(id);
-    FacultyDto facultyDto = facultyModelAssembler.toModel(faculty);
-
-    return ResponseEntity.ok(facultyDto);
-  }
+//  @GetMapping("/{id}/faculty")
+//  public ResponseEntity<FacultyDto> getUserFaculty(@PathVariable Long id) {
+//    Faculty faculty = userService.getUserFaculty(id);
+//    FacultyDto facultyDto = facultyModelAssembler.toModel(faculty);
+//
+//    return ResponseEntity.ok(facultyDto);
+//  }
 
 }
