@@ -4,6 +4,7 @@ import com.leskiewicz.schoolsystem.authentication.Role;
 import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
 import com.leskiewicz.schoolsystem.degree.utils.DegreeDtoAssembler;
 import com.leskiewicz.schoolsystem.dto.request.PageableRequest;
+import com.leskiewicz.schoolsystem.error.customexception.EntityAlreadyExistsException;
 import com.leskiewicz.schoolsystem.faculty.dto.CreateFacultyRequest;
 import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
 import com.leskiewicz.schoolsystem.faculty.dto.PatchFacultyRequest;
@@ -18,6 +19,7 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -75,7 +77,15 @@ public class FacultyController {
     return ResponseEntity.ok(faculty);
   }
 
-
+  /**
+   * Creates a new faculty based on the given request.
+   *
+   * @param request The request containing the data to create the faculty.
+   * @return status 201 with created FacultyDto in the body.
+   * @throws EntityAlreadyExistsException and returns status 400 if faculty with the same name
+   *     already exists.
+   * @throws MethodArgumentNotValidException and returns status 400 if the request is invalid.
+   */
   @PostMapping
   public ResponseEntity<FacultyDto> createFaculty(
       @Valid @RequestBody CreateFacultyRequest request) {

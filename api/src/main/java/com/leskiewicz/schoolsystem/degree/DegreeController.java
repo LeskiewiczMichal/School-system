@@ -13,6 +13,7 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -74,6 +75,7 @@ public class DegreeController {
    * @throws EntityAlreadyExistsException and returns status 400 if a degree with the same title,
    *     field of study, and faculty already exists.
    * @throws EntityNotFoundException and returns status 404 if provided faculty does not exist.
+   * @throws MethodArgumentNotValidException and returns status 400 if the request is invalid.
    */
   @PostMapping
   public ResponseEntity<DegreeDto> createDegree(@Valid @RequestBody CreateDegreeRequest request) {
