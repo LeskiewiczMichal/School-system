@@ -1,12 +1,12 @@
-package com.leskiewicz.schoolsystem.security;
+package com.leskiewicz.schoolsystem.authentication;
 
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.FacultyService;
-import com.leskiewicz.schoolsystem.security.dto.AuthenticationRequest;
-import com.leskiewicz.schoolsystem.security.dto.AuthenticationResponse;
-import com.leskiewicz.schoolsystem.security.dto.RegisterRequest;
-import com.leskiewicz.schoolsystem.security.utils.JwtUtils;
+import com.leskiewicz.schoolsystem.authentication.dto.AuthenticationRequest;
+import com.leskiewicz.schoolsystem.authentication.dto.AuthenticationResponse;
+import com.leskiewicz.schoolsystem.authentication.dto.RegisterRequest;
+import com.leskiewicz.schoolsystem.authentication.utils.JwtUtils;
 import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.UserService;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;

@@ -5,7 +5,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.leskiewicz.schoolsystem.degree.Degree;
@@ -15,16 +14,14 @@ import com.leskiewicz.schoolsystem.error.ApiError;
 import com.leskiewicz.schoolsystem.error.ErrorMessages;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.FacultyRepository;
-import com.leskiewicz.schoolsystem.security.Role;
-import com.leskiewicz.schoolsystem.security.dto.AuthenticationRequest;
-import com.leskiewicz.schoolsystem.security.dto.AuthenticationResponse;
-import com.leskiewicz.schoolsystem.security.dto.RegisterRequest;
+import com.leskiewicz.schoolsystem.authentication.Role;
+import com.leskiewicz.schoolsystem.authentication.dto.AuthenticationRequest;
+import com.leskiewicz.schoolsystem.authentication.dto.RegisterRequest;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtils;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtilsImpl;
-import com.leskiewicz.schoolsystem.testUtils.assertions.UserDtoAssertions;
 import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.UserRepository;
-import com.leskiewicz.schoolsystem.user.dto.UserDto;
+
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

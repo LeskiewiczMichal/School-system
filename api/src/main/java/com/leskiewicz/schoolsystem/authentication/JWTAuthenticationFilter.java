@@ -1,6 +1,6 @@
-package com.leskiewicz.schoolsystem.security;
+package com.leskiewicz.schoolsystem.authentication;
 
-import com.leskiewicz.schoolsystem.security.utils.JwtUtils;
+import com.leskiewicz.schoolsystem.authentication.utils.JwtUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

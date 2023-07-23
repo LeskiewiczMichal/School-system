@@ -1,7 +1,7 @@
 package com.leskiewicz.schoolsystem.faculty;
 
 import com.leskiewicz.schoolsystem.degree.Degree;
-import com.leskiewicz.schoolsystem.security.Role;
+import com.leskiewicz.schoolsystem.authentication.Role;
 import com.leskiewicz.schoolsystem.user.User;
 import java.util.Optional;
 import org.springframework.data.domain.Page;

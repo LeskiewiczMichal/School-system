@@ -9,7 +9,7 @@ import com.leskiewicz.schoolsystem.faculty.FacultyService;
 import com.leskiewicz.schoolsystem.user.dto.PatchUserRequest;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserMapper;
-import com.leskiewicz.schoolsystem.utils.ValidationUtils;
+import com.leskiewicz.schoolsystem.authentication.utils.ValidationUtils;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.Optional;
 import lombok.AllArgsConstructor;

@@ -1,4 +1,4 @@
-package com.leskiewicz.schoolsystem.security.dto;
+package com.leskiewicz.schoolsystem.authentication.dto;
 
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
 import jakarta.validation.constraints.NotNull;

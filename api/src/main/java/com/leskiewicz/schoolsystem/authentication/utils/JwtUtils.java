@@ -1,4 +1,4 @@
-package com.leskiewicz.schoolsystem.security.utils;
+package com.leskiewicz.schoolsystem.authentication.utils;
 
 import com.leskiewicz.schoolsystem.user.User;
 import io.jsonwebtoken.Claims;

@@ -1,6 +1,6 @@
-package com.leskiewicz.schoolsystem.security.utils;
+package com.leskiewicz.schoolsystem.authentication.utils;
 
-import com.leskiewicz.schoolsystem.security.dto.CustomUserDetails;
+import com.leskiewicz.schoolsystem.authentication.dto.CustomUserDetails;
 import com.leskiewicz.schoolsystem.user.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

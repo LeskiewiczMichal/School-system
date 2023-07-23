@@ -1,4 +1,4 @@
-package com.leskiewicz.schoolsystem.security.dto;
+package com.leskiewicz.schoolsystem.authentication.dto;
 
 import com.leskiewicz.schoolsystem.user.User;
 import java.util.Collection;

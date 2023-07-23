@@ -1,6 +1,6 @@
-package com.leskiewicz.schoolsystem.security.config;
+package com.leskiewicz.schoolsystem.config;
 
-import com.leskiewicz.schoolsystem.security.JWTAuthenticationFilter;
+import com.leskiewicz.schoolsystem.authentication.JWTAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

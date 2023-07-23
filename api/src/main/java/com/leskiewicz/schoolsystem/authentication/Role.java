@@ -1,4 +1,4 @@
-package com.leskiewicz.schoolsystem.security;
+package com.leskiewicz.schoolsystem.authentication;
 
 public enum Role {
   ROLE_STUDENT,

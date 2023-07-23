@@ -3,7 +3,7 @@ package com.leskiewicz.schoolsystem.controller;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-import com.leskiewicz.schoolsystem.security.AuthenticationController;
+import com.leskiewicz.schoolsystem.authentication.AuthenticationController;
 import com.leskiewicz.schoolsystem.user.UserController;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;

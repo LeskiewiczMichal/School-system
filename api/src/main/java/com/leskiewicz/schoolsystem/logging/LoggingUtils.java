@@ -1,8 +1,8 @@
-package com.leskiewicz.schoolsystem.utils;
+package com.leskiewicz.schoolsystem.logging;
 
-import com.leskiewicz.schoolsystem.security.dto.AuthenticationRequest;
-import com.leskiewicz.schoolsystem.security.dto.AuthenticationResponse;
-import com.leskiewicz.schoolsystem.security.dto.RegisterRequest;
+import com.leskiewicz.schoolsystem.authentication.dto.AuthenticationRequest;
+import com.leskiewicz.schoolsystem.authentication.dto.AuthenticationResponse;
+import com.leskiewicz.schoolsystem.authentication.dto.RegisterRequest;
 import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import java.util.List;

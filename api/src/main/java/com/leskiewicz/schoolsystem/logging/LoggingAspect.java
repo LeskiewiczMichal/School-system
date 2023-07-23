@@ -1,6 +1,5 @@
-package com.leskiewicz.schoolsystem.aspect;
+package com.leskiewicz.schoolsystem.logging;
 
-import com.leskiewicz.schoolsystem.utils.LoggingUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;

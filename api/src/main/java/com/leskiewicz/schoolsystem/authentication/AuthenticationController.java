@@ -1,10 +1,10 @@
-package com.leskiewicz.schoolsystem.security;
+package com.leskiewicz.schoolsystem.authentication;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-import com.leskiewicz.schoolsystem.security.dto.AuthenticationRequest;
-import com.leskiewicz.schoolsystem.security.dto.AuthenticationResponse;
-import com.leskiewicz.schoolsystem.security.dto.RegisterRequest;
+import com.leskiewicz.schoolsystem.authentication.dto.AuthenticationRequest;
+import com.leskiewicz.schoolsystem.authentication.dto.AuthenticationResponse;
+import com.leskiewicz.schoolsystem.authentication.dto.RegisterRequest;
 import com.leskiewicz.schoolsystem.user.utils.UserDtoAssembler;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

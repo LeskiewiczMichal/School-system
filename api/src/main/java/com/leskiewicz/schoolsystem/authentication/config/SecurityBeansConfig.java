@@ -1,6 +1,6 @@
-package com.leskiewicz.schoolsystem.security.config;
+package com.leskiewicz.schoolsystem.authentication.config;
 
-import com.leskiewicz.schoolsystem.security.dto.CustomUserDetails;
+import com.leskiewicz.schoolsystem.authentication.dto.CustomUserDetails;
 import com.leskiewicz.schoolsystem.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

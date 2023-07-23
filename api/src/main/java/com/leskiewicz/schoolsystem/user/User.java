@@ -3,7 +3,7 @@ package com.leskiewicz.schoolsystem.user;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
-import com.leskiewicz.schoolsystem.security.Role;
+import com.leskiewicz.schoolsystem.authentication.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotNull;

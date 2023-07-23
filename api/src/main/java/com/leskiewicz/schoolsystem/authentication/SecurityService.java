@@ -1,4 +1,4 @@
-package com.leskiewicz.schoolsystem.security;
+package com.leskiewicz.schoolsystem.authentication;
 
 import org.springframework.security.core.Authentication;
 

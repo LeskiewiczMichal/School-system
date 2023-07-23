@@ -1,4 +1,4 @@
-package com.leskiewicz.schoolsystem.security.dto;
+package com.leskiewicz.schoolsystem.authentication.dto;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
