@@ -71,7 +71,8 @@ public class LoggingUtils {
         LoggingUtils.maskEmail(userDto.getEmail()),
         userDto.getFaculty(),
         userDto.getDegree(),
-            null);
+        userDto.getFacultyId(),
+        userDto.getDegreeId());
   }
 
   private static CollectionModel<?> maskCollectionModel(CollectionModel<?> collectionModel) {
