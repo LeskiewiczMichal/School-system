@@ -1,7 +1,9 @@
 package com.leskiewicz.schoolsystem.user.utils;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
+import com.leskiewicz.schoolsystem.degree.DegreeController;
 import com.leskiewicz.schoolsystem.faculty.FacultyController;
-import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.UserController;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import org.springframework.hateoas.Link;
@@ -9,30 +11,31 @@ import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSuppor
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Component;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
 @Component
 public class UserDtoAssembler extends RepresentationModelAssemblerSupport<UserDto, UserDto> {
 
+  public UserDtoAssembler() {
+    super(UserController.class, UserDto.class);
+  }
 
-    public UserDtoAssembler() {
-        super(UserController.class, UserDto.class);
-    }
+  @Override
+  public UserDto toModel(UserDto user) {
 
-    @Override
-    public UserDto toModel(UserDto user) {
+    Link selfLink =
+        WebMvcLinkBuilder.linkTo(methodOn(UserController.class).getUserById(user.getId()))
+            .withSelfRel();
+    Link facultyLink =
+        WebMvcLinkBuilder.linkTo(
+                methodOn(FacultyController.class).getFacultyById(user.getFacultyId()))
+            .withRel("faculty");
+    Link degreeLink =
+        WebMvcLinkBuilder.linkTo(
+            methodOn(DegreeController.class).getDegreeById(user.getDegreeId())).withRel("degree");
 
-        Link selfLink =
-                WebMvcLinkBuilder.linkTo(methodOn(UserController.class).getUserById(user.getId()))
-                        .withSelfRel();
-        Link facultyLink =
-                WebMvcLinkBuilder.linkTo(
-                                methodOn(FacultyController.class).getFacultyById(user.getFacultyId()))
-                        .withRel("faculty");
+    user.add(selfLink);
+    user.add(facultyLink);
+    user.add(degreeLink);
 
-        user.add(selfLink);
-        user.add(facultyLink);
-
-        return user;
-    }
+    return user;
+  }
 }

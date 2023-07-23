@@ -22,4 +22,5 @@ public class UserDto extends RepresentationModel<UserDto> {
   private final String degree;
 
   @JsonIgnore private final Long facultyId;
+  @JsonIgnore private final Long degreeId;
 }
