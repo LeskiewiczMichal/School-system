@@ -1,12 +1,13 @@
 package com.leskiewicz.schoolsystem.faculty;
 
+import com.leskiewicz.schoolsystem.authentication.Role;
+import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
 import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
 import com.leskiewicz.schoolsystem.faculty.dto.CreateFacultyRequest;
 import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
 import com.leskiewicz.schoolsystem.faculty.dto.PatchFacultyRequest;
-import com.leskiewicz.schoolsystem.authentication.Role;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,5 +27,8 @@ public interface FacultyService {
   FacultyDto updateFaculty(PatchFacultyRequest request, Long facultyId);
 
   Page<UserDto> getFacultyUsers(Long facultyId, Pageable pageable, Role role);
+
   Page<DegreeDto> getFacultyDegrees(Long facultyId, Pageable pageable);
+
+  Page<CourseDto> getFacultyCourses(Long facultyId, Pageable pageable);
 }

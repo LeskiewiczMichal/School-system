@@ -1,7 +1,8 @@
 package com.leskiewicz.schoolsystem.faculty;
 
-import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.authentication.Role;
+import com.leskiewicz.schoolsystem.course.Course;
+import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.user.User;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -20,4 +21,7 @@ public interface FacultyRepository extends JpaRepository<Faculty, Long> {
 
   @Query("SELECT d FROM Degree d WHERE d.faculty.id = :facultyId")
   Page<Degree> findFacultyDegrees(Long facultyId, Pageable pageable);
+
+  @Query("SELECT c FROM Course c WHERE c.faculty.id = :facultyId")
+  Page<Course> findFacultyCourses(Long facultyId, Pageable pageable);
 }

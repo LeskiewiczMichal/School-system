@@ -1,5 +1,10 @@
 package com.leskiewicz.schoolsystem.faculty;
 
+import com.leskiewicz.schoolsystem.authentication.Role;
+import com.leskiewicz.schoolsystem.authentication.utils.ValidationUtils;
+import com.leskiewicz.schoolsystem.course.Course;
+import com.leskiewicz.schoolsystem.course.dto.CourseDto;
+import com.leskiewicz.schoolsystem.course.utils.CourseMapper;
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
 import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
@@ -10,12 +15,10 @@ import com.leskiewicz.schoolsystem.faculty.dto.CreateFacultyRequest;
 import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
 import com.leskiewicz.schoolsystem.faculty.dto.PatchFacultyRequest;
 import com.leskiewicz.schoolsystem.faculty.utils.FacultyMapper;
-import com.leskiewicz.schoolsystem.authentication.Role;
 import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserMapper;
 import com.leskiewicz.schoolsystem.utils.StringUtils;
-import com.leskiewicz.schoolsystem.authentication.utils.ValidationUtils;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
@@ -31,9 +34,13 @@ import org.springframework.stereotype.Service;
 public class FacultyServiceImpl implements FacultyService {
 
   private final FacultyRepository facultyRepository;
+
+  // Mappers
   private final DegreeMapper degreeMapper;
   private final FacultyMapper facultyMapper;
   private final UserMapper userMapper;
+  private final CourseMapper courseMapper;
+
   private final Logger logger = LoggerFactory.getLogger(FacultyController.class);
 
   @Override
@@ -134,6 +141,13 @@ public class FacultyServiceImpl implements FacultyService {
     facultyExistsCheck(facultyId);
     Page<Degree> degrees = facultyRepository.findFacultyDegrees(facultyId, pageable);
     return degrees.map(degreeMapper::convertToDto);
+  }
+
+  @Override
+  public Page<CourseDto> getFacultyCourses(Long facultyId, Pageable pageable) {
+    facultyExistsCheck(facultyId);
+    Page<Course> courses = facultyRepository.findFacultyCourses(facultyId, pageable);
+    return courses.map(courseMapper::convertToDto);
   }
 
   private void facultyExistsCheck(Long facultyId) {
