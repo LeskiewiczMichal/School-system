@@ -1,6 +1,7 @@
 package com.leskiewicz.schoolsystem.faculty.utils;
 
-import com.leskiewicz.schoolsystem.faculty.Faculty;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import com.leskiewicz.schoolsystem.faculty.FacultyController;
 import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
 import org.springframework.hateoas.Link;
@@ -8,34 +9,37 @@ import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSuppor
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Component;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
 @Component
-public class FacultyDtoAssembler extends RepresentationModelAssemblerSupport<FacultyDto, FacultyDto> {
+public class FacultyDtoAssembler
+    extends RepresentationModelAssemblerSupport<FacultyDto, FacultyDto> {
 
-    public FacultyDtoAssembler() {
-        super(FacultyController.class, FacultyDto.class);
-    }
+  public FacultyDtoAssembler() {
+    super(FacultyController.class, FacultyDto.class);
+  }
 
-    @Override
+  @Override
   public FacultyDto toModel(FacultyDto faculty) {
-        Link selfLink =
-                WebMvcLinkBuilder.linkTo(methodOn(FacultyController.class).getFacultyById(faculty.getId()))
-                        .withSelfRel();
+    Link selfLink =
+        WebMvcLinkBuilder.linkTo(methodOn(FacultyController.class).getFacultyById(faculty.getId()))
+            .withSelfRel();
 
-        Link studentsLink =
-                WebMvcLinkBuilder.linkTo(
-                                methodOn(FacultyController.class).getFacultyStudents(faculty.getId(), null))
-                        .withRel("students");
-        Link teachersLink =
-                WebMvcLinkBuilder.linkTo(
-                                methodOn(FacultyController.class).getFacultyTeachers(faculty.getId(), null))
-                        .withRel("teachers");
+    Link studentsLink =
+        WebMvcLinkBuilder.linkTo(
+                methodOn(FacultyController.class).getFacultyStudents(faculty.getId(), null))
+            .withRel("students");
+    Link teachersLink =
+        WebMvcLinkBuilder.linkTo(
+                methodOn(FacultyController.class).getFacultyTeachers(faculty.getId(), null))
+            .withRel("teachers");
+    Link degreesLink =
+        WebMvcLinkBuilder.linkTo(
+            methodOn(FacultyController.class).getFacultyDegrees(faculty.getId(), null)).withRel("degrees");
 
-        faculty.add(selfLink);
-        faculty.add(studentsLink);
-        faculty.add(teachersLink);
+    faculty.add(selfLink);
+    faculty.add(studentsLink);
+    faculty.add(teachersLink);
+    faculty.add(degreesLink);
 
-        return faculty;
-    }
+    return faculty;
+  }
 }
