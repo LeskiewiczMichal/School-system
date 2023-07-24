@@ -5,13 +5,16 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import com.leskiewicz.schoolsystem.course.Course;
+import com.leskiewicz.schoolsystem.course.dto.CourseDto;
+import com.leskiewicz.schoolsystem.course.utils.CourseMapper;
 import com.leskiewicz.schoolsystem.degree.Degree;
-import com.leskiewicz.schoolsystem.degree.DegreeTitle;
 import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
 import com.leskiewicz.schoolsystem.degree.utils.DegreeMapper;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.FacultyRepository;
 import com.leskiewicz.schoolsystem.faculty.FacultyServiceImpl;
+import com.leskiewicz.schoolsystem.user.User;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.Arrays;
 import java.util.List;
@@ -29,14 +32,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 @ExtendWith(MockitoExtension.class)
-public class GetFacultyDegreesTest {
+public class GetFacultyCourses {
 
   // Variables
   Faculty faculty;
 
   // Mocks
   @Mock private FacultyRepository facultyRepository;
-  @Mock private DegreeMapper degreeMapper;
+  @Mock private CourseMapper courseMapper;
   @InjectMocks private FacultyServiceImpl facultyService;
 
   @BeforeEach
@@ -48,44 +51,61 @@ public class GetFacultyDegreesTest {
 
   @Test
   public void getFacultyDegreesReturnsPagedDegrees() {
-    List<Degree> facultyList =
+    User teacher = Mockito.mock(User.class);
+
+    List<Course> facultyList =
         Arrays.asList(
-            Degree.builder()
+            Course.builder()
                 .id(1L)
-                .title(DegreeTitle.BACHELOR)
-                .fieldOfStudy("Computer Science")
+                .title("Software Engineering")
                 .faculty(faculty)
+                .duration_in_hours(20)
+                .teacher(teacher)
                 .build(),
-            Degree.builder()
+            Course.builder()
                 .id(2L)
-                .title(DegreeTitle.MASTER)
-                .fieldOfStudy("Computer Science")
+                .title("Computer Science")
                 .faculty(faculty)
+                .duration_in_hours(30)
+                .teacher(teacher)
                 .build());
-    Page<Degree> facultyPage = new PageImpl<>(facultyList);
+    Page<Course> coursePage = new PageImpl<>(facultyList);
 
-    given(facultyRepository.findFacultyDegrees(any(Long.class), any(Pageable.class)))
-        .willReturn(facultyPage);
+    given(facultyRepository.findFacultyCourses(any(Long.class), any(Pageable.class)))
+        .willReturn(coursePage);
 
-    // Mock the behavior of the userMapper
-    DegreeDto degreeDto1 =
-        new DegreeDto(1L, DegreeTitle.BACHELOR, "Computer Science", "Some faculty", 1L);
-    DegreeDto degreeDto2 =
-        new DegreeDto(2L, DegreeTitle.MASTER, "Computer Science", "Some faculty", 1L);
+    // Mock the behavior of the courseMapper
+    CourseDto courseDto1 =
+        CourseDto.builder()
+            .id(1L)
+            .title("Software Engineering")
+            .faculty("faculty")
+            .teacher("Something Testing")
+            .duration_in_hours(20)
+            .build();
+    CourseDto courseDto2 =
+        CourseDto.builder()
+            .id(2L)
+            .title("Computer Science")
+            .faculty("faculty")
+            .teacher("Something Testing")
+            .duration_in_hours(30)
+            .build();
 
-    given(degreeMapper.convertToDto(any(Degree.class))).willReturn(degreeDto1, degreeDto2);
+    given(courseMapper.convertToDto(any(Course.class))).willReturn(courseDto1, courseDto2);
     given(facultyRepository.existsById(any(Long.class))).willReturn(true);
+
     // Call the method to test
-    Page<DegreeDto> result = facultyService.getFacultyDegrees(1L, PageRequest.of(0, 10));
+    Page<CourseDto> result = facultyService.getFacultyCourses(1L, PageRequest.of(0, 10));
 
     // Assert the result
     Assertions.assertEquals(2, result.getTotalElements());
-    Assertions.assertEquals(degreeDto1, result.getContent().get(0));
-    Assertions.assertEquals(degreeDto2, result.getContent().get(1));
+    Assertions.assertEquals(courseDto1, result.getContent().get(0));
+    Assertions.assertEquals(courseDto2, result.getContent().get(1));
 
     // Verify the interactions with userRepository and userMapper
-    verify(facultyRepository, times(1)).findFacultyDegrees(any(Long.class), any(Pageable.class));
-    verify(degreeMapper, times(2)).convertToDto(any(Degree.class));
+    verify(facultyRepository, times(1)).findFacultyCourses(any(Long.class), any(Pageable.class));
+    verify(courseMapper, times(2)).convertToDto(any(Course.class));
   }
 
   @Test
@@ -96,6 +116,6 @@ public class GetFacultyDegreesTest {
 
     Assertions.assertThrows(
         EntityNotFoundException.class,
-        () -> facultyService.getFacultyDegrees(faculty.getId(), pageable));
+        () -> facultyService.getFacultyCourses(faculty.getId(), pageable));
   }
 }
