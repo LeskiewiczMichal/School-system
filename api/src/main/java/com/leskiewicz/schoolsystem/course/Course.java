@@ -26,7 +26,6 @@ public class Course {
   @Column(name = "title")
   private String title;
 
-  @NotNull
   @Column(name = "duration_in_hours")
   private int duration_in_hours;
 
