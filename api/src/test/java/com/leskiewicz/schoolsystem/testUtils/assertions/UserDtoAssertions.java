@@ -2,7 +2,9 @@ package com.leskiewicz.schoolsystem.testUtils.assertions;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
+import com.leskiewicz.schoolsystem.degree.DegreeController;
 import com.leskiewicz.schoolsystem.testModels.UserDto;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.test.web.servlet.ResultActions;
 
 public class UserDtoAssertions implements DtoAssertion<UserDto> {
@@ -38,25 +40,30 @@ public class UserDtoAssertions implements DtoAssertion<UserDto> {
         .andExpect(jsonPath(String.format("$.lastName")).value(dto.getLastName()))
         .andExpect(jsonPath(String.format("$.email")).value(dto.getEmail()))
         .andExpect(jsonPath(String.format("$.faculty")).value(dto.getFaculty()))
-            .andExpect(
+        .andExpect(
             jsonPath(String.format("$._links.self.href"))
                 .value(String.format("http://localhost/api/users/%d", dto.getId())));
     if (dto.getDegree() != null) {
       result.andExpect(jsonPath(String.format("$.degree")).value(dto.getDegree()));
+      result.andExpect(
+          jsonPath(String.format("$._links.degree.href"))
+              .value(
+                  WebMvcLinkBuilder.linkTo(DegreeController.class)
+                      .slash(dto.getDegreeId())
+                      .withSelfRel()
+                      .getHref()));
     }
   }
 
   @Override
   public void assertDtoWithAnyId(ResultActions result, UserDto dto) throws Exception {
     result
-            .andExpect(jsonPath(String.format("$.id")).exists())
-            .andExpect(jsonPath(String.format("$.firstName")).value(dto.getFirstName()))
-            .andExpect(jsonPath(String.format("$.lastName")).value(dto.getLastName()))
-            .andExpect(jsonPath(String.format("$.email")).value(dto.getEmail()))
-            .andExpect(jsonPath(String.format("$.faculty")).value(dto.getFaculty()))
-            .andExpect(
-                    jsonPath(String.format("$._links.self.href"))
-                            .exists());
+        .andExpect(jsonPath(String.format("$.id")).exists())
+        .andExpect(jsonPath(String.format("$.firstName")).value(dto.getFirstName()))
+        .andExpect(jsonPath(String.format("$.lastName")).value(dto.getLastName()))
+        .andExpect(jsonPath(String.format("$.email")).value(dto.getEmail()))
+        .andExpect(jsonPath(String.format("$.faculty")).value(dto.getFaculty()))
+        .andExpect(jsonPath(String.format("$._links.self.href")).exists());
     if (dto.getDegree() != null) {
       result.andExpect(jsonPath(String.format("$.degree")).value(dto.getDegree()));
     }

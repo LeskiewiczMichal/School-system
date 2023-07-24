@@ -9,7 +9,6 @@ import com.leskiewicz.schoolsystem.testUtils.CommonTests;
 import com.leskiewicz.schoolsystem.testUtils.assertions.UserDtoAssertions;
 import java.util.Arrays;
 import java.util.stream.Stream;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.provider.Arguments;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -104,18 +103,21 @@ public class UserGenericControllerProviderTest extends GenericControllerTest<Use
     return Stream.of(noParams, pageOne, descending, sortByName, pageSize20);
   }
 
-  @Test
-  public void getUsersTestPagination() throws Exception {
-    CommonTests.paginationLinksTest(requestUtils, "/api/users", 2);
-  }
-
   static Stream<Arguments> getApiSingleItemResponsesProvider() {
     Arguments happyPath =
         Arguments.of(
             "/api/users/1",
             status().isOk(),
             "application/hal+json",
-                UserDto.builder().id(1L).firstName("John").lastName("Doe").email("johndoe@example.com").faculty("Informatics").degree("Computer Science").build(),
+            UserDto.builder()
+                .id(1L)
+                .firstName("John")
+                .lastName("Doe")
+                .email("johndoe@example.com")
+                .faculty("Informatics")
+                .degree("Computer Science")
+                .degreeId(1L)
+                .build(),
             new UserDtoAssertions());
 
     return Stream.of(happyPath);
@@ -141,5 +143,10 @@ public class UserGenericControllerProviderTest extends GenericControllerTest<Use
             404);
 
     return Stream.of(status400OnStringProvided, status404OnUserNotFound);
+  }
+
+  @Test
+  public void getUsersTestPagination() throws Exception {
+    CommonTests.paginationLinksTest(requestUtils, "/api/users", 2);
   }
 }

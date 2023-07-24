@@ -38,7 +38,7 @@ public class PatchUserApiTest {
   private final String GET_USER_BY_ID = "/api/users/";
   private final UserDtoAssertions userDtoAssertions = new UserDtoAssertions();
   @Autowired private MockMvc mvc;
-  
+
   // Variables
   private ObjectMapper mapper;
   private RequestUtils requestUtils;
@@ -52,6 +52,7 @@ public class PatchUserApiTest {
             .email("alicesmith@example.com")
             .faculty("Informatics")
             .degree("Computer Science")
+            .degreeId(1L)
             .build();
 
     Arguments changeName =
@@ -68,18 +69,19 @@ public class PatchUserApiTest {
         Arguments.of(
             PatchUserRequest.builder().email("test@example.com").build(),
             baseUser.toBuilder().email("test@example.com").build());
+
     Arguments changeDegree =
         Arguments.of(
             PatchUserRequest.builder()
                 .degreeField("Software Engineering")
                 .degreeTitle(DegreeTitle.MASTER)
                 .build(),
-            baseUser.toBuilder().degree("Software Engineering").build());
+            baseUser.toBuilder().degree("Software Engineering").degreeId(2L).build());
 
     Arguments changeFaculty =
         Arguments.of(
             PatchUserRequest.builder().facultyName("Biology").build(),
-            baseUser.toBuilder().faculty("Biology").build());
+            baseUser.toBuilder().faculty("Biology").degreeId(4L).build());
 
     Arguments changeFacultyAndDegree =
         Arguments.of(
@@ -88,7 +90,7 @@ public class PatchUserApiTest {
                 .degreeTitle(DegreeTitle.BACHELOR)
                 .degreeField("Nano")
                 .build(),
-            baseUser.toBuilder().faculty("Biology").degree("Nano").build());
+            baseUser.toBuilder().faculty("Biology").degree("Nano").degreeId(3L).build());
 
     return Stream.of(
         changeName,
@@ -103,74 +105,74 @@ public class PatchUserApiTest {
     String path = "/api/users/20";
 
     Arguments changeDegreeToNotCorrectOnCurrentFaculty =
-            Arguments.of(
-                    PatchUserRequest.builder()
-                            .degreeField("Nano")
-                            .degreeTitle(DegreeTitle.BACHELOR)
-                            .build(),
-                    new ApiError(
-                            path,
-                            ErrorMessages.objectWasNotUpdated("User")
-                                    + ". "
-                                    + ErrorMessages.degreeNotOnFaculty("Nano", DegreeTitle.BACHELOR, "Informatics"),
-                            404,
-                            LocalDateTime.now()),
-                    status().isNotFound());
+        Arguments.of(
+            PatchUserRequest.builder()
+                .degreeField("Nano")
+                .degreeTitle(DegreeTitle.BACHELOR)
+                .build(),
+            new ApiError(
+                path,
+                ErrorMessages.objectWasNotUpdated("User")
+                    + ". "
+                    + ErrorMessages.degreeNotOnFaculty("Nano", DegreeTitle.BACHELOR, "Informatics"),
+                404,
+                LocalDateTime.now()),
+            status().isNotFound());
 
     Arguments changeFacultyToNonExistent =
-            Arguments.of(
-                    PatchUserRequest.builder().facultyName("qwre").build(),
-                    new ApiError(
-                            path,
-                            ErrorMessages.objectWasNotUpdated("User")
-                                    + ". "
-                                    + ErrorMessages.objectWithNameNotFound("Faculty", "qwre"),
-                            404,
-                            LocalDateTime.now()),
-                    status().isNotFound());
+        Arguments.of(
+            PatchUserRequest.builder().facultyName("qwre").build(),
+            new ApiError(
+                path,
+                ErrorMessages.objectWasNotUpdated("User")
+                    + ". "
+                    + ErrorMessages.objectWithNameNotFound("Faculty", "qwre"),
+                404,
+                LocalDateTime.now()),
+            status().isNotFound());
 
     Arguments changeFacultyToOneThatHaveNotGotTheSameDegree =
-            Arguments.of(
-                    PatchUserRequest.builder().facultyName("Electronics").build(),
-                    new ApiError(
-                            path,
-                            ErrorMessages.objectWasNotUpdated("User")
-                                    + ". "
-                                    + ErrorMessages.degreeNotOnFaculty(
-                                    "Computer Science", DegreeTitle.BACHELOR_OF_SCIENCE, "Electronics"),
-                            404,
-                            LocalDateTime.now()),
-                    status().isNotFound());
+        Arguments.of(
+            PatchUserRequest.builder().facultyName("Electronics").build(),
+            new ApiError(
+                path,
+                ErrorMessages.objectWasNotUpdated("User")
+                    + ". "
+                    + ErrorMessages.degreeNotOnFaculty(
+                        "Computer Science", DegreeTitle.BACHELOR_OF_SCIENCE, "Electronics"),
+                404,
+                LocalDateTime.now()),
+            status().isNotFound());
 
     Arguments changeFacultyAndDegreeButDegreeButDegreeIsNotOnNewFaculty =
-            Arguments.of(
-                    PatchUserRequest.builder()
-                            .facultyName("Electronics")
-                            .degreeTitle(DegreeTitle.BACHELOR)
-                            .degreeField("Nano")
-                            .build(),
-                    new ApiError(
-                            path,
-                            ErrorMessages.objectWasNotUpdated("User")
-                                    + ". "
-                                    + ErrorMessages.degreeNotOnFaculty("Nano", DegreeTitle.BACHELOR, "Electronics"),
-                            404,
-                            LocalDateTime.now()),
-                    status().isNotFound());
+        Arguments.of(
+            PatchUserRequest.builder()
+                .facultyName("Electronics")
+                .degreeTitle(DegreeTitle.BACHELOR)
+                .degreeField("Nano")
+                .build(),
+            new ApiError(
+                path,
+                ErrorMessages.objectWasNotUpdated("User")
+                    + ". "
+                    + ErrorMessages.degreeNotOnFaculty("Nano", DegreeTitle.BACHELOR, "Electronics"),
+                404,
+                LocalDateTime.now()),
+            status().isNotFound());
     return Stream.of(
-            changeDegreeToNotCorrectOnCurrentFaculty,
-            changeFacultyToNonExistent,
-            changeFacultyToOneThatHaveNotGotTheSameDegree,
-            changeFacultyAndDegreeButDegreeButDegreeIsNotOnNewFaculty);
+        changeDegreeToNotCorrectOnCurrentFaculty,
+        changeFacultyToNonExistent,
+        changeFacultyToOneThatHaveNotGotTheSameDegree,
+        changeFacultyAndDegreeButDegreeButDegreeIsNotOnNewFaculty);
   }
 
   @BeforeEach
   public void setUp() {
     // Configure object mapper
     mapper =
-            new ObjectMapper()
-                    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-                    .registerModule(new JavaTimeModule());
+        new ObjectMapper()
+            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+            .registerModule(new JavaTimeModule());
 
     requestUtils = new RequestUtilsImpl(mvc, mapper);
   }
@@ -180,7 +182,7 @@ public class PatchUserApiTest {
   @MethodSource("patchUserHappyPathProvider")
   public void patchUserHappyPath(PatchUserRequest request, UserDto expectedUser) throws Exception {
     ResultActions result =
-            requestUtils.performPatchRequest(GET_USER_BY_ID + "20", request, status().isOk());
+        requestUtils.performPatchRequest(GET_USER_BY_ID + "20", request, status().isOk());
 
     userDtoAssertions.assertDto(result, expectedUser);
   }
@@ -188,25 +190,24 @@ public class PatchUserApiTest {
   @Test
   public void patchUserReturnsStatus404OnUserNotFound() throws Exception {
     ResultActions result =
-            requestUtils.performPatchRequest(
-                    GET_USER_BY_ID + "300",
-                    PatchUserRequest.builder().firstName("Ok").build(),
-                    status().isNotFound());
+        requestUtils.performPatchRequest(
+            GET_USER_BY_ID + "300",
+            PatchUserRequest.builder().firstName("Ok").build(),
+            status().isNotFound());
 
     TestAssertions.assertError(
-            result, ErrorMessages.objectWithIdNotFound("User", 300L), GET_USER_BY_ID + "300", 404);
+        result, ErrorMessages.objectWithIdNotFound("User", 300L), GET_USER_BY_ID + "300", 404);
   }
 
   @ParameterizedTest
   @MethodSource("patchUserErrorTestingProvider")
   public void patchUserErrorTesting(
-          PatchUserRequest request, ApiError expectedError, ResultMatcher expectedStatus)
-          throws Exception {
+      PatchUserRequest request, ApiError expectedError, ResultMatcher expectedStatus)
+      throws Exception {
     ResultActions result =
-            requestUtils.performPatchRequest(GET_USER_BY_ID + "20", request, expectedStatus);
+        requestUtils.performPatchRequest(GET_USER_BY_ID + "20", request, expectedStatus);
 
     TestAssertions.assertError(
-            result, expectedError.message(), expectedError.path(), expectedError.statusCode());
+        result, expectedError.message(), expectedError.path(), expectedError.statusCode());
   }
-
 }
