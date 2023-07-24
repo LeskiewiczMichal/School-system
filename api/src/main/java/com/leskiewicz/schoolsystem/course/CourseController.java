@@ -40,7 +40,7 @@ public class CourseController {
    * @throws IllegalArgumentException if the ID is a string, returns status 400.
    */
   @GetMapping("/{id}")
-  public ResponseEntity<CourseDto> getCouseById(@PathVariable Long id) {
+  public ResponseEntity<CourseDto> getCourseById(@PathVariable Long id) {
     CourseDto course = courseService.getById(id);
     course = courseDtoAssembler.toModel(course);
 
