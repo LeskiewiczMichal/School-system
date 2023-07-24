@@ -17,7 +17,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * REST controller for managing degrees.
+ * REST controller for managing {@link Degree}.
  *
  * <p>All endpoints return responses formatted as HAL representations with _links. Collections are
  * return inside _embedded field.
@@ -39,7 +39,7 @@ public class DegreeController {
    * Get a degree by its ID.
    *
    * @param id the ID of the degree to retrieve.
-   * @return status 200 and the DegreeDto representing the degree with the given ID in the body.
+   * @return status 200 and the {@link DegreeDto} representing the degree with the given ID in the body.
    * @throws EntityNotFoundException if the degree does not exist, returns status 404.
    * @throws IllegalArgumentException if the ID is a string, returns status 400.
    */
@@ -54,8 +54,8 @@ public class DegreeController {
   /**
    * Get all degrees.
    *
-   * @param request the pageable request containing sorting, pagination, etc.
-   * @return status 200 (OK) and in body the paged list of DegreeDto objects and page metadata. If
+   * @param request the {@link PageableRequest} containing sorting, pagination, etc.
+   * @return status 200 (OK) and in body the paged list of {@link DegreeDto} objects and page metadata. If
    *     there are no degrees, an empty page is returned (without _embedded.degrees field).
    */
   @GetMapping
@@ -71,8 +71,8 @@ public class DegreeController {
   /**
    * Creates a new degree based on the given request.
    *
-   * @param request The request containing the data to create the degree.
-   * @return status 201 with created DegreeDto in the body.
+   * @param request The {@link CreateDegreeRequest} containing the data to create the degree.
+   * @return status 201 with created {@link DegreeDto} in the body.
    * @throws EntityAlreadyExistsException and returns status 400 if a degree with the same title,
    *     field of study, and faculty already exists.
    * @throws EntityNotFoundException and returns status 404 if provided faculty does not exist.

@@ -25,7 +25,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * REST controller for managing faculties.
+ * REST controller for managing {@link Faculty}.
  *
  * <p>All endpoints return responses formatted as HAL representations with _links. Collections are
  * return inside _embedded field.
