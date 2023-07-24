@@ -2,6 +2,7 @@ package com.leskiewicz.schoolsystem.user;
 
 import com.leskiewicz.schoolsystem.authentication.utils.ValidationUtils;
 import com.leskiewicz.schoolsystem.course.Course;
+import com.leskiewicz.schoolsystem.course.CourseRepository;
 import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.course.utils.CourseMapper;
 import com.leskiewicz.schoolsystem.degree.Degree;
@@ -27,9 +28,14 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
-  private final UserRepository userRepository;
   private final FacultyService facultyService;
   private final PasswordEncoder passwordEncoder;
+
+  // Repositories
+  private final UserRepository userRepository;
+  private final CourseRepository courseRepository;
+
+  // Mappers
   private final UserMapper userMapper;
   private final CourseMapper courseMapper;
   private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
@@ -188,7 +194,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public Page<CourseDto> getUserCourses(Long userId, Pageable pageable) {
-    Page<Course> courses = userRepository.findCoursesByUserId(userId, pageable);
+    Page<Course> courses = courseRepository.findCoursesByUserId(userId, pageable);
     return courses.map(courseMapper::convertToDto);
   }
 }

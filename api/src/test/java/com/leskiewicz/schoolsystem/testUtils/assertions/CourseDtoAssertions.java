@@ -20,6 +20,9 @@ public class CourseDtoAssertions implements DtoAssertion<CourseDto> {
             jsonPath(String.format("$._embedded.courses[%d].faculty", index))
                 .value(dto.getFaculty()))
         .andExpect(
+            jsonPath(String.format("$._embedded.courses[%d].durationInHours", index))
+                .value(dto.getDurationInHours()))
+        .andExpect(
             jsonPath(String.format("$._embedded.courses[%d]._links.self.href", index))
                 .value(String.format("http://localhost/api/courses/%d", dto.getId())))
         .andExpect(
@@ -39,6 +42,7 @@ public class CourseDtoAssertions implements DtoAssertion<CourseDto> {
         .andExpect(jsonPath("$.title").value(dto.getTitle()))
         .andExpect(jsonPath("$.teacher").value(dto.getTeacher()))
         .andExpect(jsonPath("$.faculty").value(dto.getFaculty()))
+        .andExpect(jsonPath("$.durationInHours").value(dto.getDurationInHours()))
         .andExpect(
             jsonPath("$._links.self.href")
                 .value(String.format("http://localhost/api/courses/%d", dto.getId())))
@@ -54,6 +58,7 @@ public class CourseDtoAssertions implements DtoAssertion<CourseDto> {
         .andExpect(jsonPath("$.title").value(dto.getTitle()))
         .andExpect(jsonPath("$.teacher").value(dto.getTeacher()))
         .andExpect(jsonPath("$.faculty").value(dto.getFaculty()))
+        .andExpect(jsonPath("$.durationInHours").value(dto.getDurationInHours()))
         .andExpect(jsonPath("$._links.self.href").exists())
         .andExpect(jsonPath("$._links.teacher.href").exists())
         .andExpect(jsonPath("$._links.faculty.href").exists());
