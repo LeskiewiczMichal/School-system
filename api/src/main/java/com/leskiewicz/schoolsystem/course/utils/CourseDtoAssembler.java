@@ -6,6 +6,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import com.leskiewicz.schoolsystem.course.CourseController;
 import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.faculty.FacultyController;
+import com.leskiewicz.schoolsystem.user.UserController;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
@@ -24,9 +25,13 @@ public class CourseDtoAssembler extends RepresentationModelAssemblerSupport<Cour
     Link facultyLink =
             linkTo(methodOn(FacultyController.class).getFacultyById(course.getFacultyId()))
                     .withRel("faculty");
+    Link teacherLink =
+            linkTo(methodOn(UserController.class).getUserById(course.getTeacherId()))
+                    .withRel("teacher");
 
     course.add(selfLink);
     course.add(facultyLink);
+    course.add(teacherLink);
 
     return course;
   }
