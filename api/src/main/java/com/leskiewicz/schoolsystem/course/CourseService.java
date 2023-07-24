@@ -1,11 +1,11 @@
 package com.leskiewicz.schoolsystem.course;
 
 import com.leskiewicz.schoolsystem.course.Course;
+import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 
 import java.security.Principal;
 
 public interface CourseService {
 
-    Course getById(Long id);
-    void addStudentToCourse(Long courseId, Principal principal);
+    CourseDto getById(Long id);
 }
