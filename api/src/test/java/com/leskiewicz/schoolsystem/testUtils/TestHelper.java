@@ -1,6 +1,7 @@
 package com.leskiewicz.schoolsystem.testUtils;
 
 import com.leskiewicz.schoolsystem.authentication.Role;
+import com.leskiewicz.schoolsystem.course.Course;
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
@@ -19,6 +20,18 @@ public class TestHelper {
         .role(Role.ROLE_STUDENT)
         .faculty(faculty)
         .degree(degree)
+        .build();
+  }
+
+  public static User createTeacher(Faculty faculty) {
+    return User.builder()
+        .id(1L)
+        .firstName("Daro")
+        .lastName("Bibini")
+        .email("darobibini@example.com")
+        .password("12345")
+        .role(Role.ROLE_TEACHER)
+        .faculty(faculty)
         .build();
   }
 
@@ -43,6 +56,16 @@ public class TestHelper {
         .title(DegreeTitle.BACHELOR_OF_SCIENCE)
         .fieldOfStudy("Computer Science")
         .faculty(faculty)
+        .build();
+  }
+
+  public static Course createCourse(Faculty faculty, User teacher) {
+    return Course.builder()
+        .id(1L)
+        .title("TestCourse")
+        .faculty(faculty)
+        .teacher(teacher)
+        .duration_in_hours(20)
         .build();
   }
 }
