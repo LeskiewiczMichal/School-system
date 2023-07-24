@@ -2,6 +2,7 @@ package com.leskiewicz.schoolsystem.user;
 
 import com.leskiewicz.schoolsystem.dto.request.PageableRequest;
 import com.leskiewicz.schoolsystem.error.customexception.EntityAlreadyExistsException;
+import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.user.dto.PatchUserRequest;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserDtoAssembler;
@@ -15,7 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * REST controller for managing faculties.
+ * REST controller for managing {@link User}.
  *
  * <p>All endpoints return responses formatted as HAL representations with _links. Collections are
  * return inside _embedded field.
@@ -36,8 +37,8 @@ public class UserController {
   /**
    * Get all users.
    *
-   * @param request the pageable request containing sorting, pagination, etc.
-   * @return status 200 (OK) and in body the paged list of UserDto objects and page metadata. If
+   * @param request the {@link PageableRequest} containing sorting, pagination, etc.
+   * @return status 200 (OK) and in body the paged list of {@link UserDto} objects and page metadata. If
    *     there are no users, an empty page is returned (without _embedded.users field).
    */
   @GetMapping
@@ -54,7 +55,7 @@ public class UserController {
    * Get a user by its ID.
    *
    * @param id the ID of the user to retrieve.
-   * @return status 200 and the UserDto representing the user with the given ID in the body.
+   * @return status 200 and the {@link UserDto} representing the user with the given ID in the body.
    * @throws EntityNotFoundException if the user does not exist, returns status 404.
    * @throws IllegalArgumentException if the ID is a string, returns status 400.
    */
@@ -69,9 +70,9 @@ public class UserController {
   /**
    * Updates a user based on the given request.
    *
-   * @param request The request containing the data to update in the user.
+   * @param request The {@link PatchUserRequest} containing the data to update in the user.
    * @param id The ID of the user to update.
-   * @return status 200 with modified UserDto in the body.
+   * @return status 200 with modified {@link UserDto} in the body.
    * @throws EntityNotFoundException and returns status 404 if the user does not exist.
    * @throws EntityAlreadyExistsException and returns status 400 if user with the same email as
    *     provided already exists.
