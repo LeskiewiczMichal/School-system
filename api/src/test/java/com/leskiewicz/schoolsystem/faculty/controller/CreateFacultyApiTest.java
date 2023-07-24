@@ -91,6 +91,6 @@ public class CreateFacultyApiTest {
 
     // Assert name was already taken
     TestAssertions.assertError(
-        result, "Faculty with name: Informatics already exists", BASE_FACULTIES, 400);
+        result, "Faculty with name: zxcv already exists", BASE_FACULTIES, 400);
   }
 }

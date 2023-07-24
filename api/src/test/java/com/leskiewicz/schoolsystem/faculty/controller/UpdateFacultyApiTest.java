@@ -81,7 +81,7 @@ public class UpdateFacultyApiTest {
   @Test
   public void updateFacultyReturns400OnFacultyWithNameAlreadyExists() throws Exception {
     // Create faculty with the name we want to change to
-    Faculty faculty = Faculty.builder().name("Biology").build();
+    Faculty faculty = Faculty.builder().name("zxcv").build();
     facultyRepository.save(faculty);
 
     // Create request to change the name to the one that already exists
@@ -92,6 +92,6 @@ public class UpdateFacultyApiTest {
         requestUtils.performPatchRequest(BASE_FACULTIES + "/1", request, status().isBadRequest());
 
     TestAssertions.assertError(
-        result, "Faculty with name: Biology already exists", BASE_FACULTIES + "/1", 400);
+        result, "Faculty with name: zxcv already exists", BASE_FACULTIES + "/1", 400);
   }
 }
