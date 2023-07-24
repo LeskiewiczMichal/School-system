@@ -66,7 +66,7 @@ public class FacultyController {
    * Get a faculty by its ID.
    *
    * @param id the ID of the faculty to retrieve.
-   * @return status 200 and the FacultyDto representing the faculty with the given ID in the body.
+   * @return status 200 and the {@link FacultyDto} representing the faculty with the given ID in the body.
    * @throws EntityNotFoundException if the faculty does not exist, returns status 404.
    * @throws IllegalArgumentException if the ID is a string, returns status 400.
    */
