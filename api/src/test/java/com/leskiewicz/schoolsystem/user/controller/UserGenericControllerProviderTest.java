@@ -115,8 +115,7 @@ public class UserGenericControllerProviderTest extends GenericControllerTest<Use
             "/api/users/1",
             status().isOk(),
             "application/hal+json",
-            new UserDto(
-                1L, "John", "Doe", "johndoe@example.com", "Informatics", "Computer Science"),
+                UserDto.builder().firstName("John").lastName("Doe").email("johndoe@example.com").faculty("Informatics").degree("Computer Science").build(),
             new UserDtoAssertions());
 
     return Stream.of(happyPath);

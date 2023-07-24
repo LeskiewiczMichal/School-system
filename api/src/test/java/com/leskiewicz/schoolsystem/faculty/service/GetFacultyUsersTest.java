@@ -77,10 +77,10 @@ public class GetFacultyUsersTest {
 
     // Mock the behavior of the userMapper
     UserDto userDto1 =
-        new UserDto(1L, "John", "Doe", "john.doe@example.com", "Some Faculty", "Some Degree", 1L);
+        new UserDto(1L, "John", "Doe", "john.doe@example.com", "Some Faculty",  1L, "Some Degree", 2L);
     UserDto userDto2 =
         new UserDto(
-            2L, "Jane", "Smith", "jane.smith@example.com", "Another Faculty", "Another Degree", 2L);
+            2L, "Jane", "Smith", "jane.smith@example.com", "Another Faculty", 2L, "Another Degree",  2L);
     given(userMapper.convertToDto(any(User.class))).willReturn(userDto1, userDto2);
     given(facultyRepository.existsById(any(Long.class))).willReturn(true);
     // Call the method to test

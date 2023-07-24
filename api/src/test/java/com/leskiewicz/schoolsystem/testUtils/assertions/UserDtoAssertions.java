@@ -38,7 +38,7 @@ public class UserDtoAssertions implements DtoAssertion<UserDto> {
         .andExpect(jsonPath(String.format("$.lastName")).value(dto.getLastName()))
         .andExpect(jsonPath(String.format("$.email")).value(dto.getEmail()))
         .andExpect(jsonPath(String.format("$.faculty")).value(dto.getFaculty()))
-        .andExpect(
+            .andExpect(
             jsonPath(String.format("$._links.self.href"))
                 .value(String.format("http://localhost/api/users/%d", dto.getId())));
     if (dto.getDegree() != null) {

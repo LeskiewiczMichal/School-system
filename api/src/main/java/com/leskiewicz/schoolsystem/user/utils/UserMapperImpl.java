@@ -24,8 +24,6 @@ public class UserMapperImpl implements UserMapper {
     }
 
     Faculty userFaculty = user.getFaculty();
-    logger.debug(
-        "User with ID: {} registered into faculty: {}", user.getId(), userFaculty.getName());
 
     // Create dto from user
     UserDto.UserDtoBuilder userDto =
@@ -35,16 +33,20 @@ public class UserMapperImpl implements UserMapper {
             .lastName(user.getLastName())
             .email(user.getEmail())
             .faculty(userFaculty.getName())
-            .facultyId(userFaculty.getId())
-            .degreeId(user.getDegree().getId());
+            .facultyId(userFaculty.getId());
 
     if (user.getRole() == Role.ROLE_STUDENT) {
       userDto.degree(user.getDegree().getFieldOfStudy());
+      userDto.degreeId(user.getDegree().getId());
     } else {
       userDto.degree(null);
+      userDto.degreeId(null);
     }
-    logger.debug("Converted User entity with ID: {} to UserDto", user.getId());
 
-    return userDto.build();
+    UserDto mappedUserDto = userDto.build();
+    ValidationUtils.validate(mappedUserDto);
+
+    logger.debug("Converted User entity with ID: {} to UserDto", user.getId());
+    return mappedUserDto;
   }
 }

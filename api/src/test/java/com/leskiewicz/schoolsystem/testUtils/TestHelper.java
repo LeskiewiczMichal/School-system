@@ -1,9 +1,9 @@
 package com.leskiewicz.schoolsystem.testUtils;
 
+import com.leskiewicz.schoolsystem.authentication.Role;
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
-import com.leskiewicz.schoolsystem.authentication.Role;
 import com.leskiewicz.schoolsystem.testModels.UserDto;
 import com.leskiewicz.schoolsystem.user.User;
 
@@ -15,6 +15,7 @@ public class TestHelper {
         .firstName("John")
         .lastName("Doe")
         .email("johndoe@example.com")
+        .password("12345")
         .role(Role.ROLE_STUDENT)
         .faculty(faculty)
         .degree(degree)

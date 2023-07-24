@@ -3,6 +3,7 @@ package com.leskiewicz.schoolsystem.logging;
 import com.leskiewicz.schoolsystem.authentication.dto.AuthenticationRequest;
 import com.leskiewicz.schoolsystem.authentication.dto.AuthenticationResponse;
 import com.leskiewicz.schoolsystem.authentication.dto.RegisterRequest;
+import com.leskiewicz.schoolsystem.authentication.utils.ValidationUtils;
 import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import java.util.List;
@@ -64,15 +65,25 @@ public class LoggingUtils {
   }
 
   private static UserDto maskUserDto(UserDto userDto) {
-    return new UserDto(
-        userDto.getId(),
-        LoggingUtils.maskInfo(userDto.getFirstName()),
-        LoggingUtils.maskInfo(userDto.getLastName()),
-        LoggingUtils.maskEmail(userDto.getEmail()),
-        userDto.getFaculty(),
-        userDto.getDegree(),
-        userDto.getFacultyId(),
-        userDto.getDegreeId());
+    UserDto.UserDtoBuilder maskedUserDto =
+        UserDto.builder()
+            .id(userDto.getId())
+            .firstName(LoggingUtils.maskInfo(userDto.getFirstName()))
+            .lastName(LoggingUtils.maskInfo(userDto.getLastName()))
+            .email(LoggingUtils.maskEmail(userDto.getEmail()))
+            .faculty(userDto.getFaculty())
+            .facultyId(userDto.getFacultyId());
+
+    // Degree might be null if user is not a student
+    if (userDto.getDegree() != null) {
+      maskedUserDto.degree(userDto.getDegree());
+      maskedUserDto.degreeId(userDto.getDegreeId());
+    }
+
+    UserDto mappedUserDto = maskedUserDto.build();
+    ValidationUtils.validate(mappedUserDto);
+
+    return mappedUserDto;
   }
 
   private static CollectionModel<?> maskCollectionModel(CollectionModel<?> collectionModel) {

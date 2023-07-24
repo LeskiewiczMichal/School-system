@@ -63,12 +63,10 @@ public class GetUsersTest {
 
     given(userRepository.findAll(any(Pageable.class))).willReturn(usersPage);
 
-    // Mock the behavior of the userMapper
-    UserDto userDto1 =
-        new UserDto(1L, "John", "Doe", "john.doe@example.com", "Some Faculty", "Some Degree", 1L);
-    UserDto userDto2 =
-        new UserDto(
-            2L, "Jane", "Smith", "jane.smith@example.com", "Another Faculty", "Another Degree", 2L);
+    // Mock the behavior of the userMappe
+    UserDto userDto1 = UserDto.builder().id(1L).firstName("John").lastName("Doe").email("john.doe@example.com").faculty("Some Faculty").degree("Some Degree").build();
+    UserDto userDto2 = UserDto.builder().id(2L).firstName("Jane").lastName("Smith").email("jane.smith@example.com").faculty("Another Faculty").degree("Another Degree").build();
+
     given(userMapper.convertToDto(any(User.class))).willReturn(userDto1, userDto2);
 
     // Call the method to test

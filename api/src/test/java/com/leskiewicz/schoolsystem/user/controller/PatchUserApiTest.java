@@ -5,113 +5,102 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.leskiewicz.schoolsystem.degree.Degree;
-import com.leskiewicz.schoolsystem.degree.DegreeRepository;
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
 import com.leskiewicz.schoolsystem.error.ApiError;
 import com.leskiewicz.schoolsystem.error.ErrorMessages;
-import com.leskiewicz.schoolsystem.faculty.Faculty;
-import com.leskiewicz.schoolsystem.faculty.FacultyRepository;
 import com.leskiewicz.schoolsystem.testModels.UserDto;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtils;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtilsImpl;
-import com.leskiewicz.schoolsystem.testUtils.TestHelper;
 import com.leskiewicz.schoolsystem.testUtils.assertions.TestAssertions;
 import com.leskiewicz.schoolsystem.testUtils.assertions.UserDtoAssertions;
-import com.leskiewicz.schoolsystem.user.User;
-import com.leskiewicz.schoolsystem.user.UserRepository;
 import com.leskiewicz.schoolsystem.user.dto.PatchUserRequest;
 import java.time.LocalDateTime;
 import java.util.stream.Stream;
-
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.ResultMatcher;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Sql(scripts = {"classpath:schema.sql", "classpath:usersTest.sql"})
 public class PatchUserApiTest {
 
   private final String GET_USER_BY_ID = "/api/users/";
   private final UserDtoAssertions userDtoAssertions = new UserDtoAssertions();
   @Autowired private MockMvc mvc;
-  @Autowired private UserRepository userRepository;
-  @Autowired private DegreeRepository degreeRepository;
-  @Autowired private FacultyRepository facultyRepository;
-
+  
   // Variables
   private ObjectMapper mapper;
   private RequestUtils requestUtils;
-  Faculty faculty;
-  Degree degree;
-  User user;
 
   static Stream<Arguments> patchUserHappyPathProvider() {
-    Faculty faculty = TestHelper.createFaculty();
-    Degree degree = TestHelper.createDegree(faculty);
-    UserDto baseUser = TestHelper.createUserDto(faculty, degree);
+    UserDto baseUser =
+        UserDto.builder()
+            .id(20L)
+            .firstName("Alice")
+            .lastName("Smith")
+            .email("alicesmith@example.com")
+            .faculty("Informatics")
+            .degree("Computer Science")
+            .build();
 
     Arguments changeName =
-            Arguments.of(
-                    PatchUserRequest.builder().firstName("Michal").build(),
-                    baseUser.toBuilder().firstName("Michal").build());
+        Arguments.of(
+            PatchUserRequest.builder().firstName("Michal").build(),
+            baseUser.toBuilder().firstName("Michal").build());
 
-    baseUser = baseUser.toBuilder().firstName("Michal").build();
     Arguments changeLastName =
-            Arguments.of(
-                    PatchUserRequest.builder().lastName("Leskiewicz").build(),
-                    baseUser.toBuilder().lastName("Leskiewicz").build());
+        Arguments.of(
+            PatchUserRequest.builder().lastName("Leskiewicz").build(),
+            baseUser.toBuilder().lastName("Leskiewicz").build());
 
-    baseUser = baseUser.toBuilder().lastName("Leskiewicz").build();
     Arguments changeEmail =
-            Arguments.of(
-                    PatchUserRequest.builder().email("test@example.com").build(),
-                    baseUser.toBuilder().email("test@example.com").build());
-
-    baseUser = baseUser.toBuilder().email("test@example.com").build();
+        Arguments.of(
+            PatchUserRequest.builder().email("test@example.com").build(),
+            baseUser.toBuilder().email("test@example.com").build());
     Arguments changeDegree =
-            Arguments.of(
-                    PatchUserRequest.builder()
-                            .degreeField("Software Engineering")
-                            .degreeTitle(DegreeTitle.MASTER)
-                            .build(),
-                    baseUser.toBuilder().degree("Software Engineering").build());
+        Arguments.of(
+            PatchUserRequest.builder()
+                .degreeField("Software Engineering")
+                .degreeTitle(DegreeTitle.MASTER)
+                .build(),
+            baseUser.toBuilder().degree("Software Engineering").build());
 
-    baseUser = baseUser.toBuilder().degree("Software Engineering").build();
     Arguments changeFaculty =
-            Arguments.of(
-                    PatchUserRequest.builder().facultyName("Biology").build(),
-                    baseUser.toBuilder().faculty("Biology").build());
+        Arguments.of(
+            PatchUserRequest.builder().facultyName("Biology").build(),
+            baseUser.toBuilder().faculty("Biology").build());
 
-    baseUser = baseUser.toBuilder().faculty("Biology").build();
     Arguments changeFacultyAndDegree =
-            Arguments.of(
-                    PatchUserRequest.builder()
-                            .facultyName("Biology")
-                            .degreeTitle(DegreeTitle.BACHELOR)
-                            .degreeField("Nano")
-                            .build(),
-                    baseUser.toBuilder().faculty("Biology").degree("Nano").build());
+        Arguments.of(
+            PatchUserRequest.builder()
+                .facultyName("Biology")
+                .degreeTitle(DegreeTitle.BACHELOR)
+                .degreeField("Nano")
+                .build(),
+            baseUser.toBuilder().faculty("Biology").degree("Nano").build());
 
     return Stream.of(
-            changeName,
-            changeLastName,
-            changeEmail,
-            changeDegree,
-            changeFaculty,
-            changeFacultyAndDegree);
+        changeName,
+        changeLastName,
+        changeEmail,
+        changeDegree,
+        changeFaculty,
+        changeFacultyAndDegree);
   }
 
   static Stream<Arguments> patchUserErrorTestingProvider() {
-    String path = "/api/users/1";
+    String path = "/api/users/20";
 
     Arguments changeDegreeToNotCorrectOnCurrentFaculty =
             Arguments.of(
@@ -123,7 +112,7 @@ public class PatchUserApiTest {
                             path,
                             ErrorMessages.objectWasNotUpdated("User")
                                     + ". "
-                                    + ErrorMessages.degreeNotOnFaculty("Nano", DegreeTitle.BACHELOR, "TestFaculty"),
+                                    + ErrorMessages.degreeNotOnFaculty("Nano", DegreeTitle.BACHELOR, "Informatics"),
                             404,
                             LocalDateTime.now()),
                     status().isNotFound());
@@ -168,7 +157,6 @@ public class PatchUserApiTest {
                             404,
                             LocalDateTime.now()),
                     status().isNotFound());
-
     return Stream.of(
             changeDegreeToNotCorrectOnCurrentFaculty,
             changeFacultyToNonExistent,
@@ -176,43 +164,15 @@ public class PatchUserApiTest {
             changeFacultyAndDegreeButDegreeButDegreeIsNotOnNewFaculty);
   }
 
-  @BeforeAll
+  @BeforeEach
   public void setUp() {
     // Configure object mapper
     mapper =
-        new ObjectMapper()
-            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-            .registerModule(new JavaTimeModule());
+            new ObjectMapper()
+                    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                    .registerModule(new JavaTimeModule());
 
     requestUtils = new RequestUtilsImpl(mvc, mapper);
-
-    // Create user to modify
-    faculty = TestHelper.createFaculty();
-    degree = TestHelper.createDegree(faculty);
-    user = TestHelper.createUser(faculty, degree);
-    faculty.setId(null);
-    degree.setId(null);
-    user.setId(null);
-
-    facultyRepository.save(faculty);
-    degreeRepository.save(degree);
-    userRepository.save(user);
-
-    Degree softwareEngineeringMaster =
-        Degree.builder().faculty(faculty).fieldOfStudy("Software Engineering").title(DegreeTitle.MASTER).build();
-    Faculty biology = Faculty.builder().name("Biology").degree(degree).build();
-    Degree softwareEngineeringMasterBiology =
-            Degree.builder().faculty(biology).fieldOfStudy("Software Engineering").title(DegreeTitle.MASTER).build();
-    Degree bachelorOfNanoOnBiology = Degree.builder().faculty(biology).fieldOfStudy("Nano").title(DegreeTitle.BACHELOR).build();
-    Degree bachelorOfNanoOnTestFaculty = Degree.builder().faculty(faculty).fieldOfStudy("Nano").title(DegreeTitle.BACHELOR).build();
-    Faculty electronics = Faculty.builder().name("Electronics").degree(softwareEngineeringMaster).build();
-
-    degreeRepository.save(softwareEngineeringMaster);
-    facultyRepository.save(biology);
-    degreeRepository.save(softwareEngineeringMasterBiology);
-    degreeRepository.save(bachelorOfNanoOnBiology);
-//    degreeRepository.save(bachelorOfNanoOnTestFaculty);
-    facultyRepository.save(electronics);
   }
 
   @DisplayName("Patch user API with different params")
@@ -220,7 +180,7 @@ public class PatchUserApiTest {
   @MethodSource("patchUserHappyPathProvider")
   public void patchUserHappyPath(PatchUserRequest request, UserDto expectedUser) throws Exception {
     ResultActions result =
-            requestUtils.performPatchRequest(GET_USER_BY_ID + "1", request, status().isOk());
+            requestUtils.performPatchRequest(GET_USER_BY_ID + "20", request, status().isOk());
 
     userDtoAssertions.assertDto(result, expectedUser);
   }
@@ -243,9 +203,10 @@ public class PatchUserApiTest {
           PatchUserRequest request, ApiError expectedError, ResultMatcher expectedStatus)
           throws Exception {
     ResultActions result =
-            requestUtils.performPatchRequest(GET_USER_BY_ID + "1", request, expectedStatus);
+            requestUtils.performPatchRequest(GET_USER_BY_ID + "20", request, expectedStatus);
 
     TestAssertions.assertError(
             result, expectedError.message(), expectedError.path(), expectedError.statusCode());
   }
+
 }
