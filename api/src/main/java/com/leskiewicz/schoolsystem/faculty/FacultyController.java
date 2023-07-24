@@ -52,9 +52,9 @@ public class FacultyController {
   /**
    * Get all faculties.
    *
-   * @param request the pageable request containing sorting, pagination, etc.
-   * @return status 200 (OK) and in body the paged list of FacultyDto objects and page metadata. If
-   *     there are no faculties, an empty page is returned (without _embedded.faculties field).
+   * @param request the {@link PageableRequest} containing sorting, pagination, etc.
+   * @return status 200 (OK) and in body the paged list of {@link FacultyDto} objects and page metadata.
+   *     If there are no faculties, an empty page is returned (without _embedded.faculties field).
    */
   @GetMapping
   public ResponseEntity<RepresentationModel<FacultyDto>> getFaculties(
@@ -86,8 +86,8 @@ public class FacultyController {
   /**
    * Creates a new faculty based on the given request.
    *
-   * @param request The request containing the data to create the faculty.
-   * @return status 201 with created FacultyDto in the body.
+   * @param request The {@link CreateFacultyRequest} containing the data to create the faculty.
+   * @return status 201 with created {@link FacultyDto} in the body.
    * @throws EntityAlreadyExistsException and returns status 400 if faculty with the same name
    *     already exists.
    * @throws MethodArgumentNotValidException, returns status 400 and body with path, message about
@@ -105,9 +105,9 @@ public class FacultyController {
   /**
    * Updates a faculty based on the given request.
    *
-   * @param request The request containing the data to update in the faculty.
+   * @param request The {@link PatchFacultyRequest} containing the data to update in the faculty.
    * @param id The ID of the faculty to update.
-   * @return status 200 with modified FacultyDto in the body.
+   * @return status 200 with modified {@link FacultyDto} in the body.
    * @throws EntityNotFoundException and returns status 404 if the faculty does not exist.
    * @throws EntityAlreadyExistsException and returns status 400 if faculty with the same name as
    *     provided to the request already exists.
@@ -125,8 +125,8 @@ public class FacultyController {
    * Get all students of faculty with provided ID.
    *
    * @param id the ID of the faculty to retrieve students from.
-   * @param request the pageable request containing sorting, pagination, etc.
-   * @return status 200 (OK) and in body the paged list of UserDto objects and page metadata. If
+   * @param request the {@link PageableRequest} containing sorting, pagination, etc.
+   * @return status 200 (OK) and in body the paged list of {@link UserDto} objects and page metadata. If
    *     there are no students, an empty page is returned (without _embedded.users field).
    */
   @GetMapping("/{id}/students")
@@ -144,8 +144,8 @@ public class FacultyController {
    * Get all teachers of faculty with provided ID.
    *
    * @param id the ID of the faculty to retrieve teachers from.
-   * @param request the pageable request containing sorting, pagination, etc.
-   * @return status 200 (OK) and in body the paged list of UserDto objects and page metadata. If
+   * @param request the {@link PageableRequest} containing sorting, pagination, etc.
+   * @return status 200 (OK) and in body the paged list of {@link UserDto} objects and page metadata. If
    *     there are no teachers, an empty page is returned (without _embedded.users field).
    */
   @GetMapping("/{id}/teachers")
@@ -163,8 +163,8 @@ public class FacultyController {
    * Get all degrees of faculty with provided ID.
    *
    * @param id the ID of the faculty to retrieve degrees from.
-   * @param request the pageable request containing sorting, pagination, etc.
-   * @return status 200 (OK) and in body the paged list of UserDto objects and page metadata. If
+   * @param request the {@link PageableRequest} containing sorting, pagination, etc.
+   * @return status 200 (OK) and in body the paged list of {@link DegreeDto} objects and page metadata. If
    *     there are no degrees, an empty page is returned (without _embedded.degrees field).
    */
   @GetMapping("/{id}/degrees")
