@@ -1,6 +1,8 @@
 package com.leskiewicz.schoolsystem.faculty;
 
 import com.leskiewicz.schoolsystem.authentication.Role;
+import com.leskiewicz.schoolsystem.course.dto.CourseDto;
+import com.leskiewicz.schoolsystem.course.utils.CourseDtoAssembler;
 import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
 import com.leskiewicz.schoolsystem.degree.utils.DegreeDtoAssembler;
 import com.leskiewicz.schoolsystem.dto.request.PageableRequest;
@@ -39,11 +41,13 @@ public class FacultyController {
   private final FacultyDtoAssembler facultyDtoAssembler;
   private final DegreeDtoAssembler degreeDtoAssembler;
   private final UserDtoAssembler userDtoAssembler;
+  private final CourseDtoAssembler courseDtoAssembler;
 
   // Used to add links to paged resources
   private final PagedResourcesAssembler<FacultyDto> facultyPagedResourcesAssembler;
   private final PagedResourcesAssembler<DegreeDto> degreePagedResourcesAssembler;
   private final PagedResourcesAssembler<UserDto> userPagedResourcesAssembler;
+  private final PagedResourcesAssembler<CourseDto> coursePagedResourcesAssembler;
 
   /**
    * Get all faculties.
@@ -66,7 +70,8 @@ public class FacultyController {
    * Get a faculty by its ID.
    *
    * @param id the ID of the faculty to retrieve.
-   * @return status 200 and the {@link FacultyDto} representing the faculty with the given ID in the body.
+   * @return status 200 and the {@link FacultyDto} representing the faculty with the given ID in the
+   *     body.
    * @throws EntityNotFoundException if the faculty does not exist, returns status 404.
    * @throws IllegalArgumentException if the ID is a string, returns status 400.
    */
@@ -86,7 +91,8 @@ public class FacultyController {
    * @throws EntityAlreadyExistsException and returns status 400 if faculty with the same name
    *     already exists.
    * @throws MethodArgumentNotValidException, returns status 400 and body with path, message about
-   *     missing fields, statusCode if the request is invalid.   */
+   *     missing fields, statusCode if the request is invalid.
+   */
   @PostMapping
   public ResponseEntity<FacultyDto> createFaculty(
       @Valid @RequestBody CreateFacultyRequest request) {
@@ -169,5 +175,24 @@ public class FacultyController {
 
     return ResponseEntity.ok(
         HalModelBuilder.halModelOf(degreePagedResourcesAssembler.toModel(degrees)).build());
+  }
+
+  /**
+   * Get all courses of faculty with provided ID.
+   *
+   * @param id the ID of the faculty to retrieve courses from.
+   * @param request the {@link PageableRequest} containing sorting, pagination, etc.
+   * @return status 200 (OK) and in body the paged list of {@link CourseDto} objects and page
+   *     metadata. If there are no courses, an empty page is returned (without _embedded.courses
+   *     field).
+   */
+  @GetMapping("/{id}/courses")
+  public ResponseEntity<RepresentationModel<CourseDto>> getFacultyCourses(
+      @PathVariable Long id, @ModelAttribute PageableRequest request) {
+    Page<CourseDto> courses = facultyService.getFacultyCourses(id, request.toPageable());
+    courses = courses.map(courseDtoAssembler::toModel);
+
+    return ResponseEntity.ok(
+        HalModelBuilder.halModelOf(coursePagedResourcesAssembler.toModel(courses)).build());
   }
 }
