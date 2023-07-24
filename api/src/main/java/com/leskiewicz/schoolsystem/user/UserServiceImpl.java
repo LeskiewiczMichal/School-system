@@ -1,5 +1,9 @@
 package com.leskiewicz.schoolsystem.user;
 
+import com.leskiewicz.schoolsystem.authentication.utils.ValidationUtils;
+import com.leskiewicz.schoolsystem.course.Course;
+import com.leskiewicz.schoolsystem.course.dto.CourseDto;
+import com.leskiewicz.schoolsystem.course.utils.CourseMapper;
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.error.ErrorMessages;
 import com.leskiewicz.schoolsystem.error.customexception.MissingFieldException;
@@ -9,7 +13,6 @@ import com.leskiewicz.schoolsystem.faculty.FacultyService;
 import com.leskiewicz.schoolsystem.user.dto.PatchUserRequest;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserMapper;
-import com.leskiewicz.schoolsystem.authentication.utils.ValidationUtils;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
@@ -28,14 +31,16 @@ public class UserServiceImpl implements UserService {
   private final FacultyService facultyService;
   private final PasswordEncoder passwordEncoder;
   private final UserMapper userMapper;
+  private final CourseMapper courseMapper;
   private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
   @Override
   public UserDto getById(Long id) {
-    return userMapper.convertToDto(userRepository
-        .findById(id)
-        .orElseThrow(
-            () -> new EntityNotFoundException(ErrorMessages.objectWithIdNotFound("User", id))));
+    return userMapper.convertToDto(
+        userRepository
+            .findById(id)
+            .orElseThrow(
+                () -> new EntityNotFoundException(ErrorMessages.objectWithIdNotFound("User", id))));
   }
 
   @Override
@@ -179,5 +184,11 @@ public class UserServiceImpl implements UserService {
             () ->
                 new EntityNotFoundException(
                     "User with ID: " + userId + " does not have associated degree"));
+  }
+
+  @Override
+  public Page<CourseDto> getUserCourses(Long userId, Pageable pageable) {
+    Page<Course> courses = userRepository.findCoursesByUserId(userId, pageable);
+    return courses.map(courseMapper::convertToDto);
   }
 }

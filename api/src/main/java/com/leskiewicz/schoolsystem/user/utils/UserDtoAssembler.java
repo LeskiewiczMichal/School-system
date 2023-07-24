@@ -2,6 +2,7 @@ package com.leskiewicz.schoolsystem.user.utils;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import com.leskiewicz.schoolsystem.course.CourseController;
 import com.leskiewicz.schoolsystem.degree.DegreeController;
 import com.leskiewicz.schoolsystem.faculty.FacultyController;
 import com.leskiewicz.schoolsystem.user.UserController;
@@ -28,6 +29,10 @@ public class UserDtoAssembler extends RepresentationModelAssemblerSupport<UserDt
         WebMvcLinkBuilder.linkTo(
                 methodOn(FacultyController.class).getFacultyById(user.getFacultyId()))
             .withRel("faculty");
+//    Link coursesLink =
+//        WebMvcLinkBuilder.linkTo(
+//                methodOn(CourseController.class).(user.getId(), null))
+//            .withRel("courses");
 
     user.add(selfLink);
     user.add(facultyLink);

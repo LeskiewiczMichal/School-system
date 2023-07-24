@@ -1,8 +1,9 @@
 package com.leskiewicz.schoolsystem.user;
 
+import com.leskiewicz.schoolsystem.course.dto.CourseDto;
+import com.leskiewicz.schoolsystem.course.utils.CourseDtoAssembler;
 import com.leskiewicz.schoolsystem.dto.request.PageableRequest;
 import com.leskiewicz.schoolsystem.error.customexception.EntityAlreadyExistsException;
-import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.user.dto.PatchUserRequest;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserDtoAssembler;
@@ -30,16 +31,18 @@ public class UserController {
 
   // Used to convert DTOs to HAL representations
   private final UserDtoAssembler userDtoAssembler;
+  private final CourseDtoAssembler courseDtoAssembler;
 
   // Used to add links to paged resources
   private final PagedResourcesAssembler<UserDto> userPagedResourcesAssembler;
+  private final PagedResourcesAssembler<CourseDto> coursePagedResourcesAssembler;
 
   /**
    * Get all users.
    *
    * @param request the {@link PageableRequest} containing sorting, pagination, etc.
-   * @return status 200 (OK) and in body the paged list of {@link UserDto} objects and page metadata. If
-   *     there are no users, an empty page is returned (without _embedded.users field).
+   * @return status 200 (OK) and in body the paged list of {@link UserDto} objects and page
+   *     metadata. If there are no users, an empty page is returned (without _embedded.users field).
    */
   @GetMapping
   public ResponseEntity<RepresentationModel<UserDto>> getUsers(
@@ -94,4 +97,22 @@ public class UserController {
   //    return ResponseEntity.ok(facultyDto);
   //  }
 
+  /**
+   * Get all courses of user with provided ID.
+   *
+   * @param id the ID of the user to retrieve courses from.
+   * @param request the {@link PageableRequest} containing sorting, pagination, etc.
+   * @return status 200 (OK) and in body the paged list of {@link CourseDto} objects and page
+   *     metadata. If there are no courses, an empty page is returned (without _embedded.courses
+   *     field).
+   */
+  @GetMapping("/{id}/courses")
+  public ResponseEntity<RepresentationModel<UserDto>> getUserCourses(
+      @PathVariable Long id, @ModelAttribute PageableRequest request) {
+    Page<CourseDto> courses = userService.getUserCourses(id, request.toPageable());
+    courses = courses.map(courseDtoAssembler::toModel);
+
+    return ResponseEntity.ok(
+        HalModelBuilder.halModelOf(coursePagedResourcesAssembler.toModel(courses)).build());
+  }
 }

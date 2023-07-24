@@ -1,5 +1,7 @@
 package com.leskiewicz.schoolsystem.user;
 
+import com.leskiewicz.schoolsystem.course.Course;
+import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.user.dto.PatchUserRequest;
@@ -22,4 +24,6 @@ public interface UserService {
   Faculty getUserFaculty(Long userId);
 
   Degree getUserDegree(Long userId);
+
+  Page<CourseDto> getUserCourses(Long userId, Pageable pageable);
 }
