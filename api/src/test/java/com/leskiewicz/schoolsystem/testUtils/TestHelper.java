@@ -2,6 +2,7 @@ package com.leskiewicz.schoolsystem.testUtils;
 
 import com.leskiewicz.schoolsystem.authentication.Role;
 import com.leskiewicz.schoolsystem.course.Course;
+import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
@@ -67,5 +68,17 @@ public class TestHelper {
         .teacher(teacher)
         .duration_in_hours(20)
         .build();
+  }
+
+  public static CourseDto createCourseDto(String facultyName, String teacherName) {
+    return CourseDto.builder()
+            .id(1L)
+            .title("TestCourseDto")
+            .faculty(facultyName)
+            .teacher(teacherName)
+            .facultyId(1L)
+            .teacherId(1L)
+            .durationInHours(20)
+            .build();
   }
 }
