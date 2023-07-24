@@ -79,7 +79,7 @@ public class CreateFacultyApiTest {
   @Test
   public void createFacultyReturns400OnFacultyWithNameAlreadyExists() throws Exception {
     // Save the same faculty that we want to create
-    Faculty faculty = Faculty.builder().name("Informatics").build();
+    Faculty faculty = Faculty.builder().name("zxcv").build();
     facultyRepository.save(faculty);
 
     // Create request for that same faculty we saved earlier
