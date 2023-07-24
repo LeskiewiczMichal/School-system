@@ -30,7 +30,7 @@ public class CourseMapperImpl implements CourseMapper {
         CourseDto.builder()
             .id(course.getId())
             .title(course.getTitle())
-            .duration_in_hours(course.getDuration_in_hours())
+            .durationInHours(course.getDuration_in_hours())
             .faculty(courseFaculty.getName())
             .teacher(courseTeacher.getFirstName() + " " + courseTeacher.getLastName())
             .facultyId(courseFaculty.getId())

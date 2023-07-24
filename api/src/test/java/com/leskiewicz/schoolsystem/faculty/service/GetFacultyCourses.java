@@ -81,7 +81,7 @@ public class GetFacultyCourses {
             .title("Software Engineering")
             .faculty("faculty")
             .teacher("Something Testing")
-            .duration_in_hours(20)
+            .durationInHours(20)
             .build();
     CourseDto courseDto2 =
         CourseDto.builder()
@@ -89,7 +89,7 @@ public class GetFacultyCourses {
             .title("Computer Science")
             .faculty("faculty")
             .teacher("Something Testing")
-            .duration_in_hours(30)
+            .durationInHours(30)
             .build();
 
     given(courseMapper.convertToDto(any(Course.class))).willReturn(courseDto1, courseDto2);

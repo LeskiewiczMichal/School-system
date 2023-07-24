@@ -11,13 +11,13 @@ import org.springframework.hateoas.server.core.Relation;
 
 @Getter
 @Builder
-@Relation(collectionRelation = "faculties")
+@Relation(collectionRelation = "courses")
 @AllArgsConstructor
 public class CourseDto extends RepresentationModel<CourseDto> {
 
   @NonNull private final Long id;
   @NonNull private final String title;
-  @NonNull private final int duration_in_hours;
+  @NonNull private final int durationInHours;
   @NonNull private final String faculty;
   @NonNull private final String teacher;
 

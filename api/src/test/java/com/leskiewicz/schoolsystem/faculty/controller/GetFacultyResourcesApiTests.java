@@ -88,7 +88,7 @@ public class GetFacultyResourcesApiTests {
   // *** GetFacultyDegrees ***//
 
   @Test
-  public void getFacultyDegreesReturnsCorrectStudents() throws Exception {
+  public void getFacultyDegreesReturnsCorrectDegrees() throws Exception {
     ResultActions result =
         requestUtils.performGetRequest(BASE_FACULTIES + "/101/degrees", status().isOk());
 
@@ -109,6 +109,31 @@ public class GetFacultyResourcesApiTests {
         .andExpect(
             MockMvcResultMatchers.jsonPath("$._embedded.degrees[1].fieldOfStudy")
                 .value("Software Engineering"));
+  }
+
+  // *** GetFacultyDegrees *** //
+
+  @Test
+  public void getFacultyCoursesReturnsCorrectCourses() throws Exception {
+    ResultActions result =
+        requestUtils.performGetRequest(BASE_FACULTIES + "/101/courses", status().isOk());
+
+    result
+        .andExpect(MockMvcResultMatchers.jsonPath("$._links").exists())
+        .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.courses").exists())
+        .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.courses").isArray())
+        .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.courses").isNotEmpty())
+        .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.courses[0].id").value(1))
+        .andExpect(
+            MockMvcResultMatchers.jsonPath("$._embedded.courses[0].title")
+                .value("Introduction to Programming"))
+        .andExpect(
+            MockMvcResultMatchers.jsonPath("$._embedded.courses[0].durationInHours").value(40))
+        .andExpect(
+            MockMvcResultMatchers.jsonPath("$._embedded.courses[0].teacher")
+                .value("Olivia Martinez"))
+        .andExpect(
+            MockMvcResultMatchers.jsonPath("$._embedded.courses[0].faculty").value("Informatics"));
   }
 
   @Test
