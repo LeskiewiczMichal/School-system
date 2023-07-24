@@ -20,14 +20,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
   @Query("SELECT u.degree FROM User u WHERE u.id = :id")
   Optional<Degree> findDegreeByUserId(@Param("id") Long id);
-
-  //  @Query("SELECT c FROM Course c WHERE c.id IN (SELECT uc.course_id FROM course_student uc WHERE
-  // uc.user_id = :id)")
-  //  Page<Course> findCoursesByUserId(@Param("id") Long id, Pageable pageable);
-
-//  @Query(
-//      value =
-//          "SELECT u.* FROM users u JOIN course_student cs ON u.id = cs.student_id WHERE cs.course_id = :id",
-//      nativeQuery = true)
-//  Page<User> findStudentsByCourseId(@Param("id") Long id, Pageable pageable);
 }

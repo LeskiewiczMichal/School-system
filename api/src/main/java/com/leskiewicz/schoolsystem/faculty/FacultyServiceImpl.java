@@ -3,6 +3,7 @@ package com.leskiewicz.schoolsystem.faculty;
 import com.leskiewicz.schoolsystem.authentication.Role;
 import com.leskiewicz.schoolsystem.authentication.utils.ValidationUtils;
 import com.leskiewicz.schoolsystem.course.Course;
+import com.leskiewicz.schoolsystem.course.CourseRepository;
 import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.course.utils.CourseMapper;
 import com.leskiewicz.schoolsystem.degree.Degree;
@@ -33,7 +34,9 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class FacultyServiceImpl implements FacultyService {
 
+  // Repositories
   private final FacultyRepository facultyRepository;
+  private final CourseRepository courseRepository;
 
   // Mappers
   private final DegreeMapper degreeMapper;
@@ -146,7 +149,7 @@ public class FacultyServiceImpl implements FacultyService {
   @Override
   public Page<CourseDto> getFacultyCourses(Long facultyId, Pageable pageable) {
     facultyExistsCheck(facultyId);
-    Page<Course> courses = facultyRepository.findFacultyCourses(facultyId, pageable);
+    Page<Course> courses = courseRepository.findCoursesByFacultyId(facultyId, pageable);
     return courses.map(courseMapper::convertToDto);
   }
 
