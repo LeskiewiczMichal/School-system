@@ -6,6 +6,7 @@ import com.leskiewicz.schoolsystem.authentication.dto.AuthenticationRequest;
 import com.leskiewicz.schoolsystem.authentication.dto.AuthenticationResponse;
 import com.leskiewicz.schoolsystem.authentication.dto.RegisterRequest;
 import com.leskiewicz.schoolsystem.error.customexception.EntityAlreadyExistsException;
+import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserDtoAssembler;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -37,8 +38,9 @@ public class AuthenticationController {
   /**
    * Creates a new user based on the given request.
    *
-   * @param request The request containing the data to create the user.
-   * @return status 201 with created UserDto and authentication token in the body.
+   * @param request The {@link RegisterRequest} containing the data to create the user.
+   * @return status 201 with {@link AuthenticationResponse} - created {@link UserDto} and
+   *     authentication token in the body.
    * @throws EntityAlreadyExistsException and returns status 400 if user with the same email already
    *     exists.
    * @throws MethodArgumentNotValidException, returns status 400 and body with path, message about
@@ -58,8 +60,10 @@ public class AuthenticationController {
   /**
    * Authenticates the user based on the given request.
    *
-   * @param request The request containing the data to authenticate the user (email and password).
-   * @return status 200 with authenticated UserDto and authentication token in the body.
+   * @param request The {@link AuthenticationRequest} containing the data to authenticate the user
+   *     (email and password).
+   * @return status 200 with {@link AuthenticationResponse} - authenticated {@link UserDto} and
+   *     authentication token in the body.
    * @throws BadCredentialsException and returns status 401 if the credentials are invalid.
    * @throws MethodArgumentNotValidException, returns status 400 and body with path, message about
    *     missing fields, statusCode if the request is invalid.
