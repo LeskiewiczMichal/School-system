@@ -1,5 +1,9 @@
 package com.leskiewicz.schoolsystem.degree;
 
+import com.leskiewicz.schoolsystem.course.Course;
+import com.leskiewicz.schoolsystem.course.CourseRepository;
+import com.leskiewicz.schoolsystem.course.dto.CourseDto;
+import com.leskiewicz.schoolsystem.course.utils.CourseMapper;
 import com.leskiewicz.schoolsystem.degree.dto.CreateDegreeRequest;
 import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
 import com.leskiewicz.schoolsystem.degree.utils.DegreeMapper;
@@ -23,10 +27,17 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class DegreeServiceImpl implements DegreeService {
 
+  // Repositories
   private final DegreeRepository degreeRepository;
+  private final CourseRepository courseRepository;
+
   private final FacultyService facultyService;
+
+  // Mappers
   private final UserMapper userMapper;
   private final DegreeMapper degreeMapper;
+  private final CourseMapper courseMapper;
+
   private final Logger logger = LoggerFactory.getLogger(DegreeServiceImpl.class);
 
   @Override
@@ -82,6 +93,12 @@ public class DegreeServiceImpl implements DegreeService {
     logger.info("Created degree: {}", degree);
 
     return degreeMapper.convertToDto(degree);
+  }
+
+  @Override
+  public Page<CourseDto> getDegreeCourses(Long degreeId, Pageable pageable) {
+    Page<Course> courses = courseRepository.findCoursesByDegreeId(degreeId, pageable);
+    return courses.map(courseMapper::convertToDto);
   }
 
 

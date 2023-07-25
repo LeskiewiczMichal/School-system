@@ -1,5 +1,7 @@
 package com.leskiewicz.schoolsystem.degree;
 
+import com.leskiewicz.schoolsystem.course.dto.CourseDto;
+import com.leskiewicz.schoolsystem.course.utils.CourseDtoAssembler;
 import com.leskiewicz.schoolsystem.degree.dto.CreateDegreeRequest;
 import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
 import com.leskiewicz.schoolsystem.degree.utils.DegreeDtoAssembler;
@@ -31,15 +33,18 @@ public class DegreeController {
 
   // Used to convert DTOs to HAL representations
   private final DegreeDtoAssembler degreeDtoAssembler;
+  private final CourseDtoAssembler courseDtoAssembler;
 
   // Used to add links to paged resources
   private final PagedResourcesAssembler<DegreeDto> degreePagedResourcesAssembler;
+  private final PagedResourcesAssembler<CourseDto> coursePagedResourcesAssembler;
 
   /**
    * Get a degree by its ID.
    *
    * @param id the ID of the degree to retrieve.
-   * @return status 200 and the {@link DegreeDto} representing the degree with the given ID in the body.
+   * @return status 200 and the {@link DegreeDto} representing the degree with the given ID in the
+   *     body.
    * @throws EntityNotFoundException if the degree does not exist, returns status 404.
    * @throws IllegalArgumentException if the ID is a string, returns status 400.
    */
@@ -55,8 +60,9 @@ public class DegreeController {
    * Get all degrees.
    *
    * @param request the {@link PageableRequest} containing sorting, pagination, etc.
-   * @return status 200 (OK) and in body the paged list of {@link DegreeDto} objects and page metadata. If
-   *     there are no degrees, an empty page is returned (without _embedded.degrees field).
+   * @return status 200 (OK) and in body the paged list of {@link DegreeDto} objects and page
+   *     metadata. If there are no degrees, an empty page is returned (without _embedded.degrees
+   *     field).
    */
   @GetMapping
   public ResponseEntity<RepresentationModel<DegreeDto>> getDegrees(
@@ -87,5 +93,13 @@ public class DegreeController {
     return ResponseEntity.created(degree.getLink("self").get().toUri()).body(degree);
   }
 
+  @GetMapping("/{id}/courses")
+  public ResponseEntity<RepresentationModel<CourseDto>> getDegreeCourses(
+      @PathVariable Long id, @ModelAttribute PageableRequest request) {
+    Page<CourseDto> courses = degreeService.getDegreeCourses(id, request.toPageable());
+    courses = courses.map(courseDtoAssembler::toModel);
 
+    return ResponseEntity.ok(
+        HalModelBuilder.halModelOf(coursePagedResourcesAssembler.toModel(courses)).build());
+  }
 }
