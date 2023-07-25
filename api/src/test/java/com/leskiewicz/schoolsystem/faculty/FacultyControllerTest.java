@@ -1,5 +1,6 @@
 package com.leskiewicz.schoolsystem.faculty;
 
+import com.leskiewicz.schoolsystem.authentication.Role;
 import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.course.utils.CourseDtoAssembler;
 import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
@@ -121,4 +122,17 @@ public class FacultyControllerTest {
             (PageableRequest request) -> facultyController.getFacultyCourses(1L, request)
     );
   }
+
+  @Test
+  public void getFacultyStudents() {
+    CommonTests.controllerGetEntities(
+            UserDto.class,
+            userPagedResourcesAssembler,
+            (Pageable pageable) ->  facultyService.getFacultyUsers(1L, pageable, Role.ROLE_STUDENT),
+            userDtoAssembler::toModel,
+            (PageableRequest request) -> facultyController.getFacultyStudents(1L, request)
+    );
+  }
+
+  
 }
