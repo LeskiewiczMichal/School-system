@@ -11,6 +11,7 @@ import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.dto.request.PageableRequest;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.FacultyService;
+import com.leskiewicz.schoolsystem.faculty.dto.CreateFacultyRequest;
 import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtils;
 import com.leskiewicz.schoolsystem.testUtils.TestHelper;
@@ -27,6 +28,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.ResultActions;
@@ -210,5 +212,29 @@ public class CommonTests {
     // Verify response
     Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
     Assertions.assertEquals(existingDto, response.getBody());
+  }
+
+  @Test
+  public static <T, R> void controllerCreateEntity(
+      T entityDto,
+      Class<T> entityClass,
+      T mockedDtoWithLinks,
+      Class<R> createRequestClass,
+      R createRequest,
+      Function<R, T> createEntityFunction,
+      Function<T, T> toModelFunction,
+      Function<R, ResponseEntity<T>> controllerCreateFunction) {
+
+    // Mock the service behavior
+    given(createEntityFunction.apply(any(createRequestClass))).willReturn(entityDto);
+
+    // Mock the assembler behavior
+    given(toModelFunction.apply(any(entityClass))).willReturn(mockedDtoWithLinks);
+
+    // Call the controller method
+    ResponseEntity<T> responseEntity = controllerCreateFunction.apply(createRequest);
+
+    // Assert the response
+    Assertions.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
   }
 }

@@ -6,6 +6,7 @@ import com.leskiewicz.schoolsystem.course.utils.CourseDtoAssembler;
 import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
 import com.leskiewicz.schoolsystem.degree.utils.DegreeDtoAssembler;
 import com.leskiewicz.schoolsystem.dto.request.PageableRequest;
+import com.leskiewicz.schoolsystem.faculty.dto.CreateFacultyRequest;
 import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
 import com.leskiewicz.schoolsystem.faculty.dto.PatchFacultyRequest;
 import com.leskiewicz.schoolsystem.faculty.utils.FacultyDtoAssembler;
@@ -13,6 +14,7 @@ import com.leskiewicz.schoolsystem.generic.CommonTests;
 import com.leskiewicz.schoolsystem.testUtils.TestHelper;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserDtoAssembler;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,6 +22,15 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class FacultyControllerTest {
@@ -69,12 +80,11 @@ public class FacultyControllerTest {
   @Test
   public void getFaculties() {
     CommonTests.controllerGetEntities(
-            FacultyDto.class,
-            facultyPagedResourcesAssembler,
-            facultyService::getFaculties,
-            facultyDtoAssembler::toModel,
-            facultyController::getFaculties
-    );
+        FacultyDto.class,
+        facultyPagedResourcesAssembler,
+        facultyService::getFaculties,
+        facultyDtoAssembler::toModel,
+        facultyController::getFaculties);
   }
 
   @Test
@@ -82,66 +92,75 @@ public class FacultyControllerTest {
     FacultyDto facultyDto = TestHelper.createFacultyDto("TestFaculty");
 
     CommonTests.controllerGetEntityById(
-            facultyDto,
-            1L,
-            facultyService::getById,
-            facultyDtoAssembler::toModel,
-            facultyController::getFacultyById
-    );
+        facultyDto,
+        1L,
+        facultyService::getById,
+        facultyDtoAssembler::toModel,
+        facultyController::getFacultyById);
   }
 
   @Test
   public void patchFaculty() {
     CommonTests.controllerPatchEntity(
-            FacultyDto.class,
-            PatchFacultyRequest.class,
-            facultyService::updateFaculty,
-            facultyDtoAssembler::toModel,
-            facultyController::updateFaculty
-    );
+        FacultyDto.class,
+        PatchFacultyRequest.class,
+        facultyService::updateFaculty,
+        facultyDtoAssembler::toModel,
+        facultyController::updateFaculty);
   }
 
   @Test
   public void getFacultyDegrees() {
     CommonTests.controllerGetEntities(
-            DegreeDto.class,
-            degreePagedResourcesAssembler,
-            (Pageable pageable) ->  facultyService.getFacultyDegrees(1L, pageable),
-            degreeDtoAssembler::toModel,
-            (PageableRequest request) -> facultyController.getFacultyDegrees(1L, request)
-    );
+        DegreeDto.class,
+        degreePagedResourcesAssembler,
+        (Pageable pageable) -> facultyService.getFacultyDegrees(1L, pageable),
+        degreeDtoAssembler::toModel,
+        (PageableRequest request) -> facultyController.getFacultyDegrees(1L, request));
   }
 
   @Test
   public void getFacultyCourses() {
     CommonTests.controllerGetEntities(
-            CourseDto.class,
-            coursePagedResourcesAssembler,
-            (Pageable pageable) ->  facultyService.getFacultyCourses(1L, pageable),
-            courseDtoAssembler::toModel,
-            (PageableRequest request) -> facultyController.getFacultyCourses(1L, request)
-    );
+        CourseDto.class,
+        coursePagedResourcesAssembler,
+        (Pageable pageable) -> facultyService.getFacultyCourses(1L, pageable),
+        courseDtoAssembler::toModel,
+        (PageableRequest request) -> facultyController.getFacultyCourses(1L, request));
   }
 
   @Test
   public void getFacultyStudents() {
     CommonTests.controllerGetEntities(
-            UserDto.class,
-            userPagedResourcesAssembler,
-            (Pageable pageable) ->  facultyService.getFacultyUsers(1L, pageable, Role.ROLE_STUDENT),
-            userDtoAssembler::toModel,
-            (PageableRequest request) -> facultyController.getFacultyStudents(1L, request)
-    );
+        UserDto.class,
+        userPagedResourcesAssembler,
+        (Pageable pageable) -> facultyService.getFacultyUsers(1L, pageable, Role.ROLE_STUDENT),
+        userDtoAssembler::toModel,
+        (PageableRequest request) -> facultyController.getFacultyStudents(1L, request));
   }
 
   @Test
   public void getFacultyTeachers() {
     CommonTests.controllerGetEntities(
-            UserDto.class,
-            userPagedResourcesAssembler,
-            (Pageable pageable) ->  facultyService.getFacultyUsers(1L, pageable, Role.ROLE_TEACHER),
-            userDtoAssembler::toModel,
-            (PageableRequest request) -> facultyController.getFacultyTeachers(1L, request)
-    );
+        UserDto.class,
+        userPagedResourcesAssembler,
+        (Pageable pageable) -> facultyService.getFacultyUsers(1L, pageable, Role.ROLE_TEACHER),
+        userDtoAssembler::toModel,
+        (PageableRequest request) -> facultyController.getFacultyTeachers(1L, request));
+  }
+
+  @Test
+  public void testCreateFaculty() {
+    FacultyDto mockedFacultyDto = TestHelper.createFacultyDto("TestFaculty");
+
+    CommonTests.controllerCreateEntity(
+        mockedFacultyDto,
+        FacultyDto.class,
+        mockedFacultyDto.add(WebMvcLinkBuilder.linkTo(CreateFacultyRequest.class).withSelfRel()),
+        CreateFacultyRequest.class,
+        new CreateFacultyRequest("TestFaculty"),
+        facultyService::createFaculty,
+        facultyDtoAssembler::toModel,
+        facultyController::createFaculty);
   }
 }
