@@ -40,6 +40,14 @@ import java.util.function.Function;
 
 public class CommonTests {
 
+  /**
+   * Test the controller pagination (for integration tests)
+   *
+   * @param requestUtils Request utils for performing requests
+   * @param baseApiPath Base api path
+   * @param lastPage Last page number
+   * @throws Exception If an error occurs
+   */
   public static void paginationLinksTest(
       RequestUtils requestUtils, String baseApiPath, int lastPage) throws Exception {
     String query = "http://localhost" + baseApiPath + "?page=%d&size=%d&sort=%s,%s";
