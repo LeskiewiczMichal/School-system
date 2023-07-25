@@ -77,30 +77,21 @@ public class UserControllerTest {
   }
 
   @Test
-  public void getUserByIdReturnsCorrectUser() {
-    // Mock input and output data
+  public void getUserById() {
+    //    // Mock input and output data
     Faculty faculty = Mockito.mock(Faculty.class);
     Degree degree = Mockito.mock(Degree.class);
     given(faculty.getName()).willReturn("Test");
     given(degree.getFieldOfStudy()).willReturn("Law");
     UserDto userDto = TestHelper.createUserDto(faculty, degree);
 
-    // Mock service
-    given(userService.getById(userDto.getId())).willReturn(userDto);
+    CommonTests.controllerGetEntitiyById(
+            userDto,
+            1L,
+            userService::getById,
+            userDtoAssembler::toModel,
+            userController::getUserById);
 
-    // Mock assembler
-    given(userDtoAssembler.toModel(userDto)).willReturn(userDto);
-
-    // Call controller
-    ResponseEntity<UserDto> result = userController.getUserById(userDto.getId());
-
-    // Verify result
-    Assertions.assertEquals(userDto, result.getBody());
-    Assertions.assertEquals(HttpStatus.OK, result.getStatusCode());
-
-    // Verify mocks
-    verify(userService, times(1)).getById(userDto.getId());
-    verify(userDtoAssembler, times(1)).toModel(userDto);
   }
 
   @Test
@@ -114,7 +105,7 @@ public class UserControllerTest {
   }
 
   @Test
-  public void testPathUser() {
+  public void testPatchUser() {
     // Prepare data
     Long userId = 1L;
     PatchUserRequest request = Mockito.mock(PatchUserRequest.class);

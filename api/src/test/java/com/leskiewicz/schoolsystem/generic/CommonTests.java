@@ -7,10 +7,14 @@ import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.dto.request.PageableRequest;
+import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.FacultyService;
 import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtils;
+import com.leskiewicz.schoolsystem.testUtils.TestHelper;
+import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -123,7 +127,6 @@ public class CommonTests {
         .andExpect(jsonPath("$.page.number").exists());
   }
 
-  @Test
   public static <T extends RepresentationModel<T>> void controllerGetEntities(
       Class<T> entityClass,
       PagedResourcesAssembler<T> pagedResourcesAssembler,
@@ -158,5 +161,26 @@ public class CommonTests {
 
     // Verify mocks
     verify(pagedResourcesAssembler, times(1)).toModel(entityDtoPage);
+  }
+
+  public static <T> void controllerGetEntitiyById(
+      T entityDto,
+      Long entityId,
+      Function<Long, T> getEntityByIdFunction,
+      Function<T, T> toModelFunction,
+      Function<Long, ResponseEntity<T>> controllerGetFunction) {
+
+    // Mock service
+    given(getEntityByIdFunction.apply(entityId)).willReturn(entityDto);
+
+    // Mock assembler
+    given(toModelFunction.apply(entityDto)).willReturn(entityDto);
+
+    // Call controller
+    ResponseEntity<T> result = controllerGetFunction.apply(entityId);
+
+    // Verify result
+    Assertions.assertEquals(entityDto, result.getBody());
+    Assertions.assertEquals(HttpStatus.OK, result.getStatusCode());
   }
 }
