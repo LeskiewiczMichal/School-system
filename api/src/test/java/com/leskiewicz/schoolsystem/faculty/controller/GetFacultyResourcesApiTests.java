@@ -9,10 +9,12 @@ import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
 import com.leskiewicz.schoolsystem.generic.CommonTests;
 import com.leskiewicz.schoolsystem.testModels.DegreeDto;
+import com.leskiewicz.schoolsystem.testModels.UserDto;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtils;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtilsImpl;
 import com.leskiewicz.schoolsystem.testUtils.assertions.CourseDtoAssertions;
 import com.leskiewicz.schoolsystem.testUtils.assertions.DegreeDtoAssertions;
+import com.leskiewicz.schoolsystem.testUtils.assertions.UserDtoAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +41,7 @@ public class GetFacultyResourcesApiTests {
   // Assertions
   private final CourseDtoAssertions courseDtoAssertions = new CourseDtoAssertions();
   private final DegreeDtoAssertions degreeDtoAssertions = new DegreeDtoAssertions();
+  private final UserDtoAssertions userDtoAssertions = new UserDtoAssertions();
 
   @BeforeEach
   public void setUp() {
@@ -74,18 +77,16 @@ public class GetFacultyResourcesApiTests {
     ResultActions result =
         requestUtils.performGetRequest(BASE_FACULTIES + "/106/teachers", status().isOk());
 
-    result
-        .andExpect(MockMvcResultMatchers.jsonPath("$._links").exists())
-        .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.users").exists())
-        .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.users").isArray())
-        .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.users").isNotEmpty())
-        .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.users[0].id").exists())
-        .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.users[0].firstName").value("Olivia"))
-        .andExpect(
-            MockMvcResultMatchers.jsonPath("$._embedded.users[0].lastName").value("Martinez"))
-        .andExpect(
-            MockMvcResultMatchers.jsonPath("$._embedded.users[0].email")
-                .value("olivia.martinez@example.com"));
+    UserDto userDto =
+        UserDto.builder()
+            .id(6L)
+            .firstName("Olivia")
+            .lastName("Martinez")
+            .email("olivia.martinez@example.com")
+            .faculty("Mathematics")
+            .build();
+
+    userDtoAssertions.assertDtoInCollection(result, 0, userDto);
   }
 
   @Test
