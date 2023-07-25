@@ -93,6 +93,15 @@ public class DegreeController {
     return ResponseEntity.created(degree.getLink("self").get().toUri()).body(degree);
   }
 
+  /**
+   * Get all courses of degree with provided ID.
+   *
+   * @param id the ID of the degree to retrieve courses from.
+   * @param request the {@link PageableRequest} containing sorting, pagination, etc.
+   * @return status 200 (OK) and in body the paged list of {@link CourseDto} objects and page
+   *     metadata. If there are no courses, an empty page is returned (without _embedded.courses
+   *     field).
+   */
   @GetMapping("/{id}/courses")
   public ResponseEntity<RepresentationModel<CourseDto>> getDegreeCourses(
       @PathVariable Long id, @ModelAttribute PageableRequest request) {
