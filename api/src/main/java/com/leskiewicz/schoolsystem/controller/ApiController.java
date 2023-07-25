@@ -18,18 +18,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api")
 public class ApiController {
-  //        Link selfLink = linkTo(controllerClass).withSelfRel();
-  //        String uriTemplate = selfLink.getHref() + "{?size,page,sort,direction}";
-  //        selfLink = Link.of(uriTemplate).withSelfRel();
-  //        resources.add(selfLink);
-  private String PAGINATION_PARAMETERS = "{?size,page,sort}";
+
+  private final String PAGINATION_PARAMETERS = "{?size,page,sort}";
 
   @GetMapping
   public ResponseEntity<RepresentationModel<?>> index() {
     RepresentationModel<?> model = new RepresentationModel<>();
 
+    // Adding links to base api path
     model.add(linkTo(methodOn(ApiController.class).index()).withSelfRel());
-
     this.addAuthenticationLinks(model);
     this.addUsersLinks(model);
     this.addFacultiesLinks(model);
@@ -40,7 +37,6 @@ public class ApiController {
   }
 
   private void addAuthenticationLinks(RepresentationModel<?> model) {
-
     model.add(
         linkTo(methodOn(AuthenticationController.class).authenticate(null))
             .withRel("authenticate"));
