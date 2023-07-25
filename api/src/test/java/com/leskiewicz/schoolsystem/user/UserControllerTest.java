@@ -103,41 +103,6 @@ public class UserControllerTest {
     verify(userDtoAssembler, times(1)).toModel(userDto);
   }
 
-//  @Test
-//  public void getUsers() {
-//    PageableRequest request = new PageableRequest();
-//
-//    // Mock the list of userDto
-//    List<UserDto> userDtoList =
-//        Arrays.asList(Mockito.mock(UserDto.class), Mockito.mock(UserDto.class));
-//
-//    // Mock the page
-//    Page<UserDto> userDtoPage = new PageImpl<>(userDtoList);
-//
-//    // Mock service
-//    given(userService.getUsers(request.toPageable())).willReturn(userDtoPage);
-//
-//    // Mock assembler
-//    given(userDtoAssembler.toModel(any(UserDto.class)))
-//        .willReturn(userDtoList.get(0), userDtoList.get(1));
-//
-//    // Mock paged resources assembler
-//    PagedModel<EntityModel<UserDto>> pagedModel = Mockito.mock(PagedModel.class);
-//    given(userPagedResourcesAssembler.toModel(any(Page.class))).willReturn(pagedModel);
-//
-//    // Call controller
-//    ResponseEntity<RepresentationModel<UserDto>> response = userController.getUsers(request);
-//
-//    // Assert the response
-//    Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
-//    Assertions.assertEquals(HalModelBuilder.halModelOf(pagedModel).build(), response.getBody());
-//
-//    // Verify mocks
-//    verify(userService, times(1)).getUsers(any(Pageable.class));
-//    verify(userDtoAssembler, times(2)).toModel(any(UserDto.class));
-//    verify(userPagedResourcesAssembler, times(1)).toModel(userDtoPage);
-//  }
-
   @Test
   public void getUsers() {
     CommonTests.controllerGetEntities(
@@ -168,42 +133,6 @@ public class UserControllerTest {
     Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
     Assertions.assertEquals(existingUserDto, response.getBody());
   }
-
-//  @Test
-//  public void getUserCourses() {
-//    PageableRequest request = new PageableRequest();
-//
-//    // Mock the list of userDto
-//    List<CourseDto> userDtoList =
-//        Arrays.asList(Mockito.mock(CourseDto.class), Mockito.mock(CourseDto.class));
-//
-//    // Mock the page
-//    Page<CourseDto> userDtoPage = new PageImpl<>(userDtoList);
-//
-//    // Mock service
-//    given(userService.getUserCourses(1L, request.toPageable())).willReturn(userDtoPage);
-//
-//    // Mock assembler
-//    given(courseDtoAssembler.toModel(any(CourseDto.class)))
-//        .willReturn(userDtoList.get(0), userDtoList.get(1));
-//
-//    // Mock paged resources assembler
-//    PagedModel<EntityModel<CourseDto>> pagedModel = Mockito.mock(PagedModel.class);
-//    given(coursePagedResourcesAssembler.toModel(userDtoPage)).willReturn(pagedModel);
-//
-//    // Call controller
-//    ResponseEntity<RepresentationModel<CourseDto>> response =
-//        userController.getUserCourses(1L, request);
-//
-//    // Assert the response
-//    Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
-//    Assertions.assertEquals(HalModelBuilder.halModelOf(pagedModel).build(), response.getBody());
-//
-//    // Verify mocks
-//    verify(userService, times(1)).getUserCourses(any(Long.class), any(Pageable.class));
-//    verify(courseDtoAssembler, times(2)).toModel(any(CourseDto.class));
-//    verify(coursePagedResourcesAssembler, times(1)).toModel(userDtoPage);
-//  }
 
   @Test
   public void getUserCourses() {

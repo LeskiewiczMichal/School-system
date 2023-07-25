@@ -82,16 +82,6 @@ public class FacultyControllerTest {
             coursePagedResourcesAssembler);
   }
 
-//  @Test
-//  public void getUsers() {
-//    CommonTests.controllerGetEntities(
-//            UserDto.class,
-//            userPagedResourcesAssembler,
-//            userService::getUsers,
-//            userDtoAssembler::toModel,
-//            userController::getUsers);
-//  }
-
   @Test
   public void getFaculties() {
     CommonTests.controllerGetEntities(
@@ -103,38 +93,4 @@ public class FacultyControllerTest {
     );
   }
 
-//  @Test
-//  public void getFaculties() {
-//    PageableRequest request = new PageableRequest();
-//
-//    // Mock the list of userDto
-//    List<FacultyDto> facultyDtoList =
-//            Arrays.asList(Mockito.mock(FacultyDto.class), Mockito.mock(FacultyDto.class));
-//
-//    // Mock the page
-//    Page<FacultyDto> facultyDtoPage = new PageImpl<>(facultyDtoList);
-//
-//    // Mock service
-//    given(facultyService.getFaculties(request.toPageable())).willReturn(facultyDtoPage);
-//
-//    // Mock assembler
-//    given(facultyDtoAssembler.toModel(any(FacultyDto.class)))
-//            .willReturn(facultyDtoList.get(0), facultyDtoList.get(1));
-//
-//    // Mock paged resources assembler
-//    PagedModel<EntityModel<FacultyDto>> pagedModel = Mockito.mock(PagedModel.class);
-//    given(userPagedResourcesAssembler.toModel(any(Page.class))).willReturn(pagedModel);
-//
-//    // Call controller
-//    ResponseEntity<RepresentationModel<FacultyDto>> response = facultyController.getFaculties(request);
-//
-//    // Assert the response
-//    Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
-//    Assertions.assertEquals(HalModelBuilder.halModelOf(pagedModel).build(), response.getBody());
-//
-//    // Verify mocks
-//    verify(facultyService, times(1)).getFaculties(any(Pageable.class));
-//    verify(facultyDtoAssembler, times(2)).toModel(any(FacultyDto.class));
-//    verify(facultyPagedResourcesAssembler, times(1)).toModel(facultyDtoPage);
-//  }
 }
