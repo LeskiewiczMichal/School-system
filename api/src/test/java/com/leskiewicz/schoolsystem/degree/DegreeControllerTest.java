@@ -4,7 +4,9 @@ import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.course.utils.CourseDtoAssembler;
 import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
 import com.leskiewicz.schoolsystem.degree.utils.DegreeDtoAssembler;
+import com.leskiewicz.schoolsystem.generic.CommonTests;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -41,5 +43,15 @@ public class DegreeControllerTest {
             courseDtoAssembler,
             degreePagedResourcesAssembler,
             coursePagedResourcesAssembler);
+  }
+
+  @Test
+  public void getDegrees() {
+    CommonTests.controllerGetEntities(
+        DegreeDto.class,
+        degreePagedResourcesAssembler,
+        degreeService::getDegrees,
+        degreeDtoAssembler::toModel,
+        degreeController::getDegrees);
   }
 }
