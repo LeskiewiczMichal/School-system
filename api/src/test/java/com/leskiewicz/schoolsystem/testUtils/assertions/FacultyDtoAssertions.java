@@ -29,30 +29,32 @@ public class FacultyDtoAssertions implements DtoAssertion<FacultyDto> {
 
   @Override
   public void assertDto(ResultActions result, FacultyDto dto) throws Exception {
+    assertDtoHelper(result, dto);
     result
         .andExpect(jsonPath("$.id").value(dto.getId()))
-        .andExpect(jsonPath("$.name").value(dto.getName()))
         .andExpect(
             jsonPath("$._links.self.href")
                 .value(
                     WebMvcLinkBuilder.linkTo(
                             methodOn(FacultyController.class).getFacultyById(dto.getId()))
-                        .toString()))
-        .andExpect(jsonPath("$._links.students.href").exists())
-        .andExpect(jsonPath("$._links.teachers.href").exists())
-        .andExpect(jsonPath("$._links.degrees.href").exists())
-        .andExpect(jsonPath("$._links.courses.href").exists());
+                        .toString()));
   }
 
   @Override
   public void assertDtoWithAnyId(ResultActions result, FacultyDto dto) throws Exception {
+    assertDtoHelper(result, dto);
     result
         .andExpect(jsonPath("$.id").exists())
-        .andExpect(jsonPath("$.name").value(dto.getName()))
-        .andExpect(jsonPath("$._links.self.href").exists())
-        .andExpect(jsonPath("$._links.students.href").exists())
-        .andExpect(jsonPath("$._links.teachers.href").exists())
-        .andExpect(jsonPath("$._links.degrees.href").exists())
-        .andExpect(jsonPath("$._links.courses.href").exists());
+        .andExpect(jsonPath("$._links.self.href").exists());
+  }
+
+  // This is used for common part of assertDto and assertDtoWithAnyId
+  private void assertDtoHelper(ResultActions result, FacultyDto dto) throws Exception {
+    result
+            .andExpect(jsonPath("$.name").value(dto.getName()))
+            .andExpect(jsonPath("$._links.students.href").exists())
+            .andExpect(jsonPath("$._links.teachers.href").exists())
+            .andExpect(jsonPath("$._links.degrees.href").exists())
+            .andExpect(jsonPath("$._links.courses.href").exists());
   }
 }
