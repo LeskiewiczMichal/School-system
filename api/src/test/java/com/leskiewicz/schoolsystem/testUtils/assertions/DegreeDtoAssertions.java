@@ -26,7 +26,11 @@ public class DegreeDtoAssertions implements DtoAssertion<DegreeDto> {
                 .value(dto.getTitle().toString()))
         .andExpect(
             jsonPath(String.format("$._embedded.degrees[%d]._links.self.href", index))
-                .value(String.format("http://localhost/api/degrees/%d", dto.getId())));
+                .value(String.format("http://localhost/api/degrees/%d", dto.getId())))
+        .andExpect(
+            jsonPath(String.format("$._embedded.degrees[%d]._links.courses.href", index)).exists())
+        .andExpect(
+            jsonPath(String.format("$._embedded.degrees[%d]._links.faculty.href", index)).exists());
   }
 
   @Override
@@ -55,6 +59,8 @@ public class DegreeDtoAssertions implements DtoAssertion<DegreeDto> {
     result
         .andExpect(jsonPath("$.title").value(dto.getTitle().toString()))
         .andExpect(jsonPath("$.fieldOfStudy").value(dto.getFieldOfStudy()))
-        .andExpect(jsonPath("$.faculty").value(dto.getFaculty()));
+        .andExpect(jsonPath("$.faculty").value(dto.getFaculty()))
+        .andExpect(jsonPath("$._links.courses.href").exists())
+        .andExpect(jsonPath("$._links.faculty.href").exists());
   }
 }

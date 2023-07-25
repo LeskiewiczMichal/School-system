@@ -14,24 +14,28 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @Component
 public class DegreeDtoAssembler extends RepresentationModelAssemblerSupport<DegreeDto, DegreeDto> {
 
+  public DegreeDtoAssembler() {
+    super(DegreeController.class, DegreeDto.class);
+  }
 
-    public DegreeDtoAssembler() {
-        super(DegreeController.class, DegreeDto.class);
-    }
+  @Override
+  public DegreeDto toModel(DegreeDto degree) {
+    Link selfLink =
+        WebMvcLinkBuilder.linkTo(methodOn(DegreeController.class).getDegreeById(degree.getId()))
+            .withSelfRel();
+    Link facultyLink =
+        WebMvcLinkBuilder.linkTo(
+                methodOn(FacultyController.class).getFacultyById(degree.getFacultyId()))
+            .withRel("faculty");
+    Link coursesLink =
+        WebMvcLinkBuilder.linkTo(
+                methodOn(DegreeController.class).getDegreeCourses(degree.getId(), null))
+            .withRel("courses");
 
-    @Override
-    public DegreeDto toModel(DegreeDto degree) {
-        Link selfLink =
-                WebMvcLinkBuilder.linkTo(methodOn(DegreeController.class).getDegreeById(degree.getId()))
-                        .withSelfRel();
-        Link facultyLink =
-                WebMvcLinkBuilder.linkTo(
-                                methodOn(FacultyController.class).getFacultyById(degree.getFacultyId()))
-                        .withRel("faculty");
+    degree.add(selfLink);
+    degree.add(facultyLink);
+    degree.add(coursesLink);
 
-        degree.add(selfLink);
-        degree.add(facultyLink);
-
-        return degree;
-    }
+    return degree;
+  }
 }
