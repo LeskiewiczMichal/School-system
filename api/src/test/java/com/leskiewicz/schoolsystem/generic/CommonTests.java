@@ -131,6 +131,16 @@ public class CommonTests {
         .andExpect(jsonPath("$.page.number").exists());
   }
 
+  /**
+   * Test the controller get all method
+   *
+   * @param entityClass Class of entity dto
+   * @param pagedResourcesAssembler Paged resources assembler of dto type
+   * @param getEntitiesFunction Get all function of the service
+   * @param toModelFunction To model function of the assembler of dto type
+   * @param controllerGetFunction Get all function of the controller
+   * @param <T> Entity dto type (must extend RepresentationModel)
+   */
   public static <T extends RepresentationModel<T>> void controllerGetEntities(
       Class<T> entityClass,
       PagedResourcesAssembler<T> pagedResourcesAssembler,
