@@ -50,6 +50,17 @@ public class TestHelper {
         .build();
   }
 
+  public static UserDto createUserDto(String facultyName, String degreeFieldOfStudy) {
+    return UserDto.builder()
+            .id(1L)
+            .firstName("John")
+            .lastName("Doe")
+            .email("johndoe@example.com")
+            .faculty(facultyName)
+            .degree(degreeFieldOfStudy)
+            .build();
+  }
+
 //  public static UserDto createUserDto(Faculty faculty, Degree degree) {
 //    return UserDto.builder()
 //            .id(1L)

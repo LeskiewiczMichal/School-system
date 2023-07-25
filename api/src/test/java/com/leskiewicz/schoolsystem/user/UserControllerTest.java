@@ -1,10 +1,13 @@
 package com.leskiewicz.schoolsystem.user;
 
+import com.leskiewicz.schoolsystem.authentication.Role;
 import com.leskiewicz.schoolsystem.degree.Degree;
+import com.leskiewicz.schoolsystem.degree.DegreeTitle;
 import com.leskiewicz.schoolsystem.dto.request.PageableRequest;
 import com.leskiewicz.schoolsystem.error.ErrorMessages;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.testUtils.TestHelper;
+import com.leskiewicz.schoolsystem.user.dto.PatchUserRequest;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserDtoAssembler;
 import jakarta.persistence.EntityNotFoundException;
@@ -70,7 +73,7 @@ public class UserControllerTest {
     verify(userService, times(1)).getById(userDto.getId());
     verify(userDtoAssembler, times(1)).toModel(userDto);
   }
-  
+
   @Test
   public void getUsers() {
     PageableRequest request = new PageableRequest();
@@ -104,5 +107,26 @@ public class UserControllerTest {
     verify(userService, times(1)).getUsers(any(Pageable.class));
     verify(userDtoAssembler, times(2)).toModel(any(UserDto.class));
     verify(userPagedResourcesAssembler, times(1)).toModel(userDtoPage);
+  }
+
+  @Test
+  public void testPathUser() {
+    // Prepare data
+    Long userId = 1L;
+    PatchUserRequest request = Mockito.mock(PatchUserRequest.class);
+    UserDto existingUserDto = Mockito.mock(UserDto.class);
+
+    // Mock service
+    given(userService.updateUser(request, userId)).willReturn(existingUserDto);
+
+    // Mock assembler
+    given(userDtoAssembler.toModel(any(UserDto.class))).willReturn(existingUserDto);
+
+    // Call controller
+    ResponseEntity<UserDto> response = userController.patchUser(request, userId);
+
+    // Verify response
+    Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+    Assertions.assertEquals(existingUserDto, response.getBody());
   }
 }
