@@ -5,6 +5,7 @@ import com.leskiewicz.schoolsystem.course.utils.CourseDtoAssembler;
 import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
 import com.leskiewicz.schoolsystem.degree.utils.DegreeDtoAssembler;
 import com.leskiewicz.schoolsystem.generic.CommonTests;
+import com.leskiewicz.schoolsystem.testUtils.TestHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -54,4 +55,16 @@ public class DegreeControllerTest {
         degreeDtoAssembler::toModel,
         degreeController::getDegrees);
   }
+
+  @Test
+    public void getDegreeById() {
+        DegreeDto degreeDto = TestHelper.createDegreeDto("Faculty");
+
+        CommonTests.controllerGetEntityById(
+            degreeDto,
+            1L,
+            degreeService::getById,
+            degreeDtoAssembler::toModel,
+            degreeController::getDegreeById);
+    }
 }

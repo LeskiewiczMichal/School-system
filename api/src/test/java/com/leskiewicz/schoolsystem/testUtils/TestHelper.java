@@ -5,6 +5,7 @@ import com.leskiewicz.schoolsystem.course.Course;
 import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
+import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
 import com.leskiewicz.schoolsystem.user.User;
@@ -88,6 +89,16 @@ public class TestHelper {
         .fieldOfStudy("Computer Science")
         .faculty(faculty)
         .build();
+  }
+
+  public static DegreeDto createDegreeDto(String facultyName) {
+    return DegreeDto.builder()
+            .id(1L)
+            .title(DegreeTitle.BACHELOR_OF_SCIENCE)
+            .fieldOfStudy("Computer Science")
+            .faculty(facultyName)
+            .facultyId(1L)
+            .build();
   }
 
   /// *** Course *** ///
