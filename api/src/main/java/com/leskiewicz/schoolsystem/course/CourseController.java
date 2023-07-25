@@ -2,15 +2,16 @@ package com.leskiewicz.schoolsystem.course;
 
 import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.course.utils.CourseDtoAssembler;
+import com.leskiewicz.schoolsystem.dto.request.PageableRequest;
 import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * REST controller for managing courses.
@@ -35,7 +36,8 @@ public class CourseController {
    * Get a course by its ID.
    *
    * @param id the ID of the course to retrieve.
-   * @return status 200 and the {@link CourseDto} representing the course with the given ID in the body.
+   * @return status 200 and the {@link CourseDto} representing the course with the given ID in the
+   *     body.
    * @throws EntityNotFoundException if the course does not exist, returns status 404.
    * @throws IllegalArgumentException if the ID is a string, returns status 400.
    */
@@ -45,5 +47,23 @@ public class CourseController {
     course = courseDtoAssembler.toModel(course);
 
     return ResponseEntity.ok(course);
+  }
+
+  /**
+   * Get all courses.
+   *
+   * @param request the {@link PageableRequest} containing sorting, pagination, etc.
+   * @return status 200 (OK) and in body the paged list of {@link CourseDto} objects and page
+   *     metadata. If there are no courses, an empty page is returned (without _embedded.faculties
+   *     field).
+   */
+  @GetMapping
+  public ResponseEntity<RepresentationModel<CourseDto>> getCourses(
+      @ModelAttribute PageableRequest request) {
+    Page<CourseDto> courses = courseService.getCourses(request.toPageable());
+    courses = courses.map(courseDtoAssembler::toModel);
+
+    return ResponseEntity.ok(
+        HalModelBuilder.halModelOf(coursePagedResourcesAssembler.toModel(courses)).build());
   }
 }
