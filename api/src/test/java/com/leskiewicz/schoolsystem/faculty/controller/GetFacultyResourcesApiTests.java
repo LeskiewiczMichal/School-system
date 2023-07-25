@@ -59,17 +59,17 @@ public class GetFacultyResourcesApiTests {
     ResultActions result =
         requestUtils.performGetRequest(BASE_FACULTIES + "/101/students", status().isOk());
 
-    result
-        .andExpect(MockMvcResultMatchers.jsonPath("$._links").exists())
-        .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.users").exists())
-        .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.users").isArray())
-        .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.users").isNotEmpty())
-        .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.users[0].id").value(1))
-        .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.users[0].firstName").value("John"))
-        .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.users[0].lastName").value("Doe"))
-        .andExpect(
-            MockMvcResultMatchers.jsonPath("$._embedded.users[0].email")
-                .value("johndoe@example.com"));
+    UserDto userDto =
+        UserDto.builder()
+            .id(1L)
+            .firstName("John")
+            .lastName("Doe")
+            .email("johndoe@example.com")
+            .faculty("Informatics")
+            .degree("Computer Science")
+            .build();
+
+    userDtoAssertions.assertDtoInCollection(result, 0, userDto);
   }
 
   @Test
