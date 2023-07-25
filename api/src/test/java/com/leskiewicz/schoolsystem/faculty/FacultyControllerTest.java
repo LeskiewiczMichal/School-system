@@ -134,5 +134,14 @@ public class FacultyControllerTest {
     );
   }
 
-  
+  @Test
+  public void getFacultyTeachers() {
+    CommonTests.controllerGetEntities(
+            UserDto.class,
+            userPagedResourcesAssembler,
+            (Pageable pageable) ->  facultyService.getFacultyUsers(1L, pageable, Role.ROLE_TEACHER),
+            userDtoAssembler::toModel,
+            (PageableRequest request) -> facultyController.getFacultyTeachers(1L, request)
+    );
+  }
 }
