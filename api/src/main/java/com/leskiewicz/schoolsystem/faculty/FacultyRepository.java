@@ -16,10 +16,6 @@ public interface FacultyRepository extends JpaRepository<Faculty, Long> {
 
   Optional<Faculty> findByName(String name);
 
-  @Query("SELECT u FROM User u WHERE u.faculty.id = :facultyId AND u.role = :role")
-  Page<User> findFacultyUsers(Long facultyId, Pageable pageable, Role role);
 
-  @Query("SELECT d FROM Degree d WHERE d.faculty.id = :facultyId")
-  Page<Degree> findFacultyDegrees(Long facultyId, Pageable pageable);
 
 }

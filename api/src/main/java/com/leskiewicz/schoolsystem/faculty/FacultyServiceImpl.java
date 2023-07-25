@@ -7,6 +7,7 @@ import com.leskiewicz.schoolsystem.course.CourseRepository;
 import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.course.utils.CourseMapper;
 import com.leskiewicz.schoolsystem.degree.Degree;
+import com.leskiewicz.schoolsystem.degree.DegreeRepository;
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
 import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
 import com.leskiewicz.schoolsystem.degree.utils.DegreeMapper;
@@ -17,6 +18,7 @@ import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
 import com.leskiewicz.schoolsystem.faculty.dto.PatchFacultyRequest;
 import com.leskiewicz.schoolsystem.faculty.utils.FacultyMapper;
 import com.leskiewicz.schoolsystem.user.User;
+import com.leskiewicz.schoolsystem.user.UserRepository;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserMapper;
 import com.leskiewicz.schoolsystem.utils.StringUtils;
@@ -37,6 +39,8 @@ public class FacultyServiceImpl implements FacultyService {
   // Repositories
   private final FacultyRepository facultyRepository;
   private final CourseRepository courseRepository;
+  private final DegreeRepository degreeRepository;
+  private final UserRepository userRepository;
 
   // Mappers
   private final DegreeMapper degreeMapper;
@@ -135,14 +139,14 @@ public class FacultyServiceImpl implements FacultyService {
   @Override
   public Page<UserDto> getFacultyUsers(Long facultyId, Pageable pageable, Role role) {
     facultyExistsCheck(facultyId);
-    Page<User> users = facultyRepository.findFacultyUsers(facultyId, pageable, role);
+    Page<User> users = userRepository.findUsersByFacultyId(facultyId, pageable, role);
     return users.map(userMapper::convertToDto);
   }
 
   @Override
   public Page<DegreeDto> getFacultyDegrees(Long facultyId, Pageable pageable) {
     facultyExistsCheck(facultyId);
-    Page<Degree> degrees = facultyRepository.findFacultyDegrees(facultyId, pageable);
+    Page<Degree> degrees = degreeRepository.findDegreesByFacultyId(facultyId, pageable);
     return degrees.map(degreeMapper::convertToDto);
   }
 

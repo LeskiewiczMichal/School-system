@@ -1,5 +1,6 @@
 package com.leskiewicz.schoolsystem.user;
 
+import com.leskiewicz.schoolsystem.authentication.Role;
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import java.util.Optional;
@@ -20,4 +21,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
   @Query("SELECT u.degree FROM User u WHERE u.id = :id")
   Optional<Degree> findDegreeByUserId(@Param("id") Long id);
+
+  @Query("SELECT u FROM User u WHERE u.faculty.id = :facultyId AND u.role = :role")
+  Page<User> findUsersByFacultyId(Long facultyId, Pageable pageable, Role role);
 }

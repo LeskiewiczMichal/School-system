@@ -6,6 +6,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import com.leskiewicz.schoolsystem.degree.Degree;
+import com.leskiewicz.schoolsystem.degree.DegreeRepository;
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
 import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
 import com.leskiewicz.schoolsystem.degree.utils.DegreeMapper;
@@ -36,6 +37,7 @@ public class GetFacultyDegreesTest {
 
   // Mocks
   @Mock private FacultyRepository facultyRepository;
+  @Mock private DegreeRepository degreeRepository;
   @Mock private DegreeMapper degreeMapper;
   @InjectMocks private FacultyServiceImpl facultyService;
 
@@ -64,7 +66,7 @@ public class GetFacultyDegreesTest {
                 .build());
     Page<Degree> facultyPage = new PageImpl<>(facultyList);
 
-    given(facultyRepository.findFacultyDegrees(any(Long.class), any(Pageable.class)))
+    given(degreeRepository.findDegreesByFacultyId(any(Long.class), any(Pageable.class)))
         .willReturn(facultyPage);
 
     // Mock the behavior of the userMapper
@@ -84,7 +86,7 @@ public class GetFacultyDegreesTest {
     Assertions.assertEquals(degreeDto2, result.getContent().get(1));
 
     // Verify the interactions with userRepository and userMapper
-    verify(facultyRepository, times(1)).findFacultyDegrees(any(Long.class), any(Pageable.class));
+    verify(degreeRepository, times(1)).findDegreesByFacultyId(any(Long.class), any(Pageable.class));
     verify(degreeMapper, times(2)).convertToDto(any(Degree.class));
   }
 

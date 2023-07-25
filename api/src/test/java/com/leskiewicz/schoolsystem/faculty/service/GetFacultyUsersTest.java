@@ -11,6 +11,7 @@ import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.FacultyRepository;
 import com.leskiewicz.schoolsystem.faculty.FacultyServiceImpl;
 import com.leskiewicz.schoolsystem.user.User;
+import com.leskiewicz.schoolsystem.user.UserRepository;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserMapper;
 import jakarta.persistence.EntityNotFoundException;
@@ -36,6 +37,7 @@ public class GetFacultyUsersTest {
   Faculty faculty;
   // Mocks
   @Mock private FacultyRepository facultyRepository;
+  @Mock private UserRepository userRepository;
   @Mock private UserMapper userMapper;
   @InjectMocks private FacultyServiceImpl facultyService;
 
@@ -72,7 +74,7 @@ public class GetFacultyUsersTest {
                 Role.ROLE_STUDENT));
     Page<User> usersPage = new PageImpl<>(userList);
 
-    given(facultyRepository.findFacultyUsers(any(Long.class), any(Pageable.class), any(Role.class)))
+    given(userRepository.findUsersByFacultyId(any(Long.class), any(Pageable.class), any(Role.class)))
         .willReturn(usersPage);
 
     // Mock the behavior of the userMapper
@@ -93,8 +95,8 @@ public class GetFacultyUsersTest {
     Assertions.assertEquals(userDto2, result.getContent().get(1));
 
     // Verify the interactions with userRepository and userMapper
-    verify(facultyRepository, times(1))
-        .findFacultyUsers(any(Long.class), any(Pageable.class), any(Role.class));
+    verify(userRepository, times(1))
+        .findUsersByFacultyId(any(Long.class), any(Pageable.class), any(Role.class));
     verify(userMapper, times(2)).convertToDto(any(User.class));
   }
 
