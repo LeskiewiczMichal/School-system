@@ -11,6 +11,8 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
 import org.springframework.http.ResponseEntity;
@@ -49,6 +51,7 @@ public class UserController {
       @ModelAttribute PageableRequest request) {
     Page<UserDto> users = userService.getUsers(request.toPageable());
     users = users.map(userDtoAssembler::toModel);
+
 
     return ResponseEntity.ok(
         HalModelBuilder.halModelOf(userPagedResourcesAssembler.toModel(users)).build());
@@ -107,7 +110,7 @@ public class UserController {
    *     field).
    */
   @GetMapping("/{id}/courses")
-  public ResponseEntity<RepresentationModel<UserDto>> getUserCourses(
+  public ResponseEntity<RepresentationModel<CourseDto>> getUserCourses(
       @PathVariable Long id, @ModelAttribute PageableRequest request) {
     Page<CourseDto> courses = userService.getUserCourses(id, request.toPageable());
     courses = courses.map(courseDtoAssembler::toModel);

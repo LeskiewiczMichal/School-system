@@ -1,6 +1,8 @@
 package com.leskiewicz.schoolsystem.user;
 
 import com.leskiewicz.schoolsystem.authentication.Role;
+import com.leskiewicz.schoolsystem.course.dto.CourseDto;
+import com.leskiewicz.schoolsystem.course.utils.CourseDtoAssembler;
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
 import com.leskiewicz.schoolsystem.dto.request.PageableRequest;
@@ -11,7 +13,9 @@ import com.leskiewicz.schoolsystem.user.dto.PatchUserRequest;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserDtoAssembler;
 import jakarta.persistence.EntityNotFoundException;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -29,7 +33,9 @@ import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.BDDMockito.given;
@@ -42,10 +48,32 @@ public class UserControllerTest {
   @Mock private UserService userService;
 
   // Assemblers
-  @Mock private UserDtoAssembler userDtoAssembler;
-  @Mock private PagedResourcesAssembler<UserDto> userPagedResourcesAssembler;
+  private UserDtoAssembler userDtoAssembler;
+  private PagedResourcesAssembler<UserDto> userPagedResourcesAssembler;
+  private CourseDtoAssembler courseDtoAssembler;
+  private PagedResourcesAssembler<CourseDto> coursePagedResourcesAssembler;
 
-  @InjectMocks private UserController userController;
+  private UserController userController;
+
+  // Annotation mocks didn't work as expected here, pagedResourcesAssemblers were mixed up
+  @BeforeEach
+  public void setUp() {
+    // Create mock instances
+    userService = Mockito.mock(UserService.class);
+    userDtoAssembler = Mockito.mock(UserDtoAssembler.class);
+    userPagedResourcesAssembler = Mockito.mock(PagedResourcesAssembler.class);
+    courseDtoAssembler = Mockito.mock(CourseDtoAssembler.class);
+    coursePagedResourcesAssembler = Mockito.mock(PagedResourcesAssembler.class);
+
+    // Create UserController instance
+    userController =
+        new UserController(
+            userService,
+            userDtoAssembler,
+            courseDtoAssembler,
+            userPagedResourcesAssembler,
+            coursePagedResourcesAssembler);
+  }
 
   @Test
   public void getUserByIdReturnsCorrectUser() {
@@ -94,7 +122,7 @@ public class UserControllerTest {
 
     // Mock paged resources assembler
     PagedModel<EntityModel<UserDto>> pagedModel = Mockito.mock(PagedModel.class);
-    given(userPagedResourcesAssembler.toModel(userDtoPage)).willReturn(pagedModel);
+    given(userPagedResourcesAssembler.toModel(any(Page.class))).willReturn(pagedModel);
 
     // Call controller
     ResponseEntity<RepresentationModel<UserDto>> response = userController.getUsers(request);
@@ -128,5 +156,41 @@ public class UserControllerTest {
     // Verify response
     Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
     Assertions.assertEquals(existingUserDto, response.getBody());
+  }
+
+  @Test
+  public void getUserCourses() {
+    PageableRequest request = new PageableRequest();
+
+    // Mock the list of userDto
+    List<CourseDto> userDtoList =
+        Arrays.asList(Mockito.mock(CourseDto.class), Mockito.mock(CourseDto.class));
+
+    // Mock the page
+    Page<CourseDto> userDtoPage = new PageImpl<>(userDtoList);
+
+    // Mock service
+    given(userService.getUserCourses(1L, request.toPageable())).willReturn(userDtoPage);
+
+    // Mock assembler
+    given(courseDtoAssembler.toModel(any(CourseDto.class)))
+        .willReturn(userDtoList.get(0), userDtoList.get(1));
+
+    // Mock paged resources assembler
+    PagedModel<EntityModel<CourseDto>> pagedModel = Mockito.mock(PagedModel.class);
+    given(coursePagedResourcesAssembler.toModel(userDtoPage)).willReturn(pagedModel);
+
+    // Call controller
+    ResponseEntity<RepresentationModel<CourseDto>> response =
+        userController.getUserCourses(1L, request);
+
+    // Assert the response
+    Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+    Assertions.assertEquals(HalModelBuilder.halModelOf(pagedModel).build(), response.getBody());
+
+    // Verify mocks
+    verify(userService, times(1)).getUserCourses(any(Long.class), any(Pageable.class));
+    verify(courseDtoAssembler, times(2)).toModel(any(CourseDto.class));
+    verify(coursePagedResourcesAssembler, times(1)).toModel(userDtoPage);
   }
 }
