@@ -1,4 +1,4 @@
-package com.leskiewicz.schoolsystem.degree.controller;
+package com.leskiewicz.schoolsystem.degree.integration;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 

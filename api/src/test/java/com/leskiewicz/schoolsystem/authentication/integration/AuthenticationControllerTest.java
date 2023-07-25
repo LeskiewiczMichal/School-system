@@ -1,4 +1,4 @@
-package com.leskiewicz.schoolsystem.authentication.controller;
+package com.leskiewicz.schoolsystem.authentication.integration;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;

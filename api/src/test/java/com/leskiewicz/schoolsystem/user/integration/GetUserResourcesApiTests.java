@@ -1,4 +1,4 @@
-package com.leskiewicz.schoolsystem.user.controller;
+package com.leskiewicz.schoolsystem.user.integration;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
