@@ -194,7 +194,14 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public Page<CourseDto> getUserCourses(Long userId, Pageable pageable) {
+    userExistsCheck(userId);
     Page<Course> courses = courseRepository.findCoursesByUserId(userId, pageable);
     return courses.map(courseMapper::convertToDto);
+  }
+
+  private void userExistsCheck(Long id) {
+    if (!userRepository.existsById(id)) {
+      throw new EntityNotFoundException(ErrorMessages.objectWithIdNotFound("User", id));
+    }
   }
 }

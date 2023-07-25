@@ -4,7 +4,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.leskiewicz.schoolsystem.generic.GenericControllerTest;
 import com.leskiewicz.schoolsystem.testModels.FacultyDto;
-import com.leskiewicz.schoolsystem.testUtils.CommonTests;
+import com.leskiewicz.schoolsystem.generic.CommonTests;
 import com.leskiewicz.schoolsystem.testUtils.assertions.FacultyDtoAssertions;
 import java.util.Arrays;
 import java.util.stream.Stream;

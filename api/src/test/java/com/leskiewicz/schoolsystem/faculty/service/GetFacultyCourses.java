@@ -55,7 +55,7 @@ public class GetFacultyCourses {
   public void getFacultyDegreesReturnsPagedDegrees() {
     User teacher = Mockito.mock(User.class);
 
-    List<Course> facultyList =
+    List<Course> courseList =
         Arrays.asList(
             Course.builder()
                 .id(1L)
@@ -71,7 +71,7 @@ public class GetFacultyCourses {
                 .duration_in_hours(30)
                 .teacher(teacher)
                 .build());
-    Page<Course> coursePage = new PageImpl<>(facultyList);
+    Page<Course> coursePage = new PageImpl<>(courseList);
 
     given(courseRepository.findCoursesByFacultyId(any(Long.class), any(Pageable.class)))
         .willReturn(coursePage);

@@ -9,6 +9,9 @@ import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.testModels.UserDto;
 import com.leskiewicz.schoolsystem.user.User;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class TestHelper {
 
   public static User createUser(Faculty faculty, Degree degree) {
@@ -60,6 +63,7 @@ public class TestHelper {
         .build();
   }
 
+  /// *** Course *** ///
   public static Course createCourse(Faculty faculty, User teacher) {
     return Course.builder()
         .id(1L)
@@ -80,5 +84,54 @@ public class TestHelper {
             .teacherId(1L)
             .durationInHours(20)
             .build();
+  }
+
+  public static CourseDto createCourseDto(Course course) {
+    return CourseDto.builder()
+            .id(course.getId())
+            .title(course.getTitle())
+            .faculty(course.getFaculty().getName())
+            .teacher(course.getTeacher().getFirstName() + " " + course.getTeacher().getLastName())
+            .facultyId(course.getFaculty().getId())
+            .teacherId(course.getTeacher().getId())
+            .durationInHours(course.getDuration_in_hours())
+            .build();
+  }
+
+  public static List<Course> createCoursesList(Faculty faculty, User teacher) {
+    return Arrays.asList(
+            Course.builder()
+                    .id(1L)
+                    .title("Software Engineering")
+                    .faculty(faculty)
+                    .duration_in_hours(20)
+                    .teacher(teacher)
+                    .build(),
+            Course.builder()
+                    .id(2L)
+                    .title("Computer Science")
+                    .faculty(faculty)
+                    .duration_in_hours(30)
+                    .teacher(teacher)
+                    .build());
+  }
+
+  public static List<CourseDto> createCoursesDtosList(Course course1, Course course2) {
+    return Arrays.asList(
+            CourseDto.builder()
+                    .id(course1.getId())
+                    .title(course1.getTitle())
+                    .faculty(course1.getFaculty().getName())
+                    .teacher(course1.getTeacher().getFirstName() +  " " + course1.getTeacher().getLastName())
+                    .durationInHours(course1.getDuration_in_hours())
+                    .build(),
+            CourseDto.builder()
+                    .id(course2.getId())
+                    .title(course2.getTitle())
+                    .faculty(course2.getFaculty().getName())
+                    .teacher(course2.getTeacher().getFirstName() + " " + course2.getTeacher().getLastName())
+                    .durationInHours(course2.getDuration_in_hours())
+                    .build()
+    );
   }
 }

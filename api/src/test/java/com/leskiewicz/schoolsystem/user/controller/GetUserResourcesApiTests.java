@@ -49,18 +49,6 @@ public class GetUserResourcesApiTests {
     ResultActions result =
         requestUtils.performGetRequest(BASE_PATH + "/1/courses", status().isOk());
 
-//    result
-//        .andExpect(MockMvcResultMatchers.jsonPath("$._links").exists())
-//        .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.courses").exists())
-//        .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.courses").isArray())
-//        .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.courses").isNotEmpty())
-//        .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.courses[0].id").value(1))
-//        .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.courses[0].firstName").value("John"))
-//        .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.courses[0].lastName").value("Doe"))
-//        .andExpect(
-//            MockMvcResultMatchers.jsonPath("$._embedded.users[0].email")
-//                .value("johndoe@example.com"));
-
     CourseDto expectedCourse =
         CourseDto.builder()
             .id(1L)

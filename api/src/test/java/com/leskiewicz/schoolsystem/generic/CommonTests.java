@@ -1,14 +1,15 @@
-package com.leskiewicz.schoolsystem.testUtils;
+package com.leskiewicz.schoolsystem.generic;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.leskiewicz.schoolsystem.testUtils.RequestUtils;
 import org.springframework.test.web.servlet.ResultActions;
 
 public class CommonTests {
 
   public static void paginationLinksTest(
-      RequestUtils requestUtils, String baseApiPath, int lastPage) throws Exception {
+          RequestUtils requestUtils, String baseApiPath, int lastPage) throws Exception {
     String query = "http://localhost" + baseApiPath + "?page=%d&size=%d&sort=%s,%s";
 
     // Base query
