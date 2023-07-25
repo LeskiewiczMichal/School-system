@@ -4,6 +4,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import com.leskiewicz.schoolsystem.authentication.AuthenticationController;
+import com.leskiewicz.schoolsystem.course.CourseController;
 import com.leskiewicz.schoolsystem.degree.DegreeController;
 import com.leskiewicz.schoolsystem.faculty.FacultyController;
 import com.leskiewicz.schoolsystem.user.UserController;
@@ -33,6 +34,7 @@ public class ApiController {
     this.addUsersLinks(model);
     this.addFacultiesLinks(model);
     this.addDegreesLink(model);
+    this.addCoursesLink(model);
 
     return ResponseEntity.ok(model);
   }
@@ -64,5 +66,12 @@ public class ApiController {
     String uriTemplate = degreesLink.getHref() + PAGINATION_PARAMETERS;
     degreesLink = Link.of(uriTemplate).withRel("degrees");
     model.add(degreesLink);
+  }
+
+  private void addCoursesLink(RepresentationModel<?> model) {
+    Link coursesLink = linkTo(CourseController.class).withRel("courses");
+    String uriTemplate = coursesLink.getHref() + PAGINATION_PARAMETERS;
+    coursesLink = Link.of(uriTemplate).withRel("courses");
+    model.add(coursesLink);
   }
 }
