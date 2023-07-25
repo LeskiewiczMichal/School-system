@@ -5,9 +5,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.leskiewicz.schoolsystem.course.dto.CourseDto;
+import com.leskiewicz.schoolsystem.degree.DegreeTitle;
 import com.leskiewicz.schoolsystem.generic.CommonTests;
+import com.leskiewicz.schoolsystem.testModels.DegreeDto;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtils;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtilsImpl;
+import com.leskiewicz.schoolsystem.testUtils.assertions.CourseDtoAssertions;
+import com.leskiewicz.schoolsystem.testUtils.assertions.DegreeDtoAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +35,10 @@ public class GetFacultyResourcesApiTests {
   // Variables
   private ObjectMapper mapper;
   private RequestUtils requestUtils;
+
+  // Assertions
+  private final CourseDtoAssertions courseDtoAssertions = new CourseDtoAssertions();
+  private final DegreeDtoAssertions degreeDtoAssertions = new DegreeDtoAssertions();
 
   @BeforeEach
   public void setUp() {
@@ -92,48 +101,42 @@ public class GetFacultyResourcesApiTests {
     ResultActions result =
         requestUtils.performGetRequest(BASE_FACULTIES + "/101/degrees", status().isOk());
 
-    result
-        .andExpect(MockMvcResultMatchers.jsonPath("$._links").exists())
-        .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.degrees").exists())
-        .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.degrees").isArray())
-        .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.degrees").isNotEmpty())
-        .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.degrees[0].id").value(101))
-        .andExpect(
-            MockMvcResultMatchers.jsonPath("$._embedded.degrees[0].title")
-                .value("BACHELOR_OF_SCIENCE"))
-        .andExpect(
-            MockMvcResultMatchers.jsonPath("$._embedded.degrees[0].fieldOfStudy")
-                .value("Computer Science"))
-        .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.degrees[1].id").value(102))
-        .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.degrees[1].title").value("MASTER"))
-        .andExpect(
-            MockMvcResultMatchers.jsonPath("$._embedded.degrees[1].fieldOfStudy")
-                .value("Software Engineering"));
+    DegreeDto degreeDto =
+        DegreeDto.builder()
+            .id(101L)
+            .title(DegreeTitle.BACHELOR_OF_SCIENCE)
+            .fieldOfStudy("Computer Science")
+            .faculty("Informatics")
+            .build();
+    DegreeDto degreeDto2 =
+        DegreeDto.builder()
+            .id(102L)
+            .title(DegreeTitle.MASTER)
+            .fieldOfStudy("Software Engineering")
+            .faculty("Informatics")
+            .build();
+
+    degreeDtoAssertions.assertDtoInCollection(result, 0, degreeDto);
+    degreeDtoAssertions.assertDtoInCollection(result, 1, degreeDto2);
   }
 
-  // *** GetFacultyDegrees *** //
+  // *** GetFacultyCourses *** //
 
   @Test
   public void getFacultyCoursesReturnsCorrectCourses() throws Exception {
     ResultActions result =
         requestUtils.performGetRequest(BASE_FACULTIES + "/101/courses", status().isOk());
 
-    result
-        .andExpect(MockMvcResultMatchers.jsonPath("$._links").exists())
-        .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.courses").exists())
-        .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.courses").isArray())
-        .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.courses").isNotEmpty())
-        .andExpect(MockMvcResultMatchers.jsonPath("$._embedded.courses[0].id").value(1))
-        .andExpect(
-            MockMvcResultMatchers.jsonPath("$._embedded.courses[0].title")
-                .value("Introduction to Programming"))
-        .andExpect(
-            MockMvcResultMatchers.jsonPath("$._embedded.courses[0].durationInHours").value(40))
-        .andExpect(
-            MockMvcResultMatchers.jsonPath("$._embedded.courses[0].teacher")
-                .value("Olivia Martinez"))
-        .andExpect(
-            MockMvcResultMatchers.jsonPath("$._embedded.courses[0].faculty").value("Informatics"));
+    CourseDto courseDto =
+        CourseDto.builder()
+            .id(1L)
+            .title("Introduction to Programming")
+            .durationInHours(40)
+            .teacher("Olivia Martinez")
+            .faculty("Informatics")
+            .build();
+
+    courseDtoAssertions.assertDtoInCollection(result, 0, courseDto);
   }
 
   @Test
