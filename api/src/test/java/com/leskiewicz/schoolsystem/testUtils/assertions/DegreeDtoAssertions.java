@@ -22,7 +22,8 @@ public class DegreeDtoAssertions implements DtoAssertion<DegreeDto> {
             jsonPath(String.format("$._embedded.degrees[%d].fieldOfStudy", index))
                 .value(dto.getFieldOfStudy()))
         .andExpect(
-            jsonPath(String.format("$._embedded.degrees[%d].title", index)).value(dto.getTitle().toString()))
+            jsonPath(String.format("$._embedded.degrees[%d].title", index))
+                .value(dto.getTitle().toString()))
         .andExpect(
             jsonPath(String.format("$._embedded.degrees[%d]._links.self.href", index))
                 .value(String.format("http://localhost/api/degrees/%d", dto.getId())));
@@ -30,11 +31,9 @@ public class DegreeDtoAssertions implements DtoAssertion<DegreeDto> {
 
   @Override
   public void assertDto(ResultActions result, DegreeDto dto) throws Exception {
+    assertDtoHelper(result, dto);
     result
         .andExpect(jsonPath("$.id").value(dto.getId()))
-        .andExpect(jsonPath("$.title").value(dto.getTitle().toString()))
-        .andExpect(jsonPath("$.fieldOfStudy").value(dto.getFieldOfStudy()))
-        .andExpect(jsonPath("$.faculty").value(dto.getFaculty()))
         .andExpect(
             jsonPath("$._links.self.href")
                 .value(
@@ -47,14 +46,15 @@ public class DegreeDtoAssertions implements DtoAssertion<DegreeDto> {
 
   @Override
   public void assertDtoWithAnyId(ResultActions result, DegreeDto dto) throws Exception {
-    result
-            .andExpect(jsonPath("$.id").exists())
-            .andExpect(jsonPath("$.title").value(dto.getTitle().toString()))
-            .andExpect(jsonPath("$.fieldOfStudy").value(dto.getFieldOfStudy()))
-            .andExpect(jsonPath("$.faculty").value(dto.getFaculty()))
-            .andExpect(
-                    jsonPath("$._links.self.href")
-                            .exists());
+    assertDtoHelper(result, dto);
+    result.andExpect(jsonPath("$.id").exists()).andExpect(jsonPath("$._links.self.href").exists());
+  }
 
+  // This is used for common part of assertDto and assertDtoWithAnyId
+  private void assertDtoHelper(ResultActions result, DegreeDto dto) throws Exception {
+    result
+        .andExpect(jsonPath("$.title").value(dto.getTitle().toString()))
+        .andExpect(jsonPath("$.fieldOfStudy").value(dto.getFieldOfStudy()))
+        .andExpect(jsonPath("$.faculty").value(dto.getFaculty()));
   }
 }

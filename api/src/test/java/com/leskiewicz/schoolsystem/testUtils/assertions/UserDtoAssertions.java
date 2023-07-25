@@ -26,8 +26,10 @@ public class UserDtoAssertions implements DtoAssertion<UserDto> {
         .andExpect(
             jsonPath(String.format("$._embedded.users[%d]._links.self.href", index))
                 .value(String.format("http://localhost/api/users/%d", dto.getId())))
-        .andExpect(jsonPath(String.format("$._embedded.users[%d]._links.faculty.href", index)).exists())
-        .andExpect(jsonPath(String.format("$._embedded.users[%d]._links.courses.href", index)).exists());
+        .andExpect(
+            jsonPath(String.format("$._embedded.users[%d]._links.faculty.href", index)).exists())
+        .andExpect(
+            jsonPath(String.format("$._embedded.users[%d]._links.courses.href", index)).exists());
 
     // Degree might be empty when user is teacher
     if (dto.getDegree() != null) {
@@ -42,38 +44,26 @@ public class UserDtoAssertions implements DtoAssertion<UserDto> {
   public void assertDto(ResultActions result, UserDto dto) throws Exception {
     result
         .andExpect(jsonPath(String.format("$.id")).value(dto.getId()))
-        .andExpect(jsonPath(String.format("$.firstName")).value(dto.getFirstName()))
-        .andExpect(jsonPath(String.format("$.lastName")).value(dto.getLastName()))
-        .andExpect(jsonPath(String.format("$.email")).value(dto.getEmail()))
-        .andExpect(jsonPath(String.format("$.faculty")).value(dto.getFaculty()))
         .andExpect(
             jsonPath(String.format("$._links.self.href"))
-                .value(String.format("http://localhost/api/users/%d", dto.getId())))
-        .andExpect(jsonPath(String.format("$._links.faculty.href")).exists())
-        .andExpect(jsonPath(String.format("$._links.courses.href")).exists());
-
-    // Degree might be empty when user is teacher
-    if (dto.getDegree() != null) {
-      result.andExpect(jsonPath(String.format("$.degree")).value(dto.getDegree()));
-      result.andExpect(
-          jsonPath(String.format("$._links.degree.href"))
-              .value(
-                  WebMvcLinkBuilder.linkTo(DegreeController.class)
-                      .slash(dto.getDegreeId())
-                      .withSelfRel()
-                      .getHref()));
-    }
+                .value(String.format("http://localhost/api/users/%d", dto.getId())));
   }
 
   @Override
   public void assertDtoWithAnyId(ResultActions result, UserDto dto) throws Exception {
+    assertDtoHelper(result, dto);
     result
         .andExpect(jsonPath(String.format("$.id")).exists())
-        .andExpect(jsonPath(String.format("$.firstName")).value(dto.getFirstName()))
-        .andExpect(jsonPath(String.format("$.lastName")).value(dto.getLastName()))
-        .andExpect(jsonPath(String.format("$.email")).value(dto.getEmail()))
-        .andExpect(jsonPath(String.format("$.faculty")).value(dto.getFaculty()))
-        .andExpect(jsonPath(String.format("$._links.self.href")).exists())
+        .andExpect(jsonPath(String.format("$._links.self.href")).exists());
+  }
+
+  // This is used for common part of assertDto and assertDtoWithAnyId
+  private void assertDtoHelper(ResultActions result, UserDto dto) throws Exception {
+    result
+        .andExpect(jsonPath("$.firstName").value(dto.getFirstName()))
+        .andExpect(jsonPath("$.lastName").value(dto.getLastName()))
+        .andExpect(jsonPath("$.email").value(dto.getEmail()))
+        .andExpect(jsonPath("$.faculty").value(dto.getFaculty()))
         .andExpect(jsonPath(String.format("$._links.faculty.href")).exists())
         .andExpect(jsonPath(String.format("$._links.courses.href")).exists());
 
