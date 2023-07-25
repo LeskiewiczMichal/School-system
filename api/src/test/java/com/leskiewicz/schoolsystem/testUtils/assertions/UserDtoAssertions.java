@@ -25,10 +25,16 @@ public class UserDtoAssertions implements DtoAssertion<UserDto> {
             jsonPath(String.format("$._embedded.users[%d].faculty", index)).value(dto.getFaculty()))
         .andExpect(
             jsonPath(String.format("$._embedded.users[%d]._links.self.href", index))
-                .value(String.format("http://localhost/api/users/%d", dto.getId())));
+                .value(String.format("http://localhost/api/users/%d", dto.getId())))
+        .andExpect(jsonPath(String.format("$._embedded.users[%d]._links.faculty.href", index)).exists())
+        .andExpect(jsonPath(String.format("$._embedded.users[%d]._links.courses.href", index)).exists());
+
+    // Degree might be empty when user is teacher
     if (dto.getDegree() != null) {
       result.andExpect(
           jsonPath(String.format("$._embedded.users[%d].degree", index)).value(dto.getDegree()));
+      result.andExpect(
+          jsonPath(String.format("$._embedded.users[%d]._links.degree.href", index)).exists());
     }
   }
 
@@ -42,7 +48,11 @@ public class UserDtoAssertions implements DtoAssertion<UserDto> {
         .andExpect(jsonPath(String.format("$.faculty")).value(dto.getFaculty()))
         .andExpect(
             jsonPath(String.format("$._links.self.href"))
-                .value(String.format("http://localhost/api/users/%d", dto.getId())));
+                .value(String.format("http://localhost/api/users/%d", dto.getId())))
+        .andExpect(jsonPath(String.format("$._links.faculty.href")).exists())
+        .andExpect(jsonPath(String.format("$._links.courses.href")).exists());
+
+    // Degree might be empty when user is teacher
     if (dto.getDegree() != null) {
       result.andExpect(jsonPath(String.format("$.degree")).value(dto.getDegree()));
       result.andExpect(
@@ -63,9 +73,14 @@ public class UserDtoAssertions implements DtoAssertion<UserDto> {
         .andExpect(jsonPath(String.format("$.lastName")).value(dto.getLastName()))
         .andExpect(jsonPath(String.format("$.email")).value(dto.getEmail()))
         .andExpect(jsonPath(String.format("$.faculty")).value(dto.getFaculty()))
-        .andExpect(jsonPath(String.format("$._links.self.href")).exists());
+        .andExpect(jsonPath(String.format("$._links.self.href")).exists())
+        .andExpect(jsonPath(String.format("$._links.faculty.href")).exists())
+        .andExpect(jsonPath(String.format("$._links.courses.href")).exists());
+
+    // Degree might be empty when user is teacher
     if (dto.getDegree() != null) {
       result.andExpect(jsonPath(String.format("$.degree")).value(dto.getDegree()));
+      result.andExpect(jsonPath(String.format("$._links.degree.href")).exists());
     }
   }
 }

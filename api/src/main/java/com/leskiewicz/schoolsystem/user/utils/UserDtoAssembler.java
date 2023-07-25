@@ -29,13 +29,14 @@ public class UserDtoAssembler extends RepresentationModelAssemblerSupport<UserDt
         WebMvcLinkBuilder.linkTo(
                 methodOn(FacultyController.class).getFacultyById(user.getFacultyId()))
             .withRel("faculty");
-//    Link coursesLink =
-//        WebMvcLinkBuilder.linkTo(
-//                methodOn(CourseController.class).(user.getId(), null))
-//            .withRel("courses");
+    Link coursesLink =
+            WebMvcLinkBuilder.linkTo(
+                methodOn(UserController.class).getUserCourses(user.getId(), null))
+            .withRel("courses");
 
     user.add(selfLink);
     user.add(facultyLink);
+    user.add(coursesLink);
 
     // Degree may be empty if user is not a student
     if (user.getDegreeId() != null) {

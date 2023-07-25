@@ -44,12 +44,17 @@ public class UserDtoAssemblerTest {
     Link selfLink =
         WebMvcLinkBuilder.linkTo(methodOn(UserController.class).getUserById(1L)).withSelfRel();
     Link facultyLink =
-        WebMvcLinkBuilder.linkTo(methodOn(FacultyController.class).getFacultyById(user.getFacultyId()))
+        WebMvcLinkBuilder.linkTo(
+                methodOn(FacultyController.class).getFacultyById(user.getFacultyId()))
             .withRel("faculty");
+    Link coursesLink =
+        WebMvcLinkBuilder.linkTo(methodOn(UserController.class).getUserCourses(user.getId(), null))
+            .withRel("courses");
 
     UserDto userDto = userDtoAssembler.toModel(user);
 
     Assertions.assertEquals(selfLink, userDto.getLink("self").get());
     Assertions.assertEquals(facultyLink, userDto.getLink("faculty").get());
+    Assertions.assertEquals(coursesLink, userDto.getLink("courses").get());
   }
 }
