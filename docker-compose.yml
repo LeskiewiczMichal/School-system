@@ -1,0 +1,10 @@
+services:
+  db:
+    image: mysql:8.0.34
+    container_name: mysql-db
+    environment:
+      MYSQL_ROOT_PASSWORD: Testowy1
+    ports:
+      - "3306:3306"
+    volumes:
+      - $PWD/mysql:/var/lib/mysql
