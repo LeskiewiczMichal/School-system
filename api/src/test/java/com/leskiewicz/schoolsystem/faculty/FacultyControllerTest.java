@@ -110,4 +110,15 @@ public class FacultyControllerTest {
             (PageableRequest request) -> facultyController.getFacultyDegrees(1L, request)
     );
   }
+
+  @Test
+  public void getFacultyCourses() {
+    CommonTests.controllerGetEntities(
+            CourseDto.class,
+            coursePagedResourcesAssembler,
+            (Pageable pageable) ->  facultyService.getFacultyCourses(1L, pageable),
+            courseDtoAssembler::toModel,
+            (PageableRequest request) -> facultyController.getFacultyCourses(1L, request)
+    );
+  }
 }
