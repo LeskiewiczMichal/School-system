@@ -70,34 +70,7 @@ public class UserControllerTest {
     verify(userService, times(1)).getById(userDto.getId());
     verify(userDtoAssembler, times(1)).toModel(userDto);
   }
-
-  //  @Test
-  //  public void getUsers() {
-  //    PageableRequest request = new PageableRequest();
-  //    //    Faculty faculty = Mockito.mock(Faculty.class);
-  //    //    Degree degree = Mockito.mock(Degree.class);
-  //    //    given(faculty.getName()).willReturn("Test");
-  //    //    given(degree.getFieldOfStudy()).willReturn("Law");
-  //
-  //    // Mock the list of userDto
-  //    List<UserDto> userDtoList =
-  //        Arrays.asList(Mockito.mock(UserDto.class), Mockito.mock(UserDto.class));
-  //
-  //    // Mock the page
-  //    Page<UserDto> userDtoPage = Mockito.mock(Page.class);
-  //
-  //    // Mock service
-  //    given(userService.getUsers(request.toPageable())).willReturn(userDtoPage);
-  //
-  //    // Mock assembler
-  //    given(userDtoPage.map(userDtoAssembler::toModel)).willReturn(userDtoPage);
-  //
-  //    // Mock paged resources assembler
-  //    PagedModel<RepresentationModel<UserDto>> pagedModel;
-  //    given(userPagedResourcesAssembler.toModel(userDtoPage)).willReturn(userDtoPage);
-  //
-  //  }
-
+  
   @Test
   public void getUsers() {
     PageableRequest request = new PageableRequest();
