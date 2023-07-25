@@ -37,32 +37,30 @@ public class CourseDtoAssertions implements DtoAssertion<CourseDto> {
 
   @Override
   public void assertDto(ResultActions result, CourseDto dto) throws Exception {
+    assertDtoHelper(result, dto);
     result
         .andExpect(jsonPath("$.id").value(dto.getId()))
-        .andExpect(jsonPath("$.title").value(dto.getTitle()))
-        .andExpect(jsonPath("$.teacher").value(dto.getTeacher()))
-        .andExpect(jsonPath("$.faculty").value(dto.getFaculty()))
-        .andExpect(jsonPath("$.durationInHours").value(dto.getDurationInHours()))
         .andExpect(
             jsonPath("$._links.self.href")
-                .value(String.format("http://localhost/api/courses/%d", dto.getId())))
-        .andExpect(jsonPath("$._links.teacher.href").exists())
-        .andExpect(jsonPath("$._links.faculty.href").exists());
+                .value(String.format("http://localhost/api/courses/%d", dto.getId())));
     // TODO : add students link
   }
 
   @Override
   public void assertDtoWithAnyId(ResultActions result, CourseDto dto) throws Exception {
+    assertDtoHelper(result, dto);
+    result.andExpect(jsonPath("$.id").exists()).andExpect(jsonPath("$._links.self.href").exists());
+    // TODO : add students link
+  }
+
+  // This is used for common part of assertDto and assertDtoWithAnyId
+  private void assertDtoHelper(ResultActions result, CourseDto dto) throws Exception {
     result
-        .andExpect(jsonPath("$.id").exists())
         .andExpect(jsonPath("$.title").value(dto.getTitle()))
         .andExpect(jsonPath("$.teacher").value(dto.getTeacher()))
         .andExpect(jsonPath("$.faculty").value(dto.getFaculty()))
         .andExpect(jsonPath("$.durationInHours").value(dto.getDurationInHours()))
-        .andExpect(jsonPath("$._links.self.href").exists())
         .andExpect(jsonPath("$._links.teacher.href").exists())
         .andExpect(jsonPath("$._links.faculty.href").exists());
-    // TODO : add students link
-
   }
 }
