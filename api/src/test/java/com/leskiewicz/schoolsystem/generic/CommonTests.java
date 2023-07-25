@@ -1,15 +1,39 @@
 package com.leskiewicz.schoolsystem.generic;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.leskiewicz.schoolsystem.dto.request.PageableRequest;
+import com.leskiewicz.schoolsystem.faculty.FacultyService;
+import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtils;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.ResultActions;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Function;
 
 public class CommonTests {
 
   public static void paginationLinksTest(
-          RequestUtils requestUtils, String baseApiPath, int lastPage) throws Exception {
+      RequestUtils requestUtils, String baseApiPath, int lastPage) throws Exception {
     String query = "http://localhost" + baseApiPath + "?page=%d&size=%d&sort=%s,%s";
 
     // Base query
@@ -97,5 +121,42 @@ public class CommonTests {
         .andExpect(jsonPath("$.page.totalElements").exists())
         .andExpect(jsonPath("$.page.totalPages").exists())
         .andExpect(jsonPath("$.page.number").exists());
+  }
+
+  @Test
+  public static <T extends RepresentationModel<T>> void controllerGetEntities(
+      Class<T> entityClass,
+      PagedResourcesAssembler<T> pagedResourcesAssembler,
+      Function<Pageable, Page<T>> getEntitiesFunction,
+      Function<T, T> toModelFunction,
+      Function<PageableRequest, ResponseEntity<RepresentationModel<T>>> controllerGetFunction) {
+    PageableRequest request = new PageableRequest();
+
+    // Mock the list of resourceDto
+    List<T> resourceDtoList = Arrays.asList(Mockito.mock(entityClass), Mockito.mock(entityClass));
+
+    // Mock the page
+    Page<T> entityDtoPage = new PageImpl<>(resourceDtoList);
+
+    // Mock service
+    given(getEntitiesFunction.apply(request.toPageable())).willReturn(entityDtoPage);
+
+    // Mock assembler
+    given(toModelFunction.apply(any(entityClass)))
+        .willReturn(resourceDtoList.get(0), resourceDtoList.get(1));
+
+    // Mock paged resources assembler
+    PagedModel<EntityModel<T>> pagedModel = Mockito.mock(PagedModel.class);
+    given(pagedResourcesAssembler.toModel(any(Page.class))).willReturn(pagedModel);
+
+    // Call controller
+    ResponseEntity<RepresentationModel<T>> response = controllerGetFunction.apply(request);
+
+    // Assert the response
+    Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+    Assertions.assertEquals(HalModelBuilder.halModelOf(pagedModel).build(), response.getBody());
+
+    // Verify mocks
+    verify(pagedResourcesAssembler, times(1)).toModel(entityDtoPage);
   }
 }
