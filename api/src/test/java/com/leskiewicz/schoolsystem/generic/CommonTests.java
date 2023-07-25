@@ -22,6 +22,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
@@ -34,6 +35,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -289,5 +291,49 @@ public class CommonTests {
 
     // Assert the response
     Assertions.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+  }
+
+  /**
+   * Test the service getAll method
+   *
+   * @param entityClass Entity class
+   * @param entityList Entity list for testing
+   * @param dtoList Dto list to check
+   * @param repositoryFindAllFunction Repository find all function (with Pageable parameter
+   * @param mapperConvertToDtoFunction Mapper convert to dto function
+   * @param serviceGetAllFunction Service get all function (with Pageable parameter) to test
+   * @param <T> Entity type
+   * @param <R> Dto type
+   */
+  @Test
+  public static <T, R> void serviceGetAll(
+      Class<T> entityClass,
+      List<T> entityList,
+      List<R> dtoList,
+      Function<Pageable, Page<T>> repositoryFindAllFunction,
+      Function<T, R> mapperConvertToDtoFunction,
+      Function<Pageable, Page<R>> serviceGetAllFunction) {
+    if (dtoList.size() != 2 || entityList.size() != 2) {
+      throw new IllegalArgumentException("Lists must have 2 elements");
+    }
+
+    // Create a page with the list of entities
+    Page<T> usersPage = new PageImpl<>(entityList);
+
+    // Mock the behavior of the repository findAll method
+    given(repositoryFindAllFunction.apply(any(Pageable.class))).willReturn(usersPage);
+
+    // Mock the behavior of the mapper
+    R testDto1 = dtoList.get(0);
+    R testDto2 = dtoList.get(1);
+    given(mapperConvertToDtoFunction.apply(any(entityClass))).willReturn(testDto1, testDto2);
+
+    // Call the method to test
+    Page<R> result = serviceGetAllFunction.apply(PageRequest.of(0, 10));
+
+    // Assert the result
+    Assertions.assertEquals(2, result.getTotalElements());
+    Assertions.assertEquals(testDto1, result.getContent().get(0));
+    Assertions.assertEquals(testDto2, result.getContent().get(1));
   }
 }
