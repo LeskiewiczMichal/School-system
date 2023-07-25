@@ -31,19 +31,24 @@ public class FacultyDtoAssemblerTest {
   @Test
   public void testToModelAddsCorrectLinks() {
     Link selfLink =
-            WebMvcLinkBuilder.linkTo(methodOn(FacultyController.class).getFacultyById(0L))
-                    .withSelfRel();
+        WebMvcLinkBuilder.linkTo(methodOn(FacultyController.class).getFacultyById(0L))
+            .withSelfRel();
     Link studentsLink =
-            WebMvcLinkBuilder.linkTo(methodOn(FacultyController.class).getFacultyStudents(0L, null))
-                    .withRel("students");
+        WebMvcLinkBuilder.linkTo(methodOn(FacultyController.class).getFacultyStudents(0L, null))
+            .withRel("students");
     Link teachersLink =
-            WebMvcLinkBuilder.linkTo(methodOn(FacultyController.class).getFacultyTeachers(0L, null))
-                    .withRel("teachers");
+        WebMvcLinkBuilder.linkTo(methodOn(FacultyController.class).getFacultyTeachers(0L, null))
+            .withRel("teachers");
+    Link coursesLink =
+        WebMvcLinkBuilder.linkTo(methodOn(FacultyController.class).getFacultyCourses(0L, null))
+            .withRel("courses");
 
-    com.leskiewicz.schoolsystem.faculty.dto.FacultyDto result = facultyDtoAssembler.toModel(faculty);
+    com.leskiewicz.schoolsystem.faculty.dto.FacultyDto result =
+        facultyDtoAssembler.toModel(faculty);
 
     Assertions.assertEquals(selfLink, result.getLink("self").get());
     Assertions.assertEquals(studentsLink, result.getLink("students").get());
     Assertions.assertEquals(teachersLink, result.getLink("teachers").get());
+    Assertions.assertEquals(coursesLink, result.getLink("courses").get());
   }
 }

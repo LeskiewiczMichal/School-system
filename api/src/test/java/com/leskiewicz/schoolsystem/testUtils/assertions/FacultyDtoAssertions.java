@@ -20,7 +20,11 @@ public class FacultyDtoAssertions implements DtoAssertion<FacultyDto> {
             jsonPath(String.format("$._embedded.faculties[%d].name", index)).value(dto.getName()))
         .andExpect(
             jsonPath(String.format("$._embedded.faculties[%d]._links.self.href", index))
-                .value(String.format("http://localhost/api/faculties/%d", dto.getId())));
+                .value(String.format("http://localhost/api/faculties/%d", dto.getId())))
+        .andExpect(jsonPath("$._embedded.faculties[%d]._links.courses.href", index).exists())
+        .andExpect(jsonPath("$._embedded.faculties[%d]._links.degrees.href", index).exists())
+        .andExpect(jsonPath("$._embedded.faculties[%d]._links.students.href", index).exists())
+        .andExpect(jsonPath("$._embedded.faculties[%d]._links.teachers.href", index).exists());
   }
 
   @Override
@@ -36,7 +40,8 @@ public class FacultyDtoAssertions implements DtoAssertion<FacultyDto> {
                         .toString()))
         .andExpect(jsonPath("$._links.students.href").exists())
         .andExpect(jsonPath("$._links.teachers.href").exists())
-        .andExpect(jsonPath("$._links.degrees.href").exists());
+        .andExpect(jsonPath("$._links.degrees.href").exists())
+        .andExpect(jsonPath("$._links.courses.href").exists());
   }
 
   @Override
@@ -47,6 +52,7 @@ public class FacultyDtoAssertions implements DtoAssertion<FacultyDto> {
         .andExpect(jsonPath("$._links.self.href").exists())
         .andExpect(jsonPath("$._links.students.href").exists())
         .andExpect(jsonPath("$._links.teachers.href").exists())
-        .andExpect(jsonPath("$._links.degrees.href").exists());
+        .andExpect(jsonPath("$._links.degrees.href").exists())
+        .andExpect(jsonPath("$._links.courses.href").exists());
   }
 }

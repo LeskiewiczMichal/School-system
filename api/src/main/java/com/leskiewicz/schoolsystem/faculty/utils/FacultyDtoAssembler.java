@@ -34,11 +34,15 @@ public class FacultyDtoAssembler
     Link degreesLink =
         WebMvcLinkBuilder.linkTo(
             methodOn(FacultyController.class).getFacultyDegrees(faculty.getId(), null)).withRel("degrees");
+    Link coursesLink =
+        WebMvcLinkBuilder.linkTo(
+            methodOn(FacultyController.class).getFacultyCourses(faculty.getId(), null)).withRel("courses");
 
     faculty.add(selfLink);
     faculty.add(studentsLink);
     faculty.add(teachersLink);
     faculty.add(degreesLink);
+    faculty.add(coursesLink);
 
     return faculty;
   }
