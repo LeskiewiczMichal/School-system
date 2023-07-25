@@ -14,6 +14,7 @@ import com.leskiewicz.schoolsystem.faculty.FacultyService;
 import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtils;
 import com.leskiewicz.schoolsystem.testUtils.TestHelper;
+import com.leskiewicz.schoolsystem.user.dto.PatchUserRequest;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -32,6 +33,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public class CommonTests {
@@ -163,7 +165,7 @@ public class CommonTests {
     verify(pagedResourcesAssembler, times(1)).toModel(entityDtoPage);
   }
 
-  public static <T> void controllerGetEntitiyById(
+  public static <T> void controllerGetEntityById(
       T entityDto,
       Long entityId,
       Function<Long, T> getEntityByIdFunction,
@@ -182,5 +184,31 @@ public class CommonTests {
     // Verify result
     Assertions.assertEquals(entityDto, result.getBody());
     Assertions.assertEquals(HttpStatus.OK, result.getStatusCode());
+  }
+
+  @Test
+  public static <T, R> void controllerPatchEntity(
+      Class<T> entityClass,
+      Class<R> requestClass,
+      BiFunction<R, Long, T> updateEntityFunction,
+      Function<T, T> toModelFunction,
+      BiFunction<R, Long, ResponseEntity<T>> controllerPatchFunction) {
+    // Prepare data
+    Long entityId = 1L;
+    R request = Mockito.mock(requestClass);
+    T existingDto = Mockito.mock(entityClass);
+
+    // Mock service
+    given(updateEntityFunction.apply(request, entityId)).willReturn(existingDto);
+
+    // Mock assembler
+    given(toModelFunction.apply(any(entityClass))).willReturn(existingDto);
+
+    // Call controller
+    ResponseEntity<T> response = controllerPatchFunction.apply(request, entityId);
+
+    // Verify response
+    Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+    Assertions.assertEquals(existingDto, response.getBody());
   }
 }
