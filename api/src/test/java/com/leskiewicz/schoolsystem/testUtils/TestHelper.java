@@ -6,8 +6,8 @@ import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
-import com.leskiewicz.schoolsystem.testModels.UserDto;
 import com.leskiewicz.schoolsystem.user.User;
+import com.leskiewicz.schoolsystem.user.dto.UserDto;
 
 import java.util.Arrays;
 import java.util.List;
@@ -49,6 +49,17 @@ public class TestHelper {
         .degree(degree.getFieldOfStudy())
         .build();
   }
+
+//  public static UserDto createUserDto(Faculty faculty, Degree degree) {
+//    return UserDto.builder()
+//            .id(1L)
+//            .firstName("John")
+//            .lastName("Doe")
+//            .email("johndoe@example.com")
+//            .faculty(faculty.getName())
+//            .degree(degree.getFieldOfStudy())
+//            .build();
+//  }
 
   public static Faculty createFaculty() {
     return Faculty.builder().id(1L).name("TestFaculty").build();
