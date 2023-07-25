@@ -167,6 +167,16 @@ public class CommonTests {
     verify(pagedResourcesAssembler, times(1)).toModel(entityDtoPage);
   }
 
+  /**
+   * Test the controller get by id method
+   *
+   * @param entityDto Entity dto for testing
+   * @param entityId id of the entity
+   * @param getEntityByIdFunction Get by id function of the service
+   * @param toModelFunction To model function of the assembler of dto type
+   * @param controllerGetFunction Get by id function of the controller
+   * @param <T> Entity dto type
+   */
   public static <T> void controllerGetEntityById(
       T entityDto,
       Long entityId,
