@@ -6,6 +6,7 @@ import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
+import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
 import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 
@@ -74,6 +75,10 @@ public class TestHelper {
 
   public static Faculty createFaculty() {
     return Faculty.builder().id(1L).name("TestFaculty").build();
+  }
+
+  public static FacultyDto createFacultyDto(String name) {
+    return FacultyDto.builder().id(1L).name(name).build();
   }
 
   public static Degree createDegree(Faculty faculty) {

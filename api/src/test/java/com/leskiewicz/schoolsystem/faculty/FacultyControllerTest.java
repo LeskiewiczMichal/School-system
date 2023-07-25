@@ -8,6 +8,7 @@ import com.leskiewicz.schoolsystem.dto.request.PageableRequest;
 import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
 import com.leskiewicz.schoolsystem.faculty.utils.FacultyDtoAssembler;
 import com.leskiewicz.schoolsystem.generic.CommonTests;
+import com.leskiewicz.schoolsystem.testUtils.TestHelper;
 import com.leskiewicz.schoolsystem.user.UserController;
 import com.leskiewicz.schoolsystem.user.UserService;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
@@ -92,5 +93,18 @@ public class FacultyControllerTest {
             facultyController::getFaculties
     );
   }
+
+//  @Test
+//  public void getFacultyById() {
+//    FacultyDto facultyDto = TestHelper.createFacultyDto("TestFaculty");
+//
+//    CommonTests.controllerGetEntityById(
+//            facultyDto,
+//            1L,
+//            facultyService::getfac,
+//            facultyDtoAssembler::toModel,
+//            facultyController::getFacultyById
+//    );
+//  }
 
 }

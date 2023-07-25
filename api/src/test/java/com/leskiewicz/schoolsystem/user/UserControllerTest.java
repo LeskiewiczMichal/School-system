@@ -99,26 +99,6 @@ public class UserControllerTest {
         userController::getUsers);
   }
 
-  //  @Test
-  //  public void testPatchUser() {
-  //    // Prepare data
-  //    Long userId = 1L;
-  //    PatchUserRequest request = Mockito.mock(PatchUserRequest.class);
-  //    UserDto existingUserDto = Mockito.mock(UserDto.class);
-  //
-  //    // Mock service
-  //    given(userService.updateUser(request, userId)).willReturn(existingUserDto);
-  //
-  //    // Mock assembler
-  //    given(userDtoAssembler.toModel(any(UserDto.class))).willReturn(existingUserDto);
-  //
-  //    // Call controller
-  //    ResponseEntity<UserDto> response = userController.patchUser(request, userId);
-  //
-  //    // Verify response
-  //    Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
-  //    Assertions.assertEquals(existingUserDto, response.getBody());
-  //  }
   @Test
   public void testPatchUser() {
     CommonTests.controllerPatchEntity(
