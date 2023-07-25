@@ -188,6 +188,17 @@ public class CommonTests {
     Assertions.assertEquals(HttpStatus.OK, result.getStatusCode());
   }
 
+  /**
+   * Test the controller delete method
+   *
+   * @param entityClass Class of entity dto
+   * @param requestClass Class of patch request
+   * @param updateEntityFunction Update function of the service
+   * @param toModelFunction To model function of the assembler of dto type
+   * @param controllerPatchFunction Patch function of the controller
+   * @param <T> Entity dto type
+   * @param <R> Patch request type
+   */
   @Test
   public static <T, R> void controllerPatchEntity(
       Class<T> entityClass,
@@ -214,6 +225,20 @@ public class CommonTests {
     Assertions.assertEquals(existingDto, response.getBody());
   }
 
+  /**
+   * Test the controller create method
+   *
+   * @param entityDto Entity dto for testing
+   * @param entityClass Class of entity dto
+   * @param mockedDtoWithLinks Mocked entity dto with self link added
+   * @param createRequestClass Class of create request
+   * @param createRequest Create request for entity
+   * @param createEntityFunction Create function of the service
+   * @param toModelFunction To model function of the assembler of dto type
+   * @param controllerCreateFunction Create function of the controller
+   * @param <T> Entity dto type
+   * @param <R> Create request type
+   */
   @Test
   public static <T, R> void controllerCreateEntity(
       T entityDto,

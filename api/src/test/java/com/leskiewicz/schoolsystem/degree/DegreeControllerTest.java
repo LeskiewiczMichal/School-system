@@ -2,6 +2,7 @@ package com.leskiewicz.schoolsystem.degree;
 
 import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.course.utils.CourseDtoAssembler;
+import com.leskiewicz.schoolsystem.degree.dto.CreateDegreeRequest;
 import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
 import com.leskiewicz.schoolsystem.degree.utils.DegreeDtoAssembler;
 import com.leskiewicz.schoolsystem.generic.CommonTests;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 
 @ExtendWith(MockitoExtension.class)
 public class DegreeControllerTest {
@@ -57,14 +59,29 @@ public class DegreeControllerTest {
   }
 
   @Test
-    public void getDegreeById() {
-        DegreeDto degreeDto = TestHelper.createDegreeDto("Faculty");
+  public void getDegreeById() {
+    DegreeDto degreeDto = TestHelper.createDegreeDto("Faculty");
 
-        CommonTests.controllerGetEntityById(
-            degreeDto,
-            1L,
-            degreeService::getById,
-            degreeDtoAssembler::toModel,
-            degreeController::getDegreeById);
-    }
+    CommonTests.controllerGetEntityById(
+        degreeDto,
+        1L,
+        degreeService::getById,
+        degreeDtoAssembler::toModel,
+        degreeController::getDegreeById);
+  }
+
+  @Test
+  public void createDegree() {
+    DegreeDto degreeDto = TestHelper.createDegreeDto("Faculty");
+
+    CommonTests.controllerCreateEntity(
+        degreeDto,
+        DegreeDto.class,
+        degreeDto.add(WebMvcLinkBuilder.linkTo(DegreeController.class).withSelfRel()),
+        CreateDegreeRequest.class,
+        new CreateDegreeRequest(degreeDto.getTitle(), degreeDto.getFieldOfStudy(), degreeDto.getFaculty()),
+        degreeService::createDegree,
+        degreeDtoAssembler::toModel,
+        degreeController::createDegree);
+  }
 }
