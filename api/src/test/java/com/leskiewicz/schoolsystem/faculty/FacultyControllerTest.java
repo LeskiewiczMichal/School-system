@@ -6,37 +6,19 @@ import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
 import com.leskiewicz.schoolsystem.degree.utils.DegreeDtoAssembler;
 import com.leskiewicz.schoolsystem.dto.request.PageableRequest;
 import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
+import com.leskiewicz.schoolsystem.faculty.dto.PatchFacultyRequest;
 import com.leskiewicz.schoolsystem.faculty.utils.FacultyDtoAssembler;
 import com.leskiewicz.schoolsystem.generic.CommonTests;
 import com.leskiewicz.schoolsystem.testUtils.TestHelper;
-import com.leskiewicz.schoolsystem.user.UserController;
-import com.leskiewicz.schoolsystem.user.UserService;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserDtoAssembler;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.PagedModel;
-import org.springframework.hateoas.RepresentationModel;
-import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
-import java.util.Arrays;
-import java.util.List;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class FacultyControllerTest {
@@ -107,4 +89,25 @@ public class FacultyControllerTest {
     );
   }
 
+  @Test
+  public void patchFaculty() {
+    CommonTests.controllerPatchEntity(
+            FacultyDto.class,
+            PatchFacultyRequest.class,
+            facultyService::updateFaculty,
+            facultyDtoAssembler::toModel,
+            facultyController::updateFaculty
+    );
+  }
+
+  @Test
+  public void getFacultyDegrees() {
+    CommonTests.controllerGetEntities(
+            DegreeDto.class,
+            degreePagedResourcesAssembler,
+            (Pageable pageable) ->  facultyService.getFacultyDegrees(1L, pageable),
+            degreeDtoAssembler::toModel,
+            (PageableRequest request) -> facultyController.getFacultyDegrees(1L, request)
+    );
+  }
 }

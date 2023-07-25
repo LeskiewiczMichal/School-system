@@ -1,46 +1,25 @@
 package com.leskiewicz.schoolsystem.user;
 
-import com.leskiewicz.schoolsystem.authentication.Role;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
+
 import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.course.utils.CourseDtoAssembler;
 import com.leskiewicz.schoolsystem.degree.Degree;
-import com.leskiewicz.schoolsystem.degree.DegreeTitle;
 import com.leskiewicz.schoolsystem.dto.request.PageableRequest;
-import com.leskiewicz.schoolsystem.error.ErrorMessages;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.generic.CommonTests;
 import com.leskiewicz.schoolsystem.testUtils.TestHelper;
 import com.leskiewicz.schoolsystem.user.dto.PatchUserRequest;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserDtoAssembler;
-import jakarta.persistence.EntityNotFoundException;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.PagedModel;
-import org.springframework.hateoas.RepresentationModel;
-import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
-import java.lang.reflect.Array;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class UserControllerTest {
