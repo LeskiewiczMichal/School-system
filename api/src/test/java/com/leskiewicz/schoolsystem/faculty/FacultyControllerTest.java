@@ -94,17 +94,17 @@ public class FacultyControllerTest {
     );
   }
 
-//  @Test
-//  public void getFacultyById() {
-//    FacultyDto facultyDto = TestHelper.createFacultyDto("TestFaculty");
-//
-//    CommonTests.controllerGetEntityById(
-//            facultyDto,
-//            1L,
-//            facultyService::getfac,
-//            facultyDtoAssembler::toModel,
-//            facultyController::getFacultyById
-//    );
-//  }
+  @Test
+  public void getFacultyById() {
+    FacultyDto facultyDto = TestHelper.createFacultyDto("TestFaculty");
+
+    CommonTests.controllerGetEntityById(
+            facultyDto,
+            1L,
+            facultyService::getById,
+            facultyDtoAssembler::toModel,
+            facultyController::getFacultyById
+    );
+  }
 
 }
