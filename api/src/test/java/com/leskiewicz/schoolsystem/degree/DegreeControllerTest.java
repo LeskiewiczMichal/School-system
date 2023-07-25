@@ -5,6 +5,7 @@ import com.leskiewicz.schoolsystem.course.utils.CourseDtoAssembler;
 import com.leskiewicz.schoolsystem.degree.dto.CreateDegreeRequest;
 import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
 import com.leskiewicz.schoolsystem.degree.utils.DegreeDtoAssembler;
+import com.leskiewicz.schoolsystem.dto.request.PageableRequest;
 import com.leskiewicz.schoolsystem.generic.CommonTests;
 import com.leskiewicz.schoolsystem.testUtils.TestHelper;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 
@@ -79,9 +81,20 @@ public class DegreeControllerTest {
         DegreeDto.class,
         degreeDto.add(WebMvcLinkBuilder.linkTo(DegreeController.class).withSelfRel()),
         CreateDegreeRequest.class,
-        new CreateDegreeRequest(degreeDto.getTitle(), degreeDto.getFieldOfStudy(), degreeDto.getFaculty()),
+        new CreateDegreeRequest(
+            degreeDto.getTitle(), degreeDto.getFieldOfStudy(), degreeDto.getFaculty()),
         degreeService::createDegree,
         degreeDtoAssembler::toModel,
         degreeController::createDegree);
+  }
+
+  @Test
+  public void getDegreeCourses() {
+    CommonTests.controllerGetEntities(
+        CourseDto.class,
+        coursePagedResourcesAssembler,
+        (Pageable pageable) -> degreeService.getDegreeCourses(1L, pageable),
+        courseDtoAssembler::toModel,
+        (PageableRequest request) -> degreeController.getDegreeCourses(1L, request));
   }
 }
