@@ -3,6 +3,7 @@ package com.leskiewicz.schoolsystem.course;
 import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.course.utils.CourseDtoAssembler;
 import com.leskiewicz.schoolsystem.generic.CommonTests;
+import com.leskiewicz.schoolsystem.testUtils.TestHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,12 +35,24 @@ public class CourseControllerTest {
   }
 
   @Test
-  public void GetCourses() {
+  public void getCourses() {
     CommonTests.controllerGetEntities(
         CourseDto.class,
         coursePagedResourcesAssembler,
         courseService::getCourses,
         courseDtoAssembler::toModel,
         courseController::getCourses);
+  }
+
+  @Test
+  public void getCourseById() {
+    CourseDto courseDto = TestHelper.createCourseDto("faculty", "teacher name");
+
+    CommonTests.controllerGetEntityById(
+        courseDto,
+        1L,
+        courseService::getById,
+        courseDtoAssembler::toModel,
+        courseController::getCourseById);
   }
 }
