@@ -19,4 +19,6 @@ public interface DegreeService {
   DegreeDto createDegree(CreateDegreeRequest request);
 
   Page<CourseDto> getDegreeCourses(Long degreeId, Pageable pageable);
+
+
 }

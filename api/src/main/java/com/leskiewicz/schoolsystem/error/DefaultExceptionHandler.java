@@ -1,5 +1,6 @@
 package com.leskiewicz.schoolsystem.error;
 
+import com.leskiewicz.schoolsystem.error.customexception.DuplicateEntityException;
 import com.leskiewicz.schoolsystem.error.customexception.EntityAlreadyExistsException;
 import com.leskiewicz.schoolsystem.error.customexception.MissingFieldException;
 import com.leskiewicz.schoolsystem.error.customexception.UserAlreadyExistsException;
@@ -91,6 +92,19 @@ public class DefaultExceptionHandler {
 
   @ExceptionHandler(EntityAlreadyExistsException.class)
   public ResponseEntity<ApiError> handleEntityAlreadyExists(
+      RuntimeException ex, HttpServletRequest request) {
+    ApiError apiError =
+        new ApiError(
+            request.getRequestURI(),
+            ex.getMessage(),
+            HttpStatus.BAD_REQUEST.value(),
+            LocalDateTime.now());
+
+    return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
+  }
+
+  @ExceptionHandler(DuplicateEntityException.class)
+  public ResponseEntity<ApiError> handleDuplicateEntityException(
       RuntimeException ex, HttpServletRequest request) {
     ApiError apiError =
         new ApiError(

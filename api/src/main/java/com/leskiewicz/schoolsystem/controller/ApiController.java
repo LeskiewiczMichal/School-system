@@ -24,11 +24,12 @@ public class ApiController {
   private final String PAGINATION_PARAMETERS = "{?size,page,sort}";
 
   /// ******************** THIS IS HOW TO GET USER DETAILS *********************** ///
-  //  @GetMapping("/authenticationUser")
-  //  public ResponseEntity<String> getAuthentication(Authentication authentication) {
-  //    CustomUserDetails customUserDetails = (CustomUserDetails) (authentication.getPrincipal());
-  //    return ResponseEntity.ok(authentication.toString());
-  //  }
+//    @GetMapping("/authenticationUser")
+//    public ResponseEntity<String> getAuthentication(Authentication authentication) {
+//      CustomUserDetails customUserDetails = (CustomUserDetails) (authentication.getPrincipal());
+//      System.out.println(customUserDetails.());
+//      return ResponseEntity.ok(authentication.toString());
+//    }
 
   @GetMapping
   public ResponseEntity<RepresentationModel<?>> index() {

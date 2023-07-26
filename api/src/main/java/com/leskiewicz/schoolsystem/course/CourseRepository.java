@@ -7,12 +7,16 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface CourseRepository extends JpaRepository<Course, Long> {
 
   //    @Query("SELECT c FROM Course c WHERE c.id IN (SELECT uc.course_id FROM course_student uc
   // WHERE uc.user_id = :id)")
   //    Page<Course> findCoursesByUserId(@Param("id") Long id, Pageable pageable);
+
+  List<Course> findByTitleContainingIgnoreCase(String title);
 
   @Query(
       value =
