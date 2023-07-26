@@ -356,15 +356,15 @@ public class CommonTests {
       Function<T, R> mapperConvertToDtoFunction,
       Function<Long, Boolean> repositoryExistsByIdFunction,
       BiFunction<Long, Pageable, Page<R>> serviceGetRelatedResourcesFunction) {
-    Page<T> coursePage = new PageImpl<>(entityList);
+    Page<T> entityPage = new PageImpl<>(entityList);
 
     given(repositoryFindResourcesByIdFunction.apply(any(Long.class), any(Pageable.class)))
-        .willReturn(coursePage);
+        .willReturn(entityPage);
 
-    // Mock the behavior of the courseMapper
-    R courseDto1 = dtoList.get(0);
-    R courseDto2 = dtoList.get(1);
-    given(mapperConvertToDtoFunction.apply(any(entityClass))).willReturn(courseDto1, courseDto2);
+    // Mock the behavior of the mapper
+    R dto1 = dtoList.get(0);
+    R dto2 = dtoList.get(1);
+    given(mapperConvertToDtoFunction.apply(any(entityClass))).willReturn(dto1, dto2);
     given(repositoryExistsByIdFunction.apply(any(Long.class))).willReturn(true);
 
     // Call the method to test
@@ -372,8 +372,8 @@ public class CommonTests {
 
     // Assert the result
     Assertions.assertEquals(2, result.getTotalElements());
-    Assertions.assertEquals(courseDto1, result.getContent().get(0));
-    Assertions.assertEquals(courseDto2, result.getContent().get(1));
+    Assertions.assertEquals(dto1, result.getContent().get(0));
+    Assertions.assertEquals(dto2, result.getContent().get(1));
   }
 
   /**
