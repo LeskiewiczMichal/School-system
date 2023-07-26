@@ -11,6 +11,7 @@ import com.leskiewicz.schoolsystem.course.Course;
 import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.dto.request.PageableRequest;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
+import com.leskiewicz.schoolsystem.faculty.dto.CreateFacultyRequest;
 import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtils;
 import java.util.Arrays;
@@ -20,6 +21,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import com.leskiewicz.schoolsystem.user.User;
+import com.leskiewicz.schoolsystem.utils.StringUtils;
 import io.jsonwebtoken.lang.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

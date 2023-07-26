@@ -42,6 +42,7 @@ public class GetFacultyCourses {
   // Variables
 
   // Mocks
+
   @Mock private CourseRepository courseRepository;
   @Mock private FacultyRepository facultyRepository;
   @Mock private CourseMapper courseMapper;
