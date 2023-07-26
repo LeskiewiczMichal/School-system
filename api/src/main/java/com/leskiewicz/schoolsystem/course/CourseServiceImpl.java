@@ -76,15 +76,15 @@ public class CourseServiceImpl implements CourseService {
             .build();
 
     // Check if the course doesn't already exist
-    List<Course> coursesWithTheSameTitle =
-        courseRepository.findByTitleContainingIgnoreCase(createCourseRequest.getTitle());
-    for (Course course : coursesWithTheSameTitle) {
-      if (course.getFaculty().getId().equals(createCourseRequest.getFacultyId())
-          && course.getTeacher().getId().equals(createCourseRequest.getTeacherId())
-          && course.getDuration_in_hours() == createCourseRequest.getDurationInHours()
-          && course.getTitle().equals(createCourseRequest.getTitle())) {
-        throw new DuplicateEntityException(ErrorMessages.objectAlreadyExists("Course"));
-      }
+    boolean courseAlreadyExists =
+        courseRepository.existsCourseWithAttributes(
+            createCourseRequest.getTitle(),
+            createCourseRequest.getDurationInHours(),
+            createCourseRequest.getTeacherId(),
+            createCourseRequest.getFacultyId());
+
+    if (courseAlreadyExists) {
+      throw new EntityAlreadyExistsException(ErrorMessages.objectAlreadyExists("Course"));
     }
 
     // Validate and save new course

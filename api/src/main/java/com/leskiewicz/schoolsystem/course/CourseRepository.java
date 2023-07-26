@@ -16,7 +16,13 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
   // WHERE uc.user_id = :id)")
   //    Page<Course> findCoursesByUserId(@Param("id") Long id, Pageable pageable);
 
-  List<Course> findByTitleContainingIgnoreCase(String title);
+  @Query(
+      "SELECT COUNT(c) > 0 FROM Course c WHERE c.title = :title AND c.duration_in_hours = :durationInHours AND c.teacher.id = :teacherId AND c.faculty.id = :facultyId")
+  boolean existsCourseWithAttributes(
+      @Param("title") String title,
+      @Param("durationInHours") int durationInHours,
+      @Param("teacherId") Long teacherId,
+      @Param("facultyId") Long facultyId);
 
   @Query(
       value =
@@ -28,8 +34,8 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
   Page<Course> findCoursesByFacultyId(Long facultyId, Pageable pageable);
 
   @Query(
-          value =
-                  "SELECT c.* FROM course c JOIN degree_course dc ON d.id = dc.course_id WHERE dc.student_id = :id",
-          nativeQuery = true)
+      value =
+          "SELECT c.* FROM course c JOIN degree_course dc ON d.id = dc.course_id WHERE dc.student_id = :id",
+      nativeQuery = true)
   Page<Course> findCoursesByDegreeId(@Param("id") Long degreeId, Pageable pageable);
 }
