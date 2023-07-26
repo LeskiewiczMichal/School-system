@@ -5,6 +5,7 @@ import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.course.dto.CreateCourseRequest;
 import com.leskiewicz.schoolsystem.course.utils.CourseMapper;
 import com.leskiewicz.schoolsystem.error.ErrorMessages;
+import com.leskiewicz.schoolsystem.error.customexception.DuplicateEntityException;
 import com.leskiewicz.schoolsystem.error.customexception.EntityAlreadyExistsException;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.FacultyRepository;
@@ -65,20 +66,6 @@ public class CourseServiceImpl implements CourseService {
                         ErrorMessages.objectWithIdNotFound(
                             "Faculty", createCourseRequest.getFacultyId())));
 
-    List<Course> sameNameTitles =
-        courseRepository.findByTitleContainingIgnoreCase(createCourseRequest.getTitle());
-
-    for (Course course : sameNameTitles) {
-      if (course.getFaculty().getId().equals(faculty.getId())
-          && course.getTitle().equals(createCourseRequest.getTitle())
-          && course.getDuration_in_hours() == course.getDuration_in_hours()
-          && course.getTeacher().getId().equals(createCourseRequest.getTeacherId())) {
-        throw new EntityAlreadyExistsException(
-            ErrorMessages.objectWithPropertyAlreadyExists(
-                "Course", "title", createCourseRequest.getTitle()));
-      }
-    }
-
     // Create new course
     Course newCourse =
         Course.builder()
@@ -87,6 +74,13 @@ public class CourseServiceImpl implements CourseService {
             .faculty(faculty)
             .teacher(userRepository.findById(createCourseRequest.getTeacherId()).get())
             .build();
+
+    // Check if the course doesn't already exist
+    List<Course> coursesWithTheSameTitle =
+        courseRepository.findByTitleContainingIgnoreCase(createCourseRequest.getTitle());
+    if (coursesWithTheSameTitle.contains(newCourse)) {
+      throw new DuplicateEntityException(ErrorMessages.objectAlreadyExists("Course"));
+    }
 
     ValidationUtils.validate(newCourse);
     courseRepository.save(newCourse);

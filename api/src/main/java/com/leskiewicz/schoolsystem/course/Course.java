@@ -70,9 +70,7 @@ public class Course {
     return Objects.equals(id, course.id)
         && Objects.equals(title, course.title)
         && Objects.equals(duration_in_hours, course.duration_in_hours)
-        && Objects.equals(faculty, course.faculty)
-        && Objects.equals(teacher, course.teacher)
-        && Objects.equals(students, course.students);
+        && Objects.equals(faculty, course.faculty);
   }
 
   @Override
