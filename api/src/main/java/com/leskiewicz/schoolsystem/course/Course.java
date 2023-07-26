@@ -75,6 +75,6 @@ public class Course {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, title, duration_in_hours, faculty, teacher, students);
+    return Objects.hash(id, title, duration_in_hours, faculty);
   }
 }

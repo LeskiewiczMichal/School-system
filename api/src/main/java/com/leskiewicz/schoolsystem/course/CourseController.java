@@ -1,10 +1,12 @@
 package com.leskiewicz.schoolsystem.course;
 
 import com.leskiewicz.schoolsystem.course.dto.CourseDto;
+import com.leskiewicz.schoolsystem.course.dto.CreateCourseRequest;
 import com.leskiewicz.schoolsystem.course.utils.CourseDtoAssembler;
 import com.leskiewicz.schoolsystem.dto.request.PageableRequest;
 import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -65,5 +67,13 @@ public class CourseController {
 
     return ResponseEntity.ok(
         HalModelBuilder.halModelOf(coursePagedResourcesAssembler.toModel(courses)).build());
+  }
+
+  @PostMapping
+  public ResponseEntity<CourseDto> createCourse(@Valid @RequestBody CreateCourseRequest request) {
+    CourseDto course = courseService.createCourse(request);
+    course = courseDtoAssembler.toModel(course);
+
+    return ResponseEntity.created(course.getLink("self").get().toUri()).body(course);
   }
 }
