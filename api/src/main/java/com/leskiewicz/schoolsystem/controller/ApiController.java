@@ -4,6 +4,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import com.leskiewicz.schoolsystem.authentication.AuthenticationController;
+import com.leskiewicz.schoolsystem.authentication.dto.CustomUserDetails;
 import com.leskiewicz.schoolsystem.course.CourseController;
 import com.leskiewicz.schoolsystem.degree.DegreeController;
 import com.leskiewicz.schoolsystem.faculty.FacultyController;
@@ -11,6 +12,7 @@ import com.leskiewicz.schoolsystem.user.UserController;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +22,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class ApiController {
 
   private final String PAGINATION_PARAMETERS = "{?size,page,sort}";
+
+  /// ******************** THIS IS HOW TO GET USER DETAILS *********************** ///
+  //  @GetMapping("/authenticationUser")
+  //  public ResponseEntity<String> getAuthentication(Authentication authentication) {
+  //    CustomUserDetails customUserDetails = (CustomUserDetails) (authentication.getPrincipal());
+  //    return ResponseEntity.ok(authentication.toString());
+  //  }
 
   @GetMapping
   public ResponseEntity<RepresentationModel<?>> index() {

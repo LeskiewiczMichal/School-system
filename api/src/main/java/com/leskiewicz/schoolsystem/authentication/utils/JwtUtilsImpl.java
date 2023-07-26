@@ -27,7 +27,10 @@ public class JwtUtilsImpl implements JwtUtils {
   }
 
   public String generateToken(User user) {
-    return generateToken(new HashMap<>(), new CustomUserDetails(user));
+    Map<String, Object> claims = new HashMap<>();
+    claims.put("ID", user.getId());
+
+    return generateToken(claims, new CustomUserDetails(user));
   }
 
   public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
