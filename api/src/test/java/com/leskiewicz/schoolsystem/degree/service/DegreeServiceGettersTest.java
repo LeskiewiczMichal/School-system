@@ -75,29 +75,14 @@ public class DegreeServiceGettersTest {
   /// *** GetById *** ///
   @Test
   public void getByIdReturnsCorrectDegree() {
-    // Create a mock Degree object and DegreeDto
-    Degree degree = new Degree();
-    degree.setId(1L);
-    degree.setTitle(DegreeTitle.BACHELOR_OF_SCIENCE);
 
-    DegreeDto degreeDto = DegreeDto.builder().id(1L).title(DegreeTitle.BACHELOR_OF_SCIENCE).build();
-
-    // Mock the behavior of degreeRepository.findById() to return the mock Degree
-    given(degreeRepository.findById(1L)).willReturn(Optional.of(degree));
-
-    // Mock the behavior of degreeMapper.convertToDto()
-    given(degreeMapper.convertToDto(any(Degree.class))).willReturn(degreeDto);
-
-    // Call the method to test
-    DegreeDto result = degreeService.getById(1L);
-
-    // Assert the result
-    Assert.notNull(result);
-    Assertions.assertEquals(DegreeTitle.BACHELOR_OF_SCIENCE, result.getTitle());
-
-    // Verify the interactions with degreeRepository and degreeMapper
-    verify(degreeRepository, times(1)).findById(1L);
-    verify(degreeMapper, times(1)).convertToDto(any(Degree.class));
+    CommonTests.serviceGetById(
+        Degree.class,
+        degree,
+        TestHelper.createDegreeDto("Bachelor of Science"),
+        degreeRepository::findById,
+        degreeMapper::convertToDto,
+        degreeService::getById);
   }
 
   @Test
