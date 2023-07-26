@@ -12,6 +12,7 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -74,7 +75,11 @@ public class CourseController {
    * @param request the {@link CreateCourseRequest} containing the course data.
    * @return status 201 (Created) and in body the {@link CourseDto} representing the created course
    */
+  // TODO: HANDLE ACCESS DENIED EXCEPTION
+  // TODO: HANDLE io.jsonwebtoken.security.SignatureException: JWT
+  // TODO: CHANGE ROLE TO TEACHER
   @PostMapping
+  @PreAuthorize("hasRole('ROLE_STUDENT')")
   public ResponseEntity<CourseDto> createCourse(@Valid @RequestBody CreateCourseRequest request) {
     CourseDto course = courseService.createCourse(request);
     course = courseDtoAssembler.toModel(course);
