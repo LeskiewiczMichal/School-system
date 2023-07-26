@@ -52,40 +52,4 @@ public class GetFacultiesTest {
         facultyService::getFaculties);
   }
 
-  //  @Test
-  //  public void getFacultiesReturnsPagedFaculties() {
-  //    Degree degree = Mockito.mock(Degree.class);
-  //    List<Faculty> facultyList =
-  //        Arrays.asList(
-  //            Faculty.builder()
-  //                .id(1L)
-  //                .name("Software Engineering")
-  //                .degrees(Collections.singletonList(degree))
-  //                .build(),
-  //            Faculty.builder()
-  //                .id(2L)
-  //                .name("Computer Science")
-  //                .degrees(Collections.singletonList(degree))
-  //                .build());
-  //    Page<Faculty> usersPage = new PageImpl<>(facultyList);
-  //
-  //    given(facultyRepository.findAll(any(Pageable.class))).willReturn(usersPage);
-  //
-  //    // Mock the behavior of the userMapper
-  //    FacultyDto facultyDto1 = new FacultyDto(1L, "Software Engineering");
-  //    FacultyDto facultyDto2 = new FacultyDto(2L, "Computer Science");
-  //    given(facultyMapper.convertToDto(any(Faculty.class))).willReturn(facultyDto1, facultyDto2);
-  //
-  //    // Call the method to test
-  //    Page<FacultyDto> result = facultyService.getFaculties(PageRequest.of(0, 10));
-  //
-  //    // Assert the result
-  //    Assertions.assertEquals(2, result.getTotalElements());
-  //    Assertions.assertEquals(facultyDto1, result.getContent().get(0));
-  //    Assertions.assertEquals(facultyDto2, result.getContent().get(1));
-  //
-  //    // Verify the interactions with userRepository and userMapper
-  //    verify(facultyRepository, times(1)).findAll(any(Pageable.class));
-  //    verify(facultyMapper, times(2)).convertToDto(any(Faculty.class));
-  //  }
 }

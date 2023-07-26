@@ -7,16 +7,16 @@ import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.leskiewicz.schoolsystem.degree.Degree;
+import com.leskiewicz.schoolsystem.course.Course;
+import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.dto.request.PageableRequest;
-import com.leskiewicz.schoolsystem.faculty.Faculty;
-import com.leskiewicz.schoolsystem.faculty.FacultyService;
-import com.leskiewicz.schoolsystem.faculty.dto.CreateFacultyRequest;
-import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtils;
-import com.leskiewicz.schoolsystem.testUtils.TestHelper;
-import com.leskiewicz.schoolsystem.user.dto.PatchUserRequest;
-import com.leskiewicz.schoolsystem.user.dto.UserDto;
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+
+import com.leskiewicz.schoolsystem.user.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -29,17 +29,11 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.ResultActions;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.function.BiFunction;
-import java.util.function.Function;
-
+/** Common tests implementations for controllers and services */
 public class CommonTests {
 
   /**
@@ -335,5 +329,47 @@ public class CommonTests {
     Assertions.assertEquals(2, result.getTotalElements());
     Assertions.assertEquals(testDto1, result.getContent().get(0));
     Assertions.assertEquals(testDto2, result.getContent().get(1));
+  }
+
+  /**
+   * Test the service get related resources by entity id method
+   *
+   * @param entityClass Entity class
+   * @param entityList Entity list for testing
+   * @param dtoList Dto list to check
+   * @param repositoryFindResourcesByIdFunction Repository find related resources by id function
+   * @param mapperConvertToDtoFunction Mapper convert entity type to dto function
+   * @param repositoryExistsByIdFunction Repository entity exists by id function to mock
+   * @param serviceGetRelatedResourcesFunction Service get related resources by id function to test
+   * @param <T> Entity type
+   * @param <R> Dto type
+   */
+  public static <T, R> void serviceGetAllResourcesRelated(
+      Class<T> entityClass,
+      Class<R> dtoClass,
+      List<T> entityList,
+      List<R> dtoList,
+      BiFunction<Long, Pageable, Page<T>> repositoryFindResourcesByIdFunction,
+      Function<T, R> mapperConvertToDtoFunction,
+      Function<Long, Boolean> repositoryExistsByIdFunction,
+      BiFunction<Long, Pageable, Page<R>> serviceGetRelatedResourcesFunction) {
+    Page<T> coursePage = new PageImpl<>(entityList);
+
+    given(repositoryFindResourcesByIdFunction.apply(any(Long.class), any(Pageable.class)))
+        .willReturn(coursePage);
+
+    // Mock the behavior of the courseMapper
+    R courseDto1 = dtoList.get(0);
+    R courseDto2 = dtoList.get(1);
+    given(mapperConvertToDtoFunction.apply(any(entityClass))).willReturn(courseDto1, courseDto2);
+    given(repositoryExistsByIdFunction.apply(any(Long.class))).willReturn(true);
+
+    // Call the method to test
+    Page<R> result = serviceGetRelatedResourcesFunction.apply(1L, PageRequest.of(0, 10));
+
+    // Assert the result
+    Assertions.assertEquals(2, result.getTotalElements());
+    Assertions.assertEquals(courseDto1, result.getContent().get(0));
+    Assertions.assertEquals(courseDto2, result.getContent().get(1));
   }
 }

@@ -10,11 +10,15 @@ import com.leskiewicz.schoolsystem.course.CourseRepository;
 import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.course.utils.CourseMapper;
 import com.leskiewicz.schoolsystem.degree.Degree;
+import com.leskiewicz.schoolsystem.degree.DegreeRepository;
 import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
 import com.leskiewicz.schoolsystem.degree.utils.DegreeMapper;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.FacultyRepository;
 import com.leskiewicz.schoolsystem.faculty.FacultyServiceImpl;
+import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
+import com.leskiewicz.schoolsystem.generic.CommonTests;
+import com.leskiewicz.schoolsystem.testUtils.TestHelper;
 import com.leskiewicz.schoolsystem.user.User;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.Arrays;
@@ -42,6 +46,7 @@ public class GetFacultyCourses {
   @Mock private CourseRepository courseRepository;
   @Mock private FacultyRepository facultyRepository;
   @Mock private CourseMapper courseMapper;
+  @Mock private DegreeRepository degreeRepository;
   @InjectMocks private FacultyServiceImpl facultyService;
 
   @BeforeEach
@@ -51,63 +56,87 @@ public class GetFacultyCourses {
     faculty = Faculty.builder().id(1L).name("Software Engineering").build();
   }
 
+  //  @Test
+  //  public void getFacultyDegreesReturnsPagedDegrees() {
+  //    User teacher = Mockito.mock(User.class);
+  //
+  //    List<Course> courseList =
+  //        Arrays.asList(
+  //            Course.builder()
+  //                .id(1L)
+  //                .title("Software Engineering")
+  //                .faculty(faculty)
+  //                .duration_in_hours(20)
+  //                .teacher(teacher)
+  //                .build(),
+  //            Course.builder()
+  //                .id(2L)
+  //                .title("Computer Science")
+  //                .faculty(faculty)
+  //                .duration_in_hours(30)
+  //                .teacher(teacher)
+  //                .build());
+  //    Page<Course> coursePage = new PageImpl<>(courseList);
+  //
+  //    given(courseRepository.findCoursesByFacultyId(any(Long.class), any(Pageable.class)))
+  //        .willReturn(coursePage);
+  //
+  //    // Mock the behavior of the courseMapper
+  //    CourseDto courseDto1 =
+  //        CourseDto.builder()
+  //            .id(1L)
+  //            .title("Software Engineering")
+  //            .faculty("faculty")
+  //            .teacher("Something Testing")
+  //            .durationInHours(20)
+  //            .build();
+  //    CourseDto courseDto2 =
+  //        CourseDto.builder()
+  //            .id(2L)
+  //            .title("Computer Science")
+  //            .faculty("faculty")
+  //            .teacher("Something Testing")
+  //            .durationInHours(30)
+  //            .build();
+  //
+  //    given(courseMapper.convertToDto(any(Course.class))).willReturn(courseDto1, courseDto2);
+  //    given(facultyRepository.existsById(any(Long.class))).willReturn(true);
+  //
+  //    // Call the method to test
+  //    Page<CourseDto> result = facultyService.getFacultyCourses(1L, PageRequest.of(0, 10));
+  //
+  //    // Assert the result
+  //    Assertions.assertEquals(2, result.getTotalElements());
+  //    Assertions.assertEquals(courseDto1, result.getContent().get(0));
+  //    Assertions.assertEquals(courseDto2, result.getContent().get(1));
+  //
+  //    // Verify the interactions with userRepository and userMapper
+  //    verify(courseRepository, times(1)).findCoursesByFacultyId(any(Long.class),
+  // any(Pageable.class));
+  //    verify(courseMapper, times(2)).convertToDto(any(Course.class));
+  //  }
+
   @Test
-  public void getFacultyDegreesReturnsPagedDegrees() {
+  public void getFacultyCoursesReturnsPagedCourses() {
+    Faculty faculty = Mockito.mock(Faculty.class);
     User teacher = Mockito.mock(User.class);
-
-    List<Course> courseList =
+    List<Course> courses =
         Arrays.asList(
-            Course.builder()
-                .id(1L)
-                .title("Software Engineering")
-                .faculty(faculty)
-                .duration_in_hours(20)
-                .teacher(teacher)
-                .build(),
-            Course.builder()
-                .id(2L)
-                .title("Computer Science")
-                .faculty(faculty)
-                .duration_in_hours(30)
-                .teacher(teacher)
-                .build());
-    Page<Course> coursePage = new PageImpl<>(courseList);
+            TestHelper.createCourse(faculty, teacher), TestHelper.createCourse(faculty, teacher));
+    List<CourseDto> courseDtos =
+        Arrays.asList(
+            TestHelper.createCourseDto("Test", "Teacher name"),
+            TestHelper.createCourseDto("Testing", "Name Teacher"));
 
-    given(courseRepository.findCoursesByFacultyId(any(Long.class), any(Pageable.class)))
-        .willReturn(coursePage);
-
-    // Mock the behavior of the courseMapper
-    CourseDto courseDto1 =
-        CourseDto.builder()
-            .id(1L)
-            .title("Software Engineering")
-            .faculty("faculty")
-            .teacher("Something Testing")
-            .durationInHours(20)
-            .build();
-    CourseDto courseDto2 =
-        CourseDto.builder()
-            .id(2L)
-            .title("Computer Science")
-            .faculty("faculty")
-            .teacher("Something Testing")
-            .durationInHours(30)
-            .build();
-
-    given(courseMapper.convertToDto(any(Course.class))).willReturn(courseDto1, courseDto2);
-    given(facultyRepository.existsById(any(Long.class))).willReturn(true);
-
-    // Call the method to test
-    Page<CourseDto> result = facultyService.getFacultyCourses(1L, PageRequest.of(0, 10));
-
-    // Assert the result
-    Assertions.assertEquals(2, result.getTotalElements());
-    Assertions.assertEquals(courseDto1, result.getContent().get(0));
-    Assertions.assertEquals(courseDto2, result.getContent().get(1));
-
-    // Verify the interactions with userRepository and userMapper
-    verify(courseRepository, times(1)).findCoursesByFacultyId(any(Long.class), any(Pageable.class));
-    verify(courseMapper, times(2)).convertToDto(any(Course.class));
+    CommonTests.serviceGetAllResourcesRelated(
+        Course.class,
+        CourseDto.class,
+        courses,
+        courseDtos,
+        courseRepository::findCoursesByFacultyId,
+        courseMapper::convertToDto,
+        facultyRepository::existsById,
+        facultyService::getFacultyCourses);
   }
 
   @Test
