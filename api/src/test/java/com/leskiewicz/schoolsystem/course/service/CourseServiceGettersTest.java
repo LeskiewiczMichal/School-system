@@ -31,6 +31,7 @@ public class CourseServiceGettersTest {
 
   @Test
   public void getCoursesReturnsPagedCourses() {
+    // Prepare test data
     Faculty faculty = TestHelper.createFaculty();
     User teacher = TestHelper.createTeacher(faculty);
     List<Course> courses =
@@ -47,5 +48,22 @@ public class CourseServiceGettersTest {
         courseRepository::findAll,
         courseMapper::convertToDto,
         courseService::getCourses);
+  }
+
+  @Test
+  public void getCourseByIdReturnsCorrectCourse() {
+    // Prepare test data
+    Faculty faculty = TestHelper.createFaculty();
+    User teacher = TestHelper.createTeacher(faculty);
+    Course course = TestHelper.createCourse(faculty, teacher);
+    CourseDto courseDto = TestHelper.createCourseDto(course);
+
+    CommonTests.serviceGetById(
+        Course.class,
+        course,
+        courseDto,
+        courseRepository::findById,
+        courseMapper::convertToDto,
+        courseService::getById);
   }
 }
