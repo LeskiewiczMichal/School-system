@@ -376,6 +376,18 @@ public class CommonTests {
     Assertions.assertEquals(courseDto2, result.getContent().get(1));
   }
 
+  /**
+   * Test the service getById method
+   *
+   * @param entityClass Entity class
+   * @param entity Entity for testing
+   * @param dto Dto to check
+   * @param repositoryFindByIdFunction Repository find by id function
+   * @param mapperConvertToDtoFunction Mapper convert from entity type to dto function
+   * @param serviceGetByIdFunction Service get by id function to test
+   * @param <T> Entity type
+   * @param <R> Dto type
+   */
   @Test
   public static <T, R> void serviceGetById(
       Class<T> entityClass,
