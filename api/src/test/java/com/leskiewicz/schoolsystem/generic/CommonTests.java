@@ -409,29 +409,4 @@ public class CommonTests {
     Assert.notNull(result);
     Assertions.assertEquals(dto, result);
   }
-  //  ) {
-  //    // Create a mock Faculty object and FacultyDto
-  //    Faculty faculty = new Faculty();
-  //    faculty.setId(1L);
-  //    faculty.setName("Faculty Name");
-  //
-  //    FacultyDto facultyDto = new FacultyDto(1L, "Faculty Name");
-  //
-  //    // Mock the behavior of facultyRepository.findById() to return the mock Faculty
-  //    given(facultyRepository.findById(1L)).willReturn(Optional.of(faculty));
-  //
-  //    // Mock the behavior of facultyMapper.convertToDto()
-  //    given(facultyMapper.convertToDto(any(Faculty.class))).willReturn(facultyDto);
-  //
-  //    // Call the method to test
-  //    FacultyDto result = facultyService.getById(1L);
-  //
-  //    // Assert the result
-  //    Assert.notNull(result);
-  //    Assertions.assertEquals("Faculty Name", result.getName());
-  //
-  //    // Verify the interactions with facultyRepository and facultyMapper
-  //    verify(facultyRepository, times(1)).findById(1L);
-  //    verify(facultyMapper, times(1)).convertToDto(any(Faculty.class));
-  //  }
 }
