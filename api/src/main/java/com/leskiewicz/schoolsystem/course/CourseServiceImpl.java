@@ -15,7 +15,10 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class CourseServiceImpl implements CourseService {
 
+  // Repositories
   private CourseRepository courseRepository;
+
+  // Mappers
   private CourseMapper courseMapper;
 
   @Override
