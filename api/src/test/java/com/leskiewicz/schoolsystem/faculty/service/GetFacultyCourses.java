@@ -130,7 +130,6 @@ public class GetFacultyCourses {
 
     CommonTests.serviceGetAllResourcesRelated(
         Course.class,
-        CourseDto.class,
         courses,
         courseDtos,
         courseRepository::findCoursesByFacultyId,

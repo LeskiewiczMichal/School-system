@@ -346,7 +346,6 @@ public class CommonTests {
    */
   public static <T, R> void serviceGetAllResourcesRelated(
       Class<T> entityClass,
-      Class<R> dtoClass,
       List<T> entityList,
       List<R> dtoList,
       BiFunction<Long, Pageable, Page<T>> repositoryFindResourcesByIdFunction,
