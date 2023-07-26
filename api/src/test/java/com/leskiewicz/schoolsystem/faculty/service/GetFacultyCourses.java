@@ -40,81 +40,12 @@ import org.springframework.data.domain.Pageable;
 public class GetFacultyCourses {
 
   // Variables
-  Faculty faculty;
 
   // Mocks
   @Mock private CourseRepository courseRepository;
   @Mock private FacultyRepository facultyRepository;
   @Mock private CourseMapper courseMapper;
-  @Mock private DegreeRepository degreeRepository;
   @InjectMocks private FacultyServiceImpl facultyService;
-
-  @BeforeEach
-  public void setup() {
-
-    // Set up test data
-    faculty = Faculty.builder().id(1L).name("Software Engineering").build();
-  }
-
-  //  @Test
-  //  public void getFacultyDegreesReturnsPagedDegrees() {
-  //    User teacher = Mockito.mock(User.class);
-  //
-  //    List<Course> courseList =
-  //        Arrays.asList(
-  //            Course.builder()
-  //                .id(1L)
-  //                .title("Software Engineering")
-  //                .faculty(faculty)
-  //                .duration_in_hours(20)
-  //                .teacher(teacher)
-  //                .build(),
-  //            Course.builder()
-  //                .id(2L)
-  //                .title("Computer Science")
-  //                .faculty(faculty)
-  //                .duration_in_hours(30)
-  //                .teacher(teacher)
-  //                .build());
-  //    Page<Course> coursePage = new PageImpl<>(courseList);
-  //
-  //    given(courseRepository.findCoursesByFacultyId(any(Long.class), any(Pageable.class)))
-  //        .willReturn(coursePage);
-  //
-  //    // Mock the behavior of the courseMapper
-  //    CourseDto courseDto1 =
-  //        CourseDto.builder()
-  //            .id(1L)
-  //            .title("Software Engineering")
-  //            .faculty("faculty")
-  //            .teacher("Something Testing")
-  //            .durationInHours(20)
-  //            .build();
-  //    CourseDto courseDto2 =
-  //        CourseDto.builder()
-  //            .id(2L)
-  //            .title("Computer Science")
-  //            .faculty("faculty")
-  //            .teacher("Something Testing")
-  //            .durationInHours(30)
-  //            .build();
-  //
-  //    given(courseMapper.convertToDto(any(Course.class))).willReturn(courseDto1, courseDto2);
-  //    given(facultyRepository.existsById(any(Long.class))).willReturn(true);
-  //
-  //    // Call the method to test
-  //    Page<CourseDto> result = facultyService.getFacultyCourses(1L, PageRequest.of(0, 10));
-  //
-  //    // Assert the result
-  //    Assertions.assertEquals(2, result.getTotalElements());
-  //    Assertions.assertEquals(courseDto1, result.getContent().get(0));
-  //    Assertions.assertEquals(courseDto2, result.getContent().get(1));
-  //
-  //    // Verify the interactions with userRepository and userMapper
-  //    verify(courseRepository, times(1)).findCoursesByFacultyId(any(Long.class),
-  // any(Pageable.class));
-  //    verify(courseMapper, times(2)).convertToDto(any(Course.class));
-  //  }
 
   @Test
   public void getFacultyCoursesReturnsPagedCourses() {
@@ -145,7 +76,6 @@ public class GetFacultyCourses {
     given(facultyRepository.existsById(any(Long.class))).willReturn(false);
 
     Assertions.assertThrows(
-        EntityNotFoundException.class,
-        () -> facultyService.getFacultyCourses(faculty.getId(), pageable));
+        EntityNotFoundException.class, () -> facultyService.getFacultyCourses(1L, pageable));
   }
 }

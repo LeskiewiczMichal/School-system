@@ -12,6 +12,8 @@ import com.leskiewicz.schoolsystem.faculty.FacultyRepository;
 import com.leskiewicz.schoolsystem.faculty.FacultyServiceImpl;
 import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
 import com.leskiewicz.schoolsystem.faculty.utils.FacultyMapper;
+import com.leskiewicz.schoolsystem.generic.CommonTests;
+import com.leskiewicz.schoolsystem.testUtils.TestHelper;
 import io.jsonwebtoken.lang.Assert;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.Collections;
@@ -43,32 +45,18 @@ public class GetFacultyByTests {
   }
 
   // *** GetById ***//
-
   @Test
   public void getByIdReturnsCorrectFaculty() {
-    // Create a mock Faculty object and FacultyDto
-    Faculty faculty = new Faculty();
-    faculty.setId(1L);
-    faculty.setName("Faculty Name");
+    Faculty faculty = TestHelper.createFaculty();
+    FacultyDto facultyDto = TestHelper.createFacultyDto("FacultyName");
 
-    FacultyDto facultyDto = new FacultyDto(1L, "Faculty Name");
-
-    // Mock the behavior of facultyRepository.findById() to return the mock Faculty
-    given(facultyRepository.findById(1L)).willReturn(Optional.of(faculty));
-
-    // Mock the behavior of facultyMapper.convertToDto()
-    given(facultyMapper.convertToDto(any(Faculty.class))).willReturn(facultyDto);
-
-    // Call the method to test
-    FacultyDto result = facultyService.getById(1L);
-
-    // Assert the result
-    Assert.notNull(result);
-    Assertions.assertEquals("Faculty Name", result.getName());
-
-    // Verify the interactions with facultyRepository and facultyMapper
-    verify(facultyRepository, times(1)).findById(1L);
-    verify(facultyMapper, times(1)).convertToDto(any(Faculty.class));
+    CommonTests.serviceGetById(
+        Faculty.class,
+        faculty,
+        facultyDto,
+        facultyRepository::findById,
+        facultyMapper::convertToDto,
+        facultyService::getById);
   }
 
   @Test

@@ -10,13 +10,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.leskiewicz.schoolsystem.course.Course;
 import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.dto.request.PageableRequest;
+import com.leskiewicz.schoolsystem.faculty.Faculty;
+import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
 import com.leskiewicz.schoolsystem.testUtils.RequestUtils;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import com.leskiewicz.schoolsystem.user.User;
+import io.jsonwebtoken.lang.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -213,7 +217,7 @@ public class CommonTests {
   }
 
   /**
-   * Test the controller delete method
+   * Test the controller patch method
    *
    * @param entityClass Class of entity dto
    * @param requestClass Class of patch request
@@ -371,4 +375,51 @@ public class CommonTests {
     Assertions.assertEquals(courseDto1, result.getContent().get(0));
     Assertions.assertEquals(courseDto2, result.getContent().get(1));
   }
+
+  @Test
+  public static <T, R> void serviceGetById(
+      Class<T> entityClass,
+      T entity,
+      R dto,
+      Function<Long, Optional<T>> repositoryFindByIdFunction,
+      Function<T, R> mapperConvertToDtoFunction,
+      Function<Long, R> serviceGetByIdFunction) {
+    // Mock the behavior of the repository findById method
+    given(repositoryFindByIdFunction.apply(any(Long.class))).willReturn(Optional.of(entity));
+
+    // Mock the behavior of the mapper
+    given(mapperConvertToDtoFunction.apply(any(entityClass))).willReturn(dto);
+
+    // Call the method to test
+    R result = serviceGetByIdFunction.apply(1L);
+
+    // Assert the result
+    Assert.notNull(result);
+    Assertions.assertEquals(dto, result);
+  }
+  //  ) {
+  //    // Create a mock Faculty object and FacultyDto
+  //    Faculty faculty = new Faculty();
+  //    faculty.setId(1L);
+  //    faculty.setName("Faculty Name");
+  //
+  //    FacultyDto facultyDto = new FacultyDto(1L, "Faculty Name");
+  //
+  //    // Mock the behavior of facultyRepository.findById() to return the mock Faculty
+  //    given(facultyRepository.findById(1L)).willReturn(Optional.of(faculty));
+  //
+  //    // Mock the behavior of facultyMapper.convertToDto()
+  //    given(facultyMapper.convertToDto(any(Faculty.class))).willReturn(facultyDto);
+  //
+  //    // Call the method to test
+  //    FacultyDto result = facultyService.getById(1L);
+  //
+  //    // Assert the result
+  //    Assert.notNull(result);
+  //    Assertions.assertEquals("Faculty Name", result.getName());
+  //
+  //    // Verify the interactions with facultyRepository and facultyMapper
+  //    verify(facultyRepository, times(1)).findById(1L);
+  //    verify(facultyMapper, times(1)).convertToDto(any(Faculty.class));
+  //  }
 }
