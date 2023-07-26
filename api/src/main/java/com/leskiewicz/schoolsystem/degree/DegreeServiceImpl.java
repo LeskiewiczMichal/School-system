@@ -42,10 +42,12 @@ public class DegreeServiceImpl implements DegreeService {
 
   @Override
   public DegreeDto getById(Long id) {
-    return degreeMapper.convertToDto(degreeRepository
-        .findById(id)
-        .orElseThrow(
-            () -> new EntityNotFoundException(ErrorMessages.objectWithIdNotFound("Degree", id))));
+    return degreeMapper.convertToDto(
+        degreeRepository
+            .findById(id)
+            .orElseThrow(
+                () ->
+                    new EntityNotFoundException(ErrorMessages.objectWithIdNotFound("Degree", id))));
   }
 
   @Override
@@ -97,9 +99,14 @@ public class DegreeServiceImpl implements DegreeService {
 
   @Override
   public Page<CourseDto> getDegreeCourses(Long degreeId, Pageable pageable) {
+    degreeExistsCheck(degreeId);
     Page<Course> courses = courseRepository.findCoursesByDegreeId(degreeId, pageable);
     return courses.map(courseMapper::convertToDto);
   }
 
-
+  private void degreeExistsCheck(Long degreeId) {
+    if (!degreeRepository.existsById(degreeId)) {
+      throw new EntityNotFoundException(ErrorMessages.objectWithIdNotFound("Degree", degreeId));
+    }
+  }
 }

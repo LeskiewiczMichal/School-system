@@ -1,5 +1,9 @@
 package com.leskiewicz.schoolsystem.degree.service;
 
+import com.leskiewicz.schoolsystem.course.Course;
+import com.leskiewicz.schoolsystem.course.CourseRepository;
+import com.leskiewicz.schoolsystem.course.dto.CourseDto;
+import com.leskiewicz.schoolsystem.course.utils.CourseMapper;
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.degree.DegreeRepository;
 import com.leskiewicz.schoolsystem.degree.DegreeServiceImpl;
@@ -9,6 +13,7 @@ import com.leskiewicz.schoolsystem.degree.utils.DegreeMapper;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.generic.CommonTests;
 import com.leskiewicz.schoolsystem.testUtils.TestHelper;
+import com.leskiewicz.schoolsystem.user.User;
 import io.jsonwebtoken.lang.Assert;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Assertions;
@@ -36,9 +41,13 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 public class DegreeServiceGettersTest {
 
-  // Mocks
+  // Repository
   @Mock private DegreeRepository degreeRepository;
+  @Mock private CourseRepository courseRepository;
+
+  // Mapper
   @Mock private DegreeMapper degreeMapper;
+  @Mock private CourseMapper courseMapper;
 
   @InjectMocks private DegreeServiceImpl degreeService;
 
@@ -107,5 +116,25 @@ public class DegreeServiceGettersTest {
   }
 
   @Test
-  public void getDegreeCourses() {}
+  public void getDegreeCourses() {
+    // Set up test data
+    Faculty faculty = Mockito.mock(Faculty.class);
+    User user = Mockito.mock(User.class);
+    List<Course> courseList =
+        Arrays.asList(
+            TestHelper.createCourse(faculty, user), TestHelper.createCourse(faculty, user));
+    List<CourseDto> courseDtoList =
+        Arrays.asList(
+            TestHelper.createCourseDto("Mathematics", "Ela Kowalska"),
+            TestHelper.createCourseDto("Mathematics", "Al pacino"));
+
+    CommonTests.serviceGetAllResourcesRelated(
+        Course.class,
+        courseList,
+        courseDtoList,
+        courseRepository::findCoursesByDegreeId,
+        courseMapper::convertToDto,
+        degreeRepository::existsById,
+        degreeService::getDegreeCourses);
+  }
 }
