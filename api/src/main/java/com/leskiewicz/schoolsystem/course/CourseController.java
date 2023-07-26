@@ -69,6 +69,12 @@ public class CourseController {
         HalModelBuilder.halModelOf(coursePagedResourcesAssembler.toModel(courses)).build());
   }
 
+  /**
+   * Create a new course.
+   *
+   * @param request the {@link CreateCourseRequest} containing the course data.
+   * @return status 201 (Created) and in body the {@link CourseDto} representing the created course
+   */
   @PostMapping
   public ResponseEntity<CourseDto> createCourse(@Valid @RequestBody CreateCourseRequest request) {
     CourseDto course = courseService.createCourse(request);
