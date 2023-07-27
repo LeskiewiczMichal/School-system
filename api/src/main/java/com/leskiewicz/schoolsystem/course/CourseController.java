@@ -7,6 +7,7 @@ import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
 import com.leskiewicz.schoolsystem.dto.request.MessageModel;
 import com.leskiewicz.schoolsystem.dto.request.PageableRequest;
 import com.leskiewicz.schoolsystem.error.customexception.DuplicateEntityException;
+import com.leskiewicz.schoolsystem.error.customexception.EntitiesAlreadyAssociatedException;
 import com.leskiewicz.schoolsystem.error.customexception.EntityAlreadyExistsException;
 import com.leskiewicz.schoolsystem.user.UserController;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
@@ -127,6 +128,18 @@ public class CourseController {
         HalModelBuilder.halModelOf(userPagedResourcesAssembler.toModel(students)).build());
   }
 
+  /**
+   * Add a student to a course.
+   *
+   * @param id the ID of the course to add the student to.
+   * @param userId the ID of the student to add to the course.
+   * @return status 200 (OK) and in body a {@link MessageModel} with a message about the operation
+   *     and links to the course and the student.
+   * @throws EntityNotFoundException if the course or student does not exist, returns status 404.
+   * @throws IllegalArgumentException if the ID is a string, returns status 400.
+   * @throws EntitiesAlreadyAssociatedException if the student is already enrolled in the course,
+   *     returns status 400.
+   */
   @PostMapping("/{id}/students")
   //  @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_TEACHER')")
   public ResponseEntity<RepresentationModel<EntityModel<MessageModel>>> addStudentToCourse(
