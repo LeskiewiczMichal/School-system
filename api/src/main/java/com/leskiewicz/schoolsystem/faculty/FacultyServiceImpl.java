@@ -157,6 +157,7 @@ public class FacultyServiceImpl implements FacultyService {
     return courses.map(courseMapper::convertToDto);
   }
 
+
   private void facultyExistsCheck(Long facultyId) {
     if (!facultyRepository.existsById(facultyId)) {
       throw new EntityNotFoundException(ErrorMessages.objectWithIdNotFound("Faculty", facultyId));
