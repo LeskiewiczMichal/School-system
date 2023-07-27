@@ -12,6 +12,7 @@ import com.leskiewicz.schoolsystem.faculty.FacultyRepository;
 import com.leskiewicz.schoolsystem.testUtils.TestHelper;
 import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -120,6 +121,52 @@ public class CreateCourseTest {
     // Verify Error
     Assertions.assertThrows(
         IllegalArgumentException.class,
+        () -> {
+          courseService.createCourse(request);
+        });
+  }
+
+  @Test
+  public void createCourseThrowsEntityNotFoundExceptionWhenFacultyDoesNotExist() {
+    // Set up data
+    given(userRepository.findById(any(Long.class))).willReturn(Optional.of(teacher));
+    given(teacher.getRole()).willReturn(Role.ROLE_TEACHER);
+    given(facultyRepository.findById(any(Long.class))).willReturn(Optional.empty());
+
+    // Create request
+    CreateCourseRequest request =
+        CreateCourseRequest.builder()
+            .title("Course Title")
+            .durationInHours(10)
+            .facultyId(1L)
+            .teacherId(1L)
+            .build();
+
+    // Verify Error
+    Assertions.assertThrows(
+        EntityNotFoundException.class,
+        () -> {
+          courseService.createCourse(request);
+        });
+  }
+
+  @Test
+  public void createCourseThrowsEntityNotFoundExceptionWhenUserDoesNotExist() {
+    // Set up data
+    given(userRepository.findById(any(Long.class))).willReturn(Optional.empty());
+
+    // Create request
+    CreateCourseRequest request =
+        CreateCourseRequest.builder()
+            .title("Course Title")
+            .durationInHours(10)
+            .facultyId(1L)
+            .teacherId(1L)
+            .build();
+
+    // Verify Error
+    Assertions.assertThrows(
+        EntityNotFoundException.class,
         () -> {
           courseService.createCourse(request);
         });
