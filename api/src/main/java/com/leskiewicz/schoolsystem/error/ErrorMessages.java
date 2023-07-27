@@ -37,6 +37,10 @@ public class ErrorMessages {
     return "User with ID: " + id + " is not a teacher";
   }
 
+  public static String userIsNotStudent(Long id) {
+    return "User with ID: " + id + " is not a student";
+  }
+
   public static String degreeNotOnFaculty(
       String fieldOfStudy, DegreeTitle title, String facultyName) {
     String titleString = "Bachelor";

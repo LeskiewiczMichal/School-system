@@ -112,6 +112,27 @@ public class CourseServiceImpl implements CourseService {
     return students.map(userMapper::convertToDto);
   }
 
+  @Override
+  public void addStudentToCourse(Long userId, Long courseId) {
+    User student =
+        userRepository
+            .findById(userId)
+            .orElseThrow(
+                () ->
+                    new EntityNotFoundException(
+                        ErrorMessages.objectWithIdNotFound("User", userId)));
+    if (!student.getRole().equals(Role.ROLE_STUDENT)) {
+        throw new IllegalArgumentException(ErrorMessages.userIsNotStudent(student.getId()));
+    }
+    Course course =
+        courseRepository
+            .findById(courseId)
+            .orElseThrow(
+                () ->
+                    new EntityNotFoundException(
+                        ErrorMessages.objectWithIdNotFound("Course", courseId)));
+  }
+
   private void courseExistsCheck(Long courseId) {
     if (!courseRepository.existsById(courseId)) {
       throw new EntityNotFoundException(ErrorMessages.objectWithIdNotFound("Course", courseId));
