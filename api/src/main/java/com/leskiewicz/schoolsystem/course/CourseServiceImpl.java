@@ -7,6 +7,7 @@ import com.leskiewicz.schoolsystem.course.dto.CreateCourseRequest;
 import com.leskiewicz.schoolsystem.course.utils.CourseMapper;
 import com.leskiewicz.schoolsystem.error.ErrorMessages;
 import com.leskiewicz.schoolsystem.error.customexception.DuplicateEntityException;
+import com.leskiewicz.schoolsystem.error.customexception.EntitiesAlreadyAssociatedException;
 import com.leskiewicz.schoolsystem.error.customexception.EntityAlreadyExistsException;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.FacultyRepository;
@@ -122,7 +123,7 @@ public class CourseServiceImpl implements CourseService {
                     new EntityNotFoundException(
                         ErrorMessages.objectWithIdNotFound("User", userId)));
     if (!student.getRole().equals(Role.ROLE_STUDENT)) {
-        throw new IllegalArgumentException(ErrorMessages.userIsNotStudent(student.getId()));
+      throw new IllegalArgumentException(ErrorMessages.userIsNotStudent(student.getId()));
     }
     Course course =
         courseRepository
@@ -131,6 +132,15 @@ public class CourseServiceImpl implements CourseService {
                 () ->
                     new EntityNotFoundException(
                         ErrorMessages.objectWithIdNotFound("Course", courseId)));
+
+    if (course.getStudents().contains(student)) {
+      throw new EntitiesAlreadyAssociatedException(
+          ErrorMessages.objectsAlreadyAssociated(
+              "Course", course.getId(), "Student", student.getId()));
+    }
+
+    course.getStudents().add(student);
+    courseRepository.save(course);
   }
 
   private void courseExistsCheck(Long courseId) {

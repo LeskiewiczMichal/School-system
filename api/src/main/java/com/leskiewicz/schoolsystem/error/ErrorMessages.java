@@ -1,6 +1,7 @@
 package com.leskiewicz.schoolsystem.error;
 
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
+import lombok.extern.java.Log;
 
 public class ErrorMessages {
 
@@ -39,6 +40,18 @@ public class ErrorMessages {
 
   public static String userIsNotStudent(Long id) {
     return "User with ID: " + id + " is not a student";
+  }
+
+  public static String objectsAlreadyAssociated(
+      String object1, Long object1Id, String object2, Long object2Id) {
+    return object1
+        + " with ID: "
+        + object1Id
+        + " and "
+        + object2
+        + " with ID: "
+        + object2Id
+        + " are already associated";
   }
 
   public static String degreeNotOnFaculty(

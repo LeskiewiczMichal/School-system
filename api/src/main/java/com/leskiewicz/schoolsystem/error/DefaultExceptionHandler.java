@@ -119,7 +119,8 @@ public class DefaultExceptionHandler {
     return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
   }
 
-  @ExceptionHandler(DuplicateEntityException.class)
+  @ExceptionHandler(
+      value = {DuplicateEntityException.class, EntitiesAlreadyAssociatedException.class})
   public ResponseEntity<ApiError> handleDuplicateEntityException(
       RuntimeException ex, HttpServletRequest request) {
     ApiError apiError =
