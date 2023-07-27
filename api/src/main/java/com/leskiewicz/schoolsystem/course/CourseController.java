@@ -4,6 +4,8 @@ import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.course.dto.CreateCourseRequest;
 import com.leskiewicz.schoolsystem.course.utils.CourseDtoAssembler;
 import com.leskiewicz.schoolsystem.dto.request.PageableRequest;
+import com.leskiewicz.schoolsystem.error.customexception.DuplicateEntityException;
+import com.leskiewicz.schoolsystem.error.customexception.EntityAlreadyExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -12,7 +14,9 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -74,9 +78,16 @@ public class CourseController {
    *
    * @param request the {@link CreateCourseRequest} containing the course data.
    * @return status 201 (Created) and in body the {@link CourseDto} representing the created course
+   * @throws EntityNotFoundException if the faculty or teacher does not exist, returns status 404.
+   * @throws IllegalArgumentException if the ID is a string, returns status 400.
+   * @throws MethodArgumentNotValidException, returns status 400 and body with path, message about
+   *     missing fields, statusCode if the request is invalid.
+   * @throws EntityAlreadyExistsException if the course already exists, returns status 400.
+   * @throws AccessDeniedException if the user is not authorized to create a course, returns status
+   *     403
    */
   @PostMapping
-  @PreAuthorize("hasAnyRole('ROLE_STUDENT', 'ROLE_TEACHER')")
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_TEACHER')")
   public ResponseEntity<CourseDto> createCourse(@Valid @RequestBody CreateCourseRequest request) {
     CourseDto course = courseService.createCourse(request);
     course = courseDtoAssembler.toModel(course);
