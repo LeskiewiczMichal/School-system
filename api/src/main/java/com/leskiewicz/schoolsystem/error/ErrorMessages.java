@@ -33,6 +33,10 @@ public class ErrorMessages {
     return object + " was not updated";
   }
 
+  public static String userIsNotTeacher(Long id) {
+    return "User with ID: " + id + " is not a teacher";
+  }
+
   public static String degreeNotOnFaculty(
       String fieldOfStudy, DegreeTitle title, String facultyName) {
     String titleString = "Bachelor";

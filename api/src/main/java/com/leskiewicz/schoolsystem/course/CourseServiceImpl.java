@@ -1,5 +1,6 @@
 package com.leskiewicz.schoolsystem.course;
 
+import com.leskiewicz.schoolsystem.authentication.Role;
 import com.leskiewicz.schoolsystem.authentication.utils.ValidationUtils;
 import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.course.dto.CreateCourseRequest;
@@ -10,6 +11,7 @@ import com.leskiewicz.schoolsystem.error.customexception.EntityAlreadyExistsExce
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.FacultyRepository;
 import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
+import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
@@ -50,13 +52,20 @@ public class CourseServiceImpl implements CourseService {
   @Override
   public CourseDto createCourse(CreateCourseRequest createCourseRequest) {
     // Retrieve needed entities
-    userRepository
-        .findById(createCourseRequest.getTeacherId())
-        .orElseThrow(
-            () ->
-                new EntityNotFoundException(
-                    ErrorMessages.objectWithIdNotFound(
-                        "User", createCourseRequest.getTeacherId())));
+    User teacher =
+        userRepository
+            .findById(createCourseRequest.getTeacherId())
+            .orElseThrow(
+                () ->
+                    new EntityNotFoundException(
+                        ErrorMessages.objectWithIdNotFound(
+                            "User", createCourseRequest.getTeacherId())));
+
+    // Check if user is a teacher
+    if (!teacher.getRole().equals(Role.ROLE_TEACHER)) {
+      throw new IllegalArgumentException(ErrorMessages.userIsNotTeacher(teacher.getId()));
+    }
+
     Faculty faculty =
         facultyRepository
             .findById(createCourseRequest.getFacultyId())
@@ -66,13 +75,14 @@ public class CourseServiceImpl implements CourseService {
                         ErrorMessages.objectWithIdNotFound(
                             "Faculty", createCourseRequest.getFacultyId())));
 
+
     // Create new course
     Course newCourse =
         Course.builder()
             .title(createCourseRequest.getTitle())
             .duration_in_hours(createCourseRequest.getDurationInHours())
             .faculty(faculty)
-            .teacher(userRepository.findById(createCourseRequest.getTeacherId()).get())
+            .teacher(teacher)
             .build();
 
     // Check if the course doesn't already exist
