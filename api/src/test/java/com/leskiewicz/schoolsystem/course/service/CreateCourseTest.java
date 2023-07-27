@@ -13,6 +13,7 @@ import com.leskiewicz.schoolsystem.testUtils.TestHelper;
 import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.UserRepository;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -38,11 +39,18 @@ public class CreateCourseTest {
 
   @InjectMocks private CourseServiceImpl courseService;
 
+  User teacher;
+  Faculty faculty;
+
+  @BeforeEach
+  public void setup() {
+    teacher = Mockito.mock(User.class);
+    faculty = Mockito.mock(Faculty.class);
+  }
+
   @Test
   public void createsAndReturnCourseOnProperRequest() {
     // Mock data
-    Faculty faculty = Mockito.mock(Faculty.class);
-    User teacher = Mockito.mock(User.class);
     CourseDto courseDto = TestHelper.createCourseDto("Course Title", "Teacher Name");
     given(teacher.getRole()).willReturn(Role.ROLE_TEACHER);
 
@@ -92,5 +100,28 @@ public class CreateCourseTest {
     verify(courseRepository, Mockito.times(1))
         .existsCourseWithAttributes(any(), anyInt(), any(), any());
     verify(courseMapper, Mockito.times(1)).convertToDto(any());
+  }
+
+  @Test
+  public void createCourseThrowsIllegalArgumentExceptionWhenUserIsNotTeacher() {
+    // Set up data
+    given(userRepository.findById(any(Long.class))).willReturn(Optional.of(teacher));
+    given(teacher.getRole()).willReturn(Role.ROLE_STUDENT);
+
+    // Create request
+    CreateCourseRequest request =
+        CreateCourseRequest.builder()
+            .title("Course Title")
+            .durationInHours(10)
+            .facultyId(1L)
+            .teacherId(1L)
+            .build();
+
+    // Verify Error
+    Assertions.assertThrows(
+        IllegalArgumentException.class,
+        () -> {
+          courseService.createCourse(request);
+        });
   }
 }
