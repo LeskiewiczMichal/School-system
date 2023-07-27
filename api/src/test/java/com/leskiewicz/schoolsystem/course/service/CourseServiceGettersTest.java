@@ -5,10 +5,15 @@ import com.leskiewicz.schoolsystem.course.CourseRepository;
 import com.leskiewicz.schoolsystem.course.CourseServiceImpl;
 import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.course.utils.CourseMapper;
+import com.leskiewicz.schoolsystem.degree.Degree;
+import com.leskiewicz.schoolsystem.degree.DegreeTitle;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.generic.CommonTests;
 import com.leskiewicz.schoolsystem.testUtils.TestHelper;
 import com.leskiewicz.schoolsystem.user.User;
+import com.leskiewicz.schoolsystem.user.UserRepository;
+import com.leskiewicz.schoolsystem.user.dto.UserDto;
+import com.leskiewicz.schoolsystem.user.utils.UserMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -23,9 +28,11 @@ public class CourseServiceGettersTest {
 
   // Repositories
   @Mock private CourseRepository courseRepository;
+  @Mock private UserRepository userRepository;
 
   // Mappers
   @Mock private CourseMapper courseMapper;
+  @Mock private UserMapper userMapper;
 
   @InjectMocks private CourseServiceImpl courseService;
 
@@ -65,5 +72,25 @@ public class CourseServiceGettersTest {
         courseRepository::findById,
         courseMapper::convertToDto,
         courseService::getById);
+  }
+
+  @Test
+  public void getCourseUsersReturnsPagedUsers() {
+    // Prepare test data
+    Faculty faculty = TestHelper.createFaculty();
+    Degree degree = TestHelper.createDegree(faculty);
+    List<User> users =
+        List.of(TestHelper.createUser(faculty, degree), TestHelper.createUser(faculty, degree));
+    List<UserDto> userDtos =
+        List.of(TestHelper.createUserDto(users.get(0)), TestHelper.createUserDto(users.get(1)));
+
+    CommonTests.serviceGetAllResourcesRelated(
+        User.class,
+        users,
+        userDtos,
+        userRepository::findUsersByCourseId,
+        userMapper::convertToDto,
+        courseRepository::existsById,
+        courseService::getCourseStudents);
   }
 }

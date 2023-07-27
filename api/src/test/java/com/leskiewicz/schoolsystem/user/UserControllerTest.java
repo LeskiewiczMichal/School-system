@@ -62,7 +62,7 @@ public class UserControllerTest {
     Degree degree = Mockito.mock(Degree.class);
     given(faculty.getName()).willReturn("Test");
     given(degree.getFieldOfStudy()).willReturn("Law");
-    UserDto userDto = TestHelper.createUserDto(faculty, degree);
+    UserDto userDto = TestHelper.createUserDto(faculty.getName(), degree.getFieldOfStudy());
 
     CommonTests.controllerGetEntityById(
         userDto, 1L, userService::getById, userDtoAssembler::toModel, userController::getUserById);

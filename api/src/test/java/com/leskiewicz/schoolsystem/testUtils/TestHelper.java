@@ -41,14 +41,14 @@ public class TestHelper {
         .build();
   }
 
-  public static UserDto createUserDto(Faculty faculty, Degree degree) {
+  public static UserDto createUserDto(User user) {
     return UserDto.builder()
-        .id(1L)
-        .firstName("John")
-        .lastName("Doe")
-        .email("johndoe@example.com")
-        .faculty(faculty.getName())
-        .degree(degree.getFieldOfStudy())
+        .id(user.getId())
+        .firstName(user.getFirstName())
+        .lastName(user.getLastName())
+        .email(user.getEmail())
+        .faculty(user.getFaculty().getName())
+        .degree(user.getDegree().getFieldOfStudy())
         .build();
   }
 
