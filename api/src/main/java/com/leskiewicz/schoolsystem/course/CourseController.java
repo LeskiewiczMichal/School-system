@@ -4,9 +4,11 @@ import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.course.dto.CreateCourseRequest;
 import com.leskiewicz.schoolsystem.course.utils.CourseDtoAssembler;
 import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
+import com.leskiewicz.schoolsystem.dto.request.MessageModel;
 import com.leskiewicz.schoolsystem.dto.request.PageableRequest;
 import com.leskiewicz.schoolsystem.error.customexception.DuplicateEntityException;
 import com.leskiewicz.schoolsystem.error.customexception.EntityAlreadyExistsException;
+import com.leskiewicz.schoolsystem.user.UserController;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserDtoAssembler;
 import jakarta.persistence.EntityNotFoundException;
@@ -15,13 +17,18 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 /**
  * REST controller for managing courses.
@@ -106,8 +113,9 @@ public class CourseController {
    *
    * @param id the ID of the faculty to retrieve degrees from.
    * @param request the {@link PageableRequest} containing sorting, pagination, etc.
-   * @return status 200 (OK) and in body the paged list of {@link UserDto} objects and page metadata. If
-   *     there are no students, an empty page is returned (without _embedded.users field).
+   * @return status 200 (OK) and in body the paged list of {@link UserDto} objects and page
+   *     metadata. If there are no students, an empty page is returned (without _embedded.users
+   *     field).
    */
   @GetMapping("/{id}/students")
   public ResponseEntity<RepresentationModel<UserDto>> getCourseStudents(
@@ -117,5 +125,23 @@ public class CourseController {
 
     return ResponseEntity.ok(
         HalModelBuilder.halModelOf(userPagedResourcesAssembler.toModel(students)).build());
+  }
+
+  @PostMapping("/{id}/students")
+  //  @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_TEACHER')")
+  public ResponseEntity<RepresentationModel<EntityModel<MessageModel>>> addStudentToCourse(
+      @PathVariable Long id, @RequestBody Long userId) {
+    courseService.addStudentToCourse(userId, id);
+
+    return ResponseEntity.status(HttpStatus.OK)
+        .body(
+            HalModelBuilder.halModelOf(new MessageModel("Student added to course"))
+                .link(
+                    WebMvcLinkBuilder.linkTo(methodOn(CourseController.class).getCourseById(id))
+                        .withRel("course"))
+                .link(
+                    WebMvcLinkBuilder.linkTo(methodOn(UserController.class).getUserById(userId))
+                        .withRel("user"))
+                .build());
   }
 }

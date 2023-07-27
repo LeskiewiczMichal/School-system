@@ -39,6 +39,19 @@ public class DefaultExceptionHandler {
     return ResponseEntity.badRequest().body(apiError);
   }
 
+  @ExceptionHandler(IllegalArgumentException.class)
+  public ResponseEntity<ApiError> handleIllegalArgumentException(
+      IllegalArgumentException ex, HttpServletRequest request) {
+    ApiError apiError =
+        new ApiError(
+            request.getRequestURI(),
+            ex.getMessage(),
+            HttpStatus.BAD_REQUEST.value(),
+            LocalDateTime.now());
+
+    return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
+  }
+
   @ExceptionHandler(EntityNotFoundException.class)
   public ResponseEntity<ApiError> handleEntityNotFoundException(
       EntityNotFoundException ex, HttpServletRequest request) {
