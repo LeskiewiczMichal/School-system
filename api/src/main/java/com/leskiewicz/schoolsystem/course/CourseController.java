@@ -104,15 +104,15 @@ public class CourseController {
   /**
    * Get all students of course with provided ID.
    *
-   * @param courseId the ID of the faculty to retrieve degrees from.
+   * @param id the ID of the faculty to retrieve degrees from.
    * @param request the {@link PageableRequest} containing sorting, pagination, etc.
    * @return status 200 (OK) and in body the paged list of {@link UserDto} objects and page metadata. If
    *     there are no students, an empty page is returned (without _embedded.users field).
    */
   @GetMapping("/{id}/students")
   public ResponseEntity<RepresentationModel<UserDto>> getCourseStudents(
-      @PathVariable Long courseId, @ModelAttribute PageableRequest request) {
-    Page<UserDto> students = courseService.getCourseStudents(courseId, request.toPageable());
+      @PathVariable Long id, @ModelAttribute PageableRequest request) {
+    Page<UserDto> students = courseService.getCourseStudents(id, request.toPageable());
     students = students.map(userDtoAssembler::toModel);
 
     return ResponseEntity.ok(

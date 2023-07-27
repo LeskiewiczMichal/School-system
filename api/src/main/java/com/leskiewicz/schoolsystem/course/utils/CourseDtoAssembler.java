@@ -23,15 +23,19 @@ public class CourseDtoAssembler extends RepresentationModelAssemblerSupport<Cour
     Link selfLink =
         linkTo(methodOn(CourseController.class).getCourseById(course.getId())).withSelfRel();
     Link facultyLink =
-            linkTo(methodOn(FacultyController.class).getFacultyById(course.getFacultyId()))
-                    .withRel("faculty");
+        linkTo(methodOn(FacultyController.class).getFacultyById(course.getFacultyId()))
+            .withRel("faculty");
     Link teacherLink =
-            linkTo(methodOn(UserController.class).getUserById(course.getTeacherId()))
-                    .withRel("teacher");
+        linkTo(methodOn(UserController.class).getUserById(course.getTeacherId()))
+            .withRel("teacher");
+    Link studentsLink =
+        linkTo(methodOn(CourseController.class).getCourseStudents(course.getId(), null))
+            .withRel("students");
 
     course.add(selfLink);
     course.add(facultyLink);
     course.add(teacherLink);
+    course.add(studentsLink);
 
     return course;
   }
