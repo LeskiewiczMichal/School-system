@@ -75,11 +75,8 @@ public class CourseController {
    * @param request the {@link CreateCourseRequest} containing the course data.
    * @return status 201 (Created) and in body the {@link CourseDto} representing the created course
    */
-  // TODO: HANDLE ACCESS DENIED EXCEPTION
-  // TODO: HANDLE io.jsonwebtoken.security.SignatureException: JWT
-  // TODO: CHANGE ROLE TO TEACHER
   @PostMapping
-  @PreAuthorize("hasRole('ROLE_STUDENT')")
+  @PreAuthorize("hasAnyRole('ROLE_STUDENT', 'ROLE_TEACHER')")
   public ResponseEntity<CourseDto> createCourse(@Valid @RequestBody CreateCourseRequest request) {
     CourseDto course = courseService.createCourse(request);
     course = courseDtoAssembler.toModel(course);

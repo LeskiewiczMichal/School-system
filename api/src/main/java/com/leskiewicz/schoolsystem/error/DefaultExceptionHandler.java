@@ -1,16 +1,17 @@
 package com.leskiewicz.schoolsystem.error;
 
-import com.leskiewicz.schoolsystem.error.customexception.DuplicateEntityException;
-import com.leskiewicz.schoolsystem.error.customexception.EntityAlreadyExistsException;
-import com.leskiewicz.schoolsystem.error.customexception.MissingFieldException;
-import com.leskiewicz.schoolsystem.error.customexception.UserAlreadyExistsException;
+import com.leskiewicz.schoolsystem.error.customexception.*;
+import io.jsonwebtoken.JwtException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
+
+import java.security.SignatureException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -51,6 +52,8 @@ public class DefaultExceptionHandler {
     return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
   }
 
+  /// *** AUTHORIZATION *** ///
+
   @ExceptionHandler(BadCredentialsException.class)
   public ResponseEntity<ApiError> handleBadCredentialsException(
       BadCredentialsException ex, HttpServletRequest request) {
@@ -62,6 +65,19 @@ public class DefaultExceptionHandler {
             LocalDateTime.now());
 
     return new ResponseEntity<>(apiError, HttpStatus.UNAUTHORIZED);
+  }
+
+  @ExceptionHandler(value = {AccessDeniedException.class})
+  public ResponseEntity<ApiError> handleJwtException(
+      AccessDeniedException ex, HttpServletRequest request) {
+    ApiError apiError =
+        new ApiError(
+            request.getRequestURI(),
+            "Access denied",
+            HttpStatus.FORBIDDEN.value(),
+            LocalDateTime.now());
+
+    return new ResponseEntity<>(apiError, HttpStatus.FORBIDDEN);
   }
 
   @ExceptionHandler(value = {MissingFieldException.class, UserAlreadyExistsException.class})
