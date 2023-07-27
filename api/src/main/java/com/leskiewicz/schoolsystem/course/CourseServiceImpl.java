@@ -74,8 +74,7 @@ public class CourseServiceImpl implements CourseService {
                     new EntityNotFoundException(
                         ErrorMessages.objectWithIdNotFound(
                             "Faculty", createCourseRequest.getFacultyId())));
-
-
+    
     // Create new course
     Course newCourse =
         Course.builder()
