@@ -28,13 +28,13 @@ import java.util.List;
 public class CourseServiceImpl implements CourseService {
 
   // Repositories
-  private CourseRepository courseRepository;
-  private FacultyRepository facultyRepository;
-  private UserRepository userRepository;
+  private final CourseRepository courseRepository;
+  private final FacultyRepository facultyRepository;
+  private final UserRepository userRepository;
 
   // Mappers
-  private CourseMapper courseMapper;
-  private UserMapper userMapper;
+  private final CourseMapper courseMapper;
+  private final UserMapper userMapper;
 
   @Override
   public CourseDto getById(Long id) {

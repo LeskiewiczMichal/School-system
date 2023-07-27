@@ -5,7 +5,8 @@ import com.leskiewicz.schoolsystem.course.dto.CreateCourseRequest;
 import com.leskiewicz.schoolsystem.course.utils.CourseDtoAssembler;
 import com.leskiewicz.schoolsystem.generic.CommonTests;
 import com.leskiewicz.schoolsystem.testUtils.TestHelper;
-import org.junit.jupiter.api.Assertions;
+import com.leskiewicz.schoolsystem.user.dto.UserDto;
+import com.leskiewicz.schoolsystem.user.utils.UserDtoAssembler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,22 +14,17 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.authentication.TestingAuthenticationToken;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.test.context.support.WithMockUser;
 
 @ExtendWith(MockitoExtension.class)
 public class CourseControllerTest {
 
   // Used to convert DTOs to HAL representations
   private CourseDtoAssembler courseDtoAssembler;
+  private UserDtoAssembler userDtoAssembler;
 
   // Used to add links to paged resources
   private PagedResourcesAssembler<CourseDto> coursePagedResourcesAssembler;
+  private PagedResourcesAssembler<UserDto> userPagedResourcesAssembler;
 
   private CourseService courseService;
 
@@ -39,9 +35,16 @@ public class CourseControllerTest {
     courseDtoAssembler = Mockito.mock(CourseDtoAssembler.class);
     coursePagedResourcesAssembler = Mockito.mock(PagedResourcesAssembler.class);
     courseService = Mockito.mock(CourseService.class);
+    userDtoAssembler = Mockito.mock(UserDtoAssembler.class);
+    userPagedResourcesAssembler = Mockito.mock(PagedResourcesAssembler.class);
 
     courseController =
-        new CourseController(courseService, courseDtoAssembler, coursePagedResourcesAssembler);
+        new CourseController(
+            courseService,
+            courseDtoAssembler,
+            userDtoAssembler,
+            coursePagedResourcesAssembler,
+            userPagedResourcesAssembler);
   }
 
   @Test
@@ -86,5 +89,16 @@ public class CourseControllerTest {
         courseService::createCourse,
         courseDtoAssembler::toModel,
         courseController::createCourse);
+  }
+
+  @Test
+  public void getCourseStudents() {
+    CommonTests.controllerGetEntities(
+        UserDto.class,
+        userPagedResourcesAssembler,
+        (pageable) -> courseService.getCourseStudents(1L, pageable),
+        userDtoAssembler::toModel,
+        (pageable) -> courseController.getCourseStudents(1L, pageable)
+    );
   }
 }
