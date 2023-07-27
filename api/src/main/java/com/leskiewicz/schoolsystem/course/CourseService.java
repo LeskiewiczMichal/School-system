@@ -18,4 +18,6 @@ public interface CourseService {
   CourseDto createCourse(CreateCourseRequest createCourseRequest);
 
   Page<UserDto> getCourseStudents(Long courseId, Pageable pageable);
+
+  void addStudentToCourse(Long userId, Long courseId);
 }

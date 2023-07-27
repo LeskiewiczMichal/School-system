@@ -115,6 +115,7 @@ public class CourseServiceImpl implements CourseService {
 
   @Override
   public void addStudentToCourse(Long userId, Long courseId) {
+    // Get needed entities
     User student =
         userRepository
             .findById(userId)
@@ -125,6 +126,7 @@ public class CourseServiceImpl implements CourseService {
     if (!student.getRole().equals(Role.ROLE_STUDENT)) {
       throw new IllegalArgumentException(ErrorMessages.userIsNotStudent(student.getId()));
     }
+
     Course course =
         courseRepository
             .findById(courseId)
@@ -133,12 +135,14 @@ public class CourseServiceImpl implements CourseService {
                     new EntityNotFoundException(
                         ErrorMessages.objectWithIdNotFound("Course", courseId)));
 
+    // Check if objects aren't already associated
     if (course.getStudents().contains(student)) {
       throw new EntitiesAlreadyAssociatedException(
           ErrorMessages.objectsAlreadyAssociated(
               "Course", course.getId(), "Student", student.getId()));
     }
 
+    // Add student to course and save
     course.getStudents().add(student);
     courseRepository.save(course);
   }
