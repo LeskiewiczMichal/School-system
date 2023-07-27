@@ -24,4 +24,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
   @Query("SELECT u FROM User u WHERE u.faculty.id = :facultyId AND u.role = :role")
   Page<User> findUsersByFacultyId(Long facultyId, Pageable pageable, Role role);
+
+  @Query(
+      value =
+          "SELECT u FROM User u JOIN course_student cs ON u.id = cs.student.id WHERE cs.course.id = :courseId",
+      nativeQuery = true)
+  Page<User> findUsersByCourseId(Long courseId, Pageable pageable);
 }

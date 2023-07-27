@@ -5,6 +5,7 @@ import com.leskiewicz.schoolsystem.course.dto.CreateCourseRequest;
 import com.leskiewicz.schoolsystem.course.utils.CourseDtoAssembler;
 import com.leskiewicz.schoolsystem.generic.CommonTests;
 import com.leskiewicz.schoolsystem.testUtils.TestHelper;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,6 +13,13 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.TestingAuthenticationToken;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.test.context.support.WithMockUser;
 
 @ExtendWith(MockitoExtension.class)
 public class CourseControllerTest {
@@ -58,26 +66,25 @@ public class CourseControllerTest {
         courseController::getCourseById);
   }
 
-    @Test
-    public void createCourse() {
-        CourseDto courseDto = TestHelper.createCourseDto("faculty", "teacher name");
-        CreateCourseRequest createCourseRequest = CreateCourseRequest.builder()
-                .title("Course Title")
-                .facultyId(1L)
-                .teacherId(1L)
-                .durationInHours(10)
-                .build();
+  @Test
+  public void createCourse() {
+    CourseDto courseDto = TestHelper.createCourseDto("faculty", "teacher name");
+    CreateCourseRequest createCourseRequest =
+        CreateCourseRequest.builder()
+            .title("Course Title")
+            .facultyId(1L)
+            .teacherId(1L)
+            .durationInHours(10)
+            .build();
 
-        CommonTests.controllerCreateEntity(
-                courseDto,
-                CourseDto.class,
-                courseDto.add(WebMvcLinkBuilder.linkTo(CourseController.class).withSelfRel()),
-                CreateCourseRequest.class,
-                createCourseRequest,
-                courseService::createCourse,
-                courseDtoAssembler::toModel,
-                courseController::createCourse);
-
-
-    }
+    CommonTests.controllerCreateEntity(
+        courseDto,
+        CourseDto.class,
+        courseDto.add(WebMvcLinkBuilder.linkTo(CourseController.class).withSelfRel()),
+        CreateCourseRequest.class,
+        createCourseRequest,
+        courseService::createCourse,
+        courseDtoAssembler::toModel,
+        courseController::createCourse);
+  }
 }

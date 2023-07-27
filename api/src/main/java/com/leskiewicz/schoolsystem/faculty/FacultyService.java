@@ -31,4 +31,6 @@ public interface FacultyService {
   Page<DegreeDto> getFacultyDegrees(Long facultyId, Pageable pageable);
 
   Page<CourseDto> getFacultyCourses(Long facultyId, Pageable pageable);
+
+  Page<UserDto> getCourseStudents(Long courseId, Pageable pageable);
 }

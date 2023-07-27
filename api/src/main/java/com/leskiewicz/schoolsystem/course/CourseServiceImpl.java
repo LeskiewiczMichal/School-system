@@ -13,6 +13,8 @@ import com.leskiewicz.schoolsystem.faculty.FacultyRepository;
 import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
 import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.UserRepository;
+import com.leskiewicz.schoolsystem.user.dto.UserDto;
+import com.leskiewicz.schoolsystem.user.utils.UserMapper;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -32,6 +34,7 @@ public class CourseServiceImpl implements CourseService {
 
   // Mappers
   private CourseMapper courseMapper;
+  private UserMapper userMapper;
 
   @Override
   public CourseDto getById(Long id) {
@@ -74,7 +77,7 @@ public class CourseServiceImpl implements CourseService {
                     new EntityNotFoundException(
                         ErrorMessages.objectWithIdNotFound(
                             "Faculty", createCourseRequest.getFacultyId())));
-    
+
     // Create new course
     Course newCourse =
         Course.builder()
@@ -100,5 +103,18 @@ public class CourseServiceImpl implements CourseService {
     ValidationUtils.validate(newCourse);
     courseRepository.save(newCourse);
     return courseMapper.convertToDto(newCourse);
+  }
+
+  @Override
+  public Page<UserDto> getCourseStudents(Long courseId, Pageable pageable) {
+    courseExistsCheck(courseId);
+    Page<User> students = userRepository.findUsersByCourseId(courseId, pageable);
+    return students.map(userMapper::convertToDto);
+  }
+
+  private void courseExistsCheck(Long courseId) {
+    if (!courseRepository.existsById(courseId)) {
+      throw new EntityNotFoundException(ErrorMessages.objectWithIdNotFound("Course", courseId));
+    }
   }
 }
