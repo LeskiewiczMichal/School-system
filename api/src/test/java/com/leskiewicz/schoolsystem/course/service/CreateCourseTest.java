@@ -7,6 +7,7 @@ import com.leskiewicz.schoolsystem.course.CourseServiceImpl;
 import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.course.dto.CreateCourseRequest;
 import com.leskiewicz.schoolsystem.course.utils.CourseMapper;
+import com.leskiewicz.schoolsystem.error.customexception.EntityAlreadyExistsException;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.FacultyRepository;
 import com.leskiewicz.schoolsystem.testUtils.TestHelper;
@@ -42,11 +43,21 @@ public class CreateCourseTest {
 
   User teacher;
   Faculty faculty;
+  CreateCourseRequest request;
 
   @BeforeEach
   public void setup() {
     teacher = Mockito.mock(User.class);
     faculty = Mockito.mock(Faculty.class);
+
+    // Create request
+    request =
+        CreateCourseRequest.builder()
+            .title("Course Title")
+            .durationInHours(10)
+            .facultyId(1L)
+            .teacherId(1L)
+            .build();
   }
 
   @Test
@@ -62,15 +73,6 @@ public class CreateCourseTest {
             .title("Course Title")
             .teacher(teacher)
             .faculty(faculty)
-            .build();
-
-    // Create a mock request
-    CreateCourseRequest request =
-        CreateCourseRequest.builder()
-            .title(expectedSavedCourse.getTitle())
-            .durationInHours(expectedSavedCourse.getDuration_in_hours())
-            .facultyId(1L)
-            .teacherId(1L)
             .build();
 
     // Mock the behaviour of repositories and mappers
@@ -109,15 +111,6 @@ public class CreateCourseTest {
     given(userRepository.findById(any(Long.class))).willReturn(Optional.of(teacher));
     given(teacher.getRole()).willReturn(Role.ROLE_STUDENT);
 
-    // Create request
-    CreateCourseRequest request =
-        CreateCourseRequest.builder()
-            .title("Course Title")
-            .durationInHours(10)
-            .facultyId(1L)
-            .teacherId(1L)
-            .build();
-
     // Verify Error
     Assertions.assertThrows(
         IllegalArgumentException.class,
@@ -133,15 +126,6 @@ public class CreateCourseTest {
     given(teacher.getRole()).willReturn(Role.ROLE_TEACHER);
     given(facultyRepository.findById(any(Long.class))).willReturn(Optional.empty());
 
-    // Create request
-    CreateCourseRequest request =
-        CreateCourseRequest.builder()
-            .title("Course Title")
-            .durationInHours(10)
-            .facultyId(1L)
-            .teacherId(1L)
-            .build();
-
     // Verify Error
     Assertions.assertThrows(
         EntityNotFoundException.class,
@@ -155,18 +139,31 @@ public class CreateCourseTest {
     // Set up data
     given(userRepository.findById(any(Long.class))).willReturn(Optional.empty());
 
-    // Create request
-    CreateCourseRequest request =
-        CreateCourseRequest.builder()
-            .title("Course Title")
-            .durationInHours(10)
-            .facultyId(1L)
-            .teacherId(1L)
-            .build();
-
     // Verify Error
     Assertions.assertThrows(
         EntityNotFoundException.class,
+        () -> {
+          courseService.createCourse(request);
+        });
+  }
+
+  @Test
+  public void
+      createCourseThrowsEntityAlreadyExistsExceptionWhenCourseWithAttributesAlreadyExists() {
+    // Set up data
+    given(userRepository.findById(any(Long.class))).willReturn(Optional.of(teacher));
+    given(teacher.getRole()).willReturn(Role.ROLE_TEACHER);
+    given(facultyRepository.findById(any(Long.class))).willReturn(Optional.of(faculty));
+
+    // Mock the behaviour of repositories and mappers
+    given(
+            courseRepository.existsCourseWithAttributes(
+                any(String.class), any(Integer.class), any(Long.class), any(Long.class)))
+        .willReturn(true);
+
+    // Verify Error
+    Assertions.assertThrows(
+        EntityAlreadyExistsException.class,
         () -> {
           courseService.createCourse(request);
         });
