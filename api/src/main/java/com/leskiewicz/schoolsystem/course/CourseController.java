@@ -142,19 +142,25 @@ public class CourseController {
    */
   @PostMapping("/{id}/students")
   //  @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_TEACHER')")
-  public ResponseEntity<RepresentationModel<EntityModel<MessageModel>>> addStudentToCourse(
+  public ResponseEntity<MessageModel> addStudentToCourse(
       @PathVariable Long id, @RequestBody Long userId) {
     courseService.addStudentToCourse(userId, id);
 
-    return ResponseEntity.status(HttpStatus.OK)
-        .body(
-            HalModelBuilder.halModelOf(new MessageModel("Student added to course"))
-                .link(
-                    WebMvcLinkBuilder.linkTo(methodOn(CourseController.class).getCourseById(id))
-                        .withRel("course"))
-                .link(
-                    WebMvcLinkBuilder.linkTo(methodOn(UserController.class).getUserById(userId))
-                        .withRel("user"))
-                .build());
+    MessageModel message = new MessageModel("Student added to course successfully");
+    message.add(
+        WebMvcLinkBuilder.linkTo(methodOn(CourseController.class).getCourseById(id))
+            .withRel("course"));
+    message.add(
+        WebMvcLinkBuilder.linkTo(methodOn(UserController.class).getUserById(userId))
+            .withRel("student"));
+
+
+    return ResponseEntity.status(HttpStatus.OK).body(message);
+
+//
+//    return ResponseEntity.status(HttpStatus.OK)
+//        .body(
+//            HalModelBuilder.halModelOf(new MessageModel("Student added to course successfully"))
+//                .build());
   }
 }

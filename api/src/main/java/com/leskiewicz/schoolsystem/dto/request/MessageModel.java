@@ -1,8 +1,9 @@
 package com.leskiewicz.schoolsystem.dto.request;
 
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.RepresentationModel;
 
-public class MessageModel extends EntityModel<MessageModel> {
+public class MessageModel extends RepresentationModel<MessageModel> {
   private String message;
 
   public MessageModel(String message) {
