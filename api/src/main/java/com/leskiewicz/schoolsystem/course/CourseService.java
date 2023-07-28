@@ -20,4 +20,6 @@ public interface CourseService {
   Page<UserDto> getCourseStudents(Long courseId, Pageable pageable);
 
   void addStudentToCourse(Long userId, Long courseId);
+
+  void deleteCourse(Long courseId);
 }

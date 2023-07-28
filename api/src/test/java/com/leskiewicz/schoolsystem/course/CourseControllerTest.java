@@ -1,14 +1,25 @@
 package com.leskiewicz.schoolsystem.course;
 
-import com.leskiewicz.schoolsystem.authentication.JWTAuthenticationFilter;
-import com.leskiewicz.schoolsystem.authentication.utils.JwtUtilsImpl;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.willThrow;
+//import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+//import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import com.leskiewicz.schoolsystem.authentication.config.SecurityBeansConfig;
+import com.leskiewicz.schoolsystem.config.SecurityConfig;
 import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.course.dto.CreateCourseRequest;
 import com.leskiewicz.schoolsystem.course.utils.CourseDtoAssembler;
 import com.leskiewicz.schoolsystem.error.DefaultExceptionHandler;
 import com.leskiewicz.schoolsystem.error.ErrorMessages;
+import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.generic.CommonTests;
 import com.leskiewicz.schoolsystem.testUtils.TestHelper;
+import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserDtoAssembler;
 import jakarta.persistence.EntityNotFoundException;
@@ -18,24 +29,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import java.util.Arrays;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willThrow;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
 public class CourseControllerTest {
@@ -69,6 +69,7 @@ public class CourseControllerTest {
             userDtoAssembler,
             coursePagedResourcesAssembler,
             userPagedResourcesAssembler);
+
 
     mvc =
         MockMvcBuilders.standaloneSetup(courseController)
@@ -155,7 +156,6 @@ public class CourseControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("1")
                 .accept("application/hal+json"))
-        .andDo(print())
         .andExpect(status().isNotFound())
         .andExpect(jsonPath("$.message").value(ErrorMessages.objectWithIdNotFound("Course", 1L)))
         .andExpect(jsonPath("$.path").value("/api/courses/1/students"))

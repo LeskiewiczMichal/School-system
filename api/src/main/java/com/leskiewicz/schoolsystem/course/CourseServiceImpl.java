@@ -147,6 +147,12 @@ public class CourseServiceImpl implements CourseService {
     courseRepository.save(course);
   }
 
+  @Override
+  public void deleteCourse(Long courseId) {
+    courseExistsCheck(courseId);
+    courseRepository.deleteById(courseId);
+  }
+
   private void courseExistsCheck(Long courseId) {
     if (!courseRepository.existsById(courseId)) {
       throw new EntityNotFoundException(ErrorMessages.objectWithIdNotFound("Course", courseId));

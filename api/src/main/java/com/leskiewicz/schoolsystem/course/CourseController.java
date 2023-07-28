@@ -141,7 +141,7 @@ public class CourseController {
    *     returns status 400.
    */
   @PostMapping("/{id}/students")
-  //  @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_TEACHER')")
+  @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
   public ResponseEntity<MessageModel> addStudentToCourse(
       @PathVariable Long id, @RequestBody Long userId) {
     courseService.addStudentToCourse(userId, id);
@@ -154,13 +154,13 @@ public class CourseController {
         WebMvcLinkBuilder.linkTo(methodOn(UserController.class).getUserById(userId))
             .withRel("student"));
 
-
     return ResponseEntity.status(HttpStatus.OK).body(message);
 
-//
-//    return ResponseEntity.status(HttpStatus.OK)
-//        .body(
-//            HalModelBuilder.halModelOf(new MessageModel("Student added to course successfully"))
-//                .build());
+    //
+    //    return ResponseEntity.status(HttpStatus.OK)
+    //        .body(
+    //            HalModelBuilder.halModelOf(new MessageModel("Student added to course
+    // successfully"))
+    //                .build());
   }
 }
