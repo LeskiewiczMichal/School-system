@@ -6,10 +6,12 @@ import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.course.dto.CreateCourseRequest;
 import com.leskiewicz.schoolsystem.course.utils.CourseDtoAssembler;
 import com.leskiewicz.schoolsystem.error.DefaultExceptionHandler;
+import com.leskiewicz.schoolsystem.error.ErrorMessages;
 import com.leskiewicz.schoolsystem.generic.CommonTests;
 import com.leskiewicz.schoolsystem.testUtils.TestHelper;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserDtoAssembler;
+import jakarta.persistence.EntityNotFoundException;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,6 +20,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MockMvcBuilder;
@@ -25,9 +28,14 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Arrays;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
 public class CourseControllerTest {
@@ -129,10 +137,28 @@ public class CourseControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("1")
                 .accept("application/hal+json"))
-        .andDo(print())
+        .andExpect(status().isOk())
         .andExpect(jsonPath("$.message").value("Student added to course successfully"))
         .andExpect(jsonPath("$.links[*].rel", Matchers.hasItems("student", "course")))
         .andExpect(jsonPath("$.links[*].href", Matchers.hasSize(2)))
+        .andReturn();
+  }
+
+  @Test
+  public void addStudentToCourseThrowsProperException() throws Exception {
+    willThrow(new EntityNotFoundException(ErrorMessages.objectWithIdNotFound("Course", 1L)))
+        .given(courseService)
+        .addStudentToCourse(any(Long.class), any(Long.class));
+
+    mvc.perform(
+            post("/api/courses/1/students")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("1")
+                .accept("application/hal+json"))
+        .andDo(print())
+        .andExpect(status().isNotFound())
+        .andExpect(jsonPath("$.message").value(ErrorMessages.objectWithIdNotFound("Course", 1L)))
+        .andExpect(jsonPath("$.path").value("/api/courses/1/students"))
         .andReturn();
   }
 }
