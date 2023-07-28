@@ -1,5 +1,6 @@
 package com.leskiewicz.schoolsystem.course;
 
+import com.leskiewicz.schoolsystem.controller.ApiController;
 import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.course.dto.CreateCourseRequest;
 import com.leskiewicz.schoolsystem.course.utils.CourseDtoAssembler;
@@ -155,12 +156,17 @@ public class CourseController {
             .withRel("student"));
 
     return ResponseEntity.status(HttpStatus.OK).body(message);
+  }
 
-    //
-    //    return ResponseEntity.status(HttpStatus.OK)
-    //        .body(
-    //            HalModelBuilder.halModelOf(new MessageModel("Student added to course
-    // successfully"))
-    //                .build());
+  @DeleteMapping("/{id}")
+  //  @PreAuthorize() //TODO: teacher that is teaching the course or admin
+  public ResponseEntity<MessageModel> deleteCourseById(@PathVariable Long id) {
+    courseService.deleteCourse(id);
+
+    MessageModel message = new MessageModel("Course deleted successfully");
+    message.add(WebMvcLinkBuilder.linkTo(ApiController.class).withRel("api"));
+    message.add(WebMvcLinkBuilder.linkTo(CourseController.class).withRel("courses"));
+
+    return ResponseEntity.ok(message);
   }
 }
