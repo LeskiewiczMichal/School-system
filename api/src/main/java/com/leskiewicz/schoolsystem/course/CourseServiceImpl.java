@@ -17,6 +17,7 @@ import com.leskiewicz.schoolsystem.user.UserRepository;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserMapper;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -147,9 +148,14 @@ public class CourseServiceImpl implements CourseService {
     courseRepository.save(course);
   }
 
+  @Transactional
   @Override
   public void deleteCourse(Long courseId) {
     courseExistsCheck(courseId);
+
+    courseRepository.deleteDegreeCourseByCourseId(courseId);
+    courseRepository.deleteCourseStudentByCourseId(courseId);
+
     courseRepository.deleteById(courseId);
   }
 

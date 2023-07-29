@@ -3,6 +3,7 @@ package com.leskiewicz.schoolsystem.course;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -38,4 +39,12 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
           "SELECT c.* FROM course c JOIN degree_course dc ON d.id = dc.course_id WHERE dc.student_id = :id",
       nativeQuery = true)
   Page<Course> findCoursesByDegreeId(@Param("id") Long degreeId, Pageable pageable);
+
+  @Modifying
+  @Query(value = "DELETE FROM degree_course dc WHERE dc.course_id = :courseId", nativeQuery = true)
+  void deleteDegreeCourseByCourseId(@Param("courseId") Long courseId);
+
+  @Modifying
+  @Query(value = "DELETE FROM course_student cs WHERE cs.course_id = :courseId", nativeQuery = true)
+  void deleteCourseStudentByCourseId(@Param("courseId") Long courseId);
 }
