@@ -24,7 +24,12 @@ public class RegisterTeacherRequest {
     @NotNull(message = "Password required")
     private String password;
 
-    @NotNull(message = "Faculty name required")
-    private String facultyName;
+    @NotNull(message = "Faculty id required")
+    private Long faculty;
 
+    @NotNull(message = "Degree field of study required")
+    private String degreeField;
+
+    @NotNull(message = "Degree title required")
+    private String title;
 }

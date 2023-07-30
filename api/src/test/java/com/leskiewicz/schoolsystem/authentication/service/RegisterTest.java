@@ -79,6 +79,7 @@ public class RegisterTest {
             "encoded_password",
             faculty,
             degree,
+            null,
             Role.ROLE_STUDENT
     );
   }

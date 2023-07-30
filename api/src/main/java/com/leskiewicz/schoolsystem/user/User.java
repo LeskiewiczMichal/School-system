@@ -49,6 +49,9 @@ public class User {
   @JoinColumn(name = "degree", referencedColumnName = "id")
   private Degree degree;
 
+  @OneToOne(mappedBy = "teacher", cascade = CascadeType.ALL)
+  private TeacherDetails teacherDetails;
+
   @NotNull
   @Column(name = "role")
   @Enumerated(EnumType.STRING)

@@ -188,7 +188,10 @@ public class FacultyServiceGettersTest {
   public void getFacultyDegreesReturnsPagedDegrees() {
     List<Degree> degrees =
         Arrays.asList(TestHelper.createDegree(faculty), TestHelper.createDegree(faculty));
-    List<DegreeDto> degreeDtos = Arrays.asList(TestHelper.createDegreeDto(faculty.getName()), TestHelper.createDegreeDto("TestFaculty"));
+    List<DegreeDto> degreeDtos =
+        Arrays.asList(
+            TestHelper.createDegreeDto(faculty.getName()),
+            TestHelper.createDegreeDto("TestFaculty"));
 
     CommonTests.serviceGetAllResourcesRelated(
         Degree.class,
@@ -197,8 +200,7 @@ public class FacultyServiceGettersTest {
         degreeRepository::findDegreesByFacultyId,
         degreeMapper::convertToDto,
         facultyRepository::existsById,
-        facultyService::getFacultyDegrees
-    );
+        facultyService::getFacultyDegrees);
   }
 
   @Test
@@ -227,6 +229,7 @@ public class FacultyServiceGettersTest {
                 "12345",
                 faculty,
                 degree,
+                null,
                 Role.ROLE_STUDENT),
             new User(
                 2L,
@@ -236,6 +239,7 @@ public class FacultyServiceGettersTest {
                 "12345",
                 faculty,
                 degree,
+                null,
                 Role.ROLE_STUDENT));
     Page<User> usersPage = new PageImpl<>(userList);
 
@@ -247,7 +251,15 @@ public class FacultyServiceGettersTest {
     // Mock the behavior of the userMapper
     UserDto userDto1 =
         new UserDto(
-            1L, "John", "Doe", "john.doe@example.com", "Some Faculty", 1L, "Some Degree", 2L);
+            1L,
+            "John",
+            "Doe",
+            "john.doe@example.com",
+            "Some Faculty",
+            Role.ROLE_STUDENT.toString(),
+            1L,
+            "Some Degree",
+            2L);
     UserDto userDto2 =
         new UserDto(
             2L,
@@ -255,6 +267,7 @@ public class FacultyServiceGettersTest {
             "Smith",
             "jane.smith@example.com",
             "Another Faculty",
+            Role.ROLE_STUDENT.toString(),
             2L,
             "Another Degree",
             2L);

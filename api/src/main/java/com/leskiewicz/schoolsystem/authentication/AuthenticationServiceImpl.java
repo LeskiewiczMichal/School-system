@@ -1,16 +1,23 @@
 package com.leskiewicz.schoolsystem.authentication;
 
+import com.leskiewicz.schoolsystem.authentication.dto.RegisterTeacherRequest;
 import com.leskiewicz.schoolsystem.degree.Degree;
+import com.leskiewicz.schoolsystem.degree.DegreeTitle;
+import com.leskiewicz.schoolsystem.error.ErrorMessages;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
+import com.leskiewicz.schoolsystem.faculty.FacultyRepository;
 import com.leskiewicz.schoolsystem.faculty.FacultyService;
 import com.leskiewicz.schoolsystem.authentication.dto.AuthenticationRequest;
 import com.leskiewicz.schoolsystem.authentication.dto.AuthenticationResponse;
 import com.leskiewicz.schoolsystem.authentication.dto.RegisterRequest;
 import com.leskiewicz.schoolsystem.authentication.utils.JwtUtils;
+import com.leskiewicz.schoolsystem.user.TeacherDetails;
+import com.leskiewicz.schoolsystem.user.TeacherDetailsRepository;
 import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.UserService;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserMapper;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,6 +33,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
   private final PasswordEncoder passwordEncoder;
   private final JwtUtils jwtUtils;
   private final AuthenticationManager authenticationManager;
+  private final FacultyRepository facultyRepository;
+  private final TeacherDetailsRepository teacherDetailsRepository;
   private final UserMapper userMapper;
 
   public AuthenticationResponse register(RegisterRequest request) {
@@ -44,6 +53,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             passwordEncoder.encode(request.getPassword()),
             faculty,
             degree,
+            null,
             Role.ROLE_STUDENT);
 
     // Save new user and generate jwt token
@@ -65,5 +75,38 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     return new AuthenticationResponse(jwtToken, userDto);
   }
 
-//  public AuthenticationResponse registerTeacherAccount(RegisterRequest request) {}
+  public AuthenticationResponse registerTeacherAccount(RegisterTeacherRequest request) {
+
+    Faculty faculty =
+        facultyRepository
+            .findById(request.getFaculty())
+            .orElseThrow(
+                () ->
+                    new EntityNotFoundException(
+                        ErrorMessages.objectWithIdNotFound("Faculty", request.getFaculty())));
+
+    User user =
+        new User(
+            null,
+            request.getFirstName(),
+            request.getLastName(),
+            request.getEmail(),
+            passwordEncoder.encode(request.getPassword()),
+            faculty,
+            null,
+            null,
+            Role.ROLE_TEACHER);
+
+    TeacherDetails teacherDetails = TeacherDetails.builder()
+            .teacher(user)
+            .degreeField(request.getDegreeField())
+            .title(DegreeTitle.valueOf(request.getTitle()))
+            .build();
+
+    userService.addUser(user);
+    var jwtToken = jwtUtils.generateToken(user);
+    UserDto userDto = userMapper.convertToDto(user);
+
+    return new AuthenticationResponse(jwtToken, userDto);
+  }
 }

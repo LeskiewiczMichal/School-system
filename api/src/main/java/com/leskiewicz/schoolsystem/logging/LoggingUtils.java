@@ -61,6 +61,7 @@ public class LoggingUtils {
         "[PROVIDED]",
         user.getFaculty(),
         user.getDegree(),
+        null,
         user.getRole());
   }
 
