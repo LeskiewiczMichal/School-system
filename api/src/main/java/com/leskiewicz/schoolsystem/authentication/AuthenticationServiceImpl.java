@@ -16,6 +16,7 @@ import com.leskiewicz.schoolsystem.user.TeacherDetailsRepository;
 import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.UserService;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
+import com.leskiewicz.schoolsystem.user.utils.UserDtoAssembler;
 import com.leskiewicz.schoolsystem.user.utils.UserMapper;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +36,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
   private final AuthenticationManager authenticationManager;
   private final FacultyRepository facultyRepository;
   private final TeacherDetailsRepository teacherDetailsRepository;
+  private final UserDtoAssembler userDtoAssembler;
   private final UserMapper userMapper;
 
   public AuthenticationResponse register(RegisterRequest request) {
@@ -97,15 +99,20 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             null,
             Role.ROLE_TEACHER);
 
-    TeacherDetails teacherDetails = TeacherDetails.builder()
+    TeacherDetails teacherDetails =
+        TeacherDetails.builder()
             .teacher(user)
             .degreeField(request.getDegreeField())
             .title(DegreeTitle.valueOf(request.getTitle()))
+            .bio("")
+            .tutorship("")
             .build();
 
     userService.addUser(user);
+    teacherDetailsRepository.save(teacherDetails);
     var jwtToken = jwtUtils.generateToken(user);
     UserDto userDto = userMapper.convertToDto(user);
+    userDto = userDtoAssembler.toModel(userDto);
 
     return new AuthenticationResponse(jwtToken, userDto);
   }

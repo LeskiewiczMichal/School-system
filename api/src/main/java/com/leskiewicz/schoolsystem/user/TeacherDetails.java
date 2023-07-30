@@ -32,9 +32,11 @@ public class TeacherDetails {
   @Column(name = "title")
   private DegreeTitle title;
 
+  @NotNull
   @Column(name = "bio")
   private String bio;
 
+  @NotNull
   @Column(name = "tutorship")
   private String tutorship;
 }
