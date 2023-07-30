@@ -106,6 +106,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             .bio("")
             .tutorship("")
             .build();
+    user.setTeacherDetails(teacherDetails);
 
     userService.addUser(user);
     teacherDetailsRepository.save(teacherDetails);

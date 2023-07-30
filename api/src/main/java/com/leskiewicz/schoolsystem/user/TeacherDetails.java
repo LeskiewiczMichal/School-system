@@ -21,7 +21,7 @@ public class TeacherDetails {
 
   @NotNull
   @OneToOne
-  @Column(name = "teacher_id")
+  @JoinColumn(name = "teacher_id")
   private User teacher;
 
   @NotNull
@@ -30,6 +30,7 @@ public class TeacherDetails {
 
   @NotNull
   @Column(name = "title")
+  @Enumerated(EnumType.STRING)
   private DegreeTitle title;
 
   @NotNull

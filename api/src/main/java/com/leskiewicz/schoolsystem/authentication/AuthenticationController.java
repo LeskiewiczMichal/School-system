@@ -80,6 +80,13 @@ public class AuthenticationController {
     return ResponseEntity.ok(response);
   }
 
+  /**
+   * Creates a new teacher account based on the given request.
+   *
+   * @param request The {@link RegisterTeacherRequest} containing the data to create the teacher
+   * @return status 201 with {@link AuthenticationResponse} - created {@link UserDto} and
+   *    authentication token in the body.
+   */
   @PostMapping("/register-teacher")
   public ResponseEntity<AuthenticationResponse> registerTeacher(
       @Valid @RequestBody RegisterTeacherRequest request) {
