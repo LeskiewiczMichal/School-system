@@ -5,6 +5,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import com.leskiewicz.schoolsystem.authentication.dto.AuthenticationRequest;
 import com.leskiewicz.schoolsystem.authentication.dto.AuthenticationResponse;
 import com.leskiewicz.schoolsystem.authentication.dto.RegisterRequest;
+import com.leskiewicz.schoolsystem.authentication.dto.RegisterTeacherRequest;
 import com.leskiewicz.schoolsystem.error.customexception.EntityAlreadyExistsException;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserDtoAssembler;
@@ -77,6 +78,16 @@ public class AuthenticationController {
     authenticationAddLinks(request, response);
 
     return ResponseEntity.ok(response);
+  }
+
+  @PostMapping("/register-teacher")
+  public ResponseEntity<AuthenticationResponse> registerTeacher(
+      @Valid @RequestBody RegisterTeacherRequest request) {
+
+    AuthenticationResponse response = authenticationService.registerTeacherAccount(request);
+    response.setUser(userDtoAssembler.toModel(response.getUser()));
+
+    return ResponseEntity.created(response.getUser().getLink("self").get().toUri()).body(response);
   }
 
   private void registrationAddLinks(RegisterRequest request, AuthenticationResponse response) {

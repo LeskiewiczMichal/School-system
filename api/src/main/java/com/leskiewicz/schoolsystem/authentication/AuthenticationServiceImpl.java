@@ -36,7 +36,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
   private final AuthenticationManager authenticationManager;
   private final FacultyRepository facultyRepository;
   private final TeacherDetailsRepository teacherDetailsRepository;
-  private final UserDtoAssembler userDtoAssembler;
   private final UserMapper userMapper;
 
   public AuthenticationResponse register(RegisterRequest request) {
@@ -112,7 +111,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     teacherDetailsRepository.save(teacherDetails);
     var jwtToken = jwtUtils.generateToken(user);
     UserDto userDto = userMapper.convertToDto(user);
-    userDto = userDtoAssembler.toModel(userDto);
 
     return new AuthenticationResponse(jwtToken, userDto);
   }
