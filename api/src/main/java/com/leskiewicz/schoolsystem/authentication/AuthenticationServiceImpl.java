@@ -64,4 +64,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     return new AuthenticationResponse(jwtToken, userDto);
   }
+
+//  public AuthenticationResponse registerTeacherAccount(RegisterRequest request) {}
 }

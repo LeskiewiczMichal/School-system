@@ -1,5 +1,6 @@
 package com.leskiewicz.schoolsystem.course;
 
+import com.leskiewicz.schoolsystem.authentication.SecurityService;
 import com.leskiewicz.schoolsystem.controller.ApiController;
 import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.course.dto.CreateCourseRequest;
@@ -7,6 +8,7 @@ import com.leskiewicz.schoolsystem.course.utils.CourseDtoAssembler;
 import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
 import com.leskiewicz.schoolsystem.dto.request.MessageModel;
 import com.leskiewicz.schoolsystem.dto.request.PageableRequest;
+import com.leskiewicz.schoolsystem.error.APIResponses;
 import com.leskiewicz.schoolsystem.error.customexception.DuplicateEntityException;
 import com.leskiewicz.schoolsystem.error.customexception.EntitiesAlreadyAssociatedException;
 import com.leskiewicz.schoolsystem.error.customexception.EntityAlreadyExistsException;
@@ -44,6 +46,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class CourseController {
 
   private final CourseService courseService;
+  private final SecurityService securityService;
 
   // Used to convert DTOs to HAL representations
   private final CourseDtoAssembler courseDtoAssembler;
@@ -159,11 +162,11 @@ public class CourseController {
   }
 
   @DeleteMapping("/{id}")
-  //  @PreAuthorize() //TODO: teacher that is teaching the course or admin
+  @PreAuthorize("hasRole('ADMIN') or @securityService.isCourseTeacher(#id)")
   public ResponseEntity<MessageModel> deleteCourseById(@PathVariable Long id) {
     courseService.deleteCourse(id);
 
-    MessageModel message = new MessageModel("Course deleted successfully");
+    MessageModel message = new MessageModel(APIResponses.objectDeleted("Course", id));
     message.add(WebMvcLinkBuilder.linkTo(ApiController.class).withRel("api"));
     message.add(WebMvcLinkBuilder.linkTo(CourseController.class).withRel("courses"));
 

@@ -153,8 +153,9 @@ public class CourseServiceImpl implements CourseService {
   public void deleteCourse(Long courseId) {
     courseExistsCheck(courseId);
 
-    courseRepository.deleteDegreeCourseByCourseId(courseId);
-    courseRepository.deleteCourseStudentByCourseId(courseId);
+    // Delete all associations with other entities
+    courseRepository.deleteDegreeCourseRelationByCourseId(courseId);
+    courseRepository.deleteCourseStudentRelationByCourseId(courseId);
 
     courseRepository.deleteById(courseId);
   }
