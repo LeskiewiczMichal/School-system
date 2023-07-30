@@ -23,6 +23,17 @@ CREATE TABLE degree (
                         FOREIGN KEY (faculty) REFERENCES faculty(id)
 );
 
+CREATE TABLE teacher_details (
+        id BIGINT NOT NULL AUTO_INCREMENT,
+        teacher_id BIGINT NOT NULL,
+        degree_field VARCHAR(100) NOT NULL,
+        title VARCHAR(100) NOT NULL,
+        bio VARCHAR(1200) NOT NULL,
+        tutorship VARCHAR(800) NOT NULL,
+        PRIMARY KEY (id),
+        FOREIGN KEY (teacher_id) REFERENCES users(id)
+)
+
 CREATE TABLE users (
                        id BIGINT NOT NULL AUTO_INCREMENT,
                        first_name VARCHAR(100) NOT NULL,

@@ -18,6 +18,7 @@ public class UserDto extends RepresentationModel<UserDto> {
   @NonNull private final String lastName;
   @NonNull private final String email;
   @NonNull private final String faculty;
+  @NonNull private final String role;
 
   @JsonIgnore @NotNull private final Long facultyId;
 

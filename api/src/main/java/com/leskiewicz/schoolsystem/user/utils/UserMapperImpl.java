@@ -33,7 +33,8 @@ public class UserMapperImpl implements UserMapper {
             .lastName(user.getLastName())
             .email(user.getEmail())
             .faculty(userFaculty.getName())
-            .facultyId(userFaculty.getId());
+            .facultyId(userFaculty.getId())
+                .role(user.getRole().toString());
 
     if (user.getRole() == Role.ROLE_STUDENT) {
       userDto.degree(user.getDegree().getFieldOfStudy());
