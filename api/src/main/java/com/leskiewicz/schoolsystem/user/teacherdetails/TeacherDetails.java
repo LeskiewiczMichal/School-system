@@ -1,6 +1,7 @@
-package com.leskiewicz.schoolsystem.user;
+package com.leskiewicz.schoolsystem.user.teacherdetails;
 
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
+import com.leskiewicz.schoolsystem.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;

@@ -24,6 +24,7 @@ public class UserMapperImpl implements UserMapper {
     }
 
     Faculty userFaculty = user.getFaculty();
+    System.out.println("ROLE: " + user.getRole().toString());
 
     // Create dto from user
     UserDto.UserDtoBuilder userDto =
@@ -33,7 +34,8 @@ public class UserMapperImpl implements UserMapper {
             .lastName(user.getLastName())
             .email(user.getEmail())
             .faculty(userFaculty.getName())
-            .facultyId(userFaculty.getId());
+            .facultyId(userFaculty.getId())
+            .role(user.getRole().toString());
 
     if (user.getRole() == Role.ROLE_STUDENT) {
       userDto.degree(user.getDegree().getFieldOfStudy());
