@@ -9,6 +9,7 @@ import com.leskiewicz.schoolsystem.authentication.AuthenticationServiceImpl;
 import com.leskiewicz.schoolsystem.authentication.Role;
 import com.leskiewicz.schoolsystem.authentication.dto.AuthenticationResponse;
 import com.leskiewicz.schoolsystem.authentication.dto.RegisterRequest;
+import com.leskiewicz.schoolsystem.authentication.dto.RegisterTeacherRequest;
 import com.leskiewicz.schoolsystem.authentication.utils.JwtUtils;
 import com.leskiewicz.schoolsystem.authentication.utils.JwtUtilsImpl;
 import com.leskiewicz.schoolsystem.degree.Degree;
@@ -131,5 +132,12 @@ public class RegisterTest {
 
     Assertions.assertThrows(
         IllegalArgumentException.class, () -> authenticationService.register(request));
+  }
+
+  @Test
+  public void registerTeacherHappyPath() {
+    RegisterTeacherRequest request = RegisterTeacherRequest.builder()
+            .title(DegreeTitle.BACHELOR)
+            .f("Computer Science")
   }
 }

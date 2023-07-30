@@ -31,5 +31,5 @@ public class RegisterTeacherRequest {
     private String degreeField;
 
     @NotNull(message = "Degree title required")
-    private String title;
+    private DegreeTitle title;
 }

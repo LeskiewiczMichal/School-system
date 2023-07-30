@@ -101,7 +101,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         TeacherDetails.builder()
             .teacher(user)
             .degreeField(request.getDegreeField())
-            .title(DegreeTitle.valueOf(request.getTitle()))
+            .title(request.getTitle())
             .bio("")
             .tutorship("")
             .build();
