@@ -12,7 +12,7 @@ import com.leskiewicz.schoolsystem.error.customexception.MissingFieldException;
 import com.leskiewicz.schoolsystem.error.customexception.UserAlreadyExistsException;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.FacultyService;
-import com.leskiewicz.schoolsystem.user.dto.PatchTeacherDetailsRequest;
+import com.leskiewicz.schoolsystem.user.teacherdetails.PatchTeacherDetailsRequest;
 import com.leskiewicz.schoolsystem.user.dto.PatchUserRequest;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetails;

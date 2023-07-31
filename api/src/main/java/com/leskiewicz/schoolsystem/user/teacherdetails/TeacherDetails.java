@@ -6,6 +6,7 @@ import com.leskiewicz.schoolsystem.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.springframework.hateoas.RepresentationModel;
 
 @Getter
 @Setter
@@ -14,7 +15,7 @@ import lombok.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "teacher_details")
-public class TeacherDetails {
+public class TeacherDetails extends RepresentationModel<TeacherDetails> {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

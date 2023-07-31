@@ -1,4 +1,4 @@
-package com.leskiewicz.schoolsystem.user.dto;
+package com.leskiewicz.schoolsystem.user.teacherdetails;
 
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
 import lombok.AllArgsConstructor;
