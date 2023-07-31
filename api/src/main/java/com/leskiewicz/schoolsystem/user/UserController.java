@@ -8,6 +8,7 @@ import com.leskiewicz.schoolsystem.user.teacherdetails.PatchTeacherDetailsReques
 import com.leskiewicz.schoolsystem.user.dto.PatchUserRequest;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetails;
+import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetailsModelAssembler;
 import com.leskiewicz.schoolsystem.user.utils.UserDtoAssembler;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
@@ -34,6 +35,7 @@ public class UserController {
   // Used to convert DTOs to HAL representations
   private final UserDtoAssembler userDtoAssembler;
   private final CourseDtoAssembler courseDtoAssembler;
+  private final TeacherDetailsModelAssembler teacherDetailsModelAssembler;
 
   // Used to add links to paged resources
   private final PagedResourcesAssembler<UserDto> userPagedResourcesAssembler;
@@ -122,6 +124,7 @@ public class UserController {
   @GetMapping("/{id}/teacher-details")
   public ResponseEntity<TeacherDetails> getTeacherDetails(@PathVariable Long id) {
     TeacherDetails teacherDetails = userService.getTeacherDetails(id);
+    teacherDetails = teacherDetailsModelAssembler.toModel(teacherDetails);
 
     return ResponseEntity.ok(teacherDetails);
   }
@@ -130,6 +133,7 @@ public class UserController {
   public ResponseEntity<TeacherDetails> patchTeacherDetails(
       @RequestBody PatchTeacherDetailsRequest request, @PathVariable Long id) {
     TeacherDetails updatedTeacherDetails = userService.updateTeacherDetails(request, id);
+    updatedTeacherDetails = teacherDetailsModelAssembler.toModel(updatedTeacherDetails);
 
     return ResponseEntity.ok(updatedTeacherDetails);
   }

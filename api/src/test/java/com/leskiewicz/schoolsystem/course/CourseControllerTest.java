@@ -69,10 +69,10 @@ public class CourseControllerTest {
             coursePagedResourcesAssembler,
             userPagedResourcesAssembler);
 
-    mvc =
-        MockMvcBuilders.standaloneSetup(courseController)
-            .setControllerAdvice(new DefaultExceptionHandler())
-            .build();
+      mvc =
+          MockMvcBuilders.standaloneSetup(courseController)
+              .setControllerAdvice(new DefaultExceptionHandler())
+              .build();
   }
 
   @Test
