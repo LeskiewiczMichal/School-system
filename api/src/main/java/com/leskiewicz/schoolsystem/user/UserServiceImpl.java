@@ -256,7 +256,7 @@ public class UserServiceImpl implements UserService {
       logger.debug("Updating tutorship of teacher with ID: {}", userId);
       teacherDetails.setTutorship(request.getTutorship());
     }
-    
+
     ValidationUtils.validate(teacherDetails);
     teacherDetailsRepository.save(teacherDetails);
     return teacherDetails;

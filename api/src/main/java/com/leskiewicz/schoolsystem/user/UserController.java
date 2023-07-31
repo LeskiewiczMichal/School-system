@@ -4,6 +4,7 @@ import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.course.utils.CourseDtoAssembler;
 import com.leskiewicz.schoolsystem.dto.request.PageableRequest;
 import com.leskiewicz.schoolsystem.error.customexception.EntityAlreadyExistsException;
+import com.leskiewicz.schoolsystem.user.dto.PatchTeacherDetailsRequest;
 import com.leskiewicz.schoolsystem.user.dto.PatchUserRequest;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetails;
@@ -127,11 +128,11 @@ public class UserController {
     return ResponseEntity.ok(teacherDetails);
   }
 
-//  @PatchMapping("/{id}/teacher-details")
-//  public ResponseEntity<TeacherDetails> patchTeacherDetails(
-//      @RequestBody TeacherDetails teacherDetails, @PathVariable Long id) {
-//    TeacherDetails updatedTeacherDetails = userService.updateTeacherDetails(teacherDetails, id);
-//
-//    return ResponseEntity.ok(updatedTeacherDetails);
-//  }
+  @PatchMapping("/{id}/teacher-details")
+  public ResponseEntity<TeacherDetails> patchTeacherDetails(
+      @RequestBody PatchTeacherDetailsRequest request, @PathVariable Long id) {
+    TeacherDetails updatedTeacherDetails = userService.updateTeacherDetails(request, id);
+
+    return ResponseEntity.ok(updatedTeacherDetails);
+  }
 }
