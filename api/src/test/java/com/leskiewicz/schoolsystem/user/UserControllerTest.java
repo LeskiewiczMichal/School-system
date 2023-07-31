@@ -1,6 +1,7 @@
 package com.leskiewicz.schoolsystem.user;
 
 import static net.bytebuddy.matcher.ElementMatchers.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willThrow;
 import static org.mockito.Mockito.*;
@@ -198,7 +199,8 @@ public class UserControllerTest {
             .build();
 
     // Mocks
-    given(userService.updateTeacherDetails(any(PatchTeacherDetailsRequest.class), any(Long.class))).willReturn(modifiedTeacherDetails);
+    given(userService.updateTeacherDetails(any(PatchTeacherDetailsRequest.class), any(Long.class)))
+        .willReturn(modifiedTeacherDetails);
     given(teacherDetailsModelAssembler.toModel(any(TeacherDetails.class))).willCallRealMethod();
 
     // Perform request
@@ -217,5 +219,27 @@ public class UserControllerTest {
         .andExpect(jsonPath("$.links[*].rel", Matchers.hasItems("self", "teacher")))
         .andExpect(jsonPath("$.links[*].href", Matchers.hasSize(2)))
         .andReturn();
+  }
+
+  @Test
+  public void updateTeacherDetails_ThrowsEntityNotFoundException() {
+    // Prepare test data
+    PatchTeacherDetailsRequest request =
+        PatchTeacherDetailsRequest.builder()
+            .bio("New bio")
+            .title(DegreeTitle.DOCTOR)
+            .tutorship("New tutorship")
+            .degreeField("New degree field")
+            .build();
+
+    // Mocks
+    given(userService.updateTeacherDetails(any(PatchTeacherDetailsRequest.class), any(Long.class)))
+        .willThrow(new EntityNotFoundException(ErrorMessages.teacherDetailsNotFound(1L)));
+
+    // Perform request
+    assertThrows(
+        EntityNotFoundException.class,
+        () -> userController.patchTeacherDetails(request, 1L),
+        ErrorMessages.teacherDetailsNotFound(1L));
   }
 }
