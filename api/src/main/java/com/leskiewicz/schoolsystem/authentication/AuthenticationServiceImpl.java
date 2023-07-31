@@ -65,18 +65,19 @@ public class AuthenticationServiceImpl implements AuthenticationService {
   }
 
   public AuthenticationResponse authenticate(AuthenticationRequest request) {
+    // Authenticate user and generate jwt token
     authenticationManager.authenticate(
         new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-
     User user = userService.getByEmail(request.getEmail());
     var jwtToken = jwtUtils.generateToken(user);
+    
+    // Convert user to dto and create response
     UserDto userDto = userMapper.convertToDto(user);
-
     return new AuthenticationResponse(jwtToken, userDto);
   }
 
   public AuthenticationResponse registerTeacherAccount(RegisterTeacherRequest request) {
-
+    // Find necessary entities
     Faculty faculty =
         facultyRepository
             .findById(request.getFaculty())
@@ -85,6 +86,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                     new EntityNotFoundException(
                         ErrorMessages.objectWithIdNotFound("Faculty", request.getFaculty())));
 
+    // Create new user and teacher details
     User user =
         new User(
             null,
@@ -107,13 +109,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             .build();
     user.setTeacherDetails(teacherDetails);
 
+    // Save new user, teacher details and generate jwt token
     userService.addUser(user);
-
-
     teacherDetailsRepository.save(teacherDetails);
     var jwtToken = jwtUtils.generateToken(user);
-    UserDto userDto = userMapper.convertToDto(user);
 
+    // Convert user to dto and create response
+    UserDto userDto = userMapper.convertToDto(user);
     return new AuthenticationResponse(jwtToken, userDto);
   }
 }

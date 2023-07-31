@@ -163,7 +163,8 @@ public class RegisterTest {
             .build();
 
     // Call the method to test
-    AuthenticationResponse authenticationResponse = authenticationService.registerTeacherAccount(request);
+    AuthenticationResponse authenticationResponse =
+        authenticationService.registerTeacherAccount(request);
 
     // Proper response
     Assertions.assertEquals(userDto, authenticationResponse.getUser());
@@ -176,5 +177,28 @@ public class RegisterTest {
     Assertions.assertEquals(request.getEmail(), savedUser.getEmail());
     Assertions.assertEquals(Role.ROLE_TEACHER, savedUser.getRole());
     Assertions.assertEquals(request.getFirstName(), savedUser.getFirstName());
+  }
+
+  @Test
+  public void registerTeacherThrowsExceptionOnFacultyNotFound() {
+    given(facultyRepository.findById(any(Long.class))).willThrow(new EntityNotFoundException());
+
+    // Create a request
+    RegisterTeacherRequest request =
+        RegisterTeacherRequest.builder()
+            .title(DegreeTitle.BACHELOR)
+            .degreeField("Computer Science")
+            .firstName("John")
+            .lastName("Doe")
+            .email("johndoe@example.com")
+            .password("12345")
+            .faculty(101L)
+            .build();
+
+    Assertions.assertThrows(
+        EntityNotFoundException.class,
+        () -> {
+          authenticationService.registerTeacherAccount(request);
+        });
   }
 }
