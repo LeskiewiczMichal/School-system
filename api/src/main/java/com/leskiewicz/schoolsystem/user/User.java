@@ -50,7 +50,7 @@ public class User {
   @JoinColumn(name = "degree", referencedColumnName = "id")
   private Degree degree;
 
-  @OneToOne(mappedBy = "teacher", cascade = CascadeType.ALL)
+  @OneToOne(mappedBy = "teacher", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private TeacherDetails teacherDetails;
 
   @NotNull

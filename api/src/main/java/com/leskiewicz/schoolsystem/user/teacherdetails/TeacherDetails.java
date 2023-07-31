@@ -1,5 +1,6 @@
 package com.leskiewicz.schoolsystem.user.teacherdetails;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
 import com.leskiewicz.schoolsystem.user.User;
 import jakarta.persistence.*;
@@ -21,7 +22,8 @@ public class TeacherDetails {
   private Long id;
 
   @NotNull
-  @OneToOne
+  @OneToOne(fetch = FetchType.LAZY)
+  @JsonIgnore
   @JoinColumn(name = "teacher_id")
   private User teacher;
 
