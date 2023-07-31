@@ -2,6 +2,7 @@ package com.leskiewicz.schoolsystem.user;
 
 import static net.bytebuddy.matcher.ElementMatchers.is;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -13,6 +14,7 @@ import com.leskiewicz.schoolsystem.course.utils.CourseDtoAssembler;
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.dto.request.PageableRequest;
 import com.leskiewicz.schoolsystem.error.DefaultExceptionHandler;
+import com.leskiewicz.schoolsystem.error.ErrorMessages;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.generic.CommonTests;
 import com.leskiewicz.schoolsystem.testUtils.TestHelper;
@@ -21,6 +23,7 @@ import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetails;
 import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetailsModelAssembler;
 import com.leskiewicz.schoolsystem.user.utils.UserDtoAssembler;
+import jakarta.persistence.EntityNotFoundException;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -142,5 +145,24 @@ public class UserControllerTest {
         .andExpect(jsonPath("$.links[*].rel", Matchers.hasItems("self", "teacher")))
         .andExpect(jsonPath("$.links[*].href", Matchers.hasSize(2)))
         .andReturn();
+  }
+
+  @Test
+  public void getTeacherDetailsThrowsProperException() throws Exception {
+    //  Mock service to throw exception
+    willThrow(new EntityNotFoundException(ErrorMessages.teacherDetailsNotFound(1L)))
+        .given(userService)
+        .getTeacherDetails(any(Long.class));
+
+    // Perform request
+    mvc.perform(
+            get("/api/users/1/teacher-details")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept("application/hal+json"))
+        // Assert response
+        .andExpect(status().isNotFound())
+        .andExpect(jsonPath("$.message").value(ErrorMessages.teacherDetailsNotFound(1L)))
+        .andExpect(jsonPath("$.path").value("/api/users/1/teacher-details"))
+        .andExpect(jsonPath("$.statusCode").value(404));
   }
 }
