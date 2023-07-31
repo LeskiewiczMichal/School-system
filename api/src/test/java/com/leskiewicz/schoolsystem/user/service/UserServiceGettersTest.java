@@ -31,10 +31,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class UserServiceGettersTest {
 
   // Repositories
@@ -92,11 +96,13 @@ public class UserServiceGettersTest {
             TestHelper.createCourseDto(courseList.get(0)),
             TestHelper.createCourseDto(courseList.get(1)));
 
+    given(userRepository.findById(any(Long.class))).willReturn(Optional.of(teacher));
+
     CommonTests.serviceGetAllResourcesRelated(
         Course.class,
         courseList,
         courseDtos,
-        courseRepository::findCoursesByUserId,
+        courseRepository::findCoursesByTeacherId,
         courseMapper::convertToDto,
         userRepository::existsById,
         userService::getUserCourses);

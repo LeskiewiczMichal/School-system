@@ -9,6 +9,7 @@ import com.leskiewicz.schoolsystem.authentication.Role;
 import com.leskiewicz.schoolsystem.testUtils.TestHelper;
 import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
+import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetails;
 import com.leskiewicz.schoolsystem.user.utils.UserMapperImpl;
 import jakarta.validation.ConstraintViolationException;
 import java.util.stream.Stream;
@@ -93,11 +94,18 @@ public class UserMapperTest {
   }
 
   @Test
-  public void convertToDtoCorrectWithoutDegree() {
+  public void convertToDtoCorrectForTeacher() {
     // Setup
-    User testUser = user.toBuilder().degree(null).role(Role.ROLE_TEACHER).build();
+    TeacherDetails teacherDetails = Mockito.mock(TeacherDetails.class);
+    User testUser =
+        user.toBuilder()
+            .degree(null)
+            .teacherDetails(teacherDetails)
+            .role(Role.ROLE_TEACHER)
+            .build();
     given(faculty.getName()).willReturn("FacultyName");
     given(faculty.getId()).willReturn(1L);
+    given(teacherDetails.getId()).willReturn(1L);
 
     UserDto expectedUserDto =
         UserDto.builder()
@@ -107,6 +115,7 @@ public class UserMapperTest {
             .email(user.getEmail())
             .faculty(faculty.getName())
             .facultyId(1L)
+            .teacherDetailsId(1L)
             .build();
 
     // Call function

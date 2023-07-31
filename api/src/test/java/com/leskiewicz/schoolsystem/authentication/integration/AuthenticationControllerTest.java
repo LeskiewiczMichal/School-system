@@ -189,7 +189,6 @@ public class AuthenticationControllerTest {
     Faculty faculty = facultyRepository.findByName("Informatics").orElse(null);
     Degree degree = degreeRepository.findById(1L).orElse(null);
 
-    //    degreeRepository.save(degree);
     // Create and save user that we are going to log into
     User authenticationTestUser =
         User.builder()
@@ -262,47 +261,58 @@ public class AuthenticationControllerTest {
   public void registerTeacherHappyPath() throws Exception {
     // Create a request
     RegisterTeacherRequest request =
-            RegisterTeacherRequest.builder()
-                    .title(DegreeTitle.BACHELOR)
-                    .degreeField("Computer Science")
-                    .firstName("John")
-                    .lastName("Doe")
-                    .email("johntest@example.com")
-                    .password("12345")
-                    .faculty(1L)
-                    .build();
-
-    ResultActions result =
-        requestUtils.performPostRequest(
-            REGISTER_TEACHER_PATH, request, status().isCreated());
-
-    // Create userDto that should be provided with response
-    com.leskiewicz.schoolsystem.testModels.UserDto registerTestUserDto =
-        com.leskiewicz
-            .schoolsystem
-            .testModels
-            .UserDto
-            .builder()
-            .id(5L)
-            .firstName(registerRequest.getFirstName())
-            .lastName(registerRequest.getLastName())
-            .email(registerRequest.getEmail())
-            .faculty(registerRequest.getFacultyName())
+        RegisterTeacherRequest.builder()
+            .title(DegreeTitle.BACHELOR)
+            .degreeField("Computer Science")
+            .firstName("John")
+            .lastName("Doe")
+            .email("johntest@example.com")
+            .password("12345")
+            .faculty(1L)
             .build();
+
+    // Call endpoint
+    ResultActions result =
+        requestUtils.performPostRequest(REGISTER_TEACHER_PATH, request, status().isCreated());
 
     // Check if Location header was added
     result.andExpect(MockMvcResultMatchers.header().exists("Location"));
 
-    // Correct user was returned
+    // user was returned
     result.andExpect(MockMvcResultMatchers.jsonPath("$.user").exists());
     result.andExpect(MockMvcResultMatchers.jsonPath("$.user").isNotEmpty());
 
-    //     Token was returned
+    // Token was returned
     result.andExpect(jsonPath("$.token").exists());
 
     // Proper links were added
     result.andExpect(jsonPath("$._links.self").exists());
     result.andExpect(jsonPath("$._links.authenticate").exists());
+  }
+
+  @Test
+  public void registerTeacherReturnsStatus400WhenUserWithGivenEmailAlreadyExists()
+      throws Exception {
+    // Create a request
+    RegisterTeacherRequest request =
+        RegisterTeacherRequest.builder()
+            .title(DegreeTitle.BACHELOR)
+            .degreeField("Computer Science")
+            .firstName("John")
+            .lastName("Doe")
+            .email("johndoe@example.com")
+            .password("12345")
+            .faculty(1L)
+            .build();
+    MvcResult result = performPostRequest(REGISTER_TEACHER_PATH, request, status().isBadRequest());
+
+    ApiError response = mapResponse(result, ApiError.class);
+
+    Assertions.assertEquals(
+        ErrorMessages.userWithEmailAlreadyExists(request.getEmail()), response.message());
+    Assertions.assertEquals(REGISTER_TEACHER_PATH, response.path());
+    Assertions.assertEquals(400, response.statusCode());
+    Assertions.assertNotNull(response.localDateTime());
   }
   // endregion
 
