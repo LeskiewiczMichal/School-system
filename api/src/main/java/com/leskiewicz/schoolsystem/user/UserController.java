@@ -6,6 +6,7 @@ import com.leskiewicz.schoolsystem.dto.request.PageableRequest;
 import com.leskiewicz.schoolsystem.error.customexception.EntityAlreadyExistsException;
 import com.leskiewicz.schoolsystem.user.dto.PatchUserRequest;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
+import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetails;
 import com.leskiewicz.schoolsystem.user.utils.UserDtoAssembler;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
@@ -92,14 +93,6 @@ public class UserController {
     return ResponseEntity.ok(user);
   }
 
-  //  @GetMapping("/{id}/faculty")
-  //  public ResponseEntity<FacultyDto> getUserFaculty(@PathVariable Long id) {
-  //    Faculty faculty = userService.getUserFaculty(id);
-  //    FacultyDto facultyDto = facultyModelAssembler.toModel(faculty);
-  //
-  //    return ResponseEntity.ok(facultyDto);
-  //  }
-
   /**
    * Get all courses of user with provided ID.
    *
@@ -118,4 +111,11 @@ public class UserController {
     return ResponseEntity.ok(
         HalModelBuilder.halModelOf(coursePagedResourcesAssembler.toModel(courses)).build());
   }
+
+//  @GetMapping("/{id}/teacher-details")
+//  public ResponseEntity<TeacherDetails> getTeacherDetails(@PathVariable Long id) {
+////    TeacherDetails teacherDetails = userService.getTeacherDetails(id);
+//
+//    return ResponseEntity.ok(teacherDetails);
+//  }
 }
