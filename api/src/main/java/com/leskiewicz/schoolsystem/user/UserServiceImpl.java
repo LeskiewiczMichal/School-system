@@ -221,13 +221,11 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public TeacherDetails getTeacherDetails(Long userId) {
-    TeacherDetails td =
-        teacherDetailsRepository
-            .findByUserId(userId)
-            .orElseThrow(
-                () -> new EntityNotFoundException("Teacher details for given user not found"));
-    logger.info(td.toString());
-    return td;
+    userExistsCheck(userId);
+
+    return teacherDetailsRepository
+        .findByUserId(userId)
+        .orElseThrow(() -> new EntityNotFoundException("Teacher details for given user not found"));
   }
 
   private void userExistsCheck(Long id) {

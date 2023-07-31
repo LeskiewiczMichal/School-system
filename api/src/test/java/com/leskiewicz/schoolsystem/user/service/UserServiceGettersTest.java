@@ -2,6 +2,7 @@ package com.leskiewicz.schoolsystem.user.service;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 import com.leskiewicz.schoolsystem.course.Course;
 import com.leskiewicz.schoolsystem.course.CourseRepository;
@@ -15,6 +16,8 @@ import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.UserRepository;
 import com.leskiewicz.schoolsystem.user.UserServiceImpl;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
+import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetails;
+import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetailsRepository;
 import com.leskiewicz.schoolsystem.user.utils.UserMapper;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.Arrays;
@@ -37,6 +40,7 @@ public class UserServiceGettersTest {
   // Repositories
   @Mock private UserRepository userRepository;
   @Mock private CourseRepository courseRepository;
+  @Mock private TeacherDetailsRepository teacherDetailsRepository;
 
   // Mappers
   @Mock private UserMapper userMapper;
@@ -108,6 +112,25 @@ public class UserServiceGettersTest {
 
     Assertions.assertThrows(
         EntityNotFoundException.class, () -> userService.getUserCourses(1L, pageable));
+  }
+
+  @Test
+  public void getTeacherDetailsReturnsTeacherDetails() {
+    // Set up test data
+    Faculty faculty = TestHelper.createFaculty();
+    User teacher = TestHelper.createTeacher(faculty);
+    TeacherDetails teacherDetails = TestHelper.createTeacherDetails(teacher);
+    given(userRepository.existsById(any(Long.class))).willReturn(true);
+    given(teacherDetailsRepository.findByUserId(any(Long.class)))
+        .willReturn(Optional.of(teacherDetails));
+
+    // Call method
+    TeacherDetails testTeacherDetails = userService.getTeacherDetails(1L);
+
+    // Assertions
+    Assertions.assertEquals(teacherDetails, testTeacherDetails);
+    verify(userRepository).existsById(any(Long.class));
+    verify(teacherDetailsRepository).findByUserId(1L);
   }
 
   // *** GetById ***//
