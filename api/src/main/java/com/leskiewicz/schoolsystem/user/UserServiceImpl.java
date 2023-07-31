@@ -13,6 +13,8 @@ import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.FacultyService;
 import com.leskiewicz.schoolsystem.user.dto.PatchUserRequest;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
+import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetails;
+import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetailsRepository;
 import com.leskiewicz.schoolsystem.user.utils.UserMapper;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.Optional;
@@ -34,6 +36,7 @@ public class UserServiceImpl implements UserService {
   // Repositories
   private final UserRepository userRepository;
   private final CourseRepository courseRepository;
+  private final TeacherDetailsRepository teacherDetailsRepository;
 
   // Mappers
   private final UserMapper userMapper;
@@ -197,6 +200,11 @@ public class UserServiceImpl implements UserService {
     userExistsCheck(userId);
     Page<Course> courses = courseRepository.findCoursesByUserId(userId, pageable);
     return courses.map(courseMapper::convertToDto);
+  }
+
+  @Override
+  public TeacherDetails getTeacherDetails(Long userId) {
+//    return teacherDetailsRepository.;
   }
 
   private void userExistsCheck(Long id) {

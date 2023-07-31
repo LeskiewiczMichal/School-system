@@ -6,6 +6,7 @@ import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.user.dto.PatchUserRequest;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
+import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetails;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -26,4 +27,6 @@ public interface UserService {
   Degree getUserDegree(Long userId);
 
   Page<CourseDto> getUserCourses(Long userId, Pageable pageable);
+
+  TeacherDetails getTeacherDetails(Long userId);
 }
