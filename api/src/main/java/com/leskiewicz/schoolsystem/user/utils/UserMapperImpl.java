@@ -36,12 +36,18 @@ public class UserMapperImpl implements UserMapper {
             .facultyId(userFaculty.getId())
             .role(user.getRole());
 
+    // If user is not a student, he won't have a degree
     if (user.getRole() == Role.ROLE_STUDENT) {
       userDto.degree(user.getDegree().getFieldOfStudy());
       userDto.degreeId(user.getDegree().getId());
     } else {
       userDto.degree(null);
       userDto.degreeId(null);
+    }
+
+    // If user is teacher, he will have teacher details associated
+    if (user.getRole() == Role.ROLE_TEACHER) {
+      userDto.teacherDetailsId(user.getTeacherDetails().getId());
     }
 
     UserDto mappedUserDto = userDto.build();

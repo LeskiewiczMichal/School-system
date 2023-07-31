@@ -259,7 +259,8 @@ public class FacultyServiceGettersTest {
             Role.ROLE_STUDENT,
             1L,
             "Some Degree",
-            2L);
+            2L,
+            null);
     UserDto userDto2 =
         new UserDto(
             2L,
@@ -270,7 +271,8 @@ public class FacultyServiceGettersTest {
             Role.ROLE_STUDENT,
             2L,
             "Another Degree",
-            2L);
+            2L,
+            null);
     given(userMapper.convertToDto(any(User.class))).willReturn(userDto1, userDto2);
     given(facultyRepository.existsById(any(Long.class))).willReturn(true);
     // Call the method to test

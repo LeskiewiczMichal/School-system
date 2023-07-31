@@ -13,7 +13,7 @@ import org.springframework.hateoas.server.core.Relation;
 @Relation(collectionRelation = "users")
 @AllArgsConstructor
 public class UserDto extends RepresentationModel<UserDto> {
-  
+
   @NonNull private final Long id;
   @NonNull private final String firstName;
   @NonNull private final String lastName;
