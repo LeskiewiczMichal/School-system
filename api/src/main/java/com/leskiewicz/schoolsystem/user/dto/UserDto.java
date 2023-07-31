@@ -13,7 +13,7 @@ import org.springframework.hateoas.server.core.Relation;
 @Relation(collectionRelation = "users")
 @AllArgsConstructor
 public class UserDto extends RepresentationModel<UserDto> {
-
+  
   @NonNull private final Long id;
   @NonNull private final String firstName;
   @NonNull private final String lastName;
@@ -23,11 +23,14 @@ public class UserDto extends RepresentationModel<UserDto> {
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private final Role role;
 
+  // Needed to add link in UserDtoAssembler
   @JsonIgnore @NotNull private final Long facultyId;
 
   // Degree may be null if user is not a student
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private final String degree;
 
+  // Needed to add optional links in UserDtoAssembler
   @JsonIgnore private final Long degreeId;
+  @JsonIgnore private final Long teacherDetailsId;
 }

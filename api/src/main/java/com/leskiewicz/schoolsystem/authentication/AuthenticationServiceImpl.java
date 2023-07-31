@@ -70,7 +70,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
     User user = userService.getByEmail(request.getEmail());
     var jwtToken = jwtUtils.generateToken(user);
-    
+
     // Convert user to dto and create response
     UserDto userDto = userMapper.convertToDto(user);
     return new AuthenticationResponse(jwtToken, userDto);
