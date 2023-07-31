@@ -94,6 +94,16 @@ public class AuthenticationController {
     AuthenticationResponse response = authenticationService.registerTeacherAccount(request);
     response.setUser(userDtoAssembler.toModel(response.getUser()));
 
+    Link selfLink =
+            WebMvcLinkBuilder.linkTo(methodOn(AuthenticationController.class).registerTeacher(request))
+                    .withSelfRel();
+    Link authenticateLink =
+            WebMvcLinkBuilder.linkTo(methodOn(AuthenticationController.class).authenticate(null))
+                    .withRel("authenticate");
+    response.add(selfLink);
+    response.add(authenticateLink);
+
+
     return ResponseEntity.created(response.getUser().getLink("self").get().toUri()).body(response);
   }
 

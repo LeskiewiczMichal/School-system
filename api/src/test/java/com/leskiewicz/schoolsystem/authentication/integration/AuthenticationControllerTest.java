@@ -10,6 +10,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.leskiewicz.schoolsystem.authentication.Role;
 import com.leskiewicz.schoolsystem.authentication.dto.AuthenticationRequest;
 import com.leskiewicz.schoolsystem.authentication.dto.RegisterRequest;
+import com.leskiewicz.schoolsystem.authentication.dto.RegisterTeacherRequest;
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.degree.DegreeRepository;
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
@@ -47,6 +48,8 @@ public class AuthenticationControllerTest {
 
   private final String REGISTER_PATH = "/api/auth/register";
   private final String AUTHENTICATE_PATH = "/api/auth/authenticate";
+  private final String REGISTER_TEACHER_PATH = "/api/auth/register-teacher";
+
   RegisterRequest registerRequest;
   @Autowired private MockMvc mvc;
   @Autowired private PasswordEncoder passwordEncoder;
@@ -251,6 +254,55 @@ public class AuthenticationControllerTest {
     Assertions.assertEquals(AUTHENTICATE_PATH, response.path());
     Assertions.assertEquals(401, response.statusCode());
     Assertions.assertNotNull(response.localDateTime());
+  }
+  // endregion
+
+  // region Register Teacher
+  @Test
+  public void registerTeacherHappyPath() throws Exception {
+    // Create a request
+    RegisterTeacherRequest request =
+            RegisterTeacherRequest.builder()
+                    .title(DegreeTitle.BACHELOR)
+                    .degreeField("Computer Science")
+                    .firstName("John")
+                    .lastName("Doe")
+                    .email("johntest@example.com")
+                    .password("12345")
+                    .faculty(1L)
+                    .build();
+
+    ResultActions result =
+        requestUtils.performPostRequest(
+            REGISTER_TEACHER_PATH, request, status().isCreated());
+
+    // Create userDto that should be provided with response
+    com.leskiewicz.schoolsystem.testModels.UserDto registerTestUserDto =
+        com.leskiewicz
+            .schoolsystem
+            .testModels
+            .UserDto
+            .builder()
+            .id(5L)
+            .firstName(registerRequest.getFirstName())
+            .lastName(registerRequest.getLastName())
+            .email(registerRequest.getEmail())
+            .faculty(registerRequest.getFacultyName())
+            .build();
+
+    // Check if Location header was added
+    result.andExpect(MockMvcResultMatchers.header().exists("Location"));
+
+    // Correct user was returned
+    result.andExpect(MockMvcResultMatchers.jsonPath("$.user").exists());
+    result.andExpect(MockMvcResultMatchers.jsonPath("$.user").isNotEmpty());
+
+    //     Token was returned
+    result.andExpect(jsonPath("$.token").exists());
+
+    // Proper links were added
+    result.andExpect(jsonPath("$._links.self").exists());
+    result.andExpect(jsonPath("$._links.authenticate").exists());
   }
   // endregion
 
