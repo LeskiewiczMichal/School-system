@@ -46,12 +46,13 @@ public class UserDtoAssembler extends RepresentationModelAssemblerSupport<UserDt
       user.add(degreeLink);
     }
 
-    // TODO: add link to retrieve teacher details
-//    if (user.getTeacherDetailsId() != null) {
-//      Link teacherDetailsLink =
-//          WebMvcLinkBuilder.linkTo(methodOn(UserController.class).getTeacherDetails(user.getId()))
-//              .withRel("teacherDetails");
-//    }
+    // If user is a teacher, he has associated teacher details object
+    if (user.getTeacherDetailsId() != null) {
+      Link teacherDetailsLink =
+          WebMvcLinkBuilder.linkTo(methodOn(UserController.class).getTeacherDetails(user.getId()))
+              .withRel("teacherDetails");
+      user.add(teacherDetailsLink);
+    }
 
     return user;
   }
