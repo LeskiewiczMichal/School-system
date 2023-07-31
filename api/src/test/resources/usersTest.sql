@@ -37,6 +37,9 @@ VALUES (1, 2);
 INSERT INTO users (first_name, last_name, email, password, faculty, role)
 VALUES ('Bob', 'Johnson', 'bobjohnson@example.com', 'abcde', 1, 'ROLE_TEACHER');
 
+INSERT INTO teacher_details (teacher_id, degree_field, title, bio, tutorship)
+VALUES (3, 'Computer Science', 'BACHELOR_OF_SCIENCE', 'I am a teacher', 'I am a tutor');
+
 INSERT INTO users (first_name, last_name, email, password, faculty, degree, role)
 VALUES ('Emily', 'Wilson', 'emilywilson@example.com', 'qwerty', 1, 2, 'ROLE_STUDENT');
 

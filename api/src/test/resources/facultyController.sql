@@ -122,17 +122,37 @@ VALUES ('Daniel', 'Wilson', 'daniel.wilson@example.com', 'test123', 105, 110, 'R
 INSERT INTO users (first_name, last_name, email, password, faculty, degree, role)
 VALUES ('Olivia', 'Martinez', 'olivia.martinez@example.com', 'securepass', 106, 111, 'ROLE_TEACHER');
 
+INSERT INTO teacher_details (teacher_id, degree_field, title, bio, tutorship)
+VALUES (6, 'Informatics', 'BACHELOR_OF_SCIENCE', 'I am a informatics teacher', 'I am a tutor');
+
+
 INSERT INTO users (first_name, last_name, email, password, faculty, degree, role)
 VALUES ('James', 'Garcia', 'james.garcia@example.com', 'mypassword', 107, 113, 'ROLE_TEACHER');
+
+INSERT INTO teacher_details (teacher_id, degree_field, title, bio, tutorship)
+VALUES (7, 'Computer Science', 'BACHELOR_OF_SCIENCE', 'I am a teacher', 'I am a tutor');
+
 
 INSERT INTO users (first_name, last_name, email, password, faculty, degree, role)
 VALUES ('Ava', 'Thomas', 'ava.thomas@example.com', 'pass1234', 108, 115, 'ROLE_TEACHER');
 
+INSERT INTO teacher_details (teacher_id, degree_field, title, bio, tutorship)
+VALUES (8, 'Science', 'BACHELOR_OF_SCIENCE', 'I am a scientist', 'I am not tutoring');
+
+
 INSERT INTO users (first_name, last_name, email, password, faculty, degree, role)
 VALUES ('William', 'Robinson', 'william.robinson@example.com', 'myp@ssw0rd', 109, 117, 'ROLE_TEACHER');
 
+INSERT INTO teacher_details (teacher_id, degree_field, title, bio, tutorship)
+VALUES (9, 'Computer Science', 'BACHELOR', 'I am a teacher', 'I am a tutor');
+
+
 INSERT INTO users (first_name, last_name, email, password, faculty, degree, role)
 VALUES ('Sophia', 'Walker', 'sophia.walker@example.com', 'password123!', 110, 118, 'ROLE_TEACHER');
+
+INSERT INTO teacher_details (teacher_id, degree_field, title, bio, tutorship)
+VALUES (10, 'Biology', 'PROFESSOR', 'I am a professor', 'I profess');
+
 
 INSERT INTO users (first_name, last_name, email, password, faculty, degree, role)
 VALUES ('Benjamin', 'Young', 'benjamin.young@example.com', 'testpass', 111, 119, 'ROLE_ADMIN');
