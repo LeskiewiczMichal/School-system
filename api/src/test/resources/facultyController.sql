@@ -153,7 +153,6 @@ VALUES ('Sophia', 'Walker', 'sophia.walker@example.com', 'password123!', 110, 11
 INSERT INTO teacher_details (teacher_id, degree_field, title, bio, tutorship)
 VALUES (10, 'Biology', 'PROFESSOR', 'I am a professor', 'I profess');
 
-
 INSERT INTO users (first_name, last_name, email, password, faculty, degree, role)
 VALUES ('Benjamin', 'Young', 'benjamin.young@example.com', 'testpass', 111, 119, 'ROLE_ADMIN');
 
@@ -183,6 +182,9 @@ VALUES ('Alice', 'Smith', 'alicesmith@example.com', '54321', 101, 101, 'ROLE_STU
 
 INSERT INTO users (first_name, last_name, email, password, faculty, role)
 VALUES ('Bob', 'Johnson', 'bobjohnson@example.com', 'abcde', 101, 'ROLE_TEACHER');
+
+INSERT INTO teacher_details (teacher_id, degree_field, title, bio, tutorship)
+VALUES (20, 'Biology', 'PROFESSOR', 'I am a professor', 'I profess');
 
 INSERT INTO users (first_name, last_name, email, password, faculty, degree, role)
 VALUES ('Emily', 'Wilson', 'emilywilson@example.com', 'qwerty', 101, 102, 'ROLE_STUDENT');
