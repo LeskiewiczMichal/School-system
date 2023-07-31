@@ -53,7 +53,6 @@ public class UserController {
     Page<UserDto> users = userService.getUsers(request.toPageable());
     users = users.map(userDtoAssembler::toModel);
 
-
     return ResponseEntity.ok(
         HalModelBuilder.halModelOf(userPagedResourcesAssembler.toModel(users)).build());
   }
@@ -112,10 +111,19 @@ public class UserController {
         HalModelBuilder.halModelOf(coursePagedResourcesAssembler.toModel(courses)).build());
   }
 
-//  @GetMapping("/{id}/teacher-details")
-//  public ResponseEntity<TeacherDetails> getTeacherDetails(@PathVariable Long id) {
-////    TeacherDetails teacherDetails = userService.getTeacherDetails(id);
-//
-//    return ResponseEntity.ok(teacherDetails);
-//  }
+  /**
+   * Get teacher details of user with provided ID.
+   *
+   * @param id the ID of the user to retrieve teacher details from.
+   * @return status 200 (OK) and in body the {@link TeacherDetails} object.
+   * @throws EntityNotFoundException if teacher details for given user id does not exist, returns
+   *     status 404.
+   * @throws IllegalArgumentException if the ID is a string, returns status 400.
+   */
+  @GetMapping("/{id}/teacher-details")
+  public ResponseEntity<TeacherDetails> getTeacherDetails(@PathVariable Long id) {
+    TeacherDetails teacherDetails = userService.getTeacherDetails(id);
+
+    return ResponseEntity.ok(teacherDetails);
+  }
 }
