@@ -3,6 +3,7 @@ DROP TABLE IF EXISTS degree_course;
 DROP TABLE IF EXISTS course;
 DROP TABLE IF EXISTS faculty_teacher;
 DROP TABLE IF EXISTS authorities;
+DROP TABLE IF EXISTS teacher_details;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS degree;
 DROP TABLE IF EXISTS faculty;
@@ -46,8 +47,8 @@ CREATE TABLE teacher_details (
                          bio VARCHAR(1200) DEFAULT '' NOT NULL,
                          tutorship VARCHAR(800) DEFAULT '' NOT NULL,
                          PRIMARY KEY (id),
-                         FOREIGN KEY (teacher_id) REFERENCES users(id)
-)
+                         FOREIGN KEY (teacher_id) REFERENCES users (id)
+);
 
 CREATE TABLE authorities (
                              id INT NOT NULL AUTO_INCREMENT,

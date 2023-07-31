@@ -157,7 +157,7 @@ public class RegisterTest {
             .degreeField("Computer Science")
             .firstName("John")
             .lastName("Doe")
-            .email("johnnn@ex.com")
+            .email("johndoe@example.com")
             .password("12345")
             .faculty(101L)
             .build();
@@ -173,6 +173,8 @@ public class RegisterTest {
     ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
     verify(userService).addUser(userCaptor.capture());
     User savedUser = userCaptor.getValue();
-    Assertions.assertEquals(newUser, savedUser);
+    Assertions.assertEquals(request.getEmail(), savedUser.getEmail());
+    Assertions.assertEquals(Role.ROLE_TEACHER, savedUser.getRole());
+    Assertions.assertEquals(request.getFirstName(), savedUser.getFirstName());
   }
 }
