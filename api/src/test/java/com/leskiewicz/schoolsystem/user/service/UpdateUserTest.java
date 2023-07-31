@@ -42,10 +42,8 @@ public class UpdateUserTest {
 
   // Mocks
   @Mock private UserRepository userRepository;
-  @Mock private DegreeService degreeService;
   @Mock private FacultyService facultyService;
   @Mock private PasswordEncoder passwordEncoder;
-  @Mock private UserMapper userMapper;
   @InjectMocks private UserServiceImpl userService;
 
   static Stream<Arguments> updateUserWithDifferentFieldsSavesProperUserProvider() {
