@@ -4,6 +4,7 @@ import com.leskiewicz.schoolsystem.course.Course;
 import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
+import com.leskiewicz.schoolsystem.user.dto.PatchTeacherDetailsRequest;
 import com.leskiewicz.schoolsystem.user.dto.PatchUserRequest;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetails;
@@ -30,5 +31,5 @@ public interface UserService {
 
   TeacherDetails getTeacherDetails(Long userId);
 
-  TeacherDetails updateTeacherDetails(TeacherDetails teacherDetails, Long userId);
+  TeacherDetails updateTeacherDetails(PatchTeacherDetailsRequest request, Long userId);
 }

@@ -12,6 +12,7 @@ import com.leskiewicz.schoolsystem.error.customexception.MissingFieldException;
 import com.leskiewicz.schoolsystem.error.customexception.UserAlreadyExistsException;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.FacultyService;
+import com.leskiewicz.schoolsystem.user.dto.PatchTeacherDetailsRequest;
 import com.leskiewicz.schoolsystem.user.dto.PatchUserRequest;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetails;
@@ -225,7 +226,40 @@ public class UserServiceImpl implements UserService {
 
     return teacherDetailsRepository
         .findByUserId(userId)
-        .orElseThrow(() -> new EntityNotFoundException("Teacher details for given user not found"));
+        .orElseThrow(
+            () -> new EntityNotFoundException(ErrorMessages.teacherDetailsNotFound(userId)));
+  }
+
+  @Override
+  public TeacherDetails updateTeacherDetails(PatchTeacherDetailsRequest request, Long userId) {
+    // Retrieve teacher details for given user
+    TeacherDetails teacherDetails =
+        teacherDetailsRepository
+            .findByUserId(userId)
+            .orElseThrow(
+                () -> new EntityNotFoundException(ErrorMessages.teacherDetailsNotFound(userId)));
+
+    // Update teacher details
+    if (request.getTitle() != null) {
+      logger.debug("Updating academic title of teacher with ID: {}", userId);
+      teacherDetails.setTitle(request.getTitle());
+    }
+    if (request.getBio() != null) {
+      logger.debug("Updating bio of teacher with ID: {}", userId);
+      teacherDetails.setBio(request.getBio());
+    }
+    if (request.getDegreeField() != null) {
+      logger.debug("Updating degree field of teacher with ID: {}", userId);
+      teacherDetails.setDegreeField(request.getDegreeField());
+    }
+    if (request.getTutorship() != null) {
+      logger.debug("Updating tutorship of teacher with ID: {}", userId);
+      teacherDetails.setTutorship(request.getTutorship());
+    }
+    
+    ValidationUtils.validate(teacherDetails);
+    teacherDetailsRepository.save(teacherDetails);
+    return teacherDetails;
   }
 
   private void userExistsCheck(Long id) {

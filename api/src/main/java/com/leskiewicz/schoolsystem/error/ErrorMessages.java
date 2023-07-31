@@ -76,4 +76,8 @@ public class ErrorMessages {
   public static String userWithEmailAlreadyExists(String email) {
     return "User with email: " + email + " already exists";
   }
+
+  public static String teacherDetailsNotFound(Long userId) {
+    return "Teacher details for user with ID: " + userId + " not found";
+  }
 }
