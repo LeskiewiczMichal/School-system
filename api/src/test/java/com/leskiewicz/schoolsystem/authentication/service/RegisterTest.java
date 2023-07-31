@@ -15,11 +15,14 @@ import com.leskiewicz.schoolsystem.authentication.utils.JwtUtilsImpl;
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
+import com.leskiewicz.schoolsystem.faculty.FacultyRepository;
 import com.leskiewicz.schoolsystem.faculty.FacultyService;
 import com.leskiewicz.schoolsystem.testUtils.TestHelper;
 import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.UserService;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
+import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetails;
+import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetailsRepository;
 import com.leskiewicz.schoolsystem.user.utils.UserMapper;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Assertions;
@@ -43,6 +46,8 @@ public class RegisterTest {
   @Mock private FacultyService facultyService;
   @Mock private PasswordEncoder passwordEncoder;
   @Mock private UserMapper userMapper;
+  @Mock private FacultyRepository facultyRepository;
+  @Mock private TeacherDetailsRepository teacherDetailsRepository;
 
   // Variables
   private Faculty faculty;
@@ -56,13 +61,15 @@ public class RegisterTest {
     faculty = new Faculty();
     faculty.setName("Engineering");
 
-    degree = Degree.builder()
+    degree =
+        Degree.builder()
             .title(DegreeTitle.BACHELOR)
             .fieldOfStudy("Computer Science")
             .faculty(faculty)
             .build();
 
-    request = RegisterRequest.builder()
+    request =
+        RegisterRequest.builder()
             .email("johndoe@example.com")
             .firstName("John")
             .lastName("Doe")
@@ -72,7 +79,8 @@ public class RegisterTest {
             .degreeTitle(DegreeTitle.BACHELOR)
             .build();
 
-    newUser = new User(
+    newUser =
+        new User(
             null,
             "John",
             "Doe",
@@ -81,8 +89,7 @@ public class RegisterTest {
             faculty,
             degree,
             null,
-            Role.ROLE_STUDENT
-    );
+            Role.ROLE_STUDENT);
   }
 
   @Test
@@ -136,8 +143,36 @@ public class RegisterTest {
 
   @Test
   public void registerTeacherHappyPath() {
-    RegisterTeacherRequest request = RegisterTeacherRequest.builder()
+    // Prepare test data and mocks
+    UserDto userDto = TestHelper.createUserDto("qwer", "test");
+    given(facultyRepository.findById(any(Long.class))).willReturn(java.util.Optional.of(faculty));
+    given(passwordEncoder.encode(any(String.class))).willReturn("encoded_password");
+    given(jwtUtils.generateToken(any(User.class))).willReturn("12");
+    given(userMapper.convertToDto(any(User.class))).willReturn(userDto);
+
+    // Create a request
+    RegisterTeacherRequest request =
+        RegisterTeacherRequest.builder()
             .title(DegreeTitle.BACHELOR)
-            .f("Computer Science")
+            .degreeField("Computer Science")
+            .firstName("John")
+            .lastName("Doe")
+            .email("johnnn@ex.com")
+            .password("12345")
+            .faculty(101L)
+            .build();
+
+    // Call the method to test
+    AuthenticationResponse authenticationResponse = authenticationService.registerTeacherAccount(request);
+
+    // Proper response
+    Assertions.assertEquals(userDto, authenticationResponse.getUser());
+    Assertions.assertEquals("12", authenticationResponse.getToken());
+
+    // User was saved in repository
+    ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
+    verify(userService).addUser(userCaptor.capture());
+    User savedUser = userCaptor.getValue();
+    Assertions.assertEquals(newUser, savedUser);
   }
 }

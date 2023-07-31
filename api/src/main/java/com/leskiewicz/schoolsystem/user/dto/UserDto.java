@@ -2,6 +2,7 @@ package com.leskiewicz.schoolsystem.user.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.leskiewicz.schoolsystem.authentication.Role;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.hateoas.RepresentationModel;
@@ -20,7 +21,7 @@ public class UserDto extends RepresentationModel<UserDto> {
   @NonNull private final String faculty;
 
   @JsonInclude(JsonInclude.Include.NON_NULL)
-  private final String role;
+  private final Role role;
 
   @JsonIgnore @NotNull private final Long facultyId;
 

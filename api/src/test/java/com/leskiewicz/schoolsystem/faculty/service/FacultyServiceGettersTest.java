@@ -256,7 +256,7 @@ public class FacultyServiceGettersTest {
             "Doe",
             "john.doe@example.com",
             "Some Faculty",
-            Role.ROLE_STUDENT.toString(),
+            Role.ROLE_STUDENT,
             1L,
             "Some Degree",
             2L);
@@ -267,7 +267,7 @@ public class FacultyServiceGettersTest {
             "Smith",
             "jane.smith@example.com",
             "Another Faculty",
-            Role.ROLE_STUDENT.toString(),
+            Role.ROLE_STUDENT,
             2L,
             "Another Degree",
             2L);

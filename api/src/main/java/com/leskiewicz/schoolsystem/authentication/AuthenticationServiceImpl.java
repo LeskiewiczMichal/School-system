@@ -108,6 +108,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     user.setTeacherDetails(teacherDetails);
 
     userService.addUser(user);
+
+
     teacherDetailsRepository.save(teacherDetails);
     var jwtToken = jwtUtils.generateToken(user);
     UserDto userDto = userMapper.convertToDto(user);
