@@ -3,15 +3,19 @@ package com.leskiewicz.schoolsystem.user;
 import static net.bytebuddy.matcher.ElementMatchers.is;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willThrow;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.course.utils.CourseDtoAssembler;
 import com.leskiewicz.schoolsystem.degree.Degree;
+import com.leskiewicz.schoolsystem.degree.DegreeTitle;
 import com.leskiewicz.schoolsystem.dto.request.PageableRequest;
 import com.leskiewicz.schoolsystem.error.DefaultExceptionHandler;
 import com.leskiewicz.schoolsystem.error.ErrorMessages;
@@ -20,6 +24,7 @@ import com.leskiewicz.schoolsystem.generic.CommonTests;
 import com.leskiewicz.schoolsystem.testUtils.TestHelper;
 import com.leskiewicz.schoolsystem.user.dto.PatchUserRequest;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
+import com.leskiewicz.schoolsystem.user.teacherdetails.PatchTeacherDetailsRequest;
 import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetails;
 import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetailsModelAssembler;
 import com.leskiewicz.schoolsystem.user.utils.UserDtoAssembler;
@@ -50,6 +55,10 @@ public class UserControllerTest {
   private TeacherDetailsModelAssembler teacherDetailsModelAssembler;
 
   private UserController userController;
+  ObjectMapper objectMapper =
+      new ObjectMapper()
+          .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+          .registerModule(new JavaTimeModule());
 
   private MockMvc mvc;
 
@@ -164,5 +173,49 @@ public class UserControllerTest {
         .andExpect(jsonPath("$.message").value(ErrorMessages.teacherDetailsNotFound(1L)))
         .andExpect(jsonPath("$.path").value("/api/users/1/teacher-details"))
         .andExpect(jsonPath("$.statusCode").value(404));
+  }
+
+  @Test
+  public void updateTeacherDetailsWithProperRequest() throws Exception {
+    // Prepare test data
+    User teacher = Mockito.mock(User.class);
+    given(teacher.getId()).willReturn(1L);
+    PatchTeacherDetailsRequest request =
+        PatchTeacherDetailsRequest.builder()
+            .bio("New bio")
+            .title(DegreeTitle.DOCTOR)
+            .tutorship("New tutorship")
+            .degreeField("New degree field")
+            .build();
+    TeacherDetails modifiedTeacherDetails =
+        TeacherDetails.builder()
+            .teacher(teacher)
+            .id(1L)
+            .bio(request.getBio())
+            .title(request.getTitle())
+            .tutorship(request.getTutorship())
+            .degreeField(request.getDegreeField())
+            .build();
+
+    // Mocks
+    given(userService.updateTeacherDetails(any(PatchTeacherDetailsRequest.class), any(Long.class))).willReturn(modifiedTeacherDetails);
+    given(teacherDetailsModelAssembler.toModel(any(TeacherDetails.class))).willCallRealMethod();
+
+    // Perform request
+    mvc.perform(
+            patch("/api/users/1/teacher-details")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request))
+                .accept("application/hal+json"))
+        // Assert response
+        .andDo(print())
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.bio").value(request.getBio()))
+        .andExpect(jsonPath("$.tutorship").value(request.getTutorship()))
+        .andExpect(jsonPath("$.title").value(request.getTitle().toString()))
+        .andExpect(jsonPath("$.degreeField").value(request.getDegreeField()))
+        .andExpect(jsonPath("$.links[*].rel", Matchers.hasItems("self", "teacher")))
+        .andExpect(jsonPath("$.links[*].href", Matchers.hasSize(2)))
+        .andReturn();
   }
 }
