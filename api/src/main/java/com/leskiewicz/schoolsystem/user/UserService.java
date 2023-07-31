@@ -29,4 +29,6 @@ public interface UserService {
   Page<CourseDto> getUserCourses(Long userId, Pageable pageable);
 
   TeacherDetails getTeacherDetails(Long userId);
+
+  TeacherDetails updateTeacherDetails(TeacherDetails teacherDetails, Long userId);
 }

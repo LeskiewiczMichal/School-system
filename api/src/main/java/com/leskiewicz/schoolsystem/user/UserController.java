@@ -126,4 +126,12 @@ public class UserController {
 
     return ResponseEntity.ok(teacherDetails);
   }
+
+//  @PatchMapping("/{id}/teacher-details")
+//  public ResponseEntity<TeacherDetails> patchTeacherDetails(
+//      @RequestBody TeacherDetails teacherDetails, @PathVariable Long id) {
+//    TeacherDetails updatedTeacherDetails = userService.updateTeacherDetails(teacherDetails, id);
+//
+//    return ResponseEntity.ok(updatedTeacherDetails);
+//  }
 }
