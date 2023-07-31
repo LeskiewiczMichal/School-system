@@ -133,6 +133,14 @@ public class UserServiceGettersTest {
     verify(teacherDetailsRepository).findByUserId(1L);
   }
 
+  @Test
+  public void getTeacherDetailsThrowsEntityNotFound() {
+    // Set up test data
+    given(userRepository.existsById(any(Long.class))).willReturn(false);
+
+    Assertions.assertThrows(EntityNotFoundException.class, () -> userService.getTeacherDetails(1L));
+  }
+
   // *** GetById ***//
 
   @Test
