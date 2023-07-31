@@ -1,5 +1,6 @@
 package com.leskiewicz.schoolsystem.user;
 
+import com.leskiewicz.schoolsystem.authentication.Role;
 import com.leskiewicz.schoolsystem.authentication.utils.ValidationUtils;
 import com.leskiewicz.schoolsystem.course.Course;
 import com.leskiewicz.schoolsystem.course.CourseRepository;
@@ -197,8 +198,24 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public Page<CourseDto> getUserCourses(Long userId, Pageable pageable) {
-    userExistsCheck(userId);
-    Page<Course> courses = courseRepository.findCoursesByUserId(userId, pageable);
+    // Retrieve user
+    User user =
+        userRepository
+            .findById(userId)
+            .orElseThrow(
+                () ->
+                    new EntityNotFoundException(
+                        ErrorMessages.objectWithIdNotFound("User", userId)));
+
+    Page<Course> courses;
+    if (user.getRole() == Role.ROLE_STUDENT) {
+      courses = courseRepository.findCoursesByUserId(userId, pageable);
+    } else if (user.getRole() == Role.ROLE_TEACHER) {
+      courses = courseRepository.findCoursesByTeacherId(userId, pageable);
+    } else {
+      throw new EntityNotFoundException("User with ID: " + userId + " is not a student or teacher");
+    }
+
     return courses.map(courseMapper::convertToDto);
   }
 

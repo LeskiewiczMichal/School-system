@@ -31,6 +31,9 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
       nativeQuery = true)
   Page<Course> findCoursesByUserId(@Param("id") Long userId, Pageable pageable);
 
+  @Query(value = "SELECT c.* FROM course c WHERE c.teacher = :id", nativeQuery = true)
+  Page<Course> findCoursesByTeacherId(@Param("id") Long userId, Pageable pageable);
+
   @Query("SELECT c FROM Course c WHERE c.faculty.id = :facultyId")
   Page<Course> findCoursesByFacultyId(Long facultyId, Pageable pageable);
 
