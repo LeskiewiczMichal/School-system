@@ -82,3 +82,19 @@ CREATE TABLE degree_course (
                                FOREIGN KEY (degree_id) REFERENCES degree(id),
                                FOREIGN KEY (course_id) REFERENCES course(id)
 );
+
+CREATE TABLE file (
+                      id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                      file_name VARCHAR(255) NOT NULL,
+                      file_type VARCHAR(40) NOT NULL,
+                      uploaded_by VARCHAR(120) NOT NULL,
+                      file_data LONGBLOB NOT NULL
+);
+
+CREATE TABLE course_file (
+                             course_id BIGINT NOT NULL,
+                             file_id BIGINT NOT NULL,
+                             PRIMARY KEY (course_id, file_id),
+                             FOREIGN KEY (course_id) REFERENCES course (id) ON DELETE CASCADE,
+                             FOREIGN KEY (file_id) REFERENCES file (id) ON DELETE CASCADE
+);

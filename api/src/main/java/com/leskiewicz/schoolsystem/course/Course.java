@@ -1,6 +1,7 @@
 package com.leskiewicz.schoolsystem.course;
 
 import com.leskiewicz.schoolsystem.faculty.Faculty;
+import com.leskiewicz.schoolsystem.files.File;
 import com.leskiewicz.schoolsystem.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -47,6 +48,14 @@ public class Course {
       joinColumns = @JoinColumn(name = "course_id", referencedColumnName = "id"),
       inverseJoinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id"))
   private List<User> students;
+
+  @Singular
+  @ManyToMany
+  @JoinTable(
+      name = "course_file",
+      joinColumns = @JoinColumn(name = "course_id", referencedColumnName = "id"),
+      inverseJoinColumns = @JoinColumn(name = "file_id", referencedColumnName = "id"))
+  private List<File> files;
 
   @Override
   public String toString() {
