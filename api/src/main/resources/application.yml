@@ -17,7 +17,13 @@ spring:
     rest:
       base-path: /api
 
+  # Max file size
+  servlet:
+    multipart:
+      max-file-size: 15MB
+
 ## Base path for api settings
 #server:
 #  servlet:
 #    context-path: /api
+
