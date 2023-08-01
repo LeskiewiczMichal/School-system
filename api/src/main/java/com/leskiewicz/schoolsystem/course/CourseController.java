@@ -171,7 +171,8 @@ public class CourseController {
    * @param id the ID of the course to remove.
    * @return status 200 (OK) and in body a {@link MessageModel} with a message about the operation.
    * @throws EntityNotFoundException if the course does not exist, returns status 404.
-   * @throws AccessDeniedException if the user is not authorized to delete the course, returns status 403.
+   * @throws AccessDeniedException if the user is not authorized to delete the course, returns
+   *     status 403.
    * @throws IllegalArgumentException if the ID is a string, returns status 400.
    */
   @DeleteMapping("/{id}")
@@ -187,8 +188,11 @@ public class CourseController {
   }
 
   @GetMapping("/{id}/files")
-  public ResponseEntity<RepresentationModel<File>> getCourseFiles(@PathVariable Long id) {
-    return null;
+  public ResponseEntity<RepresentationModel<File>> getCourseFiles(
+      @PathVariable Long id, @ModelAttribute PageableRequest request) {
+    Page<File> files = courseService.getCourseFiles(id, request.toPageable());
+
+    return ResponseEntity.ok(HalModelBuilder.halModelOf(files).build());
   }
 
   @PostMapping("/{id}/files")
