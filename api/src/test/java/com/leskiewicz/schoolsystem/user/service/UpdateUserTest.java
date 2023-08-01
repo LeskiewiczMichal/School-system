@@ -20,6 +20,8 @@ import com.leskiewicz.schoolsystem.user.utils.UserMapper;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Stream;
+
+import com.leskiewicz.schoolsystem.user.utils.UserMapperImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,6 +46,7 @@ public class UpdateUserTest {
   @Mock private UserRepository userRepository;
   @Mock private FacultyService facultyService;
   @Mock private PasswordEncoder passwordEncoder;
+  @Mock private UserMapper userMapper = new UserMapperImpl();
   @InjectMocks private UserServiceImpl userService;
 
   static Stream<Arguments> updateUserWithDifferentFieldsSavesProperUserProvider() {

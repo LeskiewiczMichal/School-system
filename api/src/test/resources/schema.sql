@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS course_student;
 DROP TABLE IF EXISTS degree_course;
+DROP TABLE IF EXISTS course_file;
 DROP TABLE IF EXISTS course;
 DROP TABLE IF EXISTS faculty_teacher;
 DROP TABLE IF EXISTS authorities;
@@ -7,6 +8,8 @@ DROP TABLE IF EXISTS teacher_details;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS degree;
 DROP TABLE IF EXISTS faculty;
+DROP TABLE IF EXISTS file;
+
 
 
 CREATE TABLE faculty (

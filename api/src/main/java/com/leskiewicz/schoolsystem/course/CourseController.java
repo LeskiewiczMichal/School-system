@@ -203,6 +203,18 @@ public class CourseController {
     return ResponseEntity.ok(HalModelBuilder.halModelOf(files).build());
   }
 
+  /**
+   * Upload a file to a course.
+   *
+   * @param id the ID of the course to upload the file to.
+   * @param file the file to upload.
+   * @return status 200 (OK) and in body a {@link MessageModel} with a message about the operation
+   *     and links to the course and the file.
+   * @throws EntityNotFoundException if the course does not exist, returns status 404.
+   * @throws FileUploadFailedException if the file could not be uploaded, returns status 500.
+   * @throws AccessDeniedException if the user is not authorized to upload files to the course,
+   *     returns status 403.
+   */
   @PostMapping("/{id}/files")
 //  @PreAuthorize("hasRole('ADMIN') or @securityService.isCourseTeacher(#id)")
   public ResponseEntity<MessageModel> uploadFiles(
