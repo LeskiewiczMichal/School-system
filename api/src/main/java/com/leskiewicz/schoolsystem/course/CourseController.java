@@ -14,6 +14,7 @@ import com.leskiewicz.schoolsystem.error.customexception.DuplicateEntityExceptio
 import com.leskiewicz.schoolsystem.error.customexception.EntitiesAlreadyAssociatedException;
 import com.leskiewicz.schoolsystem.error.customexception.EntityAlreadyExistsException;
 import com.leskiewicz.schoolsystem.error.customexception.FileUploadFailedException;
+import com.leskiewicz.schoolsystem.files.File;
 import com.leskiewicz.schoolsystem.user.UserController;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserDtoAssembler;
@@ -164,6 +165,15 @@ public class CourseController {
     return ResponseEntity.status(HttpStatus.OK).body(message);
   }
 
+  /**
+   * Remove a course.
+   *
+   * @param id the ID of the course to remove.
+   * @return status 200 (OK) and in body a {@link MessageModel} with a message about the operation.
+   * @throws EntityNotFoundException if the course does not exist, returns status 404.
+   * @throws AccessDeniedException if the user is not authorized to delete the course, returns status 403.
+   * @throws IllegalArgumentException if the ID is a string, returns status 400.
+   */
   @DeleteMapping("/{id}")
   @PreAuthorize("hasRole('ADMIN') or @securityService.isCourseTeacher(#id)")
   public ResponseEntity<MessageModel> deleteCourseById(@PathVariable Long id) {
@@ -176,7 +186,12 @@ public class CourseController {
     return ResponseEntity.ok(message);
   }
 
-  @PostMapping("/{id}/upload")
+  @GetMapping("/{id}/files")
+  public ResponseEntity<RepresentationModel<File>> getCourseFiles(@PathVariable Long id) {
+    return null;
+  }
+
+  @PostMapping("/{id}/files")
   public ResponseEntity<MessageModel> uploadFiles(
       @PathVariable Long courseId, @RequestParam("file") MultipartFile file) {
     try {

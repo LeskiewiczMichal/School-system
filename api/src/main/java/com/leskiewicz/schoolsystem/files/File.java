@@ -3,6 +3,7 @@ package com.leskiewicz.schoolsystem.files;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -14,7 +15,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @Entity
 @Table(name = "file")
-public class File {
+public class File extends RepresentationModel<File> {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

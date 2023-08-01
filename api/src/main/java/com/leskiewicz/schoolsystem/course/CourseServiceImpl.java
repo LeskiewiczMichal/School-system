@@ -166,12 +166,6 @@ public class CourseServiceImpl implements CourseService {
     courseRepository.deleteById(courseId);
   }
 
-  private void courseExistsCheck(Long courseId) {
-    if (!courseRepository.existsById(courseId)) {
-      throw new EntityNotFoundException(ErrorMessages.objectWithIdNotFound("Course", courseId));
-    }
-  }
-
   public void storeFile(MultipartFile file, Long courseId) throws IOException {
     Course course =
         courseRepository
@@ -199,5 +193,17 @@ public class CourseServiceImpl implements CourseService {
     // Add the file to the course
     course.getFiles().add(newFile);
     courseRepository.save(course);
+  }
+
+  public Page<File> getCourseFiles(Long courseId, Pageable pageable) {
+    courseExistsCheck(courseId);
+
+    return fileRepository.findFilesByCourseId(courseId, pageable);
+  }
+
+  private void courseExistsCheck(Long courseId) {
+    if (!courseRepository.existsById(courseId)) {
+      throw new EntityNotFoundException(ErrorMessages.objectWithIdNotFound("Course", courseId));
+    }
   }
 }
