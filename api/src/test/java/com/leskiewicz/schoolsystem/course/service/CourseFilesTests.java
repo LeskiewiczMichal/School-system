@@ -19,11 +19,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -87,5 +92,24 @@ public class CourseFilesTests {
     Assertions.assertThrows(
         EntityNotFoundException.class,
         () -> courseService.storeFile(mock(MultipartFile.class), 1L));
+  }
+
+  @Test
+  public void getCourseFiles_ReturnsPagedFiles() {
+    // Prepare test data
+    List<File> files = Arrays.asList(Mockito.mock(File.class), Mockito.mock(File.class));
+    Page<File> entityPage = new PageImpl<>(files);
+
+    // Mocks
+    given(courseRepository.existsById(anyLong())).willReturn(true);
+    given(fileRepository.findFilesByCourseId(anyLong(), any())).willReturn(entityPage);
+
+    // Call method
+    Page<File> result = courseService.getCourseFiles(1L, PageRequest.of(0, 10));
+
+    // Assertions
+    Assertions.assertEquals(2, result.getTotalElements());
+    Assertions.assertEquals(files.get(0), result.getContent().get(0));
+    Assertions.assertEquals(files.get(1), result.getContent().get(1));
   }
 }
