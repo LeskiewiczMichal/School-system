@@ -6,7 +6,9 @@ import com.leskiewicz.schoolsystem.course.dto.CreateCourseRequest;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.security.Principal;
 
 public interface CourseService {
@@ -22,4 +24,6 @@ public interface CourseService {
   void addStudentToCourse(Long userId, Long courseId);
 
   void deleteCourse(Long courseId);
+
+  void store(MultipartFile file, Long courseId) throws IOException;
 }

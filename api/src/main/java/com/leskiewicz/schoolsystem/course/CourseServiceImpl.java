@@ -12,6 +12,7 @@ import com.leskiewicz.schoolsystem.error.customexception.EntityAlreadyExistsExce
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.FacultyRepository;
 import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
+import com.leskiewicz.schoolsystem.files.File;
 import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.UserRepository;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
@@ -22,7 +23,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -164,5 +167,29 @@ public class CourseServiceImpl implements CourseService {
     if (!courseRepository.existsById(courseId)) {
       throw new EntityNotFoundException(ErrorMessages.objectWithIdNotFound("Course", courseId));
     }
+  }
+
+  public void store(MultipartFile file, Long courseId) throws IOException {
+    Course course =
+        courseRepository
+            .findById(courseId)
+            .orElseThrow(
+                () ->
+                    new EntityNotFoundException(
+                        ErrorMessages.objectWithIdNotFound("Course", courseId)));
+
+    // Get the file data as a byte array
+    byte[] fileData = file.getBytes();
+
+    // Create a new File entity and set its properties
+    File newFile = new File();
+    newFile.setFileName(file.getOriginalFilename());
+    newFile.setFileType(file.getContentType());
+    newFile.setUploadedBy(
+        1L); // Set the ID of the user who uploaded the file, change it accordingly.
+    newFile.setFileData(fileData);
+
+    // Save the file to the database
+    fileRepository.save(newFile);
   }
 }
