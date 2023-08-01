@@ -1,6 +1,7 @@
 package com.leskiewicz.schoolsystem.authentication;
 
 import com.leskiewicz.schoolsystem.authentication.dto.CustomUserDetails;
+import com.leskiewicz.schoolsystem.authentication.utils.AuthenticationUtils;
 import com.leskiewicz.schoolsystem.course.Course;
 import com.leskiewicz.schoolsystem.course.CourseRepository;
 import com.leskiewicz.schoolsystem.error.ErrorMessages;
@@ -21,7 +22,7 @@ public class SecurityServiceImpl implements SecurityService {
 
   @Override
   public boolean isCourseTeacher(Long courseId) {
-    CustomUserDetails user = getAuthenticatedUser();
+    CustomUserDetails user = AuthenticationUtils.getAuthenticatedUser();
     Course course =
         courseRepository
             .findById(courseId)
@@ -33,8 +34,5 @@ public class SecurityServiceImpl implements SecurityService {
     return user.getId().equals(course.getTeacher().getId());
   }
 
-  private CustomUserDetails getAuthenticatedUser() {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    return (CustomUserDetails) (authentication.getPrincipal());
-  }
+
 }
