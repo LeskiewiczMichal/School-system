@@ -25,5 +25,5 @@ public interface CourseService {
 
   void deleteCourse(Long courseId);
 
-  void store(MultipartFile file, Long courseId) throws IOException;
+  void storeFile(MultipartFile file, Long courseId) throws IOException;
 }

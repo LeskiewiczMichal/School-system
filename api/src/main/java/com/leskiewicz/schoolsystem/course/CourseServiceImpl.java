@@ -1,6 +1,7 @@
 package com.leskiewicz.schoolsystem.course;
 
 import com.leskiewicz.schoolsystem.authentication.Role;
+import com.leskiewicz.schoolsystem.authentication.utils.AuthenticationUtils;
 import com.leskiewicz.schoolsystem.authentication.utils.ValidationUtils;
 import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.course.dto.CreateCourseRequest;
@@ -13,6 +14,7 @@ import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.FacultyRepository;
 import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
 import com.leskiewicz.schoolsystem.files.File;
+import com.leskiewicz.schoolsystem.files.FileRepository;
 import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.UserRepository;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
@@ -36,6 +38,7 @@ public class CourseServiceImpl implements CourseService {
   private final CourseRepository courseRepository;
   private final FacultyRepository facultyRepository;
   private final UserRepository userRepository;
+  private final FileRepository fileRepository;
 
   // Mappers
   private final CourseMapper courseMapper;
@@ -169,7 +172,7 @@ public class CourseServiceImpl implements CourseService {
     }
   }
 
-  public void store(MultipartFile file, Long courseId) throws IOException {
+  public void storeFile(MultipartFile file, Long courseId) throws IOException {
     Course course =
         courseRepository
             .findById(courseId)
@@ -186,10 +189,15 @@ public class CourseServiceImpl implements CourseService {
     newFile.setFileName(file.getOriginalFilename());
     newFile.setFileType(file.getContentType());
     newFile.setUploadedBy(
-        1L); // Set the ID of the user who uploaded the file, change it accordingly.
+        AuthenticationUtils.getAuthenticatedUser()
+            .getId()); // Set the ID of the user who uploaded the file.
     newFile.setFileData(fileData);
 
-    // Save the file to the database
+    // Save the file
     fileRepository.save(newFile);
+
+    // Add the file to the course
+    course.getFiles().add(newFile);
+    courseRepository.save(course);
   }
 }
