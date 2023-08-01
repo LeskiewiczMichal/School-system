@@ -93,7 +93,12 @@ public class DefaultExceptionHandler {
     return new ResponseEntity<>(apiError, HttpStatus.FORBIDDEN);
   }
 
-  @ExceptionHandler(value = {MissingFieldException.class, UserAlreadyExistsException.class})
+  @ExceptionHandler(
+      value = {
+        MissingFieldException.class,
+        UserAlreadyExistsException.class,
+        FileUploadFailedException.class
+      })
   public ResponseEntity<ApiError> handleMissingFieldException(
       RuntimeException ex, HttpServletRequest request) {
     ApiError apiError =

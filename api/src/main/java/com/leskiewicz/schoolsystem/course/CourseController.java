@@ -31,6 +31,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -173,18 +174,17 @@ public class CourseController {
     return ResponseEntity.ok(message);
   }
 
-//    @PostMapping("/{id}/upload")
-//  public ResponseEntity<String> uploadFiles(@PathVariable Long courseId, @RequestParam("file") MultipartFile file) {
-//    String message = "";
-//    try {
-//      courseService.store(file, courseId);
-//
-//      message = "Uploaded the file successfully: " + file.getOriginalFilename();
-//      return ResponseEntity.status(HttpStatus.OK).body(message);
-//    } catch (Exception e) {
-//      message = "Could not upload the file: " + file.getOriginalFilename() + "!";
-//      return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(message);
-//    }
-//  }
+    @PostMapping("/{id}/upload")
+  public ResponseEntity<MessageModel> uploadFiles(@PathVariable Long courseId, @RequestParam("file") MultipartFile file) {
+    try {
+      courseService.storeFile(file, courseId);
+
+      message = "Uploaded the file successfully: " + file.getOriginalFilename();
+      return ResponseEntity.status(HttpStatus.OK).body(message);
+    } catch (Exception e) {
+      message = "Could not upload the file: " + file.getOriginalFilename() + "!";
+      return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(message);
+    }
+  }
 
 }
