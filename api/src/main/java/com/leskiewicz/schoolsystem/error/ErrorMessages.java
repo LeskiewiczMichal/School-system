@@ -80,4 +80,8 @@ public class ErrorMessages {
   public static String teacherDetailsNotFound(Long userId) {
     return "Teacher details for user with ID: " + userId + " not found";
   }
+
+  public static String fileUploadFailed(String fileName) {
+    return "Failed to upload file: " + fileName;
+  }
 }

@@ -9,9 +9,11 @@ import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
 import com.leskiewicz.schoolsystem.dto.request.MessageModel;
 import com.leskiewicz.schoolsystem.dto.request.PageableRequest;
 import com.leskiewicz.schoolsystem.error.APIResponses;
+import com.leskiewicz.schoolsystem.error.ErrorMessages;
 import com.leskiewicz.schoolsystem.error.customexception.DuplicateEntityException;
 import com.leskiewicz.schoolsystem.error.customexception.EntitiesAlreadyAssociatedException;
 import com.leskiewicz.schoolsystem.error.customexception.EntityAlreadyExistsException;
+import com.leskiewicz.schoolsystem.error.customexception.FileUploadFailedException;
 import com.leskiewicz.schoolsystem.user.UserController;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserDtoAssembler;
@@ -106,7 +108,7 @@ public class CourseController {
    *     403
    */
   @PostMapping
-//  @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_TEACHER')")
+  //  @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_TEACHER')")
   public ResponseEntity<CourseDto> createCourse(@Valid @RequestBody CreateCourseRequest request) {
     CourseDto course = courseService.createCourse(request);
     course = courseDtoAssembler.toModel(course);
@@ -174,17 +176,23 @@ public class CourseController {
     return ResponseEntity.ok(message);
   }
 
-    @PostMapping("/{id}/upload")
-  public ResponseEntity<MessageModel> uploadFiles(@PathVariable Long courseId, @RequestParam("file") MultipartFile file) {
+  @PostMapping("/{id}/upload")
+  public ResponseEntity<MessageModel> uploadFiles(
+      @PathVariable Long courseId, @RequestParam("file") MultipartFile file) {
     try {
       courseService.storeFile(file, courseId);
 
-      message = "Uploaded the file successfully: " + file.getOriginalFilename();
+      // Create response
+      MessageModel message =
+          new MessageModel(APIResponses.fileUploaded(file.getOriginalFilename()));
+      message.add(
+          WebMvcLinkBuilder.linkTo(methodOn(CourseController.class).getCourseById(courseId))
+              .withRel("course"));
+
       return ResponseEntity.status(HttpStatus.OK).body(message);
     } catch (Exception e) {
-      message = "Could not upload the file: " + file.getOriginalFilename() + "!";
-      return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(message);
+      throw new FileUploadFailedException(
+          ErrorMessages.fileUploadFailed(file.getOriginalFilename()));
     }
   }
-
 }
