@@ -11,6 +11,8 @@ import com.leskiewicz.schoolsystem.files.File;
 import com.leskiewicz.schoolsystem.files.FileRepository;
 import com.leskiewicz.schoolsystem.testUtils.TestHelper;
 import com.leskiewicz.schoolsystem.user.User;
+import jakarta.persistence.EntityNotFoundException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -75,5 +77,15 @@ public class CourseFilesTests {
     // Verify that the file was added to the course's files list
     assertEquals(1, course.getFiles().size());
     assertEquals(expectedFile, course.getFiles().get(0));
+  }
+
+  @Test
+  public void storeFile_ThrowsEntityNotFoundException_WhenCourseWithGivenIdDoesntExist() {
+    given(courseRepository.findById(anyLong())).willReturn(Optional.empty());
+
+    // Call the method
+    Assertions.assertThrows(
+        EntityNotFoundException.class,
+        () -> courseService.storeFile(mock(MultipartFile.class), 1L));
   }
 }
