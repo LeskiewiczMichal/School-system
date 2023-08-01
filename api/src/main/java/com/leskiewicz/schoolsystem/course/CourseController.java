@@ -196,16 +196,17 @@ public class CourseController {
   }
 
   @PostMapping("/{id}/files")
+  @PreAuthorize("hasRole('ADMIN') or @securityService.isCourseTeacher(#id)")
   public ResponseEntity<MessageModel> uploadFiles(
-      @PathVariable Long courseId, @RequestParam("file") MultipartFile file) {
+      @PathVariable Long id, @RequestParam("file") MultipartFile file) {
     try {
-      courseService.storeFile(file, courseId);
+      courseService.storeFile(file, id);
 
       // Create response
       MessageModel message =
           new MessageModel(APIResponses.fileUploaded(file.getOriginalFilename()));
       message.add(
-          WebMvcLinkBuilder.linkTo(methodOn(CourseController.class).getCourseById(courseId))
+          WebMvcLinkBuilder.linkTo(methodOn(CourseController.class).getCourseById(id))
               .withRel("course"));
 
       return ResponseEntity.status(HttpStatus.OK).body(message);

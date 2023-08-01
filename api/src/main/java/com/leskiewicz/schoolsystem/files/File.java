@@ -1,5 +1,6 @@
 package com.leskiewicz.schoolsystem.files;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -37,6 +38,7 @@ public class File extends RepresentationModel<File> {
   @NotNull
   @Lob
   @Column(name = "file_data", columnDefinition = "BLOB")
+  @JsonIgnore
   private byte[] fileData;
 
   @Override

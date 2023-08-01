@@ -166,6 +166,7 @@ public class CourseServiceImpl implements CourseService {
     courseRepository.deleteById(courseId);
   }
 
+  @Transactional
   public void storeFile(MultipartFile file, Long courseId) throws IOException {
     Course course =
         courseRepository
@@ -188,10 +189,12 @@ public class CourseServiceImpl implements CourseService {
     newFile.setFileData(fileData);
 
     // Save the file
+    ValidationUtils.validate(newFile);
     fileRepository.save(newFile);
 
     // Add the file to the course
     course.getFiles().add(newFile);
+    ValidationUtils.validate(course);
     courseRepository.save(course);
   }
 
