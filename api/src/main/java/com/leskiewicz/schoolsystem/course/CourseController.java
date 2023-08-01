@@ -187,6 +187,14 @@ public class CourseController {
     return ResponseEntity.ok(message);
   }
 
+  /**
+   * Get all files of course with provided ID.
+   *
+   * @param id the ID of the course to retrieve files from.
+   * @param request the {@link PageableRequest} containing sorting, pagination, etc.
+   * @return status 200 (OK) and in body the paged list of {@link File} objects and page metadata.
+   *     If there are no files, an empty page is returned (without _embedded.files field).
+   */
   @GetMapping("/{id}/files")
   public ResponseEntity<RepresentationModel<File>> getCourseFiles(
       @PathVariable Long id, @ModelAttribute PageableRequest request) {
