@@ -7,4 +7,6 @@ public interface SecurityService {
 //  boolean isSelf(Authentication authentication, Long id);
 
   boolean isCourseTeacher(Long courseId);
+
+  boolean isSelf(Long id);
 }

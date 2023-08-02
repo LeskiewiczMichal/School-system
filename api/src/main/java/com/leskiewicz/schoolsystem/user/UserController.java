@@ -4,9 +4,9 @@ import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.course.utils.CourseDtoAssembler;
 import com.leskiewicz.schoolsystem.dto.request.PageableRequest;
 import com.leskiewicz.schoolsystem.error.customexception.EntityAlreadyExistsException;
-import com.leskiewicz.schoolsystem.user.teacherdetails.PatchTeacherDetailsRequest;
 import com.leskiewicz.schoolsystem.user.dto.PatchUserRequest;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
+import com.leskiewicz.schoolsystem.user.teacherdetails.PatchTeacherDetailsRequest;
 import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetails;
 import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetailsModelAssembler;
 import com.leskiewicz.schoolsystem.user.utils.UserDtoAssembler;
@@ -18,6 +18,7 @@ import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 /**
  * REST controller for managing {@link User}.
@@ -65,6 +66,7 @@ public class UserController {
    * @return status 200 and the {@link UserDto} representing the user with the given ID in the body.
    * @throws EntityNotFoundException if the user does not exist, returns status 404.
    * @throws IllegalArgumentException if the ID is a string, returns status 400.
+   * @throws MethodArgumentTypeMismatchException if the ID is not a number, returns status 400.
    */
   @GetMapping("/{id}")
   public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
@@ -83,6 +85,7 @@ public class UserController {
    * @throws EntityNotFoundException and returns status 404 if the user does not exist.
    * @throws EntityAlreadyExistsException and returns status 400 if user with the same email as
    *     provided already exists.
+   * @throws MethodArgumentTypeMismatchException and returns status 400 if the ID is not a number.
    */
   @PatchMapping("/{id}")
   public ResponseEntity<UserDto> patchUser(

@@ -34,5 +34,9 @@ public class SecurityServiceImpl implements SecurityService {
     return user.getId().equals(course.getTeacher().getId());
   }
 
-
+  @Override
+  public boolean isSelf(Long id) {
+    CustomUserDetails user = AuthenticationUtils.getAuthenticatedUser();
+    return user.getId().equals(id);
+  }
 }
