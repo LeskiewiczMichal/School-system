@@ -216,7 +216,7 @@ public class CourseController {
    *     returns status 403.
    */
   @PostMapping("/{id}/files")
-//  @PreAuthorize("hasRole('ADMIN') or @securityService.isCourseTeacher(#id)")
+  @PreAuthorize("hasRole('ADMIN') or @securityService.isCourseTeacher(#id)")
   public ResponseEntity<MessageModel> uploadFiles(
       @PathVariable Long id, @RequestParam("file") MultipartFile file) {
     try {

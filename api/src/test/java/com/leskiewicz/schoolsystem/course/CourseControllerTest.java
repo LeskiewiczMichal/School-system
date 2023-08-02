@@ -19,6 +19,7 @@ import com.leskiewicz.schoolsystem.course.dto.CreateCourseRequest;
 import com.leskiewicz.schoolsystem.course.utils.CourseDtoAssembler;
 import com.leskiewicz.schoolsystem.error.DefaultExceptionHandler;
 import com.leskiewicz.schoolsystem.error.ErrorMessages;
+import com.leskiewicz.schoolsystem.files.File;
 import com.leskiewicz.schoolsystem.generic.CommonTests;
 import com.leskiewicz.schoolsystem.testUtils.TestHelper;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
@@ -30,6 +31,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.MediaType;
@@ -37,6 +41,9 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Arrays;
+import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 public class CourseControllerTest {
@@ -210,5 +217,17 @@ public class CourseControllerTest {
         .andExpect(jsonPath("$.message").value(ErrorMessages.objectWithIdNotFound("Course", 1L)))
         .andExpect(jsonPath("$.path").value("/api/courses/1/files"))
         .andReturn();
+  }
+
+  @Test
+  public void getCourseFilesTest() throws Exception {
+    // Prepare test data
+    List<File> files = Arrays.asList(Mockito.mock(File.class), Mockito.mock(File.class));
+    Page<File> filesPage = new PageImpl<>(files);
+
+    // Mocks
+    given(courseService.getCourseFiles(any(Long.class), any(Pageable.class))).willReturn(filesPage);
+
+    // Call endpoint and assert result
   }
 }
