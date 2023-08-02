@@ -15,8 +15,11 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 /**
  * REST controller for managing {@link Degree}.
@@ -47,6 +50,7 @@ public class DegreeController {
    *     body.
    * @throws EntityNotFoundException if the degree does not exist, returns status 404.
    * @throws IllegalArgumentException if the ID is a string, returns status 400.
+   * @throws MethodArgumentTypeMismatchException if the ID is not a number, returns status 400.
    */
   @GetMapping("/{id}")
   public ResponseEntity<DegreeDto> getDegreeById(@PathVariable Long id) {
@@ -84,8 +88,11 @@ public class DegreeController {
    * @throws EntityNotFoundException and returns status 404 if provided faculty does not exist.
    * @throws MethodArgumentNotValidException, returns status 400 and body with path, message about
    *     missing fields, statusCode if the request is invalid.
+   * @throws AccessDeniedException, returns status 403 if the user is not authorized to create a
+   *     degree.
    */
   @PostMapping
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_TEACHER')")
   public ResponseEntity<DegreeDto> createDegree(@Valid @RequestBody CreateDegreeRequest request) {
     DegreeDto degree = degreeService.createDegree(request);
     degree = degreeDtoAssembler.toModel(degree);
@@ -101,6 +108,8 @@ public class DegreeController {
    * @return status 200 (OK) and in body the paged list of {@link CourseDto} objects and page
    *     metadata. If there are no courses, an empty page is returned (without _embedded.courses
    *     field).
+   * @throws MethodArgumentNotValidException, returns status 400 and body with path, message about
+   *    missing fields, statusCode if the request is invalid.
    */
   @GetMapping("/{id}/courses")
   public ResponseEntity<RepresentationModel<CourseDto>> getDegreeCourses(

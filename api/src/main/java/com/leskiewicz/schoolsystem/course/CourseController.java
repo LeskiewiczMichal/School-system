@@ -107,8 +107,6 @@ public class CourseController {
    * @throws EntityAlreadyExistsException if the course already exists, returns status 400.
    * @throws AccessDeniedException if the user is not authorized to create a course, returns status
    *     403
-   * @throws AccessDeniedException if the user is not authorized to create a course, returns status
-   *     403
    */
   @PostMapping
   @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_TEACHER')")
