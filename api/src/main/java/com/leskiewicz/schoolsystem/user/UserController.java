@@ -1,5 +1,6 @@
 package com.leskiewicz.schoolsystem.user;
 
+import com.leskiewicz.schoolsystem.authentication.SecurityService;
 import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.course.utils.CourseDtoAssembler;
 import com.leskiewicz.schoolsystem.dto.request.PageableRequest;
@@ -17,6 +18,8 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
@@ -86,8 +89,11 @@ public class UserController {
    * @throws EntityAlreadyExistsException and returns status 400 if user with the same email as
    *     provided already exists.
    * @throws MethodArgumentTypeMismatchException and returns status 400 if the ID is not a number.
+   * @throws AccessDeniedException and returns status 403 if the user is not the owner of the
+   *     resource.
    */
   @PatchMapping("/{id}")
+  @PreAuthorize("@securityServiceImpl.isSelf(#id)")
   public ResponseEntity<UserDto> patchUser(
       @RequestBody PatchUserRequest request, @PathVariable Long id) {
     UserDto user = userService.updateUser(request, id);
@@ -104,6 +110,7 @@ public class UserController {
    * @return status 200 (OK) and in body the paged list of {@link CourseDto} objects and page
    *     metadata. If there are no courses, an empty page is returned (without _embedded.courses
    *     field).
+   * @throws MethodArgumentTypeMismatchException if the ID is not a number, returns status 400.
    */
   @GetMapping("/{id}/courses")
   public ResponseEntity<RepresentationModel<CourseDto>> getUserCourses(
@@ -123,6 +130,7 @@ public class UserController {
    * @throws EntityNotFoundException if teacher details for given user id does not exist, returns
    *     status 404.
    * @throws IllegalArgumentException if the ID is a string, returns status 400.
+   * @throws MethodArgumentTypeMismatchException if the ID is not a number, returns status 400.
    */
   @GetMapping("/{id}/teacher-details")
   public ResponseEntity<TeacherDetails> getTeacherDetails(@PathVariable Long id) {
@@ -132,7 +140,20 @@ public class UserController {
     return ResponseEntity.ok(teacherDetails);
   }
 
+  /**
+   * Updates teacher details of user with provided ID.
+   *
+   * @param request The {@link PatchTeacherDetailsRequest} containing the data to update in the
+   *     teacher details.
+   * @param id The ID of the user to update teacher details.
+   * @return status 200 with modified {@link TeacherDetails} in the body.
+   * @throws EntityNotFoundException and returns status 404 if the teacher details does not exist.
+   * @throws MethodArgumentTypeMismatchException and returns status 400 if the ID is not a number.
+   * @throws AccessDeniedException and returns status 403 if the user is not the owner of the
+   *     resource.
+   */
   @PatchMapping("/{id}/teacher-details")
+  @PreAuthorize("@securityServiceImpl.isSelf(#id)")
   public ResponseEntity<TeacherDetails> patchTeacherDetails(
       @RequestBody PatchTeacherDetailsRequest request, @PathVariable Long id) {
     TeacherDetails updatedTeacherDetails = userService.updateTeacherDetails(request, id);
