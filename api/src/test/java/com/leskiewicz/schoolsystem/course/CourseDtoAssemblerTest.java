@@ -42,6 +42,9 @@ public class CourseDtoAssemblerTest {
     Link studentsLink =
         WebMvcLinkBuilder.linkTo(methodOn(CourseController.class).getCourseStudents(1L, null))
             .withRel("students");
+    Link filesLink =
+        WebMvcLinkBuilder.linkTo(methodOn(CourseController.class).getCourseFiles(1L, null))
+            .withRel("files");
 
     CourseDto result = courseDtoAssembler.toModel(course);
 
@@ -49,5 +52,6 @@ public class CourseDtoAssemblerTest {
     Assertions.assertEquals(facultyLink, result.getLink("faculty").get());
     Assertions.assertEquals(teacherLink, result.getLink("teacher").get());
     Assertions.assertEquals(studentsLink, result.getLink("students").get());
+    Assertions.assertEquals(filesLink, result.getLink("files").get());
   }
 }
