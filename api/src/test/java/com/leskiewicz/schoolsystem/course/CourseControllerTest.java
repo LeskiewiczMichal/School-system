@@ -6,9 +6,9 @@ import static org.mockito.BDDMockito.willThrow;
 // import static
 // org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.mockito.Mockito.doNothing;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 // import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -20,12 +20,14 @@ import com.leskiewicz.schoolsystem.course.utils.CourseDtoAssembler;
 import com.leskiewicz.schoolsystem.error.DefaultExceptionHandler;
 import com.leskiewicz.schoolsystem.error.ErrorMessages;
 import com.leskiewicz.schoolsystem.files.File;
+import com.leskiewicz.schoolsystem.files.FileModelAssembler;
 import com.leskiewicz.schoolsystem.generic.CommonTests;
 import com.leskiewicz.schoolsystem.testUtils.TestHelper;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserDtoAssembler;
 import jakarta.persistence.EntityNotFoundException;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,10 +37,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
+import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -52,10 +58,12 @@ public class CourseControllerTest {
   // Used to convert DTOs to HAL representations
   private CourseDtoAssembler courseDtoAssembler;
   private UserDtoAssembler userDtoAssembler;
+  private FileModelAssembler fileModelAssembler;
 
   // Used to add links to paged resources
   private PagedResourcesAssembler<CourseDto> coursePagedResourcesAssembler;
   private PagedResourcesAssembler<UserDto> userPagedResourcesAssembler;
+  private PagedResourcesAssembler<File> filePagedResourcesAssembler;
 
   private CourseService courseService;
 
@@ -71,6 +79,8 @@ public class CourseControllerTest {
     userDtoAssembler = Mockito.mock(UserDtoAssembler.class);
     userPagedResourcesAssembler = Mockito.mock(PagedResourcesAssembler.class);
     securityService = Mockito.mock(SecurityServiceImpl.class);
+    fileModelAssembler = Mockito.mock(FileModelAssembler.class);
+    filePagedResourcesAssembler = Mockito.mock(PagedResourcesAssembler.class);
 
     courseController =
         new CourseController(
@@ -78,8 +88,10 @@ public class CourseControllerTest {
             securityService,
             courseDtoAssembler,
             userDtoAssembler,
+            fileModelAssembler,
             coursePagedResourcesAssembler,
-            userPagedResourcesAssembler);
+            userPagedResourcesAssembler,
+            filePagedResourcesAssembler);
 
     mvc =
         MockMvcBuilders.standaloneSetup(courseController)
@@ -219,15 +231,27 @@ public class CourseControllerTest {
         .andReturn();
   }
 
-  @Test
-  public void getCourseFilesTest() throws Exception {
-    // Prepare test data
-    List<File> files = Arrays.asList(Mockito.mock(File.class), Mockito.mock(File.class));
-    Page<File> filesPage = new PageImpl<>(files);
-
-    // Mocks
-    given(courseService.getCourseFiles(any(Long.class), any(Pageable.class))).willReturn(filesPage);
-
-    // Call endpoint and assert result
-  }
+//  @Test
+//  public void getCourseFilesTest() throws Exception {
+//    // Prepare test data
+//    List<File> files = Arrays.asList(TestHelper.createFile(), TestHelper.createFile());
+//    Page<File> filesPage = new PageImpl<>(files);
+//    PagedModel<EntityModel<File>> pagedModel = Mockito.mock(PagedModel.class);
+//
+//    // Mocks
+//    given(courseService.getCourseFiles(any(Long.class), any(Pageable.class))).willReturn(filesPage);
+//    given(fileModelAssembler.toModel(any(File.class))).willCallRealMethod();
+//    given(filePagedResourcesAssembler.toModel(any(Page.class))).willReturn(pagedModel);
+//
+//    // Call endpoint and assert result
+//    MvcResult result =
+//        mvc.perform(get("/api/courses/1/files").contentType("application/hal+json"))
+//            .andDo(print())
+//            .andExpect(status().isOk())
+//            .andReturn();
+//
+//    String responseContent = result.getResponse().getContentAsString();
+//    System.out.println(responseContent);
+//    Assertions.assertEquals(HalModelBuilder.halModelOf(pagedModel).build().toString(), result.getResponse().getContentAsString());
+//  }
 }

@@ -8,9 +8,13 @@ import com.leskiewicz.schoolsystem.degree.DegreeTitle;
 import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
+import com.leskiewicz.schoolsystem.files.File;
 import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetails;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
 import java.util.List;
@@ -182,5 +186,20 @@ public class TestHelper {
             .teacher(course2.getTeacher().getFirstName() + " " + course2.getTeacher().getLastName())
             .durationInHours(course2.getDuration_in_hours())
             .build());
+  }
+
+  public static MultipartFile createMultipartFile() {
+    return new MockMultipartFile(
+        "file", "hello.txt", MediaType.TEXT_PLAIN_VALUE, "Hello, World!".getBytes());
+  }
+
+  public static File createFile() {
+    return File.builder()
+        .id(1L)
+        .fileName("hello.txt")
+        .fileType("text/plain")
+        .fileData("Hello, World!".getBytes())
+        .uploadedBy(1L)
+        .build();
   }
 }

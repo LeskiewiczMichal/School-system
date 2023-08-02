@@ -15,6 +15,7 @@ import com.leskiewicz.schoolsystem.error.customexception.EntitiesAlreadyAssociat
 import com.leskiewicz.schoolsystem.error.customexception.EntityAlreadyExistsException;
 import com.leskiewicz.schoolsystem.error.customexception.FileUploadFailedException;
 import com.leskiewicz.schoolsystem.files.File;
+import com.leskiewicz.schoolsystem.files.FileModelAssembler;
 import com.leskiewicz.schoolsystem.user.UserController;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserDtoAssembler;
@@ -55,10 +56,12 @@ public class CourseController {
   // Used to convert DTOs to HAL representations
   private final CourseDtoAssembler courseDtoAssembler;
   private final UserDtoAssembler userDtoAssembler;
+  private final FileModelAssembler fileModelAssembler;
 
   // Used to add links to paged resources
   private final PagedResourcesAssembler<CourseDto> coursePagedResourcesAssembler;
   private final PagedResourcesAssembler<UserDto> userPagedResourcesAssembler;
+  private final PagedResourcesAssembler<File> filePagedResourcesAssembler;
 
   /**
    * Get a course by its ID.
@@ -199,8 +202,10 @@ public class CourseController {
   public ResponseEntity<RepresentationModel<File>> getCourseFiles(
       @PathVariable Long id, @ModelAttribute PageableRequest request) {
     Page<File> files = courseService.getCourseFiles(id, request.toPageable());
+    files = files.map(fileModelAssembler::toModel);
 
-    return ResponseEntity.ok(HalModelBuilder.halModelOf(files).build());
+    return ResponseEntity.ok(
+        HalModelBuilder.halModelOf(filePagedResourcesAssembler.toModel(files)).build());
   }
 
   /**
