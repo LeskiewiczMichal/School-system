@@ -9,6 +9,7 @@ import com.leskiewicz.schoolsystem.authentication.dto.CustomUserDetails;
 import com.leskiewicz.schoolsystem.course.CourseController;
 import com.leskiewicz.schoolsystem.degree.DegreeController;
 import com.leskiewicz.schoolsystem.faculty.FacultyController;
+import com.leskiewicz.schoolsystem.files.FileController;
 import com.leskiewicz.schoolsystem.user.UserController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
@@ -23,17 +24,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 public class ApiController {
 
-  @Autowired
-  private SecurityService securityService;
+  @Autowired private SecurityService securityService;
   private final String PAGINATION_PARAMETERS = "{?size,page,sort}";
 
   /// ******************** THIS IS HOW TO GET USER DETAILS *********************** ///
-//    @GetMapping("/authenticationUser")
-//    public ResponseEntity<String> getAuthentication(Authentication authentication) {
-//      CustomUserDetails customUserDetails = (CustomUserDetails) (authentication.getPrincipal());
-//      System.out.println(customUserDetails.());
-//      return ResponseEntity.ok(authentication.toString());
-//    }
+  //    @GetMapping("/authenticationUser")
+  //    public ResponseEntity<String> getAuthentication(Authentication authentication) {
+  //      CustomUserDetails customUserDetails = (CustomUserDetails) (authentication.getPrincipal());
+  //      System.out.println(customUserDetails.());
+  //      return ResponseEntity.ok(authentication.toString());
+  //    }
 
   @GetMapping
   public ResponseEntity<RepresentationModel<?>> index() {
@@ -46,6 +46,7 @@ public class ApiController {
     this.addFacultiesLinks(model);
     this.addDegreesLink(model);
     this.addCoursesLink(model);
+    this.addFilesLink(model);
 
     return ResponseEntity.ok(model);
   }
@@ -83,5 +84,12 @@ public class ApiController {
     String uriTemplate = coursesLink.getHref() + PAGINATION_PARAMETERS;
     coursesLink = Link.of(uriTemplate).withRel("courses");
     model.add(coursesLink);
+  }
+
+  private void addFilesLink(RepresentationModel<?> model) {
+    Link filesLink = linkTo(FileController.class).withRel("files");
+    String uriTemplate = filesLink.getHref() + PAGINATION_PARAMETERS;
+    filesLink = Link.of(uriTemplate).withRel("files");
+    model.add(filesLink);
   }
 }
