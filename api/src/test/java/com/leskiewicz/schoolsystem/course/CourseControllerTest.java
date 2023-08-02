@@ -1,9 +1,12 @@
 package com.leskiewicz.schoolsystem.course;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willThrow;
 // import static
 // org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.mockito.Mockito.doNothing;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 // import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -30,8 +33,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.multipart.MultipartFile;
 
 @ExtendWith(MockitoExtension.class)
 public class CourseControllerTest {
@@ -69,10 +74,10 @@ public class CourseControllerTest {
             coursePagedResourcesAssembler,
             userPagedResourcesAssembler);
 
-      mvc =
-          MockMvcBuilders.standaloneSetup(courseController)
-              .setControllerAdvice(new DefaultExceptionHandler())
-              .build();
+    mvc =
+        MockMvcBuilders.standaloneSetup(courseController)
+            .setControllerAdvice(new DefaultExceptionHandler())
+            .build();
   }
 
   @Test
@@ -157,6 +162,26 @@ public class CourseControllerTest {
         .andExpect(status().isNotFound())
         .andExpect(jsonPath("$.message").value(ErrorMessages.objectWithIdNotFound("Course", 1L)))
         .andExpect(jsonPath("$.path").value("/api/courses/1/students"))
+        .andReturn();
+  }
+
+  @Test
+  public void uploadFile() throws Exception {
+    doNothing().when(courseService).storeFile(any(MultipartFile.class), any(Long.class));
+
+    MockMultipartFile file =
+        new MockMultipartFile(
+            "file", "hello.txt", MediaType.TEXT_PLAIN_VALUE, "Hello, World!".getBytes());
+
+    mvc.perform(
+            multipart("/api/courses/1/files")
+                .file(file)
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .accept("application/hal+json"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.message").value("File with name: hello.txt uploaded successfully"))
+        .andExpect(jsonPath("$.links[*].rel", Matchers.hasItems("course")))
+        .andExpect(jsonPath("$.links[*].href", Matchers.hasSize(1)))
         .andReturn();
   }
 }
