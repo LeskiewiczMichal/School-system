@@ -21,8 +21,11 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 /**
  * REST controller for managing {@link Faculty}.
@@ -53,8 +56,9 @@ public class FacultyController {
    * Get all faculties.
    *
    * @param request the {@link PageableRequest} containing sorting, pagination, etc.
-   * @return status 200 (OK) and in body the paged list of {@link FacultyDto} objects and page metadata.
-   *     If there are no faculties, an empty page is returned (without _embedded.faculties field).
+   * @return status 200 (OK) and in body the paged list of {@link FacultyDto} objects and page
+   *     metadata. If there are no faculties, an empty page is returned (without _embedded.faculties
+   *     field).
    */
   @GetMapping
   public ResponseEntity<RepresentationModel<FacultyDto>> getFaculties(
@@ -74,6 +78,7 @@ public class FacultyController {
    *     body.
    * @throws EntityNotFoundException if the faculty does not exist, returns status 404.
    * @throws IllegalArgumentException if the ID is a string, returns status 400.
+   * @throws MethodArgumentTypeMismatchException if the ID is not a number, returns status 400.
    */
   @GetMapping("/{id}")
   public ResponseEntity<FacultyDto> getFacultyById(@PathVariable Long id) {
@@ -92,8 +97,10 @@ public class FacultyController {
    *     already exists.
    * @throws MethodArgumentNotValidException, returns status 400 and body with path, message about
    *     missing fields, statusCode if the request is invalid.
+   * @throws AccessDeniedException and returns status 403 if the user is not an admin.
    */
   @PostMapping
+  @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<FacultyDto> createFaculty(
       @Valid @RequestBody CreateFacultyRequest request) {
     FacultyDto faculty = facultyService.createFaculty(request);
@@ -111,8 +118,11 @@ public class FacultyController {
    * @throws EntityNotFoundException and returns status 404 if the faculty does not exist.
    * @throws EntityAlreadyExistsException and returns status 400 if faculty with the same name as
    *     provided to the request already exists.
+   * @throws MethodArgumentTypeMismatchException if the ID is not a number, returns status 400.
+   * @throws AccessDeniedException and returns status 403 if the user is not an admin.
    */
   @PatchMapping("/{id}")
+  @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<FacultyDto> updateFaculty(
       @RequestBody PatchFacultyRequest request, @PathVariable Long id) {
     FacultyDto faculty = facultyService.updateFaculty(request, id);
@@ -126,8 +136,10 @@ public class FacultyController {
    *
    * @param id the ID of the faculty to retrieve students from.
    * @param request the {@link PageableRequest} containing sorting, pagination, etc.
-   * @return status 200 (OK) and in body the paged list of {@link UserDto} objects and page metadata. If
-   *     there are no students, an empty page is returned (without _embedded.users field).
+   * @return status 200 (OK) and in body the paged list of {@link UserDto} objects and page
+   *     metadata. If there are no students, an empty page is returned (without _embedded.users
+   *     field).
+   * @throws MethodArgumentTypeMismatchException if the ID is not a number, returns status 400.
    */
   @GetMapping("/{id}/students")
   public ResponseEntity<RepresentationModel<UserDto>> getFacultyStudents(
@@ -145,8 +157,10 @@ public class FacultyController {
    *
    * @param id the ID of the faculty to retrieve teachers from.
    * @param request the {@link PageableRequest} containing sorting, pagination, etc.
-   * @return status 200 (OK) and in body the paged list of {@link UserDto} objects and page metadata. If
-   *     there are no teachers, an empty page is returned (without _embedded.users field).
+   * @return status 200 (OK) and in body the paged list of {@link UserDto} objects and page
+   *     metadata. If there are no teachers, an empty page is returned (without _embedded.users
+   *     field).
+   * @throws MethodArgumentTypeMismatchException if the ID is not a number, returns status 400.
    */
   @GetMapping("/{id}/teachers")
   public ResponseEntity<RepresentationModel<UserDto>> getFacultyTeachers(
@@ -164,8 +178,10 @@ public class FacultyController {
    *
    * @param id the ID of the faculty to retrieve degrees from.
    * @param request the {@link PageableRequest} containing sorting, pagination, etc.
-   * @return status 200 (OK) and in body the paged list of {@link DegreeDto} objects and page metadata. If
-   *     there are no degrees, an empty page is returned (without _embedded.degrees field).
+   * @return status 200 (OK) and in body the paged list of {@link DegreeDto} objects and page
+   *     metadata. If there are no degrees, an empty page is returned (without _embedded.degrees
+   *     field).
+   * @throws MethodArgumentTypeMismatchException if the ID is not a number, returns status 400.
    */
   @GetMapping("/{id}/degrees")
   public ResponseEntity<RepresentationModel<DegreeDto>> getFacultyDegrees(
@@ -185,6 +201,7 @@ public class FacultyController {
    * @return status 200 (OK) and in body the paged list of {@link CourseDto} objects and page
    *     metadata. If there are no courses, an empty page is returned (without _embedded.courses
    *     field).
+   * @throws MethodArgumentTypeMismatchException if the ID is not a number, returns status 400.
    */
   @GetMapping("/{id}/courses")
   public ResponseEntity<RepresentationModel<CourseDto>> getFacultyCourses(
