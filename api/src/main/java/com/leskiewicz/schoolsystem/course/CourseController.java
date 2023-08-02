@@ -230,6 +230,8 @@ public class CourseController {
               .withRel("course"));
 
       return ResponseEntity.status(HttpStatus.OK).body(message);
+    } catch (EntityNotFoundException e) {
+      throw e;
     } catch (Exception e) {
       throw new FileUploadFailedException(
           ErrorMessages.fileUploadFailed(file.getOriginalFilename()));

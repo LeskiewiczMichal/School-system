@@ -167,12 +167,15 @@ public class CourseControllerTest {
 
   @Test
   public void uploadFile() throws Exception {
+    // Mock service method to do nothing
     doNothing().when(courseService).storeFile(any(MultipartFile.class), any(Long.class));
 
+    // Create file for testing
     MockMultipartFile file =
         new MockMultipartFile(
             "file", "hello.txt", MediaType.TEXT_PLAIN_VALUE, "Hello, World!".getBytes());
 
+    // Perform request and assert result
     mvc.perform(
             multipart("/api/courses/1/files")
                 .file(file)
@@ -182,6 +185,30 @@ public class CourseControllerTest {
         .andExpect(jsonPath("$.message").value("File with name: hello.txt uploaded successfully"))
         .andExpect(jsonPath("$.links[*].rel", Matchers.hasItems("course")))
         .andExpect(jsonPath("$.links[*].href", Matchers.hasSize(1)))
+        .andReturn();
+  }
+
+  @Test
+  public void uploadFileThrowsProperException() throws Exception {
+    // Mock service method to throw exception
+    willThrow(new EntityNotFoundException(ErrorMessages.objectWithIdNotFound("Course", 1L)))
+        .given(courseService)
+        .storeFile(any(MultipartFile.class), any(Long.class));
+
+    // Create file for testing
+    MockMultipartFile file =
+        new MockMultipartFile(
+            "file", "hello.txt", MediaType.TEXT_PLAIN_VALUE, "Hello, World!".getBytes());
+
+    // Perform request and assert result
+    mvc.perform(
+            multipart("/api/courses/1/files")
+                .file(file)
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .accept("application/hal+json"))
+        .andExpect(status().isNotFound())
+        .andExpect(jsonPath("$.message").value(ErrorMessages.objectWithIdNotFound("Course", 1L)))
+        .andExpect(jsonPath("$.path").value("/api/courses/1/files"))
         .andReturn();
   }
 }
