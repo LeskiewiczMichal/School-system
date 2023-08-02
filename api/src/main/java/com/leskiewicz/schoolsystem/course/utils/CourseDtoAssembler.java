@@ -31,6 +31,7 @@ public class CourseDtoAssembler extends RepresentationModelAssemblerSupport<Cour
     Link studentsLink =
         linkTo(methodOn(CourseController.class).getCourseStudents(course.getId(), null))
             .withRel("students");
+    //TODO: Add files links
 
     course.add(selfLink);
     course.add(facultyLink);

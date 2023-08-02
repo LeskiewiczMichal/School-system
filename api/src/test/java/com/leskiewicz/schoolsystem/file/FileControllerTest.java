@@ -84,7 +84,6 @@ public class FileControllerTest {
             get("/api/files/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
-        .andDo(print())
         .andExpect(status().isNotFound())
         .andExpect(jsonPath("$.message").value(ErrorMessages.objectWithIdNotFound("File", fileId)))
         .andExpect(jsonPath("$.statusCode").value(404))
@@ -93,21 +92,17 @@ public class FileControllerTest {
   }
 
   @Test
-  public void downloadFile_throwsException() throws Exception {
-    willThrow(new EntityNotFoundException(ErrorMessages.objectWithIdNotFound("File", fileId)))
-            .given(fileService)
-            .getFileById(any(Long.class));
-
+  public void downloadFile_throwsMethodArgumentTypeMismatchException() throws Exception {
     // Perform the test
     mvc.perform(
-                    get("/api/files/1")
+                    get("/api/files/qwer")
                             .contentType(MediaType.APPLICATION_JSON)
                             .accept(MediaType.APPLICATION_JSON))
             .andDo(print())
-            .andExpect(status().isNotFound())
-            .andExpect(jsonPath("$.message").value(ErrorMessages.objectWithIdNotFound("File", fileId)))
-            .andExpect(jsonPath("$.statusCode").value(404))
-            .andExpect(jsonPath("$.timestamp").isNotEmpty())
-            .andExpect(jsonPath("$.path").value("/api/files/" + fileId));
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.message").value("Wrong argument types provided"))
+            .andExpect(jsonPath("$.statusCode").value(400))
+            .andExpect(jsonPath("$.localDateTime").isNotEmpty())
+            .andExpect(jsonPath("$.path").value("/api/files/qwer"));
   }
 }
