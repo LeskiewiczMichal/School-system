@@ -1,6 +1,5 @@
 package com.leskiewicz.schoolsystem.files;
 
-import jakarta.annotation.Resource;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
@@ -35,8 +34,8 @@ public class FileController {
     // Set headers
     ByteArrayResource resource = new ByteArrayResource(file.getFileData());
     HttpHeaders headers = new HttpHeaders();
-    headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFileName() + "\"");
-
+    headers.add(
+        HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFileName() + "\"");
 
     return ResponseEntity.ok()
         .headers(headers)

@@ -1,16 +1,16 @@
 package com.leskiewicz.schoolsystem.course;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import com.leskiewicz.schoolsystem.authentication.SecurityService;
 import com.leskiewicz.schoolsystem.controller.ApiController;
 import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.course.dto.CreateCourseRequest;
 import com.leskiewicz.schoolsystem.course.utils.CourseDtoAssembler;
-import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
 import com.leskiewicz.schoolsystem.dto.request.MessageModel;
 import com.leskiewicz.schoolsystem.dto.request.PageableRequest;
 import com.leskiewicz.schoolsystem.error.APIResponses;
 import com.leskiewicz.schoolsystem.error.ErrorMessages;
-import com.leskiewicz.schoolsystem.error.customexception.DuplicateEntityException;
 import com.leskiewicz.schoolsystem.error.customexception.EntitiesAlreadyAssociatedException;
 import com.leskiewicz.schoolsystem.error.customexception.EntityAlreadyExistsException;
 import com.leskiewicz.schoolsystem.error.customexception.FileUploadFailedException;
@@ -24,8 +24,6 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
@@ -35,9 +33,8 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.multipart.MultipartFile;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 /**
  * REST controller for managing courses.
@@ -110,9 +107,11 @@ public class CourseController {
    * @throws EntityAlreadyExistsException if the course already exists, returns status 400.
    * @throws AccessDeniedException if the user is not authorized to create a course, returns status
    *     403
+   * @throws AccessDeniedException if the user is not authorized to create a course, returns status
+   *     403
    */
   @PostMapping
-  //  @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_TEACHER')")
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_TEACHER')")
   public ResponseEntity<CourseDto> createCourse(@Valid @RequestBody CreateCourseRequest request) {
     CourseDto course = courseService.createCourse(request);
     course = courseDtoAssembler.toModel(course);
@@ -150,6 +149,9 @@ public class CourseController {
    * @throws IllegalArgumentException if the ID is a string, returns status 400.
    * @throws EntitiesAlreadyAssociatedException if the student is already enrolled in the course,
    *     returns status 400.
+   * @throws MethodArgumentTypeMismatchException if the ID is not a number, returns status 400.
+   * @throws AccessDeniedException if the user is not authorized to add a student to the course,
+   *     returns status 403.
    */
   @PostMapping("/{id}/students")
   @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
@@ -177,6 +179,9 @@ public class CourseController {
    * @throws AccessDeniedException if the user is not authorized to delete the course, returns
    *     status 403.
    * @throws IllegalArgumentException if the ID is a string, returns status 400.
+   * @throws MethodArgumentTypeMismatchException if the ID is not a number, returns status 400.
+   * @throws AccessDeniedException if the user is not authorized to delete the course, returns
+   *     status 403.
    */
   @DeleteMapping("/{id}")
   @PreAuthorize("hasRole('ADMIN') or @securityService.isCourseTeacher(#id)")
@@ -197,6 +202,7 @@ public class CourseController {
    * @param request the {@link PageableRequest} containing sorting, pagination, etc.
    * @return status 200 (OK) and in body the paged list of {@link File} objects and page metadata.
    *     If there are no files, an empty page is returned (without _embedded.files field).
+   * @throws MethodArgumentTypeMismatchException if the ID is not a number, returns status 400.
    */
   @GetMapping("/{id}/files")
   public ResponseEntity<RepresentationModel<File>> getCourseFiles(
@@ -219,6 +225,7 @@ public class CourseController {
    * @throws FileUploadFailedException if the file could not be uploaded, returns status 500.
    * @throws AccessDeniedException if the user is not authorized to upload files to the course,
    *     returns status 403.
+   * @throws MethodArgumentTypeMismatchException if the ID is not a number, returns status 400.
    */
   @PostMapping("/{id}/files")
   @PreAuthorize("hasRole('ADMIN') or @securityService.isCourseTeacher(#id)")
