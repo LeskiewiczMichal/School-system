@@ -59,15 +59,15 @@ export default function LoginForm() {
           onChange={handleChange}
         />
       </div>
-      <div className="flex items-center justify-between">
+      <div className="flex mb-2 items-center justify-between">
         <button
-          className="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700 focus:outline-none focus:shadow-outline"
+          className="px-4 py-2 font-bold text-white bg-primary rounded hover:bg-blue-700 focus:outline-none focus:shadow-outline"
           type="button"
         >
           Sign In
         </button>
         <a
-          className="inline-block text-sm font-bold text-blue-500 align-baseline hover:text-blue-800"
+          className="inline-block text-sm font-bold text-primary align-baseline hover:text-blue-800"
           href="#"
         >
           Forgot Password?
@@ -75,7 +75,7 @@ export default function LoginForm() {
       </div>
       <div className="flex items-center">
         <button
-          className="w-full px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700 focus:outline-none focus:shadow-outline"
+          className="w-full px-4 py-2 font-bold text-white bg-primary rounded hover:bg-blue-700 focus:outline-none focus:shadow-outline"
           type="button"
         >
           Try out on pre-made account
