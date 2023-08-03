@@ -1,4 +1,5 @@
 import { Role } from "../../../type/Role";
+import { Link } from "../../../type/Link";
 
 export default interface AuthState {
   id: bigint | null;
@@ -8,4 +9,21 @@ export default interface AuthState {
   degree: string | null;
   faculty: string | null;
   role: Role | null;
+  _links: {
+    self: {
+      href: Link;
+    };
+    faculty: {
+      href: Link;
+    };
+    courses: {
+      href: Link;
+    };
+    degree: {
+      href: Link;
+    };
+    teacherDetails: {
+      href: Link;
+    };
+  } | null;
 }
