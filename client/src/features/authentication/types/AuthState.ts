@@ -2,13 +2,15 @@ import { Role } from "../../../type/Role";
 import { Link } from "../../../type/Link";
 
 export default interface AuthState {
-  id: bigint | null;
-  email: string | null;
-  firstName: string | null;
-  lastName: string | null;
-  degree: string | null;
-  faculty: string | null;
-  role: Role | null;
+  data: {
+    id: bigint | null;
+    email: string | null;
+    firstName: string | null;
+    lastName: string | null;
+    degree: string | null;
+    faculty: string | null;
+    role: Role | null;
+  };
   _links: {
     self: {
       href: Link;

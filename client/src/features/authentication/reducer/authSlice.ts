@@ -3,13 +3,15 @@ import AuthState from "../types/AuthState";
 import setAuthUserReducer from "./setAuthUserReducer";
 
 const initialState: AuthState = {
-  id: null,
-  email: null,
-  firstName: null,
-  lastName: null,
-  degree: null,
-  faculty: null,
-  role: null,
+  data: {
+    id: null,
+    email: null,
+    firstName: null,
+    lastName: null,
+    degree: null,
+    faculty: null,
+    role: null,
+  },
   _links: null,
 };
 
