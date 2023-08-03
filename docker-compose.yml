@@ -8,3 +8,12 @@ services:
       - "3306:3306"
     volumes:
       - $PWD/mysql:/var/lib/mysql
+
+#  api:
+#    container_name: school-system-api
+#    build:
+#      context: ./api
+#    ports:
+#      - "8080:8080"
+#    depends_on:
+#      - db
