@@ -45,6 +45,7 @@
     ]
   },
   "devDependencies": {
+    "@svgr/webpack": "^8.0.1",
     "autoprefixer": "^10.4.14",
     "eslint": "^8.46.0",
     "postcss": "^8.4.27",

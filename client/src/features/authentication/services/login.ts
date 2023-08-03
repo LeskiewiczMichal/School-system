@@ -51,3 +51,5 @@ const login =
       console.error(error);
     }
   };
+
+export default login;
