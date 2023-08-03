@@ -1,5 +1,5 @@
-enum TokenEnum {
-  localStorageName = "social_network_token",
-}
+const JWTToken = {
+  localStorageName: "school-system-token",
+};
 
-export { TokenEnum };
+export default JWTToken;
