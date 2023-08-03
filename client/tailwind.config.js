@@ -5,7 +5,14 @@ module.exports = {
     extend: {
       colors: {
         primary: "var(--primary)",
+        primaryLighter: "var(--primary-lighter)",
+        primaryDarkened: "var(--primary-darkened)",
         secondary: "var(--secondary)",
+        blueLighter: "var(--blue-lighter)",
+        grey: "var(--grey)",
+        lemon: "var(--lemon)",
+        cyan: "var(--cyan)",
+        glaucous: "var(--glaucous)",
       },
     },
   },

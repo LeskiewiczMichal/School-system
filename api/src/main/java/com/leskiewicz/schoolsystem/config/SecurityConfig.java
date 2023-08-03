@@ -1,6 +1,7 @@
 package com.leskiewicz.schoolsystem.config;
 
 import com.leskiewicz.schoolsystem.authentication.JWTAuthenticationFilter;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -12,7 +13,12 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.servlet.HandlerExceptionResolver;
+
+import java.util.Collections;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -25,6 +31,17 @@ public class SecurityConfig {
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http.csrf(csrf -> csrf.disable())
+    .cors(corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
+      @Override
+public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+    CorsConfiguration corsConfiguration = new CorsConfiguration();
+    corsConfiguration.setAllowedOrigins(List.of("http://localhost:3000"));
+    corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE"));
+    corsConfiguration.setAllowedHeaders(Collections.singletonList("*"));
+    corsConfiguration.setAllowCredentials(true);
+    corsConfiguration.setMaxAge(3600L);
+    return corsConfiguration;
+      }}))
         .authorizeHttpRequests(
             request -> request.requestMatchers("/api/auth/**").permitAll().anyRequest().permitAll())
         .sessionManagement(

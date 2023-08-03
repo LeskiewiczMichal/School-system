@@ -10,18 +10,20 @@ function App() {
 
   return (
     <BrowserRouter>
-      {isAuthenticated ? (
-        <>
-          <div>
-            <h1>qwer</h1>
-          </div>
-        </>
-      ) : (
+      {/*{isAuthenticated ? (*/}
+      {/*  <>*/}
+      {/*    <div>*/}
+      {/*      <h1>qwer</h1>*/}
+      {/*    </div>*/}
+      {/*  </>*/}
+      {/*) : (*/}
+      <>
         <Routes>
-          <Route path="/" element={<Pages.Login />} />
+          <Route path="/" element={<Pages.Home />} />
           <Route path="/login" element={<Pages.Login />} />
         </Routes>
-      )}
+      </>
+      {/*)}*/}
     </BrowserRouter>
   );
 }

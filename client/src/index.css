@@ -18,7 +18,14 @@ code {
 
 :root {
   --primary: #112c4a;
+  --primary-darkened: #0e2238;
+  --primary-lighter: #1c3959;
+  --blue-lighter: #3c4b62;
+  --grey: #efecec;
   --secondary: #bc1b21;
+  --lemon: #FBF2C0;
+  --cyan: #588B8B;
+  --glaucous: #7D8CC4;
   /*--primary-lighter: #6366f1;*/
   /*--background-white: rgb(248 250 252);*/
   /*--background-dark: rgb(31 41 55);*/

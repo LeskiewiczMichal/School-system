@@ -19,7 +19,10 @@ const login =
       const { email, password } = props;
 
       // Send request
-      const response = await axios.post(link, { email, password });
+      const response = await axios.post(
+        "http://localhost:8080/api/auth/authenticate",
+        { email, password },
+      );
 
       // Get and map response data
       const { user, _links, token } = response.data;
@@ -44,10 +47,9 @@ const login =
       };
 
       dispatch(setAuthUser({ data: userData, _links: links }));
-
       // Set token in localstorage
       localStorage.setItem(JWTToken.localStorageName, `Bearer ${token}`);
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
     }
   };
