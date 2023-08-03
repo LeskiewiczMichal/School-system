@@ -30,21 +30,22 @@ const login =
         const userData: UserData = UserMapper.mapUserFromServer(user);
         const links = {
           self: {
-            href: _links.self.href,
+            href: user._links.self.href,
           },
           faculty: {
-            href: _links.faculty.href,
+            href: user._links.faculty.href,
           },
           courses: {
-            href: _links.courses.href,
+            href: user._links.courses.href,
           },
           degree: {
-            href: userData.role === Role.STUDENT ? _links.degree.href : null,
+            href:
+              userData.role === Role.STUDENT ? user._links.degree.href : null,
           },
           teacherDetails: {
             href:
               userData.role === Role.TEACHER
-                ? _links.teacherDetails.href
+                ? user._links.teacherDetails.href
                 : null,
           },
         };
@@ -52,6 +53,7 @@ const login =
         dispatch(setAuthUser({ data: userData, _links: links }));
         // Set token in localstorage
         localStorage.setItem(JWTToken.localStorageName, `Bearer ${token}`);
+        resolve();
       } catch (error: any) {
         console.error(error);
         reject(new Error(error.response.data.message));
