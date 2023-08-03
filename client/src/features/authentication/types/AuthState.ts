@@ -1,3 +1,5 @@
+import { Role } from "../../../type/Role";
+
 export default interface AuthState {
   id: bigint | null;
   email: string | null;
@@ -5,4 +7,5 @@ export default interface AuthState {
   lastName: string | null;
   degree: string | null;
   faculty: string | null;
+  role: Role | null;
 }
