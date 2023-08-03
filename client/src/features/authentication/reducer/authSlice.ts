@@ -3,20 +3,12 @@ import AuthState from "../types/AuthState";
 import setAuthUserReducer from "./setAuthUserReducer";
 
 const initialState: AuthState = {
-  data: {
-    id: null,
-    email: null,
-    firstName: null,
-    lastName: null,
-    degree: null,
-    faculty: null,
-    role: null,
-  },
+  data: null,
   _links: null,
 };
 
 export const authSlice = createSlice({
-  name: "user",
+  name: "authUser",
   initialState,
   reducers: {
     setAuthUser: setAuthUserReducer,
