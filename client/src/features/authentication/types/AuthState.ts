@@ -1,5 +1,5 @@
 import NullableString from "../../../type/NullableString";
-import UserData from "../../../type/UserData";
+import { UserData } from "../../user";
 
 export default interface AuthState {
   data: UserData | null;

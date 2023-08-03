@@ -1,4 +1,4 @@
-import Role from "./Role";
+import Role from "../../type/Role";
 
 interface UserData {
   id: bigint;
