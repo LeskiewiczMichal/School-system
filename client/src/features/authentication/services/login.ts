@@ -20,10 +20,7 @@ const login =
         const { email, password } = props;
 
         // Send request
-        const response = await axios.post(
-          "http://localhost:8080/api/auth/authenticate",
-          { email, password },
-        );
+        const response = await axios.post(link, { email, password });
 
         // Get and map response data
         const { user, _links, token } = response.data;

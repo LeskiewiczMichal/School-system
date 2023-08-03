@@ -27,11 +27,10 @@ export default function LoginForm() {
     try {
       const loginRequest = { email, password };
       await dispatch(login(loginRequest));
+
       return navigate("/");
     } catch (e: any) {
-      console.error(e.message);
       setError(e.message);
-      return;
     }
   };
 
