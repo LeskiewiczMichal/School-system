@@ -26,9 +26,10 @@ export default function LoginForm() {
 
     try {
       const loginRequest = { email, password };
-      dispatch(await login(loginRequest));
+      await dispatch(login(loginRequest));
       return navigate("/");
     } catch (e: any) {
+      console.error(e.message);
       setError(e.message);
       return;
     }
