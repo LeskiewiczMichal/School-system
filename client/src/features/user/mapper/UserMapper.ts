@@ -9,3 +9,9 @@ const mapUserFromServer = (data: any): UserData => ({
   faculty: data.faculty,
   role: data.role,
 });
+
+const UserMapper = {
+  mapUserFromServer,
+};
+
+export default UserMapper;

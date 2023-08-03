@@ -1,5 +1,6 @@
 import axios from "axios";
 import { AppThunk } from "../../../store";
+import { UserData, UserMapper } from "../../user";
 
 type LoginProps = {
   email: string;
@@ -19,6 +20,10 @@ const login =
 
       // Get and map response data
       const { user, _links, token } = response.data;
+      const userData: UserData = UserMapper.mapUserFromServer(user);
+
+      // Set token in localstorage
+      localStorage.setItem();
     } catch (error) {
       console.error(error);
     }
