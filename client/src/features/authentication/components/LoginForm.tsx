@@ -17,7 +17,7 @@ export default function LoginForm() {
   };
 
   return (
-    <form className="self-center w-96 border p-8 pt-0">
+    <form className="self-center w-96 lg:w-1/3 border p-8 pt-0 bg-stone-50 rounded">
       <Logo
         style={{
           maxWidth: "100%",
