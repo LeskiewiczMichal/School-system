@@ -18,7 +18,7 @@ export default function LoginForm() {
 
   return (
     <form className="self-center w-96">
-      <Logo style={{ width: "200px", height: "200px" }} />
+      <Logo style={{ maxWidth: "250px", maxHeight: "250px" }} />
       <div className="mb-4">
         <label
           className="block mb-2 text-sm font-bold text-gray-700"
