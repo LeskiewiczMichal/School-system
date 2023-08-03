@@ -1,1 +1,3 @@
-export type Link = string | null;
+type Link = string | null;
+
+export default Link;

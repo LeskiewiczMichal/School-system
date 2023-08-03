@@ -1,31 +1,23 @@
-import { Role } from "../../../type/Role";
-import { Link } from "../../../type/Link";
+import NullableString from "../../../type/NullableString";
+import UserData from "../../../type/UserData";
 
 export default interface AuthState {
-  data: {
-    id: bigint | null;
-    email: string | null;
-    firstName: string | null;
-    lastName: string | null;
-    degree: string | null;
-    faculty: string | null;
-    role: Role | null;
-  };
+  data: UserData | null;
   _links: {
     self: {
-      href: Link;
+      href: string;
     };
     faculty: {
-      href: Link;
+      href: string;
     };
     courses: {
-      href: Link;
+      href: string;
     };
     degree: {
-      href: Link;
+      href: NullableString;
     };
     teacherDetails: {
-      href: Link;
+      href: NullableString;
     };
   } | null;
 }
