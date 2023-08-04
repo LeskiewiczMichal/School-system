@@ -1,5 +1,13 @@
+enum SortDirection {
+  ASC = "asc",
+  DESC = "desc",
+}
+
 interface PaginationParams {
   page: number;
-  limit: number;
-  sort: [string, string];
+  size: number;
+  sort: [string, SortDirection];
 }
+
+export { SortDirection };
+export default PaginationParams;
