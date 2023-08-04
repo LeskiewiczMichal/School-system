@@ -23,7 +23,7 @@ public class ArticleController {
    * @throws EntityNotFoundException if the Article with the given ID does not exist.
    * @throws IllegalArgumentException if the given ID is null.
    */
-  @GetMapping
+  @GetMapping("/{id}")
   public ResponseEntity<ArticleDto> getArticleById(Long id) {
     ArticleDto articleDto = articleModelAssembler.toModel(articleService.getById(id));
 
