@@ -49,7 +49,9 @@ public class ArticleMapperImpl implements ArticleMapper {
 
     if (article.getImageName() != null) {
       try {
-        dto.imgPath(fileService.getFile(article.getImageName()).toString());
+        String path = fileService.getFile(article.getImageName()).toString();
+        path = path.substring(path.indexOf("/images"));
+        dto.imgPath(path);
       } catch (Exception e) {
         logger.error("Error while getting image path for article with id: " + article.getId());
         dto.imgPath(null);

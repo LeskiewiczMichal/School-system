@@ -51,7 +51,7 @@ public class FileServiceImpl implements FileService {
 
   public Path getFile(String fileName) throws IOException {
     // Load the resource from the classpath
-    org.springframework.core.io.Resource resource = resourceLoader.getResource("classpath:/static/" + fileName);
+    org.springframework.core.io.Resource resource = resourceLoader.getResource("classpath:/static/images/" + fileName);
 
     // Get the file's Path
     return ResourceUtils.getFile(resource.getURL()).toPath();
