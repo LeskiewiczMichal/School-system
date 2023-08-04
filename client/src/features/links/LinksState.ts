@@ -5,9 +5,6 @@ interface LinksState {
   register: {
     href: string;
   };
-  logout: {
-    href: string;
-  };
   users: {
     href: string;
   };

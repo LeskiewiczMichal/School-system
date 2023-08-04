@@ -8,9 +8,6 @@ const initialState: LinksState = {
   register: {
     href: "",
   },
-  logout: {
-    href: "",
-  },
   users: {
     href: "",
   },
@@ -35,7 +32,6 @@ const linksSlice = createSlice({
     setLinks: (state, action: PayloadAction<LinksState>) => {
       state.login = action.payload.login;
       state.register = action.payload.register;
-      state.logout = action.payload.logout;
       state.users = action.payload.users;
       state.courses = action.payload.courses;
       state.degrees = action.payload.degrees;
