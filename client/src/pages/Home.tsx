@@ -1,7 +1,9 @@
+import { Greeting } from "../features/main-page";
+
 export default function Home() {
   return (
-    <div>
-      <h1>Home</h1>
-    </div>
+    <main className="pt-12">
+      <Greeting />
+    </main>
   );
 }

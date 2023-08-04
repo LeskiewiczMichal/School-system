@@ -22,12 +22,12 @@ export default function Header() {
         >
           About
         </a>
-        <a
+        <Link
+          to="/login"
           className="inline-block min-w-fit text-md font-bold text-primary align-baseline hover:text-primaryLighter"
-          href="#"
         >
           Sign In
-        </a>
+        </Link>
       </div>
     </header>
   );
