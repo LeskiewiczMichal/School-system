@@ -16,11 +16,16 @@ const login =
     return new Promise<void>(async (resolve, reject) => {
       try {
         // Get needed data
-        const link = getState().links.login.href;
+        const link = getState().links.login;
+        if (!link) {
+          reject(new Error("Login link is not set"));
+          return;
+        }
+
         const { email, password } = props;
 
         // Send request
-        const response = await axios.post(link, { email, password });
+        const response = await axios.post(link.href, { email, password });
 
         // Get and map response data
         const { user, _links, token } = response.data;

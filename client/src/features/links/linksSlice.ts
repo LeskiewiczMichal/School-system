@@ -2,27 +2,13 @@ import LinksState from "./LinksState";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState: LinksState = {
-  login: {
-    href: "",
-  },
-  register: {
-    href: "",
-  },
-  users: {
-    href: "",
-  },
-  courses: {
-    href: "",
-  },
-  degrees: {
-    href: "",
-  },
-  faculties: {
-    href: "",
-  },
-  files: {
-    href: "",
-  },
+  login: null,
+  register: null,
+  users: null,
+  courses: null,
+  degrees: null,
+  faculties: null,
+  files: null,
 };
 
 const linksSlice = createSlice({

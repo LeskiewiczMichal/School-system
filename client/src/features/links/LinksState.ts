@@ -1,25 +1,13 @@
+import APILink from "../../type/APILink";
+
 interface LinksState {
-  login: {
-    href: string;
-  };
-  register: {
-    href: string;
-  };
-  users: {
-    href: string;
-  };
-  courses: {
-    href: string;
-  };
-  degrees: {
-    href: string;
-  };
-  faculties: {
-    href: string;
-  };
-  files: {
-    href: string;
-  };
+  login: APILink | null;
+  register: APILink | null;
+  users: APILink | null;
+  courses: APILink | null;
+  degrees: APILink | null;
+  faculties: APILink | null;
+  files: APILink | null;
 }
 
 export default LinksState;
