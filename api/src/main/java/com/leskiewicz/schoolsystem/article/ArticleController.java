@@ -1,5 +1,6 @@
 package com.leskiewicz.schoolsystem.article;
 
+import com.leskiewicz.schoolsystem.article.utils.ArticleModelAssembler;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,10 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/articles")
 public class ArticleController {
 
-    public final ArticleService articleService;
+  public final ArticleService articleService;
+  public final ArticleModelAssembler articleModelAssembler;
 
-    @GetMapping
-    public Article getArticleById(Long id) {
-
-    }
+  @GetMapping
+  public Article getArticleById(Long id) {
+    return articleModelAssembler.toModel(articleService.getById(id));
+  }
 }

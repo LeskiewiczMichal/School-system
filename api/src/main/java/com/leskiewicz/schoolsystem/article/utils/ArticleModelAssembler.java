@@ -8,7 +8,9 @@ import com.leskiewicz.schoolsystem.article.ArticleController;
 import com.leskiewicz.schoolsystem.faculty.FacultyController;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ArticleModelAssembler extends RepresentationModelAssemblerSupport<Article, Article> {
   public ArticleModelAssembler() {
     super(ArticleController.class, Article.class);

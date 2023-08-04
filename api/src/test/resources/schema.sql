@@ -9,6 +9,7 @@ DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS degree;
 DROP TABLE IF EXISTS faculty;
 DROP TABLE IF EXISTS file;
+DROP TABLE IF EXISTS article;
 
 
 
@@ -100,4 +101,19 @@ CREATE TABLE course_file (
                              PRIMARY KEY (course_id, file_id),
                              FOREIGN KEY (course_id) REFERENCES course (id) ON DELETE CASCADE,
                              FOREIGN KEY (file_id) REFERENCES file (id) ON DELETE CASCADE
+);
+
+CREATE TABLE article(
+                        id BIGINT NOT NULL AUTO_INCREMENT,
+                        title VARCHAR(100) NOT NULL,
+                        preview VARCHAR(200) NOT NULL,
+                        content LONGTEXT NOT NULL,
+                        author_id BIGINT,
+                        category VARCHAR(50) NOT NULL,
+                        faculty_id BIGINT,
+                        image_id BIGINT,
+                        FOREIGN KEY (author_id) REFERENCES users(id),
+                        FOREIGN KEY (faculty_id) REFERENCES faculty(id),
+                        FOREIGN KEY (image_id) REFERENCES file(id),
+                        PRIMARY KEY (id)
 );
