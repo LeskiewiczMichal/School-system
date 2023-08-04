@@ -24,7 +24,7 @@ public class ArticleController {
    * @throws IllegalArgumentException if the given ID is null.
    */
   @GetMapping("/{id}")
-  public ResponseEntity<ArticleDto> getArticleById(Long id) {
+  public ResponseEntity<ArticleDto> getArticleById(@PathVariable Long id) {
     ArticleDto articleDto = articleModelAssembler.toModel(articleService.getById(id));
 
     return ResponseEntity.ok(articleDto);
