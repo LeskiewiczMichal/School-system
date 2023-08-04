@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { ReactComponent as DropdownArrow } from "../../../assets/icons/dropdown-arrow.svg";
 import RequestService from "../../../utils/RequestService";
@@ -82,7 +82,6 @@ export default function FacultiesDropdown() {
       >
         <span>Faculties</span>
         <DropdownArrow className="h-5 w-6" />{" "}
-        {/* Or your DropdownArrow component */}
       </button>
 
       {profileMenuOpen && (
@@ -92,11 +91,17 @@ export default function FacultiesDropdown() {
       {/* Dropdown */}
       <nav
         aria-labelledby="profileButton"
-        className={`z-50  bg-white border-b rounded-b-lg w-screen left-0  top-20 px-16 py-16  ${
+        className={`z-50 flex flex-col items-center bg-white border-b rounded-b-lg w-screen left-0  top-20 px-16 py-16  ${
           profileMenuOpen ? "absolute" : "hidden"
         }`}
       >
-        {/* User info */}
+        {/* Faculties */}
+        <Link
+          to="/faculties"
+          className="mb-4 text-2xl text-primaryDarkened hover:text-primaryDarkened bold italic underline"
+        >
+          Faculties and units
+        </Link>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 w-full h-full place-content-center justify-center items-center text-xl text-primary">
           {faculties.map((faculty) => (
             <div className="w-full flex justify-center">
