@@ -38,7 +38,7 @@ public class Article extends RepresentationModel<Article> {
   private String content;
 
   @ManyToOne
-  @Column(name = "author_id")
+  @JoinColumn(name = "author_id")
   private User author;
 
   @NotNull
@@ -47,10 +47,10 @@ public class Article extends RepresentationModel<Article> {
   private ArticleCategory category;
 
   @ManyToOne
-  @Column(name = "faculty_id")
+  @JoinColumn(name = "faculty_id")
   private Faculty faculty;
 
   @OneToOne
-  @Column(name = "image_id")
+  @JoinColumn(name = "image_id")
   private File image;
 }
