@@ -1,4 +1,5 @@
 import GlassBuilding from "../assets/glass-building.webp";
+import { Link } from "react-router-dom";
 
 export default function Greeting() {
   return (
@@ -12,12 +13,12 @@ export default function Greeting() {
           Welcome to our university's virtual campus, offering an array of
           opportunities for the upcoming academic adventure.
         </p>
-        <button
-          type="button"
-          className="bg-primary text-white font-bold text-md py-2 px-4"
+        <Link
+          to="/degrees"
+          className="bg-primary text-center text-white font-bold text-md py-2 px-4 hover:bg-primaryDarkened"
         >
           Browse the degree catalogue
-        </button>
+        </Link>
       </div>
     </section>
   );
