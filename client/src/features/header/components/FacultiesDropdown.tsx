@@ -49,7 +49,7 @@ export default function FacultiesDropdown() {
       {/* Dropdown */}
       <nav
         aria-labelledby="profileButton"
-        className={`z-50 bg-white border divide-y divide-gray-100 rounded-lg shadow w-screen sm:w-44 left-0 sm:-left-36 top-14 sm:top-10 dark:bg-gray-700 dark:divide-gray-600 ${
+        className={`z-50 bg-white border divide-y divide-gray-100 rounded-lg shadow w-screen sm:w-44 left-0 sm:-left-36 top-16 sm:top-10 dark:bg-gray-700 dark:divide-gray-600 ${
           profileMenuOpen ? "fixed sm:absolute" : "hidden"
         }`}
       >
