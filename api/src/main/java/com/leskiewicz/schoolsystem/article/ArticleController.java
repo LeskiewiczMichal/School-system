@@ -1,15 +1,11 @@
 package com.leskiewicz.schoolsystem.article;
 
 import com.leskiewicz.schoolsystem.article.dto.ArticleDto;
-import com.leskiewicz.schoolsystem.article.dto.CreateArticleRequest;
 import com.leskiewicz.schoolsystem.article.utils.ArticleDtoAssembler;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
 
 @RestController
 @AllArgsConstructor

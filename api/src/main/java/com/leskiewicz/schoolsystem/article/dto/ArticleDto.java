@@ -24,7 +24,7 @@ public class ArticleDto extends RepresentationModel<Article> {
   private String content;
   private final String author;
   private final String faculty;
-  private final String imgName;
+  private final String imgPath;
 
   @JsonIgnore private final Long authorId;
   @JsonIgnore private final Long facultyId;
