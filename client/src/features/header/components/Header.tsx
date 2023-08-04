@@ -3,7 +3,7 @@ import FacultiesDropdown from "./FacultiesDropdown";
 
 export default function Header() {
   return (
-    <header className="max-h-16 fixed w-full flex flex-auto justify-between items-center py-6 pr-8 bg-white border-b-2 border-primary">
+    <header className="max-h-20 flex flex-auto justify-between items-center py-6 pr-8 bg-white border-b-2 border-primary">
       <div className="flex  items-center">
         {/*<img className="h-8 w-8 mr-2" src={Logo} alt="Logo" />*/}
         <Logo className="h-28 w-28" />
