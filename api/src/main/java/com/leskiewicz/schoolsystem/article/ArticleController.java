@@ -6,6 +6,7 @@ import com.leskiewicz.schoolsystem.article.utils.ArticleDtoAssembler;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -27,8 +28,10 @@ public class ArticleController {
    * @throws IllegalArgumentException if the given ID is null.
    */
   @GetMapping
-  public ArticleDto getArticleById(Long id) {
-    return articleModelAssembler.toModel(articleService.getById(id));
+  public ResponseEntity<ArticleDto> getArticleById(Long id) {
+    ArticleDto articleDto = articleModelAssembler.toModel(articleService.getById(id));
+
+    return ResponseEntity.ok(articleDto);
   }
 
 //  @PostMapping
