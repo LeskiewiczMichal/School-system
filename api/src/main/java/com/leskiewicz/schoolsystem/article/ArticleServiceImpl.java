@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -82,10 +83,11 @@ public class ArticleServiceImpl implements ArticleService {
       if (originalFileName != null && (originalFileName.endsWith(".jpg") || originalFileName.endsWith(".jpeg")
               || originalFileName.endsWith(".png") || originalFileName.endsWith(".gif"))) {
         // The uploaded file is an image
-        File newImage = fileService.saveFile(imageFile);
+        String fileName = UUID.randomUUID().toString();
+        fileService.saveImage(imageFile, fileName);
 
         // Associate the File object with the Article
-        article.setImage(newImage);
+        article.setImage(fileName);
       } else {
         // The uploaded file is not an image
         throw new IllegalArgumentException("Uploaded file is not an image");

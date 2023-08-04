@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Service
 @AllArgsConstructor
@@ -31,5 +34,15 @@ public class FileServiceImpl implements FileService {
                     .getId()); // Set the ID of the user who uploaded the file.
     fileToSave.setFileData(file.getBytes());
     return fileRepository.save(fileToSave);
+  }
+
+  public void saveImage(MultipartFile imageFile, String fileName) {
+    try {
+      Path path = Paths.get("classpath:/static/images/" + fileName);
+      Files.write(path, imageFile.getBytes());
+    } catch (IOException e) {
+      // Handle exception
+      throw new RuntimeException("Could not store file " + fileName + ". Please try again!", e);
+    }
   }
 }

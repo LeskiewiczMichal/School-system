@@ -22,6 +22,7 @@ spring:
     multipart:
       max-file-size: 15MB
 
+
 ## Base path for api settings
 #server:
 #  servlet:

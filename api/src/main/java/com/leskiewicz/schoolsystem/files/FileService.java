@@ -9,4 +9,6 @@ public interface FileService {
   File getFileById(Long fileId);
 
   File saveFile(MultipartFile file) throws IOException;
+
+  void saveImage(MultipartFile imageFile, String fileName);
 }

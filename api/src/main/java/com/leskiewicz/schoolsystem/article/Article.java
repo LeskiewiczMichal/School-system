@@ -51,6 +51,6 @@ public class Article extends RepresentationModel<Article> {
   private Faculty faculty;
 
   @OneToOne
-  @JoinColumn(name = "image_id")
-  private File image;
+  @JoinColumn(name = "image_path")
+  private String imagePath;
 }
