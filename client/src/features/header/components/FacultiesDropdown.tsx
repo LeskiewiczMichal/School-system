@@ -1,11 +1,11 @@
-import { useEffect, useState, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { ReactComponent as DropdownArrow } from "../../../assets/icons/dropdown-arrow.svg";
 import RequestService from "../../../utils/RequestService";
 import APILink from "../../../type/APILink";
-import { Faculty } from "../../faculty";
 import ResourceNameWithLink from "../../../type/ResourceNameWithLink";
+import { SortDirection } from "../../../type/PaginationParams";
 
 export default function FacultiesDropdown() {
   const navigate = useNavigate();
@@ -46,6 +46,11 @@ export default function FacultiesDropdown() {
         // Call the API
         const responseData = await RequestService.performGetRequest({
           link: facultiesLink,
+          params: {
+            page: 0,
+            size: 20,
+            sort: ["name", SortDirection.ASC],
+          },
         });
 
         // Convert the response data into resources with links
@@ -87,23 +92,32 @@ export default function FacultiesDropdown() {
       {/* Dropdown */}
       <nav
         aria-labelledby="profileButton"
-        className={`z-50 h-3/5 bg-white border-b rounded-b-lg w-screen left-0  top-20  ${
+        className={`z-50 h-3/5 bg-white border-b rounded-b-lg w-screen left-0  top-20 px-16 py-16  ${
           profileMenuOpen ? "absolute" : "hidden"
         }`}
       >
         {/* User info */}
-        <div className="px-4 py-3 text-sm text-gray-900 dark:text-white"></div>
-        <ul
-          className="py-2 text-sm text-gray-700 dark:text-gray-200"
-          aria-labelledby="dropdownUserAvatarButton"
-        >
-          {/* Profile link button */}
-          <li>
-            {faculties.map((faculty) => (
-              <a href={faculty.link}>{faculty.name}</a>
-            ))}
-          </li>
-        </ul>
+        <div className="grid grid-cols-2 w-full place-content-center justify-center items-center text-xl text-primary">
+          {faculties.map((faculty) => (
+            <a
+              href={faculty.link}
+              className="flex justify-center items-center text-xl text-primary"
+            >
+              {faculty.name}
+            </a>
+          ))}
+        </div>
+        {/*<ul*/}
+        {/*  className="text-sm text-primary"*/}
+        {/*  aria-labelledby="dropdownUserAvatarButton"*/}
+        {/*>*/}
+        {/*  /!* Profile link button *!/*/}
+        {/*  <li>*/}
+        {/*    {faculties.map((faculty) => (*/}
+        {/*      <a href={faculty.link}>{faculty.name}</a>*/}
+        {/*    ))}*/}
+        {/*  </li>*/}
+        {/*</ul>*/}
       </nav>
     </div>
   );
