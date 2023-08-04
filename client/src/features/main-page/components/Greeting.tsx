@@ -3,9 +3,13 @@ import { Link } from "react-router-dom";
 
 export default function Greeting() {
   return (
-    <section className="flex flex-col lg:flex-row">
-      <img src={GlassBuilding} className="w-1/2 " alt="School building" />
-      <div className="flex flex-col justify-center  pr-16 pl-8 gap-4">
+    <section className="flex flex-col lg:flex-row lg:pt-12">
+      <img
+        src={GlassBuilding}
+        className="w-full lg:w-1/2"
+        alt="School building"
+      />
+      <div className="flex flex-col justify-center pl-8 pr-8 lg:pr-16 gap-4 pt-8">
         <h2 className="text-5xl font-extrabold text-primary">
           EMBRACE THE FUTURE AND UNLOCK YOUR POTENTIAL
         </h2>

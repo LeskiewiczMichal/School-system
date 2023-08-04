@@ -2,7 +2,7 @@ import { Greeting } from "../features/main-page";
 
 export default function Home() {
   return (
-    <main className="pt-12">
+    <main className="">
       <Greeting />
     </main>
   );
