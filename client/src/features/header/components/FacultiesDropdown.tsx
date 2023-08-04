@@ -58,7 +58,7 @@ export default function FacultiesDropdown() {
         responseData._embedded.faculties.forEach((faculty: any) => {
           const facultyNameWithLink: ResourceNameWithLink = {
             name: faculty.name,
-            link: faculty._links.self,
+            link: faculty._links.self.href,
           };
           facultiesArr.push(facultyNameWithLink);
         });
@@ -92,19 +92,21 @@ export default function FacultiesDropdown() {
       {/* Dropdown */}
       <nav
         aria-labelledby="profileButton"
-        className={`z-50 h-3/5 bg-white border-b rounded-b-lg w-screen left-0  top-20 px-16 py-16  ${
+        className={`z-50  bg-white border-b rounded-b-lg w-screen left-0  top-20 px-16 py-16  ${
           profileMenuOpen ? "absolute" : "hidden"
         }`}
       >
         {/* User info */}
-        <div className="grid grid-cols-2 w-full place-content-center justify-center items-center text-xl text-primary">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 w-full h-full place-content-center justify-center items-center text-xl text-primary">
           {faculties.map((faculty) => (
-            <a
-              href={faculty.link}
-              className="flex justify-center items-center text-xl text-primary"
-            >
-              {faculty.name}
-            </a>
+            <div className="w-full flex justify-center">
+              <a
+                href={faculty.link}
+                className="flex w-fit italic justify-center items-center text-xl text-primary hover:text-primaryDarkened"
+              >
+                {faculty.name}
+              </a>
+            </div>
           ))}
         </div>
         {/*<ul*/}
