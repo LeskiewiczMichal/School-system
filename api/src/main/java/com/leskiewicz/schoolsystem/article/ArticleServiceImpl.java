@@ -11,6 +11,7 @@ import com.leskiewicz.schoolsystem.files.FileRepository;
 import com.leskiewicz.schoolsystem.files.FileService;
 import com.leskiewicz.schoolsystem.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,6 +39,7 @@ public class ArticleServiceImpl implements ArticleService {
   }
 
   @Override
+  @Transactional
   public Article createArticle(CreateArticleRequest request) throws IOException {
     // Create a new Article object from the CreateArticleRequest
     Article article =
@@ -73,10 +75,21 @@ public class ArticleServiceImpl implements ArticleService {
     // Handle the image if available
     MultipartFile imageFile = request.getImage();
     if (imageFile != null && !imageFile.isEmpty()) {
-      File newImage = fileService.saveFile(imageFile);
+      // Get the original file name
+      String originalFileName = imageFile.getOriginalFilename();
 
-      // Associate the File object with the Article
-      article.setImage(newImage);
+      // Check the file extension to determine if it's an image
+      if (originalFileName != null && (originalFileName.endsWith(".jpg") || originalFileName.endsWith(".jpeg")
+              || originalFileName.endsWith(".png") || originalFileName.endsWith(".gif"))) {
+        // The uploaded file is an image
+        File newImage = fileService.saveFile(imageFile);
+
+        // Associate the File object with the Article
+        article.setImage(newImage);
+      } else {
+        // The uploaded file is not an image
+        throw new IllegalArgumentException("Uploaded file is not an image");
+      }
     }
 
     // Save the article
