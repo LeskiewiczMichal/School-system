@@ -25,7 +25,7 @@ public class ArticleDtoAssembler extends RepresentationModelAssemblerSupport<Art
 
     if (article.getFaculty() != null) {
       Link facultyLink =
-          linkTo(methodOn(FacultyController.class).getFacultyById(article.getFaculty().getId()))
+          linkTo(methodOn(FacultyController.class).getFacultyById(article.getFacultyId()))
               .withRel("faculty");
       article.add(facultyLink);
     }

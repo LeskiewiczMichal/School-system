@@ -31,8 +31,8 @@ public class ArticleController {
     return articleModelAssembler.toModel(articleService.getById(id));
   }
 
-  @PostMapping
-  public Article createArticle(@Valid @RequestBody CreateArticleRequest request) throws IOException {
-    return articleModelAssembler.toModel(articleService.createArticle(request));
-  }
+//  @PostMapping
+//  public Article createArticle(@Valid @RequestBody CreateArticleRequest request) throws IOException {
+//    return articleModelAssembler.toModel(articleService.createArticle(request));
+//  }
 }
