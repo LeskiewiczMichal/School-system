@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { ReactComponent as DropdownArrow } from "../../../assets/icons/dropdown-arrow.svg";
+import RequestService from "../../../utils/RequestService";
 
 export default function FacultiesDropdown() {
   const navigate = useNavigate();
@@ -32,6 +33,12 @@ export default function FacultiesDropdown() {
     };
   }, []);
 
+  // useEffect(() => {
+  //   const handleFetchFacultyNames = async () => {
+  //     await dispatch(RequestService.performGetRequest());
+  //   };
+  // }, []);
+
   return (
     <div ref={dropdownRef}>
       {/* User picture button */}
@@ -53,7 +60,7 @@ export default function FacultiesDropdown() {
       {/* Dropdown */}
       <nav
         aria-labelledby="profileButton"
-        className={`z-50 bg-white border-b rounded-b-lg border-b w-screen left-0  top-20  ${
+        className={`z-50 h-3/5 bg-white border-b rounded-b-lg border-b w-screen left-0  top-20  ${
           profileMenuOpen ? "absolute" : "hidden"
         }`}
       >
