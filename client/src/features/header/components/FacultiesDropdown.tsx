@@ -46,10 +46,14 @@ export default function FacultiesDropdown() {
         {/* Or your DropdownArrow component */}
       </button>
 
+      {profileMenuOpen && (
+        <div className="fixed z-40 top-20 left-0 right-0 bottom-0 bg-gray-600 opacity-40" />
+      )}
+
       {/* Dropdown */}
       <nav
         aria-labelledby="profileButton"
-        className={`z-50 bg-white border-b divide-y divide-gray-100 rounded-b-lg shadow w-screen left-0  top-14 sm:top-16  ${
+        className={`z-50 bg-white border-b rounded-b-lg border-b w-screen left-0  top-20  ${
           profileMenuOpen ? "absolute" : "hidden"
         }`}
       >
