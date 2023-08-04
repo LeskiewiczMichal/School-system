@@ -63,6 +63,10 @@ public class User {
     return role != Role.ROLE_STUDENT || degree != null;
   }
 
+  public String getFullName() {
+    return firstName + " " + lastName;
+  }
+
   @Override
   public String toString() {
     return "User{"

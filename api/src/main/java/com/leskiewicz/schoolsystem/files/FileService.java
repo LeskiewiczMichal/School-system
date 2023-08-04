@@ -3,6 +3,7 @@ package com.leskiewicz.schoolsystem.files;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.file.Path;
 
 public interface FileService {
 
@@ -11,4 +12,6 @@ public interface FileService {
   File saveFile(MultipartFile file) throws IOException;
 
   void saveImage(MultipartFile imageFile, String fileName);
+
+  Path getFile(String fileName) throws IOException;
 }

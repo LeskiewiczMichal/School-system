@@ -82,12 +82,12 @@ public class ArticleServiceImpl implements ArticleService {
       // Check the file extension to determine if it's an image
       if (originalFileName != null && (originalFileName.endsWith(".jpg") || originalFileName.endsWith(".jpeg")
               || originalFileName.endsWith(".png") || originalFileName.endsWith(".gif"))) {
-        // The uploaded file is an image
-        String fileName = UUID.randomUUID().toString();
+        // Store the image file
+        String fileName = UUID.randomUUID().toString() + originalFileName.substring(originalFileName.lastIndexOf('.'));
         fileService.saveImage(imageFile, fileName);
 
         // Associate the File object with the Article
-        article.setImage(fileName);
+        article.setImageName(fileName);
       } else {
         // The uploaded file is not an image
         throw new IllegalArgumentException("Uploaded file is not an image");
