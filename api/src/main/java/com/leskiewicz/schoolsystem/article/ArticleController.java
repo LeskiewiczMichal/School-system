@@ -1,7 +1,8 @@
 package com.leskiewicz.schoolsystem.article;
 
+import com.leskiewicz.schoolsystem.article.dto.ArticleDto;
 import com.leskiewicz.schoolsystem.article.dto.CreateArticleRequest;
-import com.leskiewicz.schoolsystem.article.utils.ArticleModelAssembler;
+import com.leskiewicz.schoolsystem.article.utils.ArticleDtoAssembler;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -15,7 +16,7 @@ import java.io.IOException;
 public class ArticleController {
 
   public final ArticleService articleService;
-  public final ArticleModelAssembler articleModelAssembler;
+  public final ArticleDtoAssembler articleModelAssembler;
 
   /**
    * Get an Article by its ID
@@ -26,7 +27,7 @@ public class ArticleController {
    * @throws IllegalArgumentException if the given ID is null.
    */
   @GetMapping
-  public Article getArticleById(Long id) {
+  public ArticleDto getArticleById(Long id) {
     return articleModelAssembler.toModel(articleService.getById(id));
   }
 

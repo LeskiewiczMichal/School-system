@@ -5,19 +5,20 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import com.leskiewicz.schoolsystem.article.Article;
 import com.leskiewicz.schoolsystem.article.ArticleController;
+import com.leskiewicz.schoolsystem.article.dto.ArticleDto;
 import com.leskiewicz.schoolsystem.faculty.FacultyController;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ArticleModelAssembler extends RepresentationModelAssemblerSupport<Article, Article> {
-  public ArticleModelAssembler() {
-    super(ArticleController.class, Article.class);
+public class ArticleDtoAssembler extends RepresentationModelAssemblerSupport<ArticleDto, ArticleDto> {
+  public ArticleDtoAssembler() {
+    super(ArticleController.class, ArticleDto.class);
   }
 
   @Override
-  public Article toModel(Article article) {
+  public ArticleDto toModel(ArticleDto article) {
     Link selfLink =
         linkTo(methodOn(ArticleController.class).getArticleById(article.getId())).withSelfRel();
     article.add(selfLink);
