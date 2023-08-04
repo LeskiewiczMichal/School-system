@@ -3,12 +3,19 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { ReactComponent as DropdownArrow } from "../../../assets/icons/dropdown-arrow.svg";
 import RequestService from "../../../utils/RequestService";
+import APILink from "../../../type/APILink";
+import { Faculty } from "../../faculty";
+import ResourceNameWithLink from "../../../type/ResourceNameWithLink";
 
 export default function FacultiesDropdown() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const facultiesLink: APILink | null = useAppSelector(
+    (state) => state.links.faculties,
+  );
+  const [faculties, setFaculties] = useState<ResourceNameWithLink[]>([]);
 
   const handleDropDown = () => {
     setProfileMenuOpen((oldState) => !oldState);
@@ -33,11 +40,18 @@ export default function FacultiesDropdown() {
     };
   }, []);
 
-  // useEffect(() => {
-  //   const handleFetchFacultyNames = async () => {
-  //     await dispatch(RequestService.performGetRequest());
-  //   };
-  // }, []);
+  useEffect(() => {
+    const handleFetchFacultyNames = async () => {
+      if (facultiesLink) {
+        const responseData = await RequestService.performGetRequest({
+          link: facultiesLink,
+        });
+        console.log(responseData);
+      }
+    };
+
+    handleFetchFacultyNames();
+  }, [facultiesLink]);
 
   return (
     <div ref={dropdownRef}>
@@ -60,7 +74,7 @@ export default function FacultiesDropdown() {
       {/* Dropdown */}
       <nav
         aria-labelledby="profileButton"
-        className={`z-50 h-3/5 bg-white border-b rounded-b-lg border-b w-screen left-0  top-20  ${
+        className={`z-50 h-3/5 bg-white border-b rounded-b-lg w-screen left-0  top-20  ${
           profileMenuOpen ? "absolute" : "hidden"
         }`}
       >

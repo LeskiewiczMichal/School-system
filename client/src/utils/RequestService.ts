@@ -4,10 +4,10 @@ import axios from "axios";
 
 interface ApiGetParams {
   link: APILink;
-  params: PaginationParams;
+  params?: PaginationParams;
 }
 
-const performGetRequest = (args: ApiGetParams) => {
+const performGetRequest = async (args: ApiGetParams) => {
   let {
     link,
     params = {
@@ -17,20 +17,23 @@ const performGetRequest = (args: ApiGetParams) => {
     },
   } = args;
 
+  let apiLink: string = "";
   if (link.templated) {
     // Process templated link to get the correct href
     if (link.href.endsWith("{?size,page,sort}")) {
-      link.href = link.href.replace(
+      apiLink = link.href.replace(
         "{?size,page,sort}",
         `?size=${params.size}&page=${params.page}&sort=${params.sort[0]},${params.sort[1]}`,
       );
     }
+  } else {
+    apiLink = link.href;
   }
 
   return new Promise<any>(async (resolve, reject) => {
     try {
       // Send request
-      const response = await axios.get(link.href);
+      const response = await axios.get(apiLink);
       resolve(response.data);
     } catch (error: any) {
       console.error(error);
