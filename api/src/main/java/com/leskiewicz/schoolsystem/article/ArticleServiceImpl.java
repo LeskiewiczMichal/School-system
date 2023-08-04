@@ -8,6 +8,7 @@ import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.FacultyRepository;
 import com.leskiewicz.schoolsystem.files.File;
 import com.leskiewicz.schoolsystem.files.FileRepository;
+import com.leskiewicz.schoolsystem.files.FileService;
 import com.leskiewicz.schoolsystem.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
@@ -24,7 +25,9 @@ public class ArticleServiceImpl implements ArticleService {
   public final ArticleRepository articleRepository;
   public final FacultyRepository facultyRepository;
   public final UserRepository userRepository;
-  public final FileRepository fileRepository;
+
+  // Services
+  public final FileService fileService;
 
   @Override
   public Article getById(Long id) {
@@ -70,22 +73,10 @@ public class ArticleServiceImpl implements ArticleService {
     // Handle the image if available
     MultipartFile imageFile = request.getImage();
     if (imageFile != null && !imageFile.isEmpty()) {
-      File newFile = new File();
-      newFile.setFileName(imageFile.getOriginalFilename());
-      newFile.setFileType(imageFile.getContentType());
-      newFile.setUploadedBy(
-              AuthenticationUtils.getAuthenticatedUser()
-                      .getId()); // Set the ID of the user who uploaded the file.
-      newFile.setFileData(imageFile.getBytes());
+      File newImage = fileService.saveFile(imageFile);
 
-        // Save the file to the database
-        newFile = fileRepository.save(newFile);
-
-      // Create a File object to store the image reference
-      File image = new File();
-      image.setFileReference(fileReference);
       // Associate the File object with the Article
-      article.setImage(image);
+      article.setImage(newImage);
     }
 
     // Save the article
