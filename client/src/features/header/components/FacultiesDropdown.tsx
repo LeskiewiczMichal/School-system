@@ -43,10 +43,23 @@ export default function FacultiesDropdown() {
   useEffect(() => {
     const handleFetchFacultyNames = async () => {
       if (facultiesLink) {
+        // Call the API
         const responseData = await RequestService.performGetRequest({
           link: facultiesLink,
         });
-        console.log(responseData);
+
+        // Convert the response data into resources with links
+        const facultiesArr: ResourceNameWithLink[] = [];
+        responseData._embedded.faculties.forEach((faculty: any) => {
+          const facultyNameWithLink: ResourceNameWithLink = {
+            name: faculty.name,
+            link: faculty._links.self,
+          };
+          facultiesArr.push(facultyNameWithLink);
+        });
+
+        // Set the state
+        setFaculties(facultiesArr);
       }
     };
 
@@ -86,29 +99,11 @@ export default function FacultiesDropdown() {
         >
           {/* Profile link button */}
           <li>
-            {/*<Link
-              to={`/profile/${user.id}`}
-              aria-label="profile"
-              className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-              onClick={() => setProfileMenuOpen(false)}
-            >
-              Profile
-            </Link>*/}
+            {faculties.map((faculty) => (
+              <a href={faculty.link}>{faculty.name}</a>
+            ))}
           </li>
         </ul>
-        {/* Sign out button */}
-        <div className="py-2">
-          <button
-            type="button"
-            className="block w-full px-4 py-2 text-sm text-left text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-            onClick={() => {
-              // dispatch(logout());
-              return navigate("/");
-            }}
-          >
-            Sign out
-          </button>
-        </div>
       </nav>
     </div>
   );
