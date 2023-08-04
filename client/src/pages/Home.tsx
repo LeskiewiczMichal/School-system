@@ -6,7 +6,7 @@ export default function Home() {
     <main className="">
       <Greeting />
       <section className="flex flex-col px-4 md:px-32 my-32 gap-16">
-        <div className="grid grid-cols-3  gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-3  gap-4">
           <Card
             imageUrl="https://img.freepik.com/free-photo/harvard-university-cambridge-usa_1268-14363.jpg"
             imageAlt="building"

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 export default function Greeting() {
   return (
-    <section className="flex flex-col sm:flex-row lg:pt-12 pb-12 border-b border-primaryLighter">
+    <section className="flex flex-col lg:flex-row lg:pt-12 pb-12 border-b border-primaryLighter">
       <img
         src={GlassBuilding}
         className="w-full lg:w-1/2"
