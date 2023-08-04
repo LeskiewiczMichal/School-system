@@ -1,6 +1,8 @@
 package com.leskiewicz.schoolsystem.article;
 
+import com.leskiewicz.schoolsystem.article.dto.ArticleDto;
 import com.leskiewicz.schoolsystem.article.dto.CreateArticleRequest;
+import com.leskiewicz.schoolsystem.article.utils.ArticleMapper;
 import com.leskiewicz.schoolsystem.authentication.utils.AuthenticationUtils;
 import com.leskiewicz.schoolsystem.authentication.utils.ValidationUtils;
 import com.leskiewicz.schoolsystem.error.ErrorMessages;
@@ -31,12 +33,15 @@ public class ArticleServiceImpl implements ArticleService {
   // Services
   public final FileService fileService;
 
+  // Mappers
+    public final ArticleMapper articleMapper;
+
   @Override
-  public Article getById(Long id) {
-    return articleRepository
+  public ArticleDto getById(Long id) {
+    return articleMapper.convertToDtoWithContent(articleRepository
         .findById(id)
         .orElseThrow(
-            () -> new EntityNotFoundException(ErrorMessages.objectWithIdNotFound("Article", id)));
+            () -> new EntityNotFoundException(ErrorMessages.objectWithIdNotFound("Article", id))));
   }
 
   @Override

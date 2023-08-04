@@ -45,6 +45,7 @@ public class ArticleMapperImpl implements ArticleMapper {
         return dto.build();
     }
 
+    @Override
     public ArticleDto convertToDtoWithContent(Article article) {
         ArticleDto dto = convertToDto(article);
         dto.setContent(article.getContent());
