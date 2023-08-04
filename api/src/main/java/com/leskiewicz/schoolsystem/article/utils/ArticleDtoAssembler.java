@@ -8,6 +8,7 @@ import com.leskiewicz.schoolsystem.article.ArticleController;
 import com.leskiewicz.schoolsystem.article.dto.ArticleDto;
 import com.leskiewicz.schoolsystem.faculty.FacultyController;
 import com.leskiewicz.schoolsystem.files.FileService;
+import com.leskiewicz.schoolsystem.user.UserController;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
@@ -31,11 +32,18 @@ public class ArticleDtoAssembler
         linkTo(methodOn(ArticleController.class).getArticleById(article.getId())).withSelfRel();
     article.add(selfLink);
 
-    if (article.getFaculty() != null) {
+    if (article.getFacultyId() != null) {
       Link facultyLink =
           linkTo(methodOn(FacultyController.class).getFacultyById(article.getFacultyId()))
               .withRel("faculty");
       article.add(facultyLink);
+    }
+
+    if (article.getAuthorId() !=  null) {
+        Link authorLink =
+            linkTo(methodOn(UserController.class).getUserById(article.getAuthorId()))
+                .withRel("author");
+        article.add(authorLink);
     }
 
     return article;

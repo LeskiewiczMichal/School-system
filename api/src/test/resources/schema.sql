@@ -111,9 +111,9 @@ CREATE TABLE article(
                         author_id BIGINT,
                         category VARCHAR(50) NOT NULL,
                         faculty_id BIGINT,
-                        image_id BIGINT,
+                        image_name VARCHAR(120),
                         FOREIGN KEY (author_id) REFERENCES users(id),
                         FOREIGN KEY (faculty_id) REFERENCES faculty(id),
-                        FOREIGN KEY (image_id) REFERENCES file(id),
                         PRIMARY KEY (id)
 );
+
