@@ -16,4 +16,6 @@ public interface FileService {
 //  Path getFile(String fileName) throws IOException;
 
   String getImageUrlPath(String fileName);
+
+  String uploadImage(MultipartFile image);
 }

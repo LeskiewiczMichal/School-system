@@ -91,30 +91,13 @@ public class ArticleServiceImpl implements ArticleService {
                             "User", AuthenticationUtils.getAuthenticatedUser().getId()))));
 
     // Handle the image if available
-    if (image != null && !image.isEmpty()) {
-      // Get the original file name
-      String originalFileName = image.getOriginalFilename();
-
-      // Check the file extension to determine if it's an image
-      if (originalFileName != null
-          && (originalFileName.endsWith(".jpg")
-              || originalFileName.endsWith(".jpeg")
-              || originalFileName.endsWith(".png")
-              || originalFileName.endsWith(".webp")
-              || originalFileName.endsWith(".gif"))) {
-        // Store the image file
-        String fileName =
-            UUID.randomUUID().toString()
-                + originalFileName.substring(originalFileName.lastIndexOf('.'));
-        fileService.saveImage(image, fileName);
-
-        // Associate the File object with the Article
-        article.setImageName(fileName);
-      } else {
-        // The uploaded file is not an image
-        throw new IllegalArgumentException("Uploaded file is not an image");
-      }
+    if (image != null) {
+      File file = fileService.(image);
+      article.setImage(file);
     }
+
+    article.setImageName(fileName);
+
 
     // Save the article
     ValidationUtils.validate(article);
