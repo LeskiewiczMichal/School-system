@@ -57,7 +57,19 @@ public class ArticleController {
 
     return ResponseEntity.ok(HalModelBuilder.halModelOf(articles).build());
   }
-  
+
+  /**
+   * Create an Article
+   *
+   * @param request JSON string with the article data as in ${@link CreateArticleRequest}.
+   * @param image optional image file for the article.
+   * @return the created {@link ArticleDto} with status 201 (CREATED).
+   * @throws IOException if provided the image file that cannot be read.
+   * @throws IllegalArgumentException and returns status 400 if the given request cannot be mapped
+   *     into ${@link CreateArticleRequest}.
+   * @throws EntityNotFoundException and returns status 404 if provided faculty id that doesn't
+   *     exist.
+   */
   @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
   public ResponseEntity<ArticleDto> createArticle(
       @RequestPart("article") String request,
@@ -66,6 +78,6 @@ public class ArticleController {
     ArticleDto article =
         articleModelAssembler.toModel(articleService.createArticle(request, image));
 
-    return ResponseEntity.ok(article);
+    return ResponseEntity.created(article.getLink("self").get().toUri()).body(article);
   }
 }
