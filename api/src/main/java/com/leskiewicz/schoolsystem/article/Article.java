@@ -35,7 +35,7 @@ public class Article extends RepresentationModel<Article> {
 
   @NotNull
   @Lob
-  @JsonIgnore
+  @Basic(fetch = FetchType.LAZY)
   @Column(name = "content")
   private String content;
 

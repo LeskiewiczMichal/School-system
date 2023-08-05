@@ -9,18 +9,16 @@ import com.leskiewicz.schoolsystem.authentication.utils.ValidationUtils;
 import com.leskiewicz.schoolsystem.error.ErrorMessages;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.FacultyRepository;
-import com.leskiewicz.schoolsystem.files.File;
-import com.leskiewicz.schoolsystem.files.FileRepository;
 import com.leskiewicz.schoolsystem.files.FileService;
 import com.leskiewicz.schoolsystem.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import java.io.IOException;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -50,6 +48,12 @@ public class ArticleServiceImpl implements ArticleService {
   }
 
   @Override
+  public Page<ArticleDto> getAll(Pageable pageable) {
+    Page<Article> articles = articleRepository.findAll(pageable);
+    return articles.map(articleMapper::convertToDto);
+  }
+
+  @Override
   @Transactional
   public ArticleDto createArticle(String request, MultipartFile image) throws IOException {
     CreateArticleRequest articleRequest;
@@ -76,7 +80,8 @@ public class ArticleServiceImpl implements ArticleService {
               .orElseThrow(
                   () ->
                       new EntityNotFoundException(
-                          ErrorMessages.objectWithIdNotFound("Faculty", articleRequest.getFacultyId())));
+                          ErrorMessages.objectWithIdNotFound(
+                              "Faculty", articleRequest.getFacultyId())));
       article.setFaculty(faculty);
     }
 
