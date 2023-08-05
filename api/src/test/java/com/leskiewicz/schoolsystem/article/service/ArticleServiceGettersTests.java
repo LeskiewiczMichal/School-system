@@ -24,40 +24,54 @@ import java.util.List;
 @ExtendWith(MockitoExtension.class)
 public class ArticleServiceGettersTests {
 
-    // Repositories
-    @Mock  private ArticleRepository articleRepository;
-    @Mock private FacultyRepository facultyRepository;
-    @Mock private UserRepository userRepository;
+  // Repositories
+  @Mock private ArticleRepository articleRepository;
+  @Mock private FacultyRepository facultyRepository;
+  @Mock private UserRepository userRepository;
 
-    // Services
-    @Mock private FileService fileService;
+  // Services
+  @Mock private FileService fileService;
 
-    // Mappers
-    @Mock private ArticleMapper articleMapper;
-    private final ObjectMapper objectMapper = new ObjectMapper();
+  // Mappers
+  @Mock private ArticleMapper articleMapper;
+  private final ObjectMapper objectMapper = new ObjectMapper();
 
-    @InjectMocks private ArticleServiceImpl articleService;
+  @InjectMocks private ArticleServiceImpl articleService;
 
-    @Test
-    public void getArticlesReturnsPagedArticles() {
-        Faculty faculty = TestHelper.createFaculty();
-        User author = TestHelper.createTeacher(faculty);
-        List<Article> articles = List.of(
-                TestHelper.createArticle(author, faculty),
-                TestHelper.createArticle(author, faculty)
-        );
-        List<ArticleDto> articleDtos = List.of(
-                TestHelper.createArticleDto(articles.get(0)),
-                TestHelper.createArticleDto(articles.get(1))
-        );
+  @Test
+  public void geAllReturnsPagedArticles() {
+    Faculty faculty = TestHelper.createFaculty();
+    User author = TestHelper.createTeacher(faculty);
+    List<Article> articles =
+        List.of(
+            TestHelper.createArticle(author, faculty), TestHelper.createArticle(author, faculty));
+    List<ArticleDto> articleDtos =
+        List.of(
+            TestHelper.createArticleDto(articles.get(0)),
+            TestHelper.createArticleDto(articles.get(1)));
 
-        CommonTests.serviceGetAll(
-                Article.class,
-                articles,
-                articleDtos,
-                articleRepository::findAll,
-                articleMapper::convertToDto,
-                articleService::getAll
-        );
-    }
+    CommonTests.serviceGetAll(
+        Article.class,
+        articles,
+        articleDtos,
+        articleRepository::findAll,
+        articleMapper::convertToDto,
+        articleService::getAll);
+  }
+
+  @Test
+  public void getByIdReturnsArticle() {
+    Faculty faculty = TestHelper.createFaculty();
+    User author = TestHelper.createTeacher(faculty);
+    Article article = TestHelper.createArticle(author, faculty);
+    ArticleDto articleDto = TestHelper.createArticleDto(article);
+
+    CommonTests.serviceGetById(
+        Article.class,
+        article,
+        articleDto,
+        articleRepository::findById,
+        articleMapper::convertToDtoWithContent,
+        articleService::getById);
+  }
 }
