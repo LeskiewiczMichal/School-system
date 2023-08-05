@@ -215,7 +215,7 @@ public class TestHelper {
         .title("Test Title")
         .preview("Test Preview")
         .content("Test Content")
-            .imageName("test.jpg")
+        .imageName("test.jpg")
         .build();
   }
 

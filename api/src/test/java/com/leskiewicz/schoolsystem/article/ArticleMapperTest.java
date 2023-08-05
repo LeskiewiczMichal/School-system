@@ -82,15 +82,15 @@ public class ArticleMapperTest {
                     .title(article.getTitle())
                     .preview(article.getPreview())
                     .author("TestUser")
+                    .authorId(1L)
                     .category(article.getCategory())
                     .faculty("TestFaculty")
-                    .imgPath("/imagess/" + article.getImageName())
+                    .facultyId(1L)
                     .content(article.getContent())
                     .build();
 
     ArticleDto result = articleMapper.convertToDtoWithContent(article);
-    System.out.println(expectedArticleDto);
 
-    Assertions.assertEquals(expectedArticleDto, result);
+    Assertions.assertEquals(expectedArticleDto.toString(), result.toString());
   }
 }
