@@ -92,12 +92,9 @@ public class ArticleServiceImpl implements ArticleService {
 
     // Handle the image if available
     if (image != null) {
-      File file = fileService.(image);
-      article.setImage(file);
+      String filename = fileService.uploadImage(image);
+      article.setImageName(filename);
     }
-
-    article.setImageName(fileName);
-
 
     // Save the article
     ValidationUtils.validate(article);
