@@ -48,14 +48,15 @@ public class ArticleMapperTest {
             .title(article.getTitle())
             .preview(article.getPreview())
             .author("TestUser")
+            .authorId(1L)
             .category(article.getCategory())
             .faculty("TestFaculty")
-            .imgPath("/images/" + article.getImageName())
+            .facultyId(1L)
             .build();
 
     ArticleDto result = articleMapper.convertToDto(article);
 
-    Assertions.assertEquals(expectedArticleDto, result);
+    Assertions.assertEquals(expectedArticleDto.toString(), result.toString());
   }
 
   @Test
@@ -77,17 +78,17 @@ public class ArticleMapperTest {
     Article article = TestHelper.createArticle(user, faculty);
 
     ArticleDto expectedArticleDto =
-            ArticleDto.builder()
-                    .id(1L)
-                    .title(article.getTitle())
-                    .preview(article.getPreview())
-                    .author("TestUser")
-                    .authorId(1L)
-                    .category(article.getCategory())
-                    .faculty("TestFaculty")
-                    .facultyId(1L)
-                    .content(article.getContent())
-                    .build();
+        ArticleDto.builder()
+            .id(1L)
+            .title(article.getTitle())
+            .preview(article.getPreview())
+            .author("TestUser")
+            .authorId(1L)
+            .category(article.getCategory())
+            .faculty("TestFaculty")
+            .facultyId(1L)
+            .content(article.getContent())
+            .build();
 
     ArticleDto result = articleMapper.convertToDtoWithContent(article);
 
