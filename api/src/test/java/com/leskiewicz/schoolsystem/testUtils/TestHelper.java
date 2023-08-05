@@ -233,4 +233,19 @@ public class TestHelper {
         .content("Test Content")
         .build();
   }
+
+  public static ArticleDto createArticleDto(Article article) {
+    return ArticleDto.builder()
+        .id(article.getId())
+        .author(article.getAuthor().getFirstName() + " " + article.getAuthor().getLastName())
+        .authorId(article.getAuthor().getId())
+        .faculty(article.getFaculty().getName())
+        .facultyId(article.getFaculty().getId())
+        .category(article.getCategory())
+        .imgPath("/images/" + article.getImageName())
+        .title(article.getTitle())
+        .preview(article.getPreview())
+        .content(article.getContent())
+        .build();
+  }
 }
