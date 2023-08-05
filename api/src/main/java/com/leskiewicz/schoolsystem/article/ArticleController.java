@@ -39,20 +39,41 @@ public class ArticleController {
 
   @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
   public ResponseEntity<ArticleDto> createArticle(
-      @Valid @RequestPart("article") String request, @RequestPart("image") MultipartFile image)
+      @Valid @RequestPart("article") String request,
+      @RequestPart(value = "image", required = false) MultipartFile image)
       throws IOException {
     CreateArticleRequest createArticleRequest;
+    System.out.println("here");
     try {
       ObjectMapper objectMapper = new ObjectMapper();
-       createArticleRequest =
-          objectMapper.readValue(request, CreateArticleRequest.class);
+      createArticleRequest = objectMapper.readValue(request, CreateArticleRequest.class);
     } catch (IOException e) {
       throw new IllegalArgumentException("Failed to parse JSON into CreateArticleRequest");
     }
-        createArticleRequest.setImage(image);
+    createArticleRequest.setImage(image);
 
-        ArticleDto article = articleModelAssembler.toModel(articleService.createArticle(createArticleRequest));
+    ArticleDto article =
+        articleModelAssembler.toModel(articleService.createArticle(createArticleRequest));
 
-        return ResponseEntity.ok(article);
+    return ResponseEntity.ok(article);
   }
+
+//  @PostMapping(value = "/", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+//  public ResponseEntity<ArticleDto> createArticle(
+//          @Valid @Req("article") String request)
+//          throws IOException {
+//    CreateArticleRequest createArticleRequest;
+//    System.out.println("here");
+//    try {
+//      ObjectMapper objectMapper = new ObjectMapper();
+//      createArticleRequest = objectMapper.readValue(request, CreateArticleRequest.class);
+//    } catch (IOException e) {
+//      throw new IllegalArgumentException("Failed to parse JSON into CreateArticleRequest");
+//    }
+//
+//    ArticleDto article =
+//            articleModelAssembler.toModel(articleService.createArticle(createArticleRequest));
+//
+//    return ResponseEntity.ok(article);
+//  }
 }
