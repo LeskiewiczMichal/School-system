@@ -1,5 +1,7 @@
 package com.leskiewicz.schoolsystem.testUtils;
 
+import com.leskiewicz.schoolsystem.article.ArticleCategory;
+import com.leskiewicz.schoolsystem.article.dto.ArticleDto;
 import com.leskiewicz.schoolsystem.authentication.Role;
 import com.leskiewicz.schoolsystem.course.Course;
 import com.leskiewicz.schoolsystem.course.dto.CourseDto;
@@ -200,6 +202,21 @@ public class TestHelper {
         .fileType("text/plain")
         .fileData("Hello, World!".getBytes())
         .uploadedBy(1L)
+        .build();
+  }
+
+  public static ArticleDto createArticleDto() {
+    return ArticleDto.builder()
+        .id(1L)
+        .author("John Doe")
+        .authorId(1L)
+        .faculty("Test Faculty")
+        .facultyId(1L)
+        .category(ArticleCategory.NEWS)
+        .imgPath("/images/test.jpg")
+        .title("Test Title")
+        .preview("Test Preview")
+        .content("Test Content")
         .build();
   }
 }
