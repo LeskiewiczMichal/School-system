@@ -1,5 +1,6 @@
 package com.leskiewicz.schoolsystem.article;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.leskiewicz.schoolsystem.article.dto.ArticleDto;
 import com.leskiewicz.schoolsystem.article.dto.CreateArticleRequest;
 import com.leskiewicz.schoolsystem.article.utils.ArticleMapper;
@@ -26,45 +27,56 @@ import java.util.UUID;
 public class ArticleServiceImpl implements ArticleService {
 
   // Repositories
-  public final ArticleRepository articleRepository;
-  public final FacultyRepository facultyRepository;
-  public final UserRepository userRepository;
+  private final ArticleRepository articleRepository;
+  private final FacultyRepository facultyRepository;
+  private final UserRepository userRepository;
 
   // Services
-  public final FileService fileService;
+  private final FileService fileService;
 
   // Mappers
-    public final ArticleMapper articleMapper;
+  private final ArticleMapper articleMapper;
+  private final ObjectMapper objectMapper = new ObjectMapper();
 
   @Override
   public ArticleDto getById(Long id) {
-    return articleMapper.convertToDtoWithContent(articleRepository
-        .findById(id)
-        .orElseThrow(
-            () -> new EntityNotFoundException(ErrorMessages.objectWithIdNotFound("Article", id))));
+    return articleMapper.convertToDtoWithContent(
+        articleRepository
+            .findById(id)
+            .orElseThrow(
+                () ->
+                    new EntityNotFoundException(
+                        ErrorMessages.objectWithIdNotFound("Article", id))));
   }
 
   @Override
   @Transactional
-  public ArticleDto createArticle(CreateArticleRequest request) throws IOException {
+  public ArticleDto createArticle(String request, MultipartFile image) throws IOException {
+    CreateArticleRequest articleRequest;
+    try {
+      articleRequest = objectMapper.readValue(request, CreateArticleRequest.class);
+    } catch (IOException e) {
+      throw new IllegalArgumentException("Failed to parse JSON into CreateArticleRequest");
+    }
+
     // Create a new Article object from the CreateArticleRequest
     Article article =
         Article.builder()
-            .title(request.getTitle())
-            .preview(request.getPreview())
-            .content(request.getContent())
-            .category(request.getCategory())
+            .title(articleRequest.getTitle())
+            .preview(articleRequest.getPreview())
+            .content(articleRequest.getContent())
+            .category(articleRequest.getCategory())
             .build();
 
     // Set the Faculty if available
-    if (request.getFacultyId() != null) {
+    if (articleRequest.getFacultyId() != null) {
       Faculty faculty =
           facultyRepository
-              .findById(request.getFacultyId())
+              .findById(articleRequest.getFacultyId())
               .orElseThrow(
                   () ->
                       new EntityNotFoundException(
-                          ErrorMessages.objectWithIdNotFound("Faculty", request.getFacultyId())));
+                          ErrorMessages.objectWithIdNotFound("Faculty", articleRequest.getFacultyId())));
       article.setFaculty(faculty);
     }
 
@@ -79,17 +91,22 @@ public class ArticleServiceImpl implements ArticleService {
                             "User", AuthenticationUtils.getAuthenticatedUser().getId()))));
 
     // Handle the image if available
-    MultipartFile imageFile = request.getImage();
-    if (imageFile != null && !imageFile.isEmpty()) {
+    if (image != null && !image.isEmpty()) {
       // Get the original file name
-      String originalFileName = imageFile.getOriginalFilename();
+      String originalFileName = image.getOriginalFilename();
 
       // Check the file extension to determine if it's an image
-      if (originalFileName != null && (originalFileName.endsWith(".jpg") || originalFileName.endsWith(".jpeg")
-              || originalFileName.endsWith(".png") ||  originalFileName.endsWith(".webp") || originalFileName.endsWith(".gif"))) {
+      if (originalFileName != null
+          && (originalFileName.endsWith(".jpg")
+              || originalFileName.endsWith(".jpeg")
+              || originalFileName.endsWith(".png")
+              || originalFileName.endsWith(".webp")
+              || originalFileName.endsWith(".gif"))) {
         // Store the image file
-        String fileName = UUID.randomUUID().toString() + originalFileName.substring(originalFileName.lastIndexOf('.'));
-        fileService.saveImage(imageFile, fileName);
+        String fileName =
+            UUID.randomUUID().toString()
+                + originalFileName.substring(originalFileName.lastIndexOf('.'));
+        fileService.saveImage(image, fileName);
 
         // Associate the File object with the Article
         article.setImageName(fileName);

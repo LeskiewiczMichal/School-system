@@ -25,10 +25,4 @@ public class CreateArticleRequest {
     private ArticleCategory category;
 
     private Long facultyId;
-
-    private MultipartFile image;
-
-    public void setImage(MultipartFile image) {
-        this.image = image;
-    }
 }
