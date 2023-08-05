@@ -5,6 +5,7 @@ import com.leskiewicz.schoolsystem.article.dto.ArticleDto;
 import com.leskiewicz.schoolsystem.article.dto.CreateArticleRequest;
 import com.leskiewicz.schoolsystem.article.utils.ArticleDtoAssembler;
 import com.leskiewicz.schoolsystem.dto.request.PageableRequest;
+import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -41,6 +42,14 @@ public class ArticleController {
     return ResponseEntity.ok(article);
   }
 
+  /**
+   * Get all Articles
+   *
+   * @param request ${@link PageableRequest} with pagination parameters.
+   * @return status 200 (OK) and in body the paged list of {@link ArticleDto} objects and page
+   *     metadata. If there are no articles, an empty page is returned (without _embedded.articles
+   *     field).
+   */
   @GetMapping
   public ResponseEntity<RepresentationModel<ArticleDto>> getArticles(PageableRequest request) {
     Page<ArticleDto> articles = articleService.getAll(request.toPageable());
@@ -48,7 +57,7 @@ public class ArticleController {
 
     return ResponseEntity.ok(HalModelBuilder.halModelOf(articles).build());
   }
-
+  
   @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
   public ResponseEntity<ArticleDto> createArticle(
       @RequestPart("article") String request,
@@ -59,23 +68,4 @@ public class ArticleController {
 
     return ResponseEntity.ok(article);
   }
-
-  //  @PostMapping(value = "/", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-  //  public ResponseEntity<ArticleDto> createArticle(
-  //          @Valid @Req("article") String request)
-  //          throws IOException {
-  //    CreateArticleRequest createArticleRequest;
-  //    System.out.println("here");
-  //    try {
-  //      ObjectMapper objectMapper = new ObjectMapper();
-  //      createArticleRequest = objectMapper.readValue(request, CreateArticleRequest.class);
-  //    } catch (IOException e) {
-  //      throw new IllegalArgumentException("Failed to parse JSON into CreateArticleRequest");
-  //    }
-  //
-  //    ArticleDto article =
-  //            articleModelAssembler.toModel(articleService.createArticle(createArticleRequest));
-  //
-  //    return ResponseEntity.ok(article);
-  //  }
 }
