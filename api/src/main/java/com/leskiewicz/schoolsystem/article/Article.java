@@ -9,6 +9,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.hateoas.RepresentationModel;
 
+import java.util.Objects;
+
 @Getter
 @Setter
 @Builder(toBuilder = true)
@@ -64,5 +66,18 @@ public class Article extends RepresentationModel<Article> {
             ", faculty=" + faculty +
             ", imageName='" + imageName + '\'' +
             '}';
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof Article article)) return false;
+    if (!super.equals(o)) return false;
+    return Objects.equals(getId(), article.getId()) && Objects.equals(getTitle(), article.getTitle()) && Objects.equals(getPreview(), article.getPreview()) && getCategory() == article.getCategory();
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(super.hashCode(), getId(), getTitle(), getPreview(), getCategory());
   }
 }
