@@ -4,9 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.leskiewicz.schoolsystem.article.dto.ArticleDto;
 import com.leskiewicz.schoolsystem.article.dto.CreateArticleRequest;
 import com.leskiewicz.schoolsystem.article.utils.ArticleDtoAssembler;
+import com.leskiewicz.schoolsystem.dto.request.PageableRequest;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,6 +41,14 @@ public class ArticleController {
     return ResponseEntity.ok(article);
   }
 
+  @GetMapping
+  public ResponseEntity<RepresentationModel<ArticleDto>> getArticles(PageableRequest request) {
+    Page<ArticleDto> articles = articleService.getAll(request.toPageable());
+    articles = articles.map(articleModelAssembler::toModel);
+
+    return ResponseEntity.ok(HalModelBuilder.halModelOf(articles).build());
+  }
+
   @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
   public ResponseEntity<ArticleDto> createArticle(
       @RequestPart("article") String request,
@@ -48,22 +60,22 @@ public class ArticleController {
     return ResponseEntity.ok(article);
   }
 
-//  @PostMapping(value = "/", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-//  public ResponseEntity<ArticleDto> createArticle(
-//          @Valid @Req("article") String request)
-//          throws IOException {
-//    CreateArticleRequest createArticleRequest;
-//    System.out.println("here");
-//    try {
-//      ObjectMapper objectMapper = new ObjectMapper();
-//      createArticleRequest = objectMapper.readValue(request, CreateArticleRequest.class);
-//    } catch (IOException e) {
-//      throw new IllegalArgumentException("Failed to parse JSON into CreateArticleRequest");
-//    }
-//
-//    ArticleDto article =
-//            articleModelAssembler.toModel(articleService.createArticle(createArticleRequest));
-//
-//    return ResponseEntity.ok(article);
-//  }
+  //  @PostMapping(value = "/", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+  //  public ResponseEntity<ArticleDto> createArticle(
+  //          @Valid @Req("article") String request)
+  //          throws IOException {
+  //    CreateArticleRequest createArticleRequest;
+  //    System.out.println("here");
+  //    try {
+  //      ObjectMapper objectMapper = new ObjectMapper();
+  //      createArticleRequest = objectMapper.readValue(request, CreateArticleRequest.class);
+  //    } catch (IOException e) {
+  //      throw new IllegalArgumentException("Failed to parse JSON into CreateArticleRequest");
+  //    }
+  //
+  //    ArticleDto article =
+  //            articleModelAssembler.toModel(articleService.createArticle(createArticleRequest));
+  //
+  //    return ResponseEntity.ok(article);
+  //  }
 }

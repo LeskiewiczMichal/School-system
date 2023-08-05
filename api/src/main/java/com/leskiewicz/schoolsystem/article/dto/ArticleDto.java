@@ -17,7 +17,7 @@ import java.util.Objects;
 @Builder
 @Relation(collectionRelation = "articles")
 @AllArgsConstructor
-public class ArticleDto extends RepresentationModel<Article> {
+public class ArticleDto extends RepresentationModel<ArticleDto> {
 
   @NonNull private final Long id;
   @NonNull private final String title;
