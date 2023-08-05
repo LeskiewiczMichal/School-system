@@ -14,10 +14,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @RequiredArgsConstructor
-public class AppConfig implements WebMvcConfigurer {
+public class AppConfig {
 
-  @Value("${upload.path.images}")
-  private String uploadImagesPath;
+//  @Value("${upload.path.images}")
+//  private String uploadImagesPath;
 
   @Bean
   public ModelMapper modelMapper() {
@@ -26,11 +26,12 @@ public class AppConfig implements WebMvcConfigurer {
     return modelMapper;
   }
 
-  @Override
-  public void addResourceHandlers(ResourceHandlerRegistry registry) {
-    registry.addResourceHandler("/images/**")
-            .addResourceLocations(uploadImagesPath);
-  }
+//  @Override
+//  public void addResourceHandlers(ResourceHandlerRegistry registry) {
+//    System.out.println("UPLOADIMAGESPATH = " + uploadImagesPath);
+//    registry.addResourceHandler("/images/**")
+//            .addResourceLocations(uploadImagesPath);
+//  }
 
   @Bean
   public HateoasSortHandlerMethodArgumentResolver sortResolver() {

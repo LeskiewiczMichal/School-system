@@ -5,6 +5,9 @@ import com.leskiewicz.schoolsystem.config.EnvironmentService;
 import com.leskiewicz.schoolsystem.error.ErrorMessages;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -25,6 +28,9 @@ public class FileServiceImpl implements FileService {
 
   private final FileRepository fileRepository;
   private final EnvironmentService environmentService;
+  private final ResourceLoader resourceLoader;
+
+  private final Logger logger = LoggerFactory.getLogger(FileServiceImpl.class);
 
   public File getFileById(Long fileId) {
     return fileRepository
@@ -107,6 +113,7 @@ public class FileServiceImpl implements FileService {
 
       // Save the image to the destination folder
       java.nio.file.Path destination = path.resolve(fileName);
+      logger.info("Saving image to {}", destination);
       image.transferTo(destination.toFile());
     } catch (IOException e) {
       throw new RuntimeException("Could not store file " + fileName + ". Please try again!", e);

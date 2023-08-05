@@ -31,4 +31,4 @@ spring:
 # Custom variables
 upload:
   path:
-    images: "/Users/michalleskiewicz/Programowanie/repos/School-system/api/images/"
+    images: "/Users/michalleskiewicz/Programowanie/repos/School-system/api/src/main/resources/static/images/"
