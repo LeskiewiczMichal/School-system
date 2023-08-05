@@ -1,5 +1,6 @@
 package com.leskiewicz.schoolsystem.article.utils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.leskiewicz.schoolsystem.article.Article;
 import com.leskiewicz.schoolsystem.article.dto.ArticleDto;
 import com.leskiewicz.schoolsystem.authentication.utils.ValidationUtils;
@@ -49,8 +50,8 @@ public class ArticleMapperImpl implements ArticleMapper {
 
     if (article.getImageName() != null) {
       try {
-        String path = fileService.getFile(article.getImageName()).toString();
-        path = path.substring(path.indexOf("/images"));
+        String path = fileService.getImageUrlPath(article.getImageName());
+//        path = path.substring(path.indexOf("/images"));
         dto.imgPath(path);
       } catch (Exception e) {
         logger.error("Error while getting image path for article with id: " + article.getId());

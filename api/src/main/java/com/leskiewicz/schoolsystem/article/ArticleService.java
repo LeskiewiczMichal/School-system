@@ -9,5 +9,5 @@ public interface ArticleService {
 
     ArticleDto getById(Long id);
 
-    Article createArticle(CreateArticleRequest request) throws IOException;
+    ArticleDto createArticle(CreateArticleRequest request) throws IOException;
 }

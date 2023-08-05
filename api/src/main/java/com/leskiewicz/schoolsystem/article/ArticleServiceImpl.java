@@ -46,7 +46,7 @@ public class ArticleServiceImpl implements ArticleService {
 
   @Override
   @Transactional
-  public Article createArticle(CreateArticleRequest request) throws IOException {
+  public ArticleDto createArticle(CreateArticleRequest request) throws IOException {
     // Create a new Article object from the CreateArticleRequest
     Article article =
         Article.builder()
@@ -86,7 +86,7 @@ public class ArticleServiceImpl implements ArticleService {
 
       // Check the file extension to determine if it's an image
       if (originalFileName != null && (originalFileName.endsWith(".jpg") || originalFileName.endsWith(".jpeg")
-              || originalFileName.endsWith(".png") || originalFileName.endsWith(".gif"))) {
+              || originalFileName.endsWith(".png") ||  originalFileName.endsWith(".webp") || originalFileName.endsWith(".gif"))) {
         // Store the image file
         String fileName = UUID.randomUUID().toString() + originalFileName.substring(originalFileName.lastIndexOf('.'));
         fileService.saveImage(imageFile, fileName);
@@ -101,6 +101,6 @@ public class ArticleServiceImpl implements ArticleService {
 
     // Save the article
     ValidationUtils.validate(article);
-    return articleRepository.save(article);
+    return articleMapper.convertToDto(articleRepository.save(article));
   }
 }

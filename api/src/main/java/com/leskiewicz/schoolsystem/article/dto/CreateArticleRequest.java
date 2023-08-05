@@ -2,29 +2,33 @@ package com.leskiewicz.schoolsystem.article.dto;
 
 import com.leskiewicz.schoolsystem.article.ArticleCategory;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @Getter
+@Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class CreateArticleRequest {
 
     @NotNull(message = "Article title required")
-    private final String title;
+    private String title;
 
     @NotNull(message = "Article preview required")
-    private final String preview;
+    private String preview;
 
     @NotNull(message = "Article content required")
-    private final String content;
+    private String content;
 
     @NotNull(message = "Article category required")
-    private final ArticleCategory category;
+    private ArticleCategory category;
 
-    private final Long facultyId;
+    private Long facultyId;
 
-    private final MultipartFile image;
+    private MultipartFile image;
+
+    public void setImage(MultipartFile image) {
+        this.image = image;
+    }
 }

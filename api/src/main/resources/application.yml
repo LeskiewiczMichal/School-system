@@ -28,3 +28,7 @@ spring:
 #  servlet:
 #    context-path: /api
 
+# Custom variables
+upload:
+  path:
+    images: "/Users/michalleskiewicz/Programowanie/repos/School-system/api/images/"

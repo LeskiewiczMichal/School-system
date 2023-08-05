@@ -1,11 +1,18 @@
 package com.leskiewicz.schoolsystem.article;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.leskiewicz.schoolsystem.article.dto.ArticleDto;
+import com.leskiewicz.schoolsystem.article.dto.CreateArticleRequest;
 import com.leskiewicz.schoolsystem.article.utils.ArticleDtoAssembler;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @AllArgsConstructor
@@ -25,13 +32,27 @@ public class ArticleController {
    */
   @GetMapping("/{id}")
   public ResponseEntity<ArticleDto> getArticleById(@PathVariable Long id) {
-    ArticleDto articleDto = articleModelAssembler.toModel(articleService.getById(id));
+    ArticleDto article = articleModelAssembler.toModel(articleService.getById(id));
 
-    return ResponseEntity.ok(articleDto);
+    return ResponseEntity.ok(article);
   }
 
-//  @PostMapping
-//  public Article createArticle(@Valid @RequestBody CreateArticleRequest request) throws IOException {
-//    return articleModelAssembler.toModel(articleService.createArticle(request));
-//  }
+  @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+  public ResponseEntity<ArticleDto> createArticle(
+      @Valid @RequestPart("article") String request, @RequestPart("image") MultipartFile image)
+      throws IOException {
+    CreateArticleRequest createArticleRequest;
+    try {
+      ObjectMapper objectMapper = new ObjectMapper();
+       createArticleRequest =
+          objectMapper.readValue(request, CreateArticleRequest.class);
+    } catch (IOException e) {
+      throw new IllegalArgumentException("Failed to parse JSON into CreateArticleRequest");
+    }
+        createArticleRequest.setImage(image);
+
+        ArticleDto article = articleModelAssembler.toModel(articleService.createArticle(createArticleRequest));
+
+        return ResponseEntity.ok(article);
+  }
 }

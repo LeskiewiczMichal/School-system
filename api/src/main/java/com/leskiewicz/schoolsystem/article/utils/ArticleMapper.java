@@ -8,4 +8,5 @@ public interface ArticleMapper {
     ArticleDto convertToDto(Article article);
 
     ArticleDto convertToDtoWithContent(Article article);
+
 }

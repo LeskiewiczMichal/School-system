@@ -13,5 +13,7 @@ public interface FileService {
 
   void saveImage(MultipartFile imageFile, String fileName);
 
-  Path getFile(String fileName) throws IOException;
+//  Path getFile(String fileName) throws IOException;
+
+  String getImageUrlPath(String fileName);
 }
