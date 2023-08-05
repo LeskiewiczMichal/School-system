@@ -4,6 +4,7 @@ import com.leskiewicz.schoolsystem.article.dto.ArticleDto;
 import com.leskiewicz.schoolsystem.article.utils.ArticleMapper;
 import com.leskiewicz.schoolsystem.article.utils.ArticleMapperImpl;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
+import com.leskiewicz.schoolsystem.files.FileService;
 import com.leskiewicz.schoolsystem.testUtils.TestHelper;
 import com.leskiewicz.schoolsystem.user.User;
 import org.junit.jupiter.api.Assertions;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -19,6 +21,7 @@ import static org.mockito.BDDMockito.given;
 @ExtendWith(MockitoExtension.class)
 public class ArticleMapperTest {
 
+  @Mock private FileService fileService;
   @InjectMocks private ArticleMapperImpl articleMapper;
 
   User user;
@@ -44,7 +47,6 @@ public class ArticleMapperTest {
             .id(1L)
             .title(article.getTitle())
             .preview(article.getPreview())
-            .content(article.getContent())
             .author("TestUser")
             .category(article.getCategory())
             .faculty("TestFaculty")
@@ -57,11 +59,38 @@ public class ArticleMapperTest {
   }
 
   @Test
-  public void convertToDtoThrowsIllegalArgumentExceptionOnNoId() {
+  public void convertToDto_ThrowsIllegalArgumentException_OnNoId() {
     Article article = TestHelper.createArticle(user, faculty);
     article.setId(null);
 
     Assertions.assertThrows(
         IllegalArgumentException.class, () -> articleMapper.convertToDto(article));
+  }
+
+  @Test
+  public void convertToDtoWithContentCorrect() {
+    given(user.getFullName()).willReturn("TestUser");
+    given(faculty.getName()).willReturn("TestFaculty");
+    given(user.getId()).willReturn(1L);
+    given(faculty.getId()).willReturn(1L);
+
+    Article article = TestHelper.createArticle(user, faculty);
+
+    ArticleDto expectedArticleDto =
+            ArticleDto.builder()
+                    .id(1L)
+                    .title(article.getTitle())
+                    .preview(article.getPreview())
+                    .author("TestUser")
+                    .category(article.getCategory())
+                    .faculty("TestFaculty")
+                    .imgPath("/imagess/" + article.getImageName())
+                    .content(article.getContent())
+                    .build();
+
+    ArticleDto result = articleMapper.convertToDtoWithContent(article);
+    System.out.println(expectedArticleDto);
+
+    Assertions.assertEquals(expectedArticleDto, result);
   }
 }

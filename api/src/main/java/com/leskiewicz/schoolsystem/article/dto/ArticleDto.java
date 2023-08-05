@@ -11,6 +11,8 @@ import lombok.NonNull;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
+import java.util.Objects;
+
 @Getter
 @Builder
 @Relation(collectionRelation = "articles")
@@ -31,5 +33,35 @@ public class ArticleDto extends RepresentationModel<Article> {
 
   public void setContent(String content) {
     this.content = content;
+  }
+
+  @Override
+  public String toString() {
+    return "ArticleDto{" +
+            "id=" + id +
+            ", title='" + title + '\'' +
+            ", preview='" + preview + '\'' +
+            ", category=" + category +
+            ", content='" + content + '\'' +
+            ", author='" + author + '\'' +
+            ", faculty='" + faculty + '\'' +
+            ", imgPath='" + imgPath + '\'' +
+            ", authorId=" + authorId +
+            ", facultyId=" + facultyId +
+            '}';
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    if (!super.equals(o)) return false;
+    ArticleDto that = (ArticleDto) o;
+    return Objects.equals(id, that.id) && Objects.equals(title, that.title) && Objects.equals(preview, that.preview) && category == that.category;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(super.hashCode(), id, title, preview, category);
   }
 }

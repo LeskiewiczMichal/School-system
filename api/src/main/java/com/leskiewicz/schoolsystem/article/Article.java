@@ -52,4 +52,17 @@ public class Article extends RepresentationModel<Article> {
 
   @Column(name = "image_name")
   private String imageName;
+
+  @Override
+  public String toString() {
+    return "Article{" +
+            "id=" + id +
+            ", title='" + title + '\'' +
+            ", preview='" + preview + '\'' +
+            ", author=" + author +
+            ", category=" + category +
+            ", faculty=" + faculty +
+            ", imageName='" + imageName + '\'' +
+            '}';
+  }
 }
