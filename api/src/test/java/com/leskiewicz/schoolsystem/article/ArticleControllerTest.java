@@ -93,7 +93,8 @@ public class ArticleControllerTest {
         .andExpect(jsonPath("$.author").value(articleDto.getAuthor()))
         .andExpect(jsonPath("$.faculty").value(articleDto.getFaculty()))
         .andExpect(jsonPath("$.imgPath").value(articleDto.getImgPath()))
-        .andExpect(jsonPath("$.links").exists());
+        .andExpect(jsonPath("$.links").exists())
+            .andExpect(jsonPath("$.links[*].rel").value("articles"));
   }
 
   @Test

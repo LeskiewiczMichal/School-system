@@ -12,15 +12,19 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
+import org.springframework.hateoas.server.LinkRelationProvider;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -44,6 +48,11 @@ public class ArticleController {
   public ResponseEntity<ArticleDto> getArticleById(@PathVariable Long id) {
     ArticleDto article = articleModelAssembler.toModel(articleService.getById(id));
 
+    Link articles =
+        WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getArticles(null))
+            .withRel("articles");
+    article.add(articles);
+
     return ResponseEntity.ok(article);
   }
 
@@ -61,8 +70,21 @@ public class ArticleController {
     Page<ArticleDto> articles = articleService.getAll(request.toPageable());
     articles = articles.map(articleModelAssembler::toModel);
 
+    Link selfLink =
+        WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getArticles(null))
+            .withSelfRel();
+    Link getByIdLink =
+        WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getArticleById(null))
+            .withRel("article");
+    Link searchLink =
+        WebMvcLinkBuilder.linkTo(
+                WebMvcLinkBuilder.methodOn(this.getClass()).searchArticles(null, null))
+            .withRel("search");
+
     return ResponseEntity.ok(
-        HalModelBuilder.halModelOf(articlePagedResourcesAssembler.toModel(articles)).build());
+        HalModelBuilder.halModelOf(articlePagedResourcesAssembler.toModel(articles))
+            .links(List.of(selfLink, getByIdLink, searchLink))
+            .build());
   }
 
   @GetMapping("/search")
@@ -77,8 +99,21 @@ public class ArticleController {
     }
     articles = articles.map(articleModelAssembler::toModel);
 
+    Link selfLink =
+        WebMvcLinkBuilder.linkTo(
+                WebMvcLinkBuilder.methodOn(this.getClass()).searchArticles(null, null))
+            .withSelfRel();
+    Link articlesLink =
+        WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getArticles(null))
+            .withRel("articles");
+    Link getByIdLink =
+        WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getArticleById(null))
+            .withRel("article");
+
     return ResponseEntity.ok(
-        HalModelBuilder.halModelOf(articlePagedResourcesAssembler.toModel(articles)).build());
+        HalModelBuilder.halModelOf(articlePagedResourcesAssembler.toModel(articles))
+            .links(List.of(selfLink, articlesLink, getByIdLink))
+            .build());
   }
 
   /**
