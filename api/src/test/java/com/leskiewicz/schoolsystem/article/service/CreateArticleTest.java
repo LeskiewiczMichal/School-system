@@ -62,9 +62,9 @@ public class CreateArticleTest {
 
   @Test
   public void createsAndReturnsArticle() throws Exception {
+    // Prepare data
     Faculty faculty = TestHelper.createFaculty();
     User user = TestHelper.createTeacher(faculty);
-    // Prepare data
     CreateArticleRequest createArticleRequest =
         CreateArticleRequest.builder()
             .title("title")
@@ -95,6 +95,36 @@ public class CreateArticleTest {
     verify(fileService).uploadImage(any(MultipartFile.class));
     verify(articleMapper).convertToDto(any(Article.class));
     verify(userRepository).findById(anyLong());
+    verify(facultyRepository).findById(anyLong());
+  }
+
+  @Test
+  public void throwsExceptionWhenFacultyNotFound() throws Exception {
+    // Prepare data
+    CreateArticleRequest createArticleRequest =
+        CreateArticleRequest.builder()
+            .title("title")
+            .content("content")
+            .facultyId(1L)
+            .preview("preview")
+            .category(ArticleCategory.EVENTS)
+            .build();
+    String request = objectMapper.writeValueAsString(createArticleRequest);
+
+
+    // Mocks
+    given(facultyRepository.findById(anyLong()))
+        .willReturn(Optional.empty());
+
+    // Call method
+    Assertions.assertThrows(
+        Exception.class, () -> articleService.createArticle(request, null));
+
+    // Assertions
+    verify(articleRepository, Mockito.never()).save(any(Article.class));
+    verify(fileService, Mockito.never()).uploadImage(any(MultipartFile.class));
+    verify(articleMapper, Mockito.never()).convertToDto(any(Article.class));
+    verify(userRepository, Mockito.never()).findById(anyLong());
     verify(facultyRepository).findById(anyLong());
   }
 }
