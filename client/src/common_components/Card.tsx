@@ -30,12 +30,14 @@ export default function Card(props: CardProps) {
     <Link
       to={`${redirectUrl}/${articleId}`}
       className={`flex flex-col w-full  bg-gray-100 border border-gray-200 rounded-lg shadow  hover:bg-grey ${
-        wide ? "lg:flex-row" : ""
+        wide ? "lg:flex-row items-center" : ""
       }`}
     >
       {imageUrl && (
         <img
-          className="w-full rounded-t-lg h-96 lg:h-auto md:rounded-none md:rounded-l-lg"
+          className={`w-full rounded-t-lg h-96 lg:h-auto md:rounded-none md:rounded-l-lg ${
+            wide ? "w-1/2" : ""
+          }`}
           src={imageUrl}
           alt={imageAlt}
         />
@@ -48,12 +50,12 @@ export default function Card(props: CardProps) {
           </h5>
           <p className="mb-3 font-normal text-gray-700 ">{truncatedText}</p>
         </div>
-        <Link
-          to={`${redirectUrl}/${articleId}`}
+        <button
+          type="button"
           className="text-primary font-bold text-lg self-end hover:text-primaryDarkened"
         >
           Read more...
-        </Link>
+        </button>
       </div>
     </Link>
   );

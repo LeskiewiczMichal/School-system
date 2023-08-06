@@ -64,7 +64,9 @@ export default function ArticlesDisplay(props: ArticlesDisplayProps) {
     };
 
     handleFetchArticles();
-  });
+  }, [links]);
+
+  console.log(articles);
 
   return (
     <section className="flex flex-col">
