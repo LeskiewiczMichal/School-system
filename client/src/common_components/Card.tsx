@@ -25,30 +25,6 @@ export default function Card(props: CardProps) {
 
   const truncatedText = text.length > 100 ? text.slice(0, 100) + "..." : text;
 
-  // return (
-  //   <div
-  //     className={`flex grow flex-col justify-center items-center bg-grey shadow-lg  min-h-96 w-full ${
-  //       wide ? "md:flex-row" : ""
-  //     }`}
-  //   >
-  //     <div className="flex justify-center items-center w-full">
-  //       <img src={imageUrl} alt={imageAlt} />
-  //     </div>
-  //     <div className="flex flex-col justify-center p-4">
-  //       <h2 className="text-xl font-medium text-gray-800">{title}</h2>
-  //       <p className="text-gray-500 text-base">{truncatedText}</p>
-  //     </div>
-  //     <div className="flex justify-end items-center w-full p-4">
-  //       <Link
-  //         to={`${redirectUrl}/${articleId}`}
-  //         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
-  //       >
-  //         {buttonText}
-  //       </Link>
-  //     </div>
-  //   </div>
-  // );
-
   return (
     <Link
       to={`${redirectUrl}/${articleId}`}
