@@ -93,10 +93,19 @@ public class ArticleControllerTest {
 
     mvc.perform(get("/api/articles/1").accept("application/json"))
         .andExpect(status().isNotFound())
-            .andDo(print())
         .andExpect(jsonPath("$.message").value("Article not found"))
         .andExpect(jsonPath("$.statusCode").value(404))
         .andExpect(jsonPath("$.path").value("/api/articles/1"))
+        .andExpect(jsonPath("$.localDateTime").exists());
+  }
+
+  @Test
+  public void getById_ReturnsStatus400_WhenIdIsNotValid() throws Exception {
+    mvc.perform(get("/api/articles/abc").accept("application/json"))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.message").value("Wrong argument types provided"))
+        .andExpect(jsonPath("$.statusCode").value(400))
+        .andExpect(jsonPath("$.path").value("/api/articles/abc"))
         .andExpect(jsonPath("$.localDateTime").exists());
   }
 
