@@ -16,6 +16,9 @@ public interface ArticleService {
 
   Page<ArticleDto> getByCategory(ArticleCategory category, Pageable pageable);
 
+  Page<ArticleDto> getByFacultyAndCategory(
+      Long facultyId, ArticleCategory category, Pageable pageable);
+
   Page<ArticleDto> getAll(Pageable pageable);
 
   ArticleDto createArticle(String request, MultipartFile image) throws IOException;

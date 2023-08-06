@@ -64,6 +64,11 @@ public class ArticleServiceImpl implements ArticleService {
   }
 
   @Override
+  public Page<ArticleDto> getByFacultyAndCategory(Long facultyId, ArticleCategory category, Pageable pageable) {
+    return null;
+  }
+
+  @Override
   public Page<ArticleDto> getAll(Pageable pageable) {
     Page<Article> articles = articleRepository.findAll(pageable);
     return articles.map(articleMapper::convertToDto);

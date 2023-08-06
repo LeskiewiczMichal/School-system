@@ -102,6 +102,9 @@ public class ArticleController {
       @RequestParam(value = "category", required = false) ArticleCategory category,
       @ModelAttribute PageableRequest request) {
     Page<ArticleDto> articles;
+    if (facultyId != null && category != null) {
+      articles = articleService.getByFacultyAndCategory(facultyId, category, request.toPageable());
+    }
     if (facultyId != null) {
       articles = articleService.getByFaculty(facultyId, request.toPageable());
     } else if (category != null) {
