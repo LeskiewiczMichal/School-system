@@ -48,6 +48,12 @@ public class ArticleServiceImpl implements ArticleService {
   }
 
   @Override
+  public Page<ArticleDto> getByFaculty(Long facultyId, Pageable pageable) {
+    Page<Article> articles = articleRepository.findArticlesByFacultyId(facultyId, pageable);
+    return articles.map(articleMapper::convertToDto);
+  }
+
+  @Override
   public Page<ArticleDto> getAll(Pageable pageable) {
     Page<Article> articles = articleRepository.findAll(pageable);
     return articles.map(articleMapper::convertToDto);
@@ -105,6 +111,4 @@ public class ArticleServiceImpl implements ArticleService {
     ValidationUtils.validate(article);
     return articleMapper.convertToDto(articleRepository.save(article));
   }
-
-
 }

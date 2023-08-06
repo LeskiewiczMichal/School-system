@@ -12,6 +12,8 @@ public interface ArticleService {
 
     ArticleDto getById(Long id);
 
+    Page<ArticleDto> getByFaculty(Long facultyId, Pageable pageable);
+
     Page<ArticleDto> getAll(Pageable pageable);
 
     ArticleDto createArticle(String request, MultipartFile image) throws IOException;

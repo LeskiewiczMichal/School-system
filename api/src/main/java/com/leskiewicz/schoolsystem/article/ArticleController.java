@@ -56,8 +56,25 @@ public class ArticleController {
    *     field).
    */
   @GetMapping
-  public ResponseEntity<RepresentationModel<ArticleDto>> getArticles(PageableRequest request) {
+  public ResponseEntity<RepresentationModel<ArticleDto>> getArticles(
+      @ModelAttribute PageableRequest request) {
     Page<ArticleDto> articles = articleService.getAll(request.toPageable());
+    articles = articles.map(articleModelAssembler::toModel);
+
+    return ResponseEntity.ok(
+        HalModelBuilder.halModelOf(articlePagedResourcesAssembler.toModel(articles)).build());
+  }
+
+  @GetMapping("/search")
+  public ResponseEntity<RepresentationModel<ArticleDto>> searchArticles(
+      @RequestParam(value = "faculty", required = false) Long facultyId,
+      @ModelAttribute PageableRequest request) {
+    Page<ArticleDto> articles;
+    if (facultyId != null) {
+      articles = articleService.getByFaculty(facultyId, request.toPageable());
+    } else {
+      return ResponseEntity.badRequest().build();
+    }
     articles = articles.map(articleModelAssembler::toModel);
 
     return ResponseEntity.ok(
