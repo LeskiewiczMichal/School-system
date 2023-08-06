@@ -8,6 +8,7 @@ import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.generic.CommonTests;
 import com.leskiewicz.schoolsystem.testUtils.TestHelper;
 import com.leskiewicz.schoolsystem.user.User;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -87,17 +88,25 @@ public class ArticleControllerTest {
   }
 
   @Test
-  public void getAllArticles() {
-    CommonTests.controllerGetEntities(
-            ArticleDto.class,
-            articlePagedResourcesAssembler,
-            articleService::getAll,
-            articleModelAssembler::toModel,
-            articleController::getArticles
-    );
+  public void getById_returnsStatus404_whenArticleDoesNotExist() throws Exception {
+    given(articleService.getById(1L)).willThrow(new EntityNotFoundException("Article not found"));
+
+    mvc.perform(get("/api/articles/1").accept("application/json"))
+        .andExpect(status().isNotFound())
+            .andDo(print())
+        .andExpect(jsonPath("$.message").value("Article not found"))
+        .andExpect(jsonPath("$.statusCode").value(404))
+        .andExpect(jsonPath("$.path").value("/api/articles/1"))
+        .andExpect(jsonPath("$.localDateTime").exists());
   }
 
-
-
-
+  @Test
+  public void getAllArticles() {
+    CommonTests.controllerGetEntities(
+        ArticleDto.class,
+        articlePagedResourcesAssembler,
+        articleService::getAll,
+        articleModelAssembler::toModel,
+        articleController::getArticles);
+  }
 }
