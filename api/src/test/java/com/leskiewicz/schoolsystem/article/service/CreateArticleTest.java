@@ -63,13 +63,14 @@ public class CreateArticleTest {
   private String request;
   private CreateArticleRequest createArticleRequest;
 
-  @BeforeAll
-  public static void init() {
-    Mockito.mockStatic(AuthenticationUtils.class);
-  }
+//  @BeforeAll
+//  public static void init() {
+//    Mockito.mockStatic(AuthenticationUtils.class);
+//  }
 
   @BeforeEach
   public void setup() throws Exception {
+//    Mockito.mockStatic(AuthenticationUtils.class);
     faculty = TestHelper.createFaculty();
     user = TestHelper.createTeacher(faculty);
 

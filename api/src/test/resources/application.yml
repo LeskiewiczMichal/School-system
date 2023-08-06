@@ -12,3 +12,8 @@ spring:
 jwt:
   secret:
     key: "U+pamSKQ1pwTziF5t0gKCv9m8J8Y4VbW/8s0BAP6Va0="
+
+
+upload:
+  path:
+    images: "/Users/michalleskiewicz/Programowanie/repos/School-system/api/src/main/resources/static/images/"
