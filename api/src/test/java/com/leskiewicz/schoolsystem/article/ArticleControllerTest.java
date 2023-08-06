@@ -1,6 +1,8 @@
 package com.leskiewicz.schoolsystem.article;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.leskiewicz.schoolsystem.article.dto.ArticleDto;
+import com.leskiewicz.schoolsystem.article.dto.CreateArticleRequest;
 import com.leskiewicz.schoolsystem.article.utils.ArticleDtoAssembler;
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.error.DefaultExceptionHandler;
@@ -19,13 +21,19 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockPart;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.lenient;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -46,6 +54,7 @@ public class ArticleControllerTest {
   // Variables
   private User author;
   private Faculty faculty;
+  ObjectMapper objectMapper = new ObjectMapper();
 
   @BeforeEach
   public void setup() {
@@ -117,5 +126,50 @@ public class ArticleControllerTest {
         articleService::getAll,
         articleModelAssembler::toModel,
         articleController::getArticles);
+  }
+
+  @Test
+  public void createArticle() throws Exception {
+    // Prepare test data
+    Faculty faculty = TestHelper.createFaculty();
+    User author = TestHelper.createUser(faculty, Mockito.mock(Degree.class));
+    Article article = TestHelper.createArticle(author, faculty);
+    ArticleDto articleDto = TestHelper.createArticleDto(article);
+    articleDto.add(
+        WebMvcLinkBuilder.linkTo(ArticleController.class).slash(article.getId()).withSelfRel());
+    CreateArticleRequest createArticleRequest =
+        CreateArticleRequest.builder()
+            .title("title")
+            .content("content")
+            .facultyId(1L)
+            .preview("preview")
+            .category(ArticleCategory.EVENTS)
+            .build();
+    String request = objectMapper.writeValueAsString(createArticleRequest);
+    MultipartFile image = Mockito.mock(MultipartFile.class);
+
+    // Mocks
+    lenient()
+        .when(articleService.createArticle(any(String.class), any(MultipartFile.class)))
+        .thenReturn(articleDto);
+    lenient().when(articleModelAssembler.toModel(any(ArticleDto.class))).thenReturn(articleDto);
+
+    mvc.perform(
+            multipart("/api/articles")
+                .part(new MockPart("article", request.getBytes()))
+                .file("image", image.getBytes())
+                .contentType(MediaType.MULTIPART_FORM_DATA))
+        .andDo(print())
+        .andExpect(status().isCreated())
+        .andDo(print())
+        .andExpect(jsonPath("$.id").value(1L))
+        .andExpect(jsonPath("$.title").value(articleDto.getTitle()))
+        .andExpect(jsonPath("$.preview").value(articleDto.getPreview()))
+        .andExpect(jsonPath("$.category").value(articleDto.getCategory().toString()))
+        .andExpect(jsonPath("$.content").value(articleDto.getContent()))
+        .andExpect(jsonPath("$.author").value(articleDto.getAuthor()))
+        .andExpect(jsonPath("$.faculty").value(articleDto.getFaculty()))
+        .andExpect(jsonPath("$.imgPath").value(articleDto.getImgPath()))
+        .andExpect(jsonPath("$.links").exists());
   }
 }
