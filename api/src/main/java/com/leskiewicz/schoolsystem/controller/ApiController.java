@@ -3,6 +3,7 @@ package com.leskiewicz.schoolsystem.controller;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import com.leskiewicz.schoolsystem.article.ArticleController;
 import com.leskiewicz.schoolsystem.authentication.AuthenticationController;
 import com.leskiewicz.schoolsystem.authentication.SecurityService;
 import com.leskiewicz.schoolsystem.authentication.dto.CustomUserDetails;
@@ -47,6 +48,7 @@ public class ApiController {
     this.addDegreesLink(model);
     this.addCoursesLink(model);
     this.addFilesLink(model);
+    this.addArticlesLink(model);
 
     return ResponseEntity.ok(model);
   }
@@ -91,5 +93,12 @@ public class ApiController {
     String uriTemplate = filesLink.getHref() + PAGINATION_PARAMETERS;
     filesLink = Link.of(uriTemplate).withRel("files");
     model.add(filesLink);
+  }
+
+  private void addArticlesLink(RepresentationModel<?> model) {
+    Link articlesLink = linkTo(ArticleController.class).withRel("articles");
+    String uriTemplate = articlesLink.getHref() + PAGINATION_PARAMETERS;
+    articlesLink = Link.of(uriTemplate).withRel("articles");
+    model.add(articlesLink);
   }
 }
