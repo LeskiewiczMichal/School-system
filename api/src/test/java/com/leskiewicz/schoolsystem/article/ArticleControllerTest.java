@@ -159,9 +159,7 @@ public class ArticleControllerTest {
                 .part(new MockPart("article", request.getBytes()))
                 .file("image", image.getBytes())
                 .contentType(MediaType.MULTIPART_FORM_DATA))
-        .andDo(print())
         .andExpect(status().isCreated())
-        .andDo(print())
         .andExpect(jsonPath("$.id").value(1L))
         .andExpect(jsonPath("$.title").value(articleDto.getTitle()))
         .andExpect(jsonPath("$.preview").value(articleDto.getPreview()))
@@ -171,5 +169,32 @@ public class ArticleControllerTest {
         .andExpect(jsonPath("$.faculty").value(articleDto.getFaculty()))
         .andExpect(jsonPath("$.imgPath").value(articleDto.getImgPath()))
         .andExpect(jsonPath("$.links").exists());
+  }
+
+  @Test
+  public void createArticle_returnsStatus400_whenArticlePartNotProvided() throws Exception {
+    // Prepare test data
+    Article article = TestHelper.createArticle(author, faculty);
+    ArticleDto articleDto = TestHelper.createArticleDto(article);
+    articleDto.add(
+        WebMvcLinkBuilder.linkTo(ArticleController.class).slash(article.getId()).withSelfRel());
+    CreateArticleRequest createArticleRequest =
+        CreateArticleRequest.builder()
+            .title("title")
+            .content("content")
+            .facultyId(1L)
+            .preview("preview")
+            .category(ArticleCategory.EVENTS)
+            .build();
+    String request = objectMapper.writeValueAsString(createArticleRequest);
+    MultipartFile image = Mockito.mock(MultipartFile.class);
+
+    mvc.perform(
+            multipart("/api/articles")
+                .part(new MockPart("BAD", request.getBytes()))
+                .file("image", image.getBytes())
+                .contentType(MediaType.MULTIPART_FORM_DATA))
+        .andDo(print())
+        .andExpect(status().isBadRequest());
   }
 }

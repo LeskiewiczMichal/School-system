@@ -19,6 +19,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 @ControllerAdvice
 public class DefaultExceptionHandler {
@@ -97,7 +98,8 @@ public class DefaultExceptionHandler {
       value = {
         MissingFieldException.class,
         UserAlreadyExistsException.class,
-        FileUploadFailedException.class
+        FileUploadFailedException.class,
+        MissingServletRequestPartException.class
       })
   public ResponseEntity<ApiError> handleMissingFieldException(
       RuntimeException ex, HttpServletRequest request) {
