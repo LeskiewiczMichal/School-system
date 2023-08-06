@@ -1,4 +1,4 @@
-import NullableString from "../../type/NullableString";
+import NullableString from "../../../type/NullableString";
 import ArticleCategory from "./ArticleCategory";
 
 interface Article {

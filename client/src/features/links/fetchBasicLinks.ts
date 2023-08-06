@@ -41,6 +41,10 @@ const fetchBasicLinks = (): AppThunk => async (dispatch) => {
           href: response.data._links.files.href,
           templated: response.data._links.files.templated === true,
         },
+        articles: {
+          href: response.data._links.articles.href,
+          templated: response.data._links.articles.templated === true,
+        },
       };
 
       // Set links in store

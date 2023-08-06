@@ -9,6 +9,7 @@ const initialState: LinksState = {
   degrees: null,
   faculties: null,
   files: null,
+  articles: null,
 };
 
 const linksSlice = createSlice({
@@ -23,6 +24,7 @@ const linksSlice = createSlice({
       state.degrees = action.payload.degrees;
       state.faculties = action.payload.faculties;
       state.files = action.payload.files;
+      state.articles = action.payload.articles;
     },
   },
 });
