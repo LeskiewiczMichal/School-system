@@ -10,3 +10,4 @@ Photos:
 
 Icons:
     Arrow down: https://www.svgrepo.com/svg/509905/dropdown-arrow
+    Arrow right: https://www.svgrepo.com/svg/533610/arrow-right

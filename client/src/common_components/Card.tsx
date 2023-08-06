@@ -56,7 +56,7 @@ export default function Card(props: CardProps) {
         </div>
         <button
           type="button"
-          className="text-primary font-bold text-lg self-end hover:text-primaryDarkened"
+          className="text-primary font-bold text-lg self-end hover:text-primaryDarkened hover:underline"
         >
           Read more...
         </button>
