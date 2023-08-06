@@ -12,12 +12,12 @@ export default function Home() {
   return (
     <main className="">
       <Greeting />
-      <section className="flex flex-col px-4 md:px-32 my-32 gap-12">
+      <section className="flex flex-col px-4 md:px-32 my-16 gap-10">
         <ArticlesDisplay heading="NEWS" />
         <Link
           to="#"
           type="button"
-          className="self-end mb-16 flex items-center border-4 border-primary gap-3 px-4 py-2 text-primary hover:border-primaryLighter hover:text-primaryLighter font-bold text-lg"
+          className="mb-16 w-2/3 lg:w-1/4 flex items-center border-4 border-primary gap-3 px-4 py-2 text-primary hover:border-primaryLighter hover:text-primaryLighter font-bold text-lg"
         >
           See more news from the Aquila University{" "}
           <ArrowRight className="w-6 h-6 " />
