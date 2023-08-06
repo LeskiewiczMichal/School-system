@@ -99,13 +99,17 @@ public class ArticleController {
   @GetMapping("/search")
   public ResponseEntity<RepresentationModel<ArticleDto>> searchArticles(
       @RequestParam(value = "faculty", required = false) Long facultyId,
+      @RequestParam(value = "category", required = false) ArticleCategory category,
       @ModelAttribute PageableRequest request) {
     Page<ArticleDto> articles;
     if (facultyId != null) {
       articles = articleService.getByFaculty(facultyId, request.toPageable());
+    } else if (category != null) {
+//      articles = articleService.getByCategory(category, request.toPageable());
     } else {
       return ResponseEntity.badRequest().build();
     }
+    
     articles = articles.map(articleModelAssembler::toModel);
 
     Link selfLink =

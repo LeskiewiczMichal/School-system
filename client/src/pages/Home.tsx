@@ -1,7 +1,11 @@
 import { Greeting } from "../features/main-page";
 import Card from "../common_components/Card";
+import { useState } from "react";
+import { Article } from "../Article";
 
 export default function Home() {
+  const [articles, setArticles] = useState<Article[]>([]);
+
   return (
     <main className="">
       <Greeting />

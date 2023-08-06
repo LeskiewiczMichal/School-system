@@ -10,11 +10,13 @@ import java.io.IOException;
 
 public interface ArticleService {
 
-    ArticleDto getById(Long id);
+  ArticleDto getById(Long id);
 
-    Page<ArticleDto> getByFaculty(Long facultyId, Pageable pageable);
+  Page<ArticleDto> getByFaculty(Long facultyId, Pageable pageable);
 
-    Page<ArticleDto> getAll(Pageable pageable);
+  Page<ArticleDto> getByCategory(ArticleCategory category, Pageable pageable);
 
-    ArticleDto createArticle(String request, MultipartFile image) throws IOException;
+  Page<ArticleDto> getAll(Pageable pageable);
+
+  ArticleDto createArticle(String request, MultipartFile image) throws IOException;
 }
