@@ -17,6 +17,7 @@ import com.leskiewicz.schoolsystem.testUtils.TestHelper;
 import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.UserRepository;
 import io.jsonwebtoken.lang.Assert;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -55,16 +56,20 @@ public class CreateArticleTest {
 
   @InjectMocks private ArticleServiceImpl articleService;
 
+  // Variables
+  private Faculty faculty;
+  private User user;
+
   @BeforeEach
   public void setup() {
     Mockito.mockStatic(AuthenticationUtils.class);
+    faculty = TestHelper.createFaculty();
+    user = TestHelper.createTeacher(faculty);
   }
 
   @Test
   public void createsAndReturnsArticle() throws Exception {
     // Prepare data
-    Faculty faculty = TestHelper.createFaculty();
-    User user = TestHelper.createTeacher(faculty);
     CreateArticleRequest createArticleRequest =
         CreateArticleRequest.builder()
             .title("title")
@@ -78,8 +83,7 @@ public class CreateArticleTest {
     ArticleDto testDto = TestHelper.createArticleDto();
 
     // Mocks
-    given(facultyRepository.findById(anyLong()))
-        .willReturn(Optional.of(faculty));
+    given(facultyRepository.findById(anyLong())).willReturn(Optional.of(faculty));
     given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
     given(fileService.uploadImage(any(MultipartFile.class))).willReturn("imagePath");
     lenient().when(articleMapper.convertToDto(any(Article.class))).thenReturn(testDto);
@@ -111,20 +115,49 @@ public class CreateArticleTest {
             .build();
     String request = objectMapper.writeValueAsString(createArticleRequest);
 
-
     // Mocks
-    given(facultyRepository.findById(anyLong()))
-        .willReturn(Optional.empty());
+    given(facultyRepository.findById(anyLong())).willReturn(Optional.empty());
 
     // Call method
     Assertions.assertThrows(
-        Exception.class, () -> articleService.createArticle(request, null));
+        EntityNotFoundException.class, () -> articleService.createArticle(request, null));
 
     // Assertions
     verify(articleRepository, Mockito.never()).save(any(Article.class));
     verify(fileService, Mockito.never()).uploadImage(any(MultipartFile.class));
     verify(articleMapper, Mockito.never()).convertToDto(any(Article.class));
     verify(userRepository, Mockito.never()).findById(anyLong());
+    verify(facultyRepository).findById(anyLong());
+  }
+
+  
+
+  @Test
+  public void throwsExceptionWhenAuthorNotFound() throws Exception {
+    // Prepare data
+    CreateArticleRequest createArticleRequest =
+        CreateArticleRequest.builder()
+            .title("title")
+            .content("content")
+            .facultyId(1L)
+            .preview("preview")
+            .category(ArticleCategory.EVENTS)
+            .build();
+    String request = objectMapper.writeValueAsString(createArticleRequest);
+
+    // Mocks
+    given(facultyRepository.findById(anyLong()))
+        .willReturn(Optional.of(Mockito.mock(Faculty.class)));
+    given(AuthenticationUtils.getAuthenticatedUser()).willReturn(new CustomUserDetails(user));
+    given(userRepository.findById(anyLong())).willReturn(Optional.empty());
+
+    // Call method
+    Assertions.assertThrows(
+        EntityNotFoundException.class, () -> articleService.createArticle(request, null));
+
+    // Assertions
+    verify(fileService, Mockito.never()).uploadImage(any(MultipartFile.class));
+    verify(articleMapper, Mockito.never()).convertToDto(any(Article.class));
     verify(facultyRepository).findById(anyLong());
   }
 }
