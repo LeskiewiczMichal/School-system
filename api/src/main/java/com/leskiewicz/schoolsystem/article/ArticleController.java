@@ -78,7 +78,7 @@ public class ArticleController {
             .withRel("article");
     Link searchLink =
         WebMvcLinkBuilder.linkTo(
-                WebMvcLinkBuilder.methodOn(this.getClass()).searchArticles(null, null))
+                WebMvcLinkBuilder.methodOn(this.getClass()).searchArticles(null, null, null))
             .withRel("search");
 
     return ResponseEntity.ok(
@@ -105,16 +105,16 @@ public class ArticleController {
     if (facultyId != null) {
       articles = articleService.getByFaculty(facultyId, request.toPageable());
     } else if (category != null) {
-//      articles = articleService.getByCategory(category, request.toPageable());
+      articles = articleService.getByCategory(category, request.toPageable());
     } else {
       return ResponseEntity.badRequest().build();
     }
-    
+
     articles = articles.map(articleModelAssembler::toModel);
 
     Link selfLink =
         WebMvcLinkBuilder.linkTo(
-                WebMvcLinkBuilder.methodOn(this.getClass()).searchArticles(null, null))
+                WebMvcLinkBuilder.methodOn(this.getClass()).searchArticles(null, null, null))
             .withSelfRel();
     Link articlesLink =
         WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getArticles(null))
