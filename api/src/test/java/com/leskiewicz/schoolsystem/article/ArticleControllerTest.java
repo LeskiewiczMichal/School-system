@@ -260,4 +260,38 @@ public class ArticleControllerTest {
     verify(articleModelAssembler, times(1)).toModel(any(ArticleDto.class));
     verify(articlePagedResourcesAssembler, times(1)).toModel(any(Page.class));
   }
+
+  @Test
+  public void testSearchArticlesWithCategory() throws Exception {
+    // Mock your articleDto and pageableRequest if needed
+    List<ArticleDto> articleDto =
+        Arrays.asList(TestHelper.createArticleDto()); // Replace this with your mocked ArticleDto
+    Page<ArticleDto> articlePage = new PageImpl<>(articleDto);
+    PagedModel<ArticleDto> pagedModel =
+        PagedModel.of(articleDto, new PagedModel.PageMetadata(1, 1, 1, 1));
+    Long facultyId = 1L;
+
+    // Mocks
+    given(articleService.getByCategory(any(ArticleCategory.class), any(Pageable.class)))
+        .willReturn(articlePage);
+    given(articleModelAssembler.toModel(any(ArticleDto.class))).willReturn(articleDto.get(0));
+    //    given(articlePagedResourcesAssembler.toModel(any(Page.class))).willReturn(pagedModel);
+    given(articlePagedResourcesAssembler.toModel(any(Page.class))).willReturn(pagedModel);
+
+    mvc.perform(
+            get("/api/articles/search")
+                .param("category", ArticleCategory.EVENTS.toString())
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.page").exists())
+        .andExpect(jsonPath("$.links").isArray())
+        .andExpect(jsonPath("$.links[0].rel").value("self"))
+        .andExpect(jsonPath("$.links[1].rel").value("articles"))
+        .andExpect(jsonPath("$.links[2].rel").value("article"))
+        .andReturn();
+
+    verify(articleService, times(1)).getByCategory(any(ArticleCategory.class), any(Pageable.class));
+    verify(articleModelAssembler, times(1)).toModel(any(ArticleDto.class));
+    verify(articlePagedResourcesAssembler, times(1)).toModel(any(Page.class));
+  }
 }
