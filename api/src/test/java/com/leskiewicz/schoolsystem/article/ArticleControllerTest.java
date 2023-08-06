@@ -1,5 +1,6 @@
 package com.leskiewicz.schoolsystem.article;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.leskiewicz.schoolsystem.article.dto.ArticleDto;
 import com.leskiewicz.schoolsystem.article.dto.CreateArticleRequest;
@@ -18,18 +19,23 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockPart;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -197,5 +203,46 @@ public class ArticleControllerTest {
                 .contentType(MediaType.MULTIPART_FORM_DATA))
         .andDo(print())
         .andExpect(status().isBadRequest());
+  }
+
+  //  @Test
+  //  public void searchArticlesByFaculty() {
+  //    CommonTests.controllerGetEntities(
+  //        ArticleDto.class,
+  //        articlePagedResourcesAssembler,
+  //        (pageable) -> articleService.getByFaculty(1L, pageable),
+  //        articleModelAssembler::toModel,
+  //        (pageableRequest) -> articleController.searchArticles(1L, pageableRequest));
+  //  }
+
+  @Test
+  public void testSearchArticlesWithFacultyId() throws Exception {
+    // Mock your articleDto and pageableRequest if needed
+    List<ArticleDto> articleDto =
+        Arrays.asList(TestHelper.createArticleDto()); // Replace this with your mocked ArticleDto
+    Page<ArticleDto> articlePage = new PageImpl<>(articleDto);
+    PagedModel<ArticleDto> pagedModel =
+        PagedModel.of(articleDto, new PagedModel.PageMetadata(1, 1, 1, 1));
+    Long facultyId = 1L;
+
+    // Mocks
+    given(articleService.getByFaculty(any(Long.class), any(Pageable.class)))
+        .willReturn(articlePage);
+    given(articleModelAssembler.toModel(any(ArticleDto.class))).willReturn(articleDto.get(0));
+//    given(articlePagedResourcesAssembler.toModel(any(Page.class))).willReturn(pagedModel);
+    given(articlePagedResourcesAssembler.toModel(any(Page.class))).willReturn(pagedModel);
+
+    MvcResult result = mvc.perform(
+            get("/api/articles/search")
+                .param("faculty", facultyId.toString())
+                .accept(MediaType.APPLICATION_JSON))
+        .andDo(print())
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.page").exists())
+        .andExpect(jsonPath("$.links").isArray())
+        .andExpect(jsonPath("$.links[0].rel").value("self"))
+        .andExpect(jsonPath("$.links[1].rel").value("articles"))
+        .andExpect(jsonPath("$.links[2].rel").value("article"))
+            .andReturn();
   }
 }
