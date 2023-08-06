@@ -57,10 +57,11 @@ public class ArticleServiceImpl implements ArticleService {
     return articles.map(articleMapper::convertToDto);
   }
 
-//  @Override
-//  public Page<ArticleDto> getByCategory(ArticleCategory category, Pageable pageable) {
-//    return null;
-//  }
+  @Override
+  public Page<ArticleDto> getByCategory(ArticleCategory category, Pageable pageable) {
+    Page<Article> articles = articleRepository.findArticlesByCategory(category, pageable);
+    return articles.map(articleMapper::convertToDto);
+  }
 
   @Override
   public Page<ArticleDto> getAll(Pageable pageable) {
