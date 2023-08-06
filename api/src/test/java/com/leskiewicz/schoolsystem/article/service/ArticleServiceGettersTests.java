@@ -145,6 +145,43 @@ public class ArticleServiceGettersTests {
   }
 
   @Test
+  public void getByFacultyIdAndCategoryReturnsPagedArticles() {
+    // Prepare data
+    Faculty faculty = TestHelper.createFaculty();
+    User author = TestHelper.createTeacher(faculty);
+    List<Article> articles =
+        List.of(
+            TestHelper.createArticle(author, faculty), TestHelper.createArticle(author, faculty));
+    List<ArticleDto> articleDtos =
+        List.of(
+            TestHelper.createArticleDto(articles.get(0)),
+            TestHelper.createArticleDto(articles.get(1)));
+    Page<Article> articlePage = new PageImpl<>(articles);
+    ArticleDto articleDto1 = articleDtos.get(0);
+    ArticleDto articleDto2 = articleDtos.get(1);
+
+    // Mocks
+    given(
+            articleRepository.findByFacultyIdAndCategory(
+                any(Long.class), any(ArticleCategory.class), any(Pageable.class)))
+        .willReturn(articlePage);
+    given(articleMapper.convertToDto(articles.get(0))).willReturn(articleDto1, articleDto2);
+
+    // Call method
+    Page<ArticleDto> result =
+        articleService.getByFacultyAndCategory(1L, ArticleCategory.NEWS, PageRequest.of(0, 1));
+
+    // Assertions
+    Assertions.assertEquals(2, result.getTotalElements());
+    Assertions.assertEquals(1, result.getTotalPages());
+    Assertions.assertEquals(2, result.getNumberOfElements());
+    Assertions.assertEquals(0, result.getNumber());
+    Assertions.assertEquals(2, result.getSize());
+    Assertions.assertEquals(articleDto1, result.getContent().get(0));
+    Assertions.assertEquals(articleDto2, result.getContent().get(1));
+  }
+
+  @Test
   public void getById_throwsEntityNotFoundException_whenArticleDoesNotExist() {
     given(articleRepository.findById(anyLong())).willReturn(Optional.empty());
 
