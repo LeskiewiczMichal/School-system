@@ -70,7 +70,7 @@ export default function ArticlesDisplay(props: ArticlesDisplayProps) {
 
   return (
     <section className="flex flex-col">
-      <h4 className="mb-6 text-4xl font-bold">{heading}</h4>
+      <h4 className="mb-8 text-4xl font-bold">{heading}</h4>
       <div className="grid grid-cols-1 lg:grid-cols-3  gap-4">
         {articles.map((article) => {
           return (
