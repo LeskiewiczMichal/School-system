@@ -42,8 +42,12 @@ const fetchBasicLinks = (): AppThunk => async (dispatch) => {
           templated: response.data._links.files.templated === true,
         },
         articles: {
-          href: response.data._links.articles.href,
-          templated: response.data._links.articles.templated === true,
+          href: response.data._links.articles[0].href,
+          templated: response.data._links.articles[0].templated === true,
+        },
+        articlesSearch: {
+          href: response.data._links.articles[1].href,
+          templated: response.data._links.articles[1].templated === true,
         },
       };
 

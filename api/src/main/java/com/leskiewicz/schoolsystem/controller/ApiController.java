@@ -13,8 +13,10 @@ import com.leskiewicz.schoolsystem.faculty.FacultyController;
 import com.leskiewicz.schoolsystem.files.FileController;
 import com.leskiewicz.schoolsystem.user.UserController;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Affordance;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.mediatype.Affordances;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -99,6 +101,13 @@ public class ApiController {
     Link articlesLink = linkTo(ArticleController.class).withRel("articles");
     String uriTemplate = articlesLink.getHref() + PAGINATION_PARAMETERS;
     articlesLink = Link.of(uriTemplate).withRel("articles");
+
+    Link searchLink =
+        linkTo(methodOn(ArticleController.class).searchArticles(null, null, null))
+            .withRel("articles")
+            .withTitle("Search");
+
     model.add(articlesLink);
+    model.add(searchLink);
   }
 }
