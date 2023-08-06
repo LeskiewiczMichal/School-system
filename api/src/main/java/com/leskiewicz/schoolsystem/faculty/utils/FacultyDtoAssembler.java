@@ -2,6 +2,7 @@ package com.leskiewicz.schoolsystem.faculty.utils;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import com.leskiewicz.schoolsystem.article.ArticleController;
 import com.leskiewicz.schoolsystem.faculty.FacultyController;
 import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
 import org.springframework.hateoas.Link;
@@ -33,16 +34,23 @@ public class FacultyDtoAssembler
             .withRel("teachers");
     Link degreesLink =
         WebMvcLinkBuilder.linkTo(
-            methodOn(FacultyController.class).getFacultyDegrees(faculty.getId(), null)).withRel("degrees");
+                methodOn(FacultyController.class).getFacultyDegrees(faculty.getId(), null))
+            .withRel("degrees");
     Link coursesLink =
         WebMvcLinkBuilder.linkTo(
-            methodOn(FacultyController.class).getFacultyCourses(faculty.getId(), null)).withRel("courses");
+                methodOn(FacultyController.class).getFacultyCourses(faculty.getId(), null))
+            .withRel("courses");
+    Link articlesLink =
+        WebMvcLinkBuilder.linkTo(
+                methodOn(ArticleController.class).searchArticles(faculty.getId(), null))
+            .withRel("articles");
 
     faculty.add(selfLink);
     faculty.add(studentsLink);
     faculty.add(teachersLink);
     faculty.add(degreesLink);
     faculty.add(coursesLink);
+    faculty.add(articlesLink);
 
     return faculty;
   }
