@@ -5,6 +5,7 @@ import { Article, ArticlesDisplay } from "../features/article";
 import { useAppSelector } from "../hooks";
 import { Link } from "react-router-dom";
 import { ReactComponent as ArrowRight } from "../assets/icons/arrow-right.svg";
+import HeaderAndOneCard from "../common_components/HeaderAndOneCard";
 
 export default function Home() {
   const links = useAppSelector((state) => state.links);
@@ -22,29 +23,15 @@ export default function Home() {
           See more news from the Aquila University{" "}
           <ArrowRight className="w-6 h-6 " />
         </Link>
-        <div className="col-span-3">
-          <h4 className="mb-8 text-4xl font-bold">
-            IGNITING DISCOVERY: EXPLORING THE WONDERS OF SCIENCE
-          </h4>
-          <p className="mb-6">
-            Embark on a thrilling scientific journey that unlocks the mysteries
-            of the universe. Immerse yourself in cutting-edge research across
-            various scientific disciplines, from astrophysics and quantum
-            mechanics to biology and environmental sciences. Experience hands-on
-            experiments, groundbreaking projects, and collaborative learning
-            that ignite your passion for discovery and innovation.
-          </p>
-
-          <Card
-            imageUrl="https://img.freepik.com/free-photo/harvard-university-cambridge-usa_1268-14363.jpg"
-            imageAlt="building"
-            redirectUrl="http://localhost:8080/articles"
-            articleId="3"
-            title={"Okay"}
-            text="lorem ipsum lorem ipsum lorem ipsum lorem ipsum"
-            wide
-          />
-        </div>
+        <HeaderAndOneCard
+          title="IGNITING DISCOVERY: EXPLORING THE WONDERS OF SCIENCE"
+          text="Embark on a thrilling scientific journey that unlocks the mysteries of
+        the universe. Immerse yourself in cutting-edge research across various
+        scientific disciplines, from astrophysics and quantum mechanics to
+        biology and environmental sciences. Experience hands-on experiments,
+        groundbreaking projects, and collaborative learning that ignite your
+        passion for discovery and innovation."
+        />
       </section>
     </main>
   );
