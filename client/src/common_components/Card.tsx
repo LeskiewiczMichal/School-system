@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
+import NullableString from "../type/NullableString";
 
 export interface CardProps {
   title: string;
   text: string;
-  imageUrl: string;
+  imageUrl: NullableString;
   imageAlt: string;
   articleId: string;
   buttonText?: string;
@@ -32,11 +33,14 @@ export default function Card(props: CardProps) {
         wide ? "lg:flex-row" : ""
       }`}
     >
-      <img
-        className=" w-full rounded-t-lg h-96 lg:h-auto md:rounded-none md:rounded-l-lg"
-        src={imageUrl}
-        alt={imageAlt}
-      />
+      {imageUrl && (
+        <img
+          className="w-full rounded-t-lg h-96 lg:h-auto md:rounded-none md:rounded-l-lg"
+          src={imageUrl}
+          alt={imageAlt}
+        />
+      )}
+
       <div className="flex flex-col justify-between p-4 ">
         <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">
           {title}
