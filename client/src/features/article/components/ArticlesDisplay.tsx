@@ -82,30 +82,6 @@ export default function ArticlesDisplay(props: ArticlesDisplayProps) {
             />
           );
         })}
-        {/*<Card*/}
-        {/*    imageUrl={articles[0]?.imgPath}*/}
-        {/*    imageAlt={articles[0]?.imgAlt}*/}
-        {/*    redirectUrl="http://localhost:8080/articles"*/}
-        {/*    articleId="3"*/}
-        {/*    title={"Okay"}*/}
-        {/*    text="lorem ipsum lorem ipsum lorem ipsum lorem ipsum"*/}
-        {/*/>*/}
-        {/*<Card*/}
-        {/*    imageUrl="https://img.freepik.com/free-photo/harvard-university-cambridge-usa_1268-14363.jpg"*/}
-        {/*    imageAlt="building"*/}
-        {/*    redirectUrl="http://localhost:8080/articles"*/}
-        {/*    articleId="3"*/}
-        {/*    title={"Okay"}*/}
-        {/*    text="lorem ipsum lorem ipsum lorem ipsum lorem ipsum"*/}
-        {/*/>*/}
-        {/*<Card*/}
-        {/*    imageUrl="https://img.freepik.com/free-photo/harvard-university-cambridge-usa_1268-14363.jpg"*/}
-        {/*    imageAlt="building"*/}
-        {/*    redirectUrl="http://localhost:8080/articles"*/}
-        {/*    articleId="3"*/}
-        {/*    title={"Okay"}*/}
-        {/*    text="lorem ipsum lorem ipsum lorem ipsum lorem ipsum em ipsum lorem ipsum lorem ipsum lorem ipsum em ipsum lorem ipsum lorem ipsum lorem ipsum"*/}
-        {/*/>*/}
       </div>
     </section>
   );
