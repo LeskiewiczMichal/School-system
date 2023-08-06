@@ -46,7 +46,7 @@ export default function FacultiesDropdown() {
         // Call the API
         const responseData = await RequestService.performGetRequest({
           link: facultiesLink,
-          params: {
+          pagination: {
             page: 0,
             size: 20,
             sort: ["name", SortDirection.ASC],

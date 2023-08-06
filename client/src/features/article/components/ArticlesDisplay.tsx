@@ -79,6 +79,7 @@ export default function ArticlesDisplay(props: ArticlesDisplayProps) {
               imageAlt="Article Preview"
               articleId={article.id.toString()}
               redirectUrl="red"
+              key={article.id.toString()}
             />
           );
         })}
