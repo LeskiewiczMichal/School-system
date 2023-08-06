@@ -6,6 +6,7 @@ import com.leskiewicz.schoolsystem.article.ArticleRepository;
 import com.leskiewicz.schoolsystem.article.ArticleServiceImpl;
 import com.leskiewicz.schoolsystem.article.dto.ArticleDto;
 import com.leskiewicz.schoolsystem.article.utils.ArticleMapper;
+import com.leskiewicz.schoolsystem.error.ErrorMessages;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.FacultyRepository;
 import com.leskiewicz.schoolsystem.files.FileService;
@@ -13,6 +14,8 @@ import com.leskiewicz.schoolsystem.generic.CommonTests;
 import com.leskiewicz.schoolsystem.testUtils.TestHelper;
 import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,6 +23,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Optional;
+
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 public class ArticleServiceGettersTests {
@@ -57,6 +64,16 @@ public class ArticleServiceGettersTests {
         articleRepository::findAll,
         articleMapper::convertToDto,
         articleService::getAll);
+  }
+
+  @Test
+  public void getById_throwsEntityNotFoundException_whenArticleDoesNotExist() {
+    given(articleRepository.findById(anyLong())).willReturn(Optional.empty());
+
+    Assertions.assertThrows(
+        EntityNotFoundException.class,
+        () -> articleService.getById(1L),
+        ErrorMessages.objectWithIdNotFound("Article", 1L));
   }
 
   @Test
