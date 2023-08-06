@@ -227,16 +227,6 @@ public class ArticleControllerTest {
         .andExpect(status().isBadRequest());
   }
 
-  //  @Test
-  //  public void searchArticlesByFaculty() {
-  //    CommonTests.controllerGetEntities(
-  //        ArticleDto.class,
-  //        articlePagedResourcesAssembler,
-  //        (pageable) -> articleService.getByFaculty(1L, pageable),
-  //        articleModelAssembler::toModel,
-  //        (pageableRequest) -> articleController.searchArticles(1L, pageableRequest));
-  //  }
-
   @Test
   public void testSearchArticlesWithFacultyId() throws Exception {
     // Mock your articleDto and pageableRequest if needed
@@ -254,17 +244,20 @@ public class ArticleControllerTest {
     //    given(articlePagedResourcesAssembler.toModel(any(Page.class))).willReturn(pagedModel);
     given(articlePagedResourcesAssembler.toModel(any(Page.class))).willReturn(pagedModel);
 
-    MvcResult result =
-        mvc.perform(
-                get("/api/articles/search")
-                    .param("faculty", facultyId.toString())
-                    .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.page").exists())
-            .andExpect(jsonPath("$.links").isArray())
-            .andExpect(jsonPath("$.links[0].rel").value("self"))
-            .andExpect(jsonPath("$.links[1].rel").value("articles"))
-            .andExpect(jsonPath("$.links[2].rel").value("article"))
-            .andReturn();
+    mvc.perform(
+            get("/api/articles/search")
+                .param("faculty", facultyId.toString())
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.page").exists())
+        .andExpect(jsonPath("$.links").isArray())
+        .andExpect(jsonPath("$.links[0].rel").value("self"))
+        .andExpect(jsonPath("$.links[1].rel").value("articles"))
+        .andExpect(jsonPath("$.links[2].rel").value("article"))
+        .andReturn();
+
+    verify(articleService, times(1)).getByFaculty(any(Long.class), any(Pageable.class));
+    verify(articleModelAssembler, times(1)).toModel(any(ArticleDto.class));
+    verify(articlePagedResourcesAssembler, times(1)).toModel(any(Page.class));
   }
 }
