@@ -42,7 +42,7 @@ public class FacultyDtoAssembler
             .withRel("courses");
     Link articlesLink =
         WebMvcLinkBuilder.linkTo(
-                methodOn(ArticleController.class).searchArticles(faculty.getId(), null))
+                methodOn(ArticleController.class).searchArticles(faculty.getId(), null, null))
             .withRel("articles");
 
     faculty.add(selfLink);
