@@ -44,9 +44,9 @@ export default function Card(props: CardProps) {
       )}
 
       <div
-        className={`flex flex-col justify-between p-4 h-full ${
+        className={`flex flex-col w-full justify-between p-4 h-full ${
           !imageUrl ? "p-8" : ""
-        }`}
+        } ${wide ? "lg:px-16" : ""}`}
       >
         <div>
           <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">
