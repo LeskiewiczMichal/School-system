@@ -19,6 +19,7 @@ import com.leskiewicz.schoolsystem.user.UserRepository;
 import io.jsonwebtoken.lang.Assert;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -59,26 +60,32 @@ public class CreateArticleTest {
   // Variables
   private Faculty faculty;
   private User user;
+  private String request;
+  private CreateArticleRequest createArticleRequest;
+
+  @BeforeAll
+  public static void init() {
+    Mockito.mockStatic(AuthenticationUtils.class);
+  }
 
   @BeforeEach
-  public void setup() {
-    Mockito.mockStatic(AuthenticationUtils.class);
+  public void setup() throws Exception {
     faculty = TestHelper.createFaculty();
     user = TestHelper.createTeacher(faculty);
+
+    createArticleRequest =
+            CreateArticleRequest.builder()
+                    .title("title")
+                    .content("content")
+                    .facultyId(1L)
+                    .preview("preview")
+                    .category(ArticleCategory.EVENTS)
+                    .build();
+    request = objectMapper.writeValueAsString(createArticleRequest);
   }
 
   @Test
   public void createsAndReturnsArticle() throws Exception {
-    // Prepare data
-    CreateArticleRequest createArticleRequest =
-        CreateArticleRequest.builder()
-            .title("title")
-            .content("content")
-            .facultyId(1L)
-            .preview("preview")
-            .category(ArticleCategory.EVENTS)
-            .build();
-    String request = objectMapper.writeValueAsString(createArticleRequest);
     MultipartFile file = Mockito.mock(MultipartFile.class);
     ArticleDto testDto = TestHelper.createArticleDto();
 
@@ -104,17 +111,6 @@ public class CreateArticleTest {
 
   @Test
   public void throwsExceptionWhenFacultyNotFound() throws Exception {
-    // Prepare data
-    CreateArticleRequest createArticleRequest =
-        CreateArticleRequest.builder()
-            .title("title")
-            .content("content")
-            .facultyId(1L)
-            .preview("preview")
-            .category(ArticleCategory.EVENTS)
-            .build();
-    String request = objectMapper.writeValueAsString(createArticleRequest);
-
     // Mocks
     given(facultyRepository.findById(anyLong())).willReturn(Optional.empty());
 
@@ -132,17 +128,6 @@ public class CreateArticleTest {
 
   @Test
   public void throwsExceptionWhenUserNotAuthenticated() throws Exception {
-    // Prepare data
-    CreateArticleRequest createArticleRequest =
-        CreateArticleRequest.builder()
-            .title("title")
-            .content("content")
-            .facultyId(1L)
-            .preview("preview")
-            .category(ArticleCategory.EVENTS)
-            .build();
-    String request = objectMapper.writeValueAsString(createArticleRequest);
-
     // Mocks
     given(facultyRepository.findById(anyLong()))
         .willReturn(Optional.of(Mockito.mock(Faculty.class)));
@@ -162,17 +147,6 @@ public class CreateArticleTest {
 
   @Test
   public void throwsExceptionWhenAuthorNotFound() throws Exception {
-    // Prepare data
-    CreateArticleRequest createArticleRequest =
-        CreateArticleRequest.builder()
-            .title("title")
-            .content("content")
-            .facultyId(1L)
-            .preview("preview")
-            .category(ArticleCategory.EVENTS)
-            .build();
-    String request = objectMapper.writeValueAsString(createArticleRequest);
-
     // Mocks
     given(facultyRepository.findById(anyLong()))
         .willReturn(Optional.of(Mockito.mock(Faculty.class)));
