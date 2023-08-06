@@ -104,8 +104,7 @@ public class ArticleController {
     Page<ArticleDto> articles;
     if (facultyId != null && category != null) {
       articles = articleService.getByFacultyAndCategory(facultyId, category, request.toPageable());
-    }
-    if (facultyId != null) {
+    } else if (facultyId != null) {
       articles = articleService.getByFaculty(facultyId, request.toPageable());
     } else if (category != null) {
       articles = articleService.getByCategory(category, request.toPageable());
