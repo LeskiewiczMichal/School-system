@@ -50,5 +50,6 @@ public class FacultyDtoAssemblerTest {
     Assertions.assertEquals(studentsLink, result.getLink("students").get());
     Assertions.assertEquals(teachersLink, result.getLink("teachers").get());
     Assertions.assertEquals(coursesLink, result.getLink("courses").get());
+    Assertions.assertNotNull(result.getLink("articles").get());
   }
 }

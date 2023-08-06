@@ -23,5 +23,6 @@ public class ArticleDtoAssemblerTest {
     Assertions.assertNotNull(result.getLink("self").get());
     Assertions.assertNotNull(result.getLink("faculty").get());
     Assertions.assertNotNull(result.getLink("author").get());
+
   }
 }
