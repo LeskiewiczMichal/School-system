@@ -49,6 +49,10 @@ public class ArticleServiceImpl implements ArticleService {
 
   @Override
   public Page<ArticleDto> getByFaculty(Long facultyId, Pageable pageable) {
+    if (!facultyRepository.existsById(facultyId)) {
+      throw new EntityNotFoundException(ErrorMessages.objectWithIdNotFound("Faculty", facultyId));
+    }
+
     Page<Article> articles = articleRepository.findArticlesByFacultyId(facultyId, pageable);
     return articles.map(articleMapper::convertToDto);
   }

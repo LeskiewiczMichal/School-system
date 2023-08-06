@@ -21,6 +21,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 import java.util.Optional;
@@ -47,6 +48,7 @@ public class ArticleServiceGettersTests {
 
   @Test
   public void geAllReturnsPagedArticles() {
+    // Prepare data
     Faculty faculty = TestHelper.createFaculty();
     User author = TestHelper.createTeacher(faculty);
     List<Article> articles =
@@ -64,6 +66,39 @@ public class ArticleServiceGettersTests {
         articleRepository::findAll,
         articleMapper::convertToDto,
         articleService::getAll);
+  }
+
+  @Test
+  public void getByFacultyReturnsPagedArticles() {
+    // Prepare data
+    Faculty faculty = TestHelper.createFaculty();
+    User author = TestHelper.createTeacher(faculty);
+    List<Article> articles =
+        List.of(
+            TestHelper.createArticle(author, faculty), TestHelper.createArticle(author, faculty));
+    List<ArticleDto> articleDtos =
+        List.of(
+            TestHelper.createArticleDto(articles.get(0)),
+            TestHelper.createArticleDto(articles.get(1)));
+
+    CommonTests.serviceGetAllResourcesRelated(
+        Article.class,
+        articles,
+        articleDtos,
+        articleRepository::findArticlesByFacultyId,
+        articleMapper::convertToDto,
+        facultyRepository::existsById,
+        articleService::getByFaculty);
+  }
+
+  @Test
+  public void getByFaculty_throwsEntityNotFoundException_whenFacultyDoesntExist() {
+    given(facultyRepository.existsById(anyLong())).willReturn(false);
+
+    Assertions.assertThrows(
+        EntityNotFoundException.class,
+        () -> articleService.getByFaculty(1L, PageRequest.of(0, 1)),
+        ErrorMessages.objectWithIdNotFound("Faculty", 1L));
   }
 
   @Test
