@@ -10,6 +10,9 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
 import org.springframework.http.MediaType;
@@ -24,8 +27,10 @@ import java.io.IOException;
 @RequestMapping("/api/articles")
 public class ArticleController {
 
-  public final ArticleService articleService;
-  public final ArticleDtoAssembler articleModelAssembler;
+  private final ArticleService articleService;
+  private final ArticleDtoAssembler articleModelAssembler;
+
+  private final PagedResourcesAssembler<ArticleDto> articlePagedResourcesAssembler;
 
   /**
    * Get an Article by its ID
@@ -55,7 +60,8 @@ public class ArticleController {
     Page<ArticleDto> articles = articleService.getAll(request.toPageable());
     articles = articles.map(articleModelAssembler::toModel);
 
-    return ResponseEntity.ok(HalModelBuilder.halModelOf(articles).build());
+    return ResponseEntity.ok(
+        HalModelBuilder.halModelOf(articlePagedResourcesAssembler.toModel(articles)).build());
   }
 
   /**
