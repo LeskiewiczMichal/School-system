@@ -12,6 +12,7 @@ import com.leskiewicz.schoolsystem.generic.CommonTests;
 import com.leskiewicz.schoolsystem.testUtils.TestHelper;
 import com.leskiewicz.schoolsystem.user.User;
 import jakarta.persistence.EntityNotFoundException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,7 +40,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -126,13 +127,34 @@ public class ArticleControllerTest {
   }
 
   @Test
-  public void getAllArticles() {
-    CommonTests.controllerGetEntities(
-        ArticleDto.class,
-        articlePagedResourcesAssembler,
-        articleService::getAll,
-        articleModelAssembler::toModel,
-        articleController::getArticles);
+  public void getAllArticles() throws Exception {
+    // Prepare test data
+    ArticleDto articleDto = TestHelper.createArticleDto();
+    List<ArticleDto> articleDtoList = Collections.singletonList(articleDto);
+    Page<ArticleDto> articleDtoPage = new PageImpl<>(articleDtoList);
+    PagedModel<EntityModel<ArticleDto>> pagedModel =
+        PagedModel.of(
+            Collections.singletonList(EntityModel.of(articleDto)),
+            new PagedModel.PageMetadata(1, 1, 1, 1));
+
+    // Mocks
+    given(articleService.getAll(any(Pageable.class))).willReturn(articleDtoPage);
+    given(articlePagedResourcesAssembler.toModel(any(Page.class))).willReturn(pagedModel);
+
+    // Test
+    mvc.perform(get("/api/articles").accept("application/json"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.page.size").value(1))
+        .andExpect(jsonPath("$.page.totalElements").value(1))
+        .andExpect(jsonPath("$.page.totalPages").value(1))
+        .andExpect(jsonPath("$.page.number").value(1))
+        .andExpect(jsonPath("$.links[0].rel").value("self"))
+        .andExpect(jsonPath("$.links[1].rel").value("article"))
+        .andExpect(jsonPath("$.links[2].rel").value("search"));
+
+    verify(articleService, times(1)).getAll(any(Pageable.class));
+    verify(articlePagedResourcesAssembler, times(1)).toModel(any(Page.class));
+    verify(articleModelAssembler, times(1)).toModel(any(ArticleDto.class));
   }
 
   @Test
@@ -229,20 +251,20 @@ public class ArticleControllerTest {
     given(articleService.getByFaculty(any(Long.class), any(Pageable.class)))
         .willReturn(articlePage);
     given(articleModelAssembler.toModel(any(ArticleDto.class))).willReturn(articleDto.get(0));
-//    given(articlePagedResourcesAssembler.toModel(any(Page.class))).willReturn(pagedModel);
+    //    given(articlePagedResourcesAssembler.toModel(any(Page.class))).willReturn(pagedModel);
     given(articlePagedResourcesAssembler.toModel(any(Page.class))).willReturn(pagedModel);
 
-    MvcResult result = mvc.perform(
-            get("/api/articles/search")
-                .param("faculty", facultyId.toString())
-                .accept(MediaType.APPLICATION_JSON))
-        .andDo(print())
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$.page").exists())
-        .andExpect(jsonPath("$.links").isArray())
-        .andExpect(jsonPath("$.links[0].rel").value("self"))
-        .andExpect(jsonPath("$.links[1].rel").value("articles"))
-        .andExpect(jsonPath("$.links[2].rel").value("article"))
+    MvcResult result =
+        mvc.perform(
+                get("/api/articles/search")
+                    .param("faculty", facultyId.toString())
+                    .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.page").exists())
+            .andExpect(jsonPath("$.links").isArray())
+            .andExpect(jsonPath("$.links[0].rel").value("self"))
+            .andExpect(jsonPath("$.links[1].rel").value("articles"))
+            .andExpect(jsonPath("$.links[2].rel").value("article"))
             .andReturn();
   }
 }
