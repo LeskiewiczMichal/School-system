@@ -2,19 +2,19 @@ import { createSlice } from "@reduxjs/toolkit";
 import IntegrationState from "./IntegrationState";
 
 const initialState: IntegrationState = {
-  mobileNavBarIconActive: false,
+  sidebarMenuActive: false,
 };
 
 export const integrationSlice = createSlice({
   name: "integration",
   initialState,
   reducers: {
-    setMobileNavBarIconActive: (state, action) => {
-      state.mobileNavBarIconActive = action.payload;
+    setSidebarMenuActive: (state, action) => {
+      state.sidebarMenuActive = action.payload;
     },
   },
 });
 
-export const { setMobileNavBarIconActive } = integrationSlice.actions;
+export const { setSidebarMenuActive } = integrationSlice.actions;
 
 export default integrationSlice.reducer;

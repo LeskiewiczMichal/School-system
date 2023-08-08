@@ -3,9 +3,15 @@ import { ReactComponent as MenuIcon } from "../assets/menu.svg";
 import FacultiesDropdown from "./FacultiesDropdown";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { IntegrationSliceActions } from "../../../store";
+import { useAppDispatch, useAppSelector } from "../../../hooks";
 
 export default function Header() {
+  const dispatch = useAppDispatch();
   const [mobileNavView, setMobileNavView] = useState<boolean>(false);
+  const sidebarMenuActive = useAppSelector(
+    (state) => state.integration.sidebarMenuActive,
+  );
 
   useEffect(() => {
     const handleResize = () => {
@@ -21,6 +27,10 @@ export default function Header() {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+  const handleClickOpenMenu = () => {
+    dispatch(IntegrationSliceActions.setSidebarMenuActive(!sidebarMenuActive));
+  };
 
   return (
     <header className="z-50 max-h-20 flex flex-auto justify-between items-center py-6 pr-8 bg-white border-b-2 border-primary">
@@ -51,6 +61,7 @@ export default function Header() {
           <button
             type="button"
             className="inline-block min-w-fit text-md font-bold text-primary align-baseline hover:text-primaryLighter"
+            onClick={handleClickOpenMenu}
           >
             <MenuIcon className="h-6 w-6" />
           </button>

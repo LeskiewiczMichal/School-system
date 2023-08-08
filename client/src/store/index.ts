@@ -1,10 +1,10 @@
 import { RootState, AppDispatch, AppThunk } from "./types";
 import store from "./store";
 import IntegrationSlice from "./slice/IntegrationSlice";
-import { setMobileNavBarIconActive } from "./slice/IntegrationSlice";
+import { setSidebarMenuActive } from "./slice/IntegrationSlice";
 
 const IntegrationSliceActions = {
-  setMobileNavBarIconActive,
+  setSidebarMenuActive,
 };
 
 export { store, IntegrationSlice, IntegrationSliceActions };

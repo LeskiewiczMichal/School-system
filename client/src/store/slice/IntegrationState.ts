@@ -1,3 +1,3 @@
 export default interface IntegrationState {
-  mobileNavBarIconActive: boolean;
+  sidebarMenuActive: boolean;
 }
