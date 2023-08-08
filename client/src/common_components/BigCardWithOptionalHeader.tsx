@@ -1,14 +1,16 @@
 import Card from "./Card";
+import { Article } from "../features/article";
 
 interface BigCardWithOptionalHeaderProps {
   title: string;
   text: string;
+  article: Article;
 }
 
 export default function BigCardWithOptionalHeader(
   props: BigCardWithOptionalHeaderProps,
 ) {
-  const { title, text } = props;
+  const { title, text, article } = props;
 
   return (
     <section className="col-span-3">
@@ -16,12 +18,12 @@ export default function BigCardWithOptionalHeader(
       <p className="mb-6">{text}</p>
 
       <Card
-        imageUrl="https://img.freepik.com/free-photo/harvard-university-cambridge-usa_1268-14363.jpg"
-        imageAlt="building"
-        redirectUrl="http://localhost:8080/articles"
-        articleId="3"
-        title={"Okay"}
-        text="lorem ipsum lorem ipsum lorem ipsum lorem ipsum"
+        imageUrl={article.imgPath}
+        imageAlt="Article Preview"
+        redirectUrl={`http://localhost:8080/articles/${article.id}`}
+        articleId={article.id.toString()}
+        title={article.title}
+        text={article.preview}
         wide
       />
     </section>

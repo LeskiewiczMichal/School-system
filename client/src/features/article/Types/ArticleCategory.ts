@@ -1,5 +1,5 @@
 enum ArticleCategory {
-  News = "NEWS",
+  NEWS = "NEWS",
   EVENTS = "EVENTS",
   SCIENCE = "SCIENCE",
   SPORT = "SPORT",

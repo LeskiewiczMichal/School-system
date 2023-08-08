@@ -10,6 +10,7 @@ import ArticleRequest from "../features/article/services/ArticleRequest";
 export default function Home() {
   const links = useAppSelector((state) => state.links);
   const [scienceArticles, setScienceArticles] = useState<Article[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   // Get science articles
   useEffect(() => {
@@ -22,16 +23,21 @@ export default function Home() {
       // Call the api
       const articles: Article[] = await ArticleRequest.getArticles({
         link: links.articlesSearch,
-        category: ArticleCategory.SCIENCE,
+        category: ArticleCategory.NEWS,
         pagination: { size: 1 },
       });
 
       // Set the articles
       setScienceArticles(articles);
+      setIsLoading(false);
     };
 
     handleFetchArticles();
   }, [links]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <main className="">
@@ -54,6 +60,7 @@ export default function Home() {
         biology and environmental sciences. Experience hands-on experiments,
         groundbreaking projects, and collaborative learning that ignite your
         passion for discovery and innovation."
+          article={scienceArticles[0]}
         />
       </section>
     </main>

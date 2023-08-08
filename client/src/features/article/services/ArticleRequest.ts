@@ -58,12 +58,13 @@ const getArticles = async (props: FetchArticlesProps): Promise<Article[]> => {
     };
   }
 
-  // Call the API
   const responseData = await RequestService.performGetRequest({
     link: link,
     pagination: paginationParams,
     params: params,
   });
+
+  console.log(responseData);
 
   // Convert the response data into articles
   const articlesArr: Article[] = ArticleMapper.mapArticleArrayFromServerData(

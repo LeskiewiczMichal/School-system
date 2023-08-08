@@ -29,6 +29,13 @@ const performGetRequest = async (args: ApiGetParams) => {
         "{?size,page,sort}",
         `?size=${pagination.size}&page=${pagination.page}&sort=${pagination.sort[0]},${pagination.sort[1]}`,
       );
+    } else if (link.href.match(/\{\?.*\}$/)) {
+      apiLink = link.href.replace(
+        /\{\?.*\}$/,
+        `?size=${pagination.size}&page=${pagination.page}&sort=${pagination.sort[0]},${pagination.sort[1]}`,
+      );
+    } else {
+      apiLink = link.href;
     }
   } else {
     apiLink = link.href;
@@ -43,6 +50,7 @@ const performGetRequest = async (args: ApiGetParams) => {
     }
   }
 
+  console.log(apiLink);
   return new Promise<any>(async (resolve, reject) => {
     try {
       // Send request
