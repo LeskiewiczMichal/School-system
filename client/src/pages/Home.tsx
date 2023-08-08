@@ -64,15 +64,17 @@ export default function Home() {
         passion for discovery and innovation."
           article={scienceArticles[0]}
         />
-        <TextAndButtonWithPhotoOnRight
-          heading={"THE TRANSFORMATIVE POWER OF HIGHER EDUCATION"}
-          text={
-            "Unlock your full potential through the transformative journey of higher education. Explore the research behind innovative teaching methodologies, personalized learning, and interdisciplinary programs. Embrace a holistic approach to education that fosters critical thinking, creativity, and adaptability."
-          }
-          buttonLink={"/science"}
-          imageLink={GlassBuilding}
-        />
-        <ArticlesDisplay />
+        <div className={"flex flex-col gap-7"}>
+          <TextAndButtonWithPhotoOnRight
+            heading={"THE TRANSFORMATIVE POWER OF HIGHER EDUCATION"}
+            text={
+              "Unlock your full potential through the transformative journey of higher education. Explore the research behind innovative teaching methodologies, personalized learning, and interdisciplinary programs. Embrace a holistic approach to education that fosters critical thinking, creativity, and adaptability."
+            }
+            buttonLink={"/science"}
+            imageLink={GlassBuilding}
+          />
+          <ArticlesDisplay />
+        </div>
       </section>
     </main>
   );

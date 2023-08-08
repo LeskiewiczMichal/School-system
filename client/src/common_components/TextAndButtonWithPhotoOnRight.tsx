@@ -16,7 +16,7 @@ export default function TextAndButtonWithPhotoOnRight(
   const { heading, text, buttonLink, imageLink } = props;
 
   return (
-    <section className="col-span-3 flex flex-col lg:flex-row lg:pt-14 pb-14">
+    <section className="col-span-3 flex flex-col lg:flex-row ">
       <img
         src={imageLink}
         className="w-full lg:w-1/2 lg:order-2"
