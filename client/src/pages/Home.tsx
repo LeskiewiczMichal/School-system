@@ -72,7 +72,7 @@ export default function Home() {
           buttonLink={"/science"}
           imageLink={GlassBuilding}
         />
-        <ArticlesDisplay heading="NEWS" />
+        <ArticlesDisplay />
       </section>
     </main>
   );

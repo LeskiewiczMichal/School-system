@@ -11,7 +11,7 @@ import ArticleMapper from "../mapper/ArticleMapper";
 import ArticleRequest from "../services/ArticleRequest";
 
 interface ArticlesDisplayProps {
-  heading: string;
+  heading?: string;
   faculty?: string;
   category?: ArticleCategory;
 }
@@ -49,7 +49,7 @@ export default function ArticlesDisplay(props: ArticlesDisplayProps) {
 
   return (
     <section className="flex flex-col">
-      <h4 className="mb-8 text-4xl font-bold">{heading}</h4>
+      {heading ? <h4 className="mb-8 text-4xl font-bold">{heading}</h4> : null}
       <div className="grid grid-cols-1 lg:grid-cols-3  gap-4">
         {articles.map((article) => {
           return (
