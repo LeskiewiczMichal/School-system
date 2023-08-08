@@ -61,7 +61,7 @@ export default function ArticlesDisplay(props: ArticlesDisplayProps) {
               imageUrl={article.imgPath}
               imageAlt="Article Preview"
               articleId={article.id.toString()}
-              redirectUrl="red"
+              redirectUrl="/article"
               key={article.id.toString()}
             />
           );
