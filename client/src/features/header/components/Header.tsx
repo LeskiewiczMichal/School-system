@@ -19,12 +19,12 @@ export default function Header() {
     const handleResize = () => {
       if (window.innerWidth > 1024) {
         setMobileNavView(false);
+        dispatch(IntegrationSliceActions.setSidebarMenuActive(false));
       } else {
         setMobileNavView(true);
       }
     };
 
-    handleResize();
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);

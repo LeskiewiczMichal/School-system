@@ -1,5 +1,5 @@
 import GlassBuilding from "../features/main-page/assets/glass-building.webp";
-import { ReactComponent as ArrowRight } from "../assets/icons/arrow-right-white.svg";
+import { ReactComponent as ArrowRight } from "../assets/icons/arrow/arrow-right-white.svg";
 import { Link } from "react-router-dom";
 import LinkButtonPrimary from "./LinkButtonPrimary";
 

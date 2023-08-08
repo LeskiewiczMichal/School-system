@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ReactComponent as ArrowRight } from "../../../assets/icons/arrow-right-white.svg";
+import { ReactComponent as ArrowRight } from "../../../assets/icons/arrow/arrow-right-white.svg";
 
 export interface LinkButtonPrimaryProps {
   text: string;

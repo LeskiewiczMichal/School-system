@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Article, ArticleCategory, ArticlesDisplay } from "../features/article";
 import { useAppSelector } from "../hooks";
 import { Link } from "react-router-dom";
-import { ReactComponent as ArrowRight } from "../assets/icons/arrow-right-primary.svg";
+import { ReactComponent as ArrowRight } from "../assets/icons/arrow/arrow-right-primary.svg";
 import BigCardWithOptionalHeader from "../common_components/BigCardWithOptionalHeader";
 import ArticleRequest from "../features/article/services/ArticleRequest";
 import TextAndButtonWithPhotoOnRight from "../common_components/TextAndButtonWithPhotoOnRight";
