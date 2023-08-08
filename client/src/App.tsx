@@ -28,6 +28,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Pages.Home />} />
           <Route path="/login" element={<Pages.Login />} />
+          <Route path="/articles" element={<Pages.Articles />} />
         </Routes>
         <Footer />
       </>

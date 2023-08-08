@@ -21,6 +21,12 @@
       line-height: 2.5rem; /* 40px */
         font-weight: 700;
     }
+
+    .sidebar {
+      /*position: -webkit-sticky;*/
+      position: sticky;
+      top: 0;
+    }
   }
 }
 
