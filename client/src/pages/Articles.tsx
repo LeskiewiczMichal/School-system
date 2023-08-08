@@ -1,5 +1,4 @@
 import { Sidebar } from "../sidebar";
-import { SidebarLinkProps } from "../sidebar/components/SidebarLink";
 import { useEffect, useState } from "react";
 import { Article, ArticleCategory } from "../features/article";
 import { SidebarButtonProps } from "../sidebar/components/SidebarButton";
@@ -77,7 +76,7 @@ export default function Articles() {
   return (
     <div className={"flex h-full"}>
       <Sidebar buttons={sidebarButtons} />
-      <main className={"h-full w-full flex flex-col px-4"}>
+      <main className={"h-full w-full flex flex-col px-8 py-8"}>
         qewr
         <p>qwer</p>
         <p>qwer</p>
