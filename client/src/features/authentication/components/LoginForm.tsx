@@ -1,6 +1,6 @@
 import { useAppDispatch } from "../../../hooks";
 import { useState } from "react";
-import { ReactComponent as Logo } from "../../../assets/logo.svg";
+import { ReactComponent as Logo } from "../../../assets/logo/logo.svg";
 import login from "../services/login";
 import { useNavigate } from "react-router-dom";
 

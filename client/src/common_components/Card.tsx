@@ -29,7 +29,7 @@ export default function Card(props: CardProps) {
   return (
     <Link
       to={`${redirectUrl}/${articleId}`}
-      className={`flex flex-col w-full  bg-gray-100 border border-gray-200 rounded-lg shadow  hover:bg-grey ${
+      className={`flex flex-col w-full  bg-hoverGray border border-gray-200 rounded-lg shadow  hover:bg-grey ${
         wide ? "lg:flex-row items-center" : ""
       }`}
     >
@@ -49,14 +49,16 @@ export default function Card(props: CardProps) {
         } ${wide ? "lg:px-16" : ""}`}
       >
         <div>
-          <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">
+          <h5 className="mb-2 text-2xl font-bold tracking-tight text-brandMainNearlyBlack">
             {title}
           </h5>
-          <p className="mb-3 font-normal text-gray-700 ">{truncatedText}</p>
+          <p className="mb-3 font-normal text-grayscaleDarkText ">
+            {truncatedText}
+          </p>
         </div>
         <button
           type="button"
-          className="text-primary font-bold text-lg self-end hover:text-primaryDarkened hover:underline"
+          className="text-primary font-bold text-lg self-end hover:text-brandMainDark hover:underline"
         >
           Read more...
         </button>

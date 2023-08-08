@@ -49,7 +49,9 @@ export default function ArticlesDisplay(props: ArticlesDisplayProps) {
 
   return (
     <section className="flex flex-col">
-      {heading ? <h4 className="mb-8 text-4xl font-bold">{heading}</h4> : null}
+      {heading ? (
+        <h4 className="my-header text-brandMainNearlyBlack">{heading}</h4>
+      ) : null}
       <div className="grid grid-cols-1 lg:grid-cols-3  gap-4">
         {articles.map((article) => {
           return (

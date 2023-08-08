@@ -14,8 +14,8 @@ export default function BigCardWithOptionalHeader(
 
   return (
     <section className="col-span-3">
-      <h4 className="mb-8 text-4xl font-bold">{title}</h4>
-      <p className="mb-6">{text}</p>
+      <h4 className="my-header text-brandMainNearlyBlack">{title}</h4>
+      <p className="mb-6 text-grayscaleDarkText">{text}</p>
 
       <Card
         imageUrl={article.imgPath}
