@@ -5,6 +5,7 @@ import { SidebarButtonProps } from "../sidebar/components/SidebarButton";
 import { useAppSelector } from "../hooks";
 import ArticleRequest from "../features/article/services/ArticleRequest";
 import DarkBackgroundWithPhotoOnRight from "../common_components/Card/DarkBackgroundWithPhotoOnRight";
+import GroupOfStundetsPhoto from "../features/article/assets/group.webp";
 
 export default function Articles() {
   const links = useAppSelector((state) => state.links);
@@ -78,13 +79,15 @@ export default function Articles() {
     <div className={"flex h-full"}>
       <Sidebar buttons={sidebarButtons} />
       <main className={"h-full w-full flex flex-col px-8 py-8"}>
-        <DarkBackgroundWithPhotoOnRight
-          heading={"Aquila's news"}
-          text={"Checkout out latest news from our University"}
-          buttonLink={"/"}
-          buttonText={"See what is new in our faculties"}
-          imageLink={"../assets/images/pexels2/entrence.jpg"}
-        />
+        <div className={"w-full flex justify-center"}>
+          <DarkBackgroundWithPhotoOnRight
+            heading={"Aquila's news"}
+            text={"Checkout out latest news from our University"}
+            buttonLink={"/"}
+            buttonText={"See what is new in our faculties"}
+            imageLink={GroupOfStundetsPhoto}
+          />
+        </div>
         qewr
         <p>qwer</p>
         <p>qwer</p>
