@@ -5,6 +5,7 @@ import * as Pages from "./pages";
 import { Header } from "./features/header";
 import { fetchBasicLinks } from "./features/links";
 import { Footer } from "./features/footer";
+import DarkenLayoutBelowIndexZ from "./common_components/DarkenLayoutBelowIndexZ";
 
 function App() {
   const dispatch = useAppDispatch();

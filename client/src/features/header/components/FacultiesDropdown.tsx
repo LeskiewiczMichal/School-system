@@ -6,6 +6,7 @@ import RequestService from "../../../utils/RequestService";
 import APILink from "../../../type/APILink";
 import ResourceNameWithLink from "../../../type/ResourceNameWithLink";
 import { SortDirection } from "../../../type/PaginationParams";
+import DarkenLayoutBelowIndexZ from "../../../common_components/DarkenLayoutBelowIndexZ";
 
 export default function FacultiesDropdown() {
   const navigate = useNavigate();
@@ -85,7 +86,9 @@ export default function FacultiesDropdown() {
       </button>
 
       {profileMenuOpen && (
-        <div className="fixed z-40 top-20 left-0 right-0 bottom-0 bg-gray-600 opacity-40" />
+        <div
+          className={`fixed z-40 top-32 left-0 right-0 bottom-0 bg-gray-600 opacity-40`}
+        />
       )}
 
       {/* Dropdown */}

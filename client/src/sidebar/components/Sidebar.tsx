@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { ReactComponent as ChevronLeft } from "../../assets/icons/chevron/chevron-left.svg";
-import { useAppSelector } from "../../hooks";
+import { useAppDispatch, useAppSelector } from "../../hooks";
 import SidebarLink from "./SidebarLink";
+import DarkenLayoutBelowIndexZ from "../../common_components/DarkenLayoutBelowIndexZ";
+import { IntegrationSliceActions } from "../../store";
 
 export default function Sidebar() {
+  const dispatch = useAppDispatch();
   const [mobileNavView, setMobileNavView] = useState<boolean>(
     window.innerWidth <= 1024,
   );
@@ -27,16 +30,20 @@ export default function Sidebar() {
     };
   }, []);
 
+  const handleClickCloseMenu = () => {
+    dispatch(IntegrationSliceActions.setSidebarMenuActive(false));
+  };
+
   if (!mobileNavView) {
     return (
       <div className="flex flex-col gap-6 bg-grayscaleLight w-72 px-8 py-10 border-r h-screen sticky top-0">
         <a
-          href={"#"}
+          href={"/"}
           className={
-            "flex items-center text-lg gap-3 font-bold text-brandMain hover:text-brandMainActive hover:underline"
+            "flex items-center text-lg gap-4 font-bold text-brandMainBright hover:underline"
           }
         >
-          <ChevronLeft className={"h-5 w-5"} /> Back
+          <ChevronLeft className={"h-6 w-6"} /> Back
         </a>
         <SidebarLink title={"News"} redirectUrl={"/"} active />
         <SidebarLink title={"Science"} redirectUrl={"/"} />
@@ -48,14 +55,33 @@ export default function Sidebar() {
   }
 
   return sidebarMenuActive ? (
-    <div className="flex flex-col bg-grayscaleLight w-72 px-4 pt-4 border-r h-screen fixed top-0">
-      This is a sticky element
-      <a href={"#"}>dumb link</a>
-      <a className={"mb-16"} href={"#"}>
-        dumb link
-      </a>
-      qwerwer
-      <p>sapofm</p>
-    </div>
+    <>
+      <DarkenLayoutBelowIndexZ />
+      <div className="z-50 flex flex-col gap-6 bg-grayscaleLight w-72 px-8 py-10 border-l h-screen fixed top-0 right-0">
+        <button
+          type={"button"}
+          className={
+            "flex items-center justify-end text-lg gap-3 font-bold text-brandMainLight hover:text-brandMainActive hover:underline"
+          }
+          onClick={handleClickCloseMenu}
+        >
+          Close X
+        </button>
+        <a
+          href={"#"}
+          className={
+            "flex items-center text-lg gap-3 font-bold text-brandMainBright hover:text-brandMainActive hover:underline"
+          }
+        >
+          <ChevronLeft className={"h-5 w-5"} /> Back
+        </a>
+
+        <SidebarLink title={"News"} redirectUrl={"/"} active />
+        <SidebarLink title={"Science"} redirectUrl={"/"} />
+        <SidebarLink title={"Sport"} redirectUrl={"/"} />
+        <SidebarLink title={"Events"} redirectUrl={"/"} />
+        <SidebarLink title={"Other"} redirectUrl={"/"} />
+      </div>
+    </>
   ) : null;
 }

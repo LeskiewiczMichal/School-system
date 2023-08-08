@@ -1,3 +1,5 @@
+import { ReactComponent as ChevronRight } from "../../assets/icons/chevron/chevron-right-bright.svg";
+
 export interface SidebarLinkProps {
   active?: boolean;
   title: string;
@@ -23,10 +25,10 @@ export default function SidebarLink(props: SidebarLinkProps) {
     <a
       href={redirectUrl}
       className={
-        "text-lg font-bold text-brandMainBright hover:text-brandMainActive hover:underline"
+        "flex items-center gap-4 text-lg font-bold text-brandMainBright hover:underline"
       }
     >
-      {title}
+      <ChevronRight className={"h-6 w-6"} /> {title}
     </a>
   );
 }
