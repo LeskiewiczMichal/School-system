@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 
 export default function Sidebar() {
-  const [mobileNavView, setMobileNavView] = useState<boolean>(false);
+  const [mobileNavView, setMobileNavView] = useState<boolean>(
+    window.innerWidth <= 1024,
+  );
 
   // Handles closing the mobile nav when the window is resized
   useEffect(() => {

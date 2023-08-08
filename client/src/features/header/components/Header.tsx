@@ -8,7 +8,9 @@ import { useAppDispatch, useAppSelector } from "../../../hooks";
 
 export default function Header() {
   const dispatch = useAppDispatch();
-  const [mobileNavView, setMobileNavView] = useState<boolean>(false);
+  const [mobileNavView, setMobileNavView] = useState<boolean>(
+    window.innerWidth <= 1024,
+  );
   const sidebarMenuActive = useAppSelector(
     (state) => state.integration.sidebarMenuActive,
   );
@@ -22,6 +24,7 @@ export default function Header() {
       }
     };
 
+    handleResize();
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
@@ -45,12 +48,12 @@ export default function Header() {
 
       <div className="flex items-center  justify-end gap-4">
         <FacultiesDropdown />
-        <a
-          className="inline-block text-md font-bold text-primary align-baseline hover:text-primaryLighter"
-          href="#"
-        >
-          About
-        </a>
+        {/*<a*/}
+        {/*  className="inline-block text-md font-bold text-primary align-baseline hover:text-primaryLighter"*/}
+        {/*  href="#"*/}
+        {/*>*/}
+        {/*  About*/}
+        {/*</a>*/}
         <Link
           to="/login"
           className="inline-block min-w-fit text-md font-bold text-primary align-baseline hover:text-primaryLighter"
