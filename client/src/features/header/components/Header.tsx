@@ -1,8 +1,27 @@
 import { ReactComponent as Logo } from "../../../assets/logo/logo.svg";
+import { ReactComponent as MenuIcon } from "../assets/menu.svg";
 import FacultiesDropdown from "./FacultiesDropdown";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 export default function Header() {
+  const [mobileNavView, setMobileNavView] = useState<boolean>(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 1024) {
+        setMobileNavView(false);
+      } else {
+        setMobileNavView(true);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
     <header className="z-50 max-h-20 flex flex-auto justify-between items-center py-6 pr-8 bg-white border-b-2 border-primary">
       <div className="flex  items-center">
@@ -28,6 +47,14 @@ export default function Header() {
         >
           Sign In
         </Link>
+        {mobileNavView && (
+          <button
+            type="button"
+            className="inline-block min-w-fit text-md font-bold text-primary align-baseline hover:text-primaryLighter"
+          >
+            <MenuIcon className="h-6 w-6" />
+          </button>
+        )}
       </div>
     </header>
   );
