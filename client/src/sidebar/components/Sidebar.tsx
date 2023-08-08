@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { ReactComponent as ChevronLeft } from "../../assets/icons/chevron/chevron-left.svg";
 import { useAppSelector } from "../../hooks";
+import SidebarLink from "./SidebarLink";
 
 export default function Sidebar() {
   const [mobileNavView, setMobileNavView] = useState<boolean>(
@@ -32,19 +33,16 @@ export default function Sidebar() {
         <a
           href={"#"}
           className={
-            "flex items-center text-xl gap-3 font-bold text-brandMain hover:text-brandMainActive hover:underline"
+            "flex items-center text-lg gap-3 font-bold text-brandMain hover:text-brandMainActive hover:underline"
           }
         >
           <ChevronLeft className={"h-5 w-5"} /> Back
         </a>
-        <a
-          href={"#"}
-          className={
-            "text-xl font-bold text-brandMain hover:text-brandMainActive hover:underline"
-          }
-        >
-          News
-        </a>
+        <SidebarLink title={"News"} redirectUrl={"/"} active />
+        <SidebarLink title={"Science"} redirectUrl={"/"} />
+        <SidebarLink title={"Sport"} redirectUrl={"/"} />
+        <SidebarLink title={"Events"} redirectUrl={"/"} />
+        <SidebarLink title={"Other"} redirectUrl={"/"} />
       </div>
     );
   }

@@ -14,7 +14,7 @@ export default function LinkButtonNoBorderOrBackground(
   return (
     <Link
       to={link}
-      className="flex items-center justify-between gap-3 w-full border-b border-white bg-brandMainSoft text-center text-white font-bold text-md py-2"
+      className="flex items-center justify-between gap-3 w-full border-b border-white text-center text-white font-bold text-md py-2"
     >
       {text} <ArrowRight className="w-6 h-6" />
     </Link>
