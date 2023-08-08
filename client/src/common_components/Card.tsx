@@ -58,7 +58,7 @@ export default function Card(props: CardProps) {
         </div>
         <button
           type="button"
-          className="text-primary font-bold text-lg self-end hover:text-brandMainDark hover:underline"
+          className="text-brandMain font-bold text-lg self-end hover:text-brandMainActive hover:underline"
         >
           Read more...
         </button>

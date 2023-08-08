@@ -49,7 +49,7 @@ export default function Home() {
         <Link
           to="#"
           type="button"
-          className="mb-16 w-2/3 lg:w-1/4 flex items-center border-4 border-primary gap-3 px-4 py-2 text-primary hover:border-primaryLighter hover:text-primaryLighter font-bold text-lg"
+          className="mb-16 w-2/3 lg:w-1/4 flex items-center border-4 border-primary gap-3 px-4 py-2 text-brandMain hover:border-brandMainActive hover:text-brandMainActive font-bold text-lg"
         >
           See more news from the Aquila University{" "}
           <ArrowRight className="w-6 h-6 " />
