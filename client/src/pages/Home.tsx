@@ -1,14 +1,37 @@
 import { Greeting } from "../features/main-page";
-import Card from "../common_components/Card";
 import { useEffect, useState } from "react";
-import { Article, ArticlesDisplay } from "../features/article";
+import { Article, ArticleCategory, ArticlesDisplay } from "../features/article";
 import { useAppSelector } from "../hooks";
 import { Link } from "react-router-dom";
 import { ReactComponent as ArrowRight } from "../assets/icons/arrow-right.svg";
 import BigCardWithOptionalHeader from "../common_components/BigCardWithOptionalHeader";
+import ArticleRequest from "../features/article/services/ArticleRequest";
 
 export default function Home() {
   const links = useAppSelector((state) => state.links);
+  const [scienceArticles, setScienceArticles] = useState<Article[]>([]);
+
+  // Get science articles
+  useEffect(() => {
+    const handleFetchArticles = async () => {
+      // Prepare the link
+      if (!links.articlesSearch) {
+        return;
+      }
+
+      // Call the api
+      const articles: Article[] = await ArticleRequest.getArticles({
+        link: links.articlesSearch,
+        category: ArticleCategory.SCIENCE,
+        pagination: { size: 1 },
+      });
+
+      // Set the articles
+      setScienceArticles(articles);
+    };
+
+    handleFetchArticles();
+  }, [links]);
 
   return (
     <main className="">
