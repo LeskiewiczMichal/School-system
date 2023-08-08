@@ -3,9 +3,10 @@ import { useEffect, useState } from "react";
 import { Article, ArticleCategory, ArticlesDisplay } from "../features/article";
 import { useAppSelector } from "../hooks";
 import { Link } from "react-router-dom";
-import { ReactComponent as ArrowRight } from "../assets/icons/arrow-right.svg";
+import { ReactComponent as ArrowRight } from "../assets/icons/arrow-right-primary.svg";
 import BigCardWithOptionalHeader from "../common_components/BigCardWithOptionalHeader";
 import ArticleRequest from "../features/article/services/ArticleRequest";
+import TextAndButtonWithPhotoOnRight from "../common_components/TextAndButtonWithPhotoOnRight";
 
 export default function Home() {
   const links = useAppSelector((state) => state.links);
@@ -62,6 +63,7 @@ export default function Home() {
         passion for discovery and innovation."
           article={scienceArticles[0]}
         />
+        <TextAndButtonWithPhotoOnRight />
       </section>
     </main>
   );

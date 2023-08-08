@@ -64,8 +64,6 @@ const getArticles = async (props: FetchArticlesProps): Promise<Article[]> => {
     params: params,
   });
 
-  console.log(responseData);
-
   // Convert the response data into articles
   const articlesArr: Article[] = ArticleMapper.mapArticleArrayFromServerData(
     responseData._embedded.articles,
