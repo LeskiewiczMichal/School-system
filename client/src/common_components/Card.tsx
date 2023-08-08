@@ -29,13 +29,13 @@ export default function Card(props: CardProps) {
   return (
     <Link
       to={`${redirectUrl}/${articleId}`}
-      className={`flex flex-col w-full  bg-hoverGray border border-gray-200 rounded-lg shadow  hover:bg-grey ${
+      className={`flex flex-col w-full  bg-hoverGray border border-gray-200 rounded shadow  hover:bg-grey ${
         wide ? "lg:flex-row items-center" : ""
       }`}
     >
       {imageUrl && (
         <img
-          className={`w-full rounded-t-lg h-96 lg:h-auto md:rounded-none md:rounded-l-lg ${
+          className={`w-full rounded-t-lg h-96 lg:h-auto md:rounded-none md:rounded-l ${
             wide ? "w-1/2" : ""
           }`}
           src={imageUrl}
