@@ -3,6 +3,12 @@ enum SortDirection {
   DESC = "desc",
 }
 
+interface OptionalPaginationParams {
+  page?: number;
+  size?: number;
+  sort?: [string, SortDirection];
+}
+
 interface PaginationParams {
   page: number;
   size: number;
@@ -10,4 +16,4 @@ interface PaginationParams {
 }
 
 export { SortDirection };
-export default PaginationParams;
+export type { OptionalPaginationParams, PaginationParams };

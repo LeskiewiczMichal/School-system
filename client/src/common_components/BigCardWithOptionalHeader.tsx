@@ -1,11 +1,13 @@
 import Card from "./Card";
 
-interface HeaderAndOneCardProps {
+interface BigCardWithOptionalHeaderProps {
   title: string;
   text: string;
 }
 
-export default function HeaderAndOneCard(props: HeaderAndOneCardProps) {
+export default function BigCardWithOptionalHeader(
+  props: BigCardWithOptionalHeaderProps,
+) {
   const { title, text } = props;
 
   return (

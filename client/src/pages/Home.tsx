@@ -5,7 +5,7 @@ import { Article, ArticlesDisplay } from "../features/article";
 import { useAppSelector } from "../hooks";
 import { Link } from "react-router-dom";
 import { ReactComponent as ArrowRight } from "../assets/icons/arrow-right.svg";
-import HeaderAndOneCard from "../common_components/HeaderAndOneCard";
+import BigCardWithOptionalHeader from "../common_components/BigCardWithOptionalHeader";
 
 export default function Home() {
   const links = useAppSelector((state) => state.links);
@@ -23,7 +23,7 @@ export default function Home() {
           See more news from the Aquila University{" "}
           <ArrowRight className="w-6 h-6 " />
         </Link>
-        <HeaderAndOneCard
+        <BigCardWithOptionalHeader
           title="IGNITING DISCOVERY: EXPLORING THE WONDERS OF SCIENCE"
           text="Embark on a thrilling scientific journey that unlocks the mysteries of
         the universe. Immerse yourself in cutting-edge research across various

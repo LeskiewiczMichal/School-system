@@ -66,8 +66,6 @@ export default function ArticlesDisplay(props: ArticlesDisplayProps) {
     handleFetchArticles();
   }, [links]);
 
-  console.log(articles);
-
   return (
     <section className="flex flex-col">
       <h4 className="mb-8 text-4xl font-bold">{heading}</h4>
