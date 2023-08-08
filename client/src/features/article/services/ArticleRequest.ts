@@ -2,6 +2,7 @@ import APILink from "../../../type/APILink";
 import RequestService from "../../../utils/RequestService";
 import {
   OptionalPaginationParams,
+  PaginationParams,
   SortDirection,
 } from "../../../type/PaginationParams";
 import Article from "../Types/Article";
@@ -24,7 +25,7 @@ export type FetchArticlesProps = {
  * category {@link ArticleCategory} (optional) and pagination {@link OptionalPaginationParams} (optional)
  * @returns Promise of an array of {@link Article} objects
  */
-const fetchArticles = async (props: FetchArticlesProps): Promise<Article[]> => {
+const getArticles = async (props: FetchArticlesProps): Promise<Article[]> => {
   // Prepare the link
   const { link, faculty, category, pagination } = props;
 
@@ -44,7 +45,7 @@ const fetchArticles = async (props: FetchArticlesProps): Promise<Article[]> => {
   }
 
   // Prepare the pagination
-  let paginationParams = {
+  let paginationParams: PaginationParams = {
     page: 0,
     size: 10,
     sort: ["id", SortDirection.ASC],
@@ -73,7 +74,7 @@ const fetchArticles = async (props: FetchArticlesProps): Promise<Article[]> => {
 };
 
 const ArticleRequest = {
-  fetchArticles,
+  getArticles,
 };
 
 export default ArticleRequest;

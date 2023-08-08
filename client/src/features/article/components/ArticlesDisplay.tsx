@@ -8,6 +8,7 @@ import { useAppSelector } from "../../../hooks";
 import { SortDirection } from "../../../type/PaginationParams";
 import APILink from "../../../type/APILink";
 import ArticleMapper from "../mapper/ArticleMapper";
+import ArticleRequest from "../services/ArticleRequest";
 
 interface ArticlesDisplayProps {
   heading: string;
@@ -21,46 +22,68 @@ export default function ArticlesDisplay(props: ArticlesDisplayProps) {
   const links = useAppSelector((state) => state.links);
 
   useEffect(() => {
+    // const handleFetchArticles = async () => {
+    //   // Prepare the link
+    //   let link: APILink | null = links.articles;
+    //   let params = {};
+    //   if (faculty) {
+    //     link = links.articlesSearch;
+    //     params = {
+    //       ...params,
+    //       faculty: faculty,
+    //     };
+    //   }
+    //   if (category) {
+    //     link = links.articlesSearch;
+    //     params = {
+    //       ...params,
+    //       category: category,
+    //     };
+    //   }
+    //
+    //   if (!link) {
+    //     return;
+    //   }
+    //
+    //   // Call the API
+    //   const responseData = await RequestService.performGetRequest({
+    //     link: link,
+    //     pagination: {
+    //       page: 0,
+    //       size: 3,
+    //       sort: ["id", SortDirection.ASC],
+    //     },
+    //     params: params,
+    //   });
+    //
+    //   // Convert the response data into articles
+    //   const articlesArr: Article[] =
+    //     ArticleMapper.mapArticleArrayFromServerData(
+    //       responseData._embedded.articles,
+    //     );
+    //   setArticles(articlesArr);
+    // };
+
     const handleFetchArticles = async () => {
       // Prepare the link
       let link: APILink | null = links.articles;
-      let params = {};
-      if (faculty) {
+      if (faculty || category) {
         link = links.articlesSearch;
-        params = {
-          ...params,
-          faculty: faculty,
-        };
       }
-      if (category) {
-        link = links.articlesSearch;
-        params = {
-          ...params,
-          category: category,
-        };
-      }
-
       if (!link) {
         return;
       }
 
-      // Call the API
-      const responseData = await RequestService.performGetRequest({
-        link: link,
-        pagination: {
-          page: 0,
-          size: 3,
-          sort: ["id", SortDirection.ASC],
-        },
-        params: params,
+      // Call the api
+      const articles: Article[] = await ArticleRequest.getArticles({
+        link,
+        faculty: faculty ? faculty : undefined,
+        category: category ? category : undefined,
+        pagination: { size: 3 },
       });
 
-      // Convert the response data into articles
-      const articlesArr: Article[] =
-        ArticleMapper.mapArticleArrayFromServerData(
-          responseData._embedded.articles,
-        );
-      setArticles(articlesArr);
+      // Set the articles
+      setArticles(articles);
     };
 
     handleFetchArticles();

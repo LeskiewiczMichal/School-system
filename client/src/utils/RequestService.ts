@@ -1,5 +1,5 @@
 import APILink from "../type/APILink";
-import PaginationParams, { SortDirection } from "../type/PaginationParams";
+import { PaginationParams, SortDirection } from "../type/PaginationParams";
 import axios from "axios";
 
 interface ApiGetParams {
