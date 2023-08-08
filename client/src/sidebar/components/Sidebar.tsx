@@ -1,10 +1,35 @@
-export default function Sidebar() {
-  return (
-    // <Sticky enabled={true} top={0} bottomBoundary={0} className={"h-full"}>
+import { useEffect, useState } from "react";
 
-    <div className=" bg-grayscaleLight w-72 px-4 border-r h-full sticky top-0">
+export default function Sidebar() {
+  const [mobileNavView, setMobileNavView] = useState<boolean>(false);
+
+  // Handles closing the mobile nav when the window is resized
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 1024) {
+        setMobileNavView(false);
+      } else {
+        setMobileNavView(true);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  return mobileNavView ? (
+    <div></div>
+  ) : (
+    <div className="flex flex-col bg-grayscaleLight w-72 px-4 pt-4 border-r h-screen sticky top-0">
       This is a sticky element
+      <a href={"#"}>dumb link</a>
+      <a className={"mb-16"} href={"#"}>
+        dumb link
+      </a>
+      qwerwer
+      <p>sapofm</p>
     </div>
-    // </Sticky>
   );
 }
