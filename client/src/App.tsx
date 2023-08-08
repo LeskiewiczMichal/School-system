@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import * as Pages from "./pages";
 import { Header } from "./features/header";
 import { fetchBasicLinks } from "./features/links";
+import { Footer } from "./features/footer";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -28,6 +29,7 @@ function App() {
           <Route path="/" element={<Pages.Home />} />
           <Route path="/login" element={<Pages.Login />} />
         </Routes>
+        <Footer />
       </>
       {/*)}*/}
     </BrowserRouter>
