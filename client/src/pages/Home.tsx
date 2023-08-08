@@ -7,6 +7,7 @@ import { ReactComponent as ArrowRight } from "../assets/icons/arrow-right-primar
 import BigCardWithOptionalHeader from "../common_components/BigCardWithOptionalHeader";
 import ArticleRequest from "../features/article/services/ArticleRequest";
 import TextAndButtonWithPhotoOnRight from "../common_components/TextAndButtonWithPhotoOnRight";
+import GlassBuilding from "../features/main-page/assets/glass-building.webp";
 
 export default function Home() {
   const links = useAppSelector((state) => state.links);
@@ -63,7 +64,14 @@ export default function Home() {
         passion for discovery and innovation."
           article={scienceArticles[0]}
         />
-        <TextAndButtonWithPhotoOnRight />
+        <TextAndButtonWithPhotoOnRight
+          heading={"THE TRANSFORMATIVE POWER OF HIGHER EDUCATION"}
+          text={
+            "Unlock your full potential through the transformative journey of higher education. Explore the research behind innovative teaching methodologies, personalized learning, and interdisciplinary programs. Embrace a holistic approach to education that fosters critical thinking, creativity, and adaptability, preparing you to thrive in an ever-changing world."
+          }
+          buttonLink={"/science"}
+          imageLink={GlassBuilding}
+        />
       </section>
     </main>
   );

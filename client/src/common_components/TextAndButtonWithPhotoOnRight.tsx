@@ -1,30 +1,35 @@
 import GlassBuilding from "../features/main-page/assets/glass-building.webp";
 import { ReactComponent as ArrowRight } from "../assets/icons/arrow-right-white.svg";
 import { Link } from "react-router-dom";
+import LinkButtonPrimary from "./LinkButtonPrimary";
 
-export default function TextAndButtonWithPhotoOnRight() {
+export interface LinkButtonPrimaryProps {
+  heading: string;
+  text: string;
+  buttonLink: string;
+  imageLink: string;
+}
+
+export default function TextAndButtonWithPhotoOnRight(
+  props: LinkButtonPrimaryProps,
+) {
+  const { heading, text, buttonLink, imageLink } = props;
+
   return (
-    <section className="col-span-3 flex flex-col lg:flex-row lg:pt-14 pb-14 border-b border-primaryLighter">
-      <div className="flex flex-col justify-center pl-8 pr-8 lg:pr-16 gap-4 pt-8">
-        <h2 className="text-5xl font-extrabold text-primary">
-          EMBRACE THE FUTURE AND UNLOCK YOUR POTENTIAL
-        </h2>
-        <p>
-          Welcome to our university's virtual campus, offering an array of
-          opportunities for the upcoming academic adventure.
-        </p>
-        <Link
-          to="/degrees"
-          className="flex items-center justify-between gap-3 w-2/3 bg-primary text-center text-white font-bold text-md py-3 px-4 hover:bg-primaryDarkened"
-        >
-          Browse the degree catalogue <ArrowRight className="w-6 h-6" />
-        </Link>
-      </div>
+    <section className="col-span-3 flex flex-col lg:flex-row lg:pt-14 pb-14">
       <img
-        src={GlassBuilding}
-        className="w-full lg:w-1/2"
+        src={imageLink}
+        className="w-full lg:w-1/2 lg:order-2"
         alt="School building"
       />
+      <div className="flex flex-col lg:justify-center pl-8 pr-8 lg:pl-0 lg:pr-0 gap-4 pt-8 lg:order-1">
+        <h2 className="text-5xl font-extrabold text-primary">{heading}</h2>
+        <p>{text}</p>
+        <LinkButtonPrimary
+          text={"Browse the degree catalogue"}
+          link={buttonLink}
+        />
+      </div>
     </section>
   );
 }
