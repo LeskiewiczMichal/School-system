@@ -64,7 +64,7 @@ export default function Home() {
         passion for discovery and innovation."
           article={scienceArticles[0]}
         />
-        <div className={"flex flex-col gap-7"}>
+        <div className={"flex flex-col gap-10 lg:gap-7"}>
           <TextAndButtonWithPhotoOnRight
             heading={"THE TRANSFORMATIVE POWER OF HIGHER EDUCATION"}
             text={
