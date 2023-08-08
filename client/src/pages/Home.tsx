@@ -71,6 +71,7 @@ export default function Home() {
               "Unlock your full potential through the transformative journey of higher education. Explore the research behind innovative teaching methodologies, personalized learning, and interdisciplinary programs. Embrace a holistic approach to education that fosters critical thinking, creativity, and adaptability."
             }
             buttonLink={"/science"}
+            buttonText={"Learn More"}
             imageLink={GlassBuilding}
           />
           <ArticlesDisplay />

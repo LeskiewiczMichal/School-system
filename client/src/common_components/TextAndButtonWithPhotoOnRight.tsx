@@ -7,13 +7,14 @@ export interface LinkButtonPrimaryProps {
   heading: string;
   text: string;
   buttonLink: string;
+  buttonText: string;
   imageLink: string;
 }
 
 export default function TextAndButtonWithPhotoOnRight(
   props: LinkButtonPrimaryProps,
 ) {
-  const { heading, text, buttonLink, imageLink } = props;
+  const { heading, text, buttonLink, imageLink, buttonText } = props;
 
   return (
     <section className="col-span-3 flex flex-col lg:flex-row ">
@@ -25,10 +26,7 @@ export default function TextAndButtonWithPhotoOnRight(
       <div className="flex flex-col lg:justify-center gap-4 pt-8 lg:pt-0 lg:order-1 lg:mr-5">
         <h2 className="text-4xl font-bold text-primary">{heading}</h2>
         <p>{text}</p>
-        <LinkButtonPrimary
-          text={"Browse the degree catalogue"}
-          link={buttonLink}
-        />
+        <LinkButtonPrimary text={buttonText} link={buttonLink} />
       </div>
     </section>
   );
