@@ -4,10 +4,10 @@ import LinkButtonNoBorderOrBackground from "./LinkButtonNoBorderOrBackground";
 
 export default function Footer() {
   return (
-    <footer className="z-50 flex gap-4 flex-auto flex-col text-white justify-center items-center py-6 px-4 bg-brandMainSoft">
+    <footer className="z-50 flex gap-4 flex-auto flex-col md:flex-row text-white justify-center items-center py-6 px-4 md:px-12 bg-brandMainSoft">
       <section
         className={
-          "grid grid-cols-1 sm:grid-cols-2 gap-1 w-full h-full place-content-center justify-center items-center"
+          "grid grid-cols-1 sm:grid-cols-2 gap-x-4 w-full h-full place-content-center justify-center items-center md:order-2 md:max-w-xl"
         }
       >
         <LinkButtonNoBorderOrBackground
@@ -23,20 +23,25 @@ export default function Footer() {
           link={"/about-us/about-website"}
         />
       </section>
-      <div className={"mb-4"}>
-        <div className={"flex gap-3 items-center"}>
-          <Logo className="h-16 w-16" />
-          <h4 className={"text font-bold"}>Aquila University</h4>
+      <section
+        className={"flex flex-col items-center gap-6 md:items-start md:w-3/5"}
+      >
+        <div className={""}>
+          <div className={"flex gap-3 items-center"}>
+            <Logo className="h-16 w-16" />
+            <h4 className={"text font-bold"}>Aquila University</h4>
+          </div>
         </div>
-      </div>
-      <div className={"flex flex-col gap-2"}>
-        <p className={"font-bold"}>Follow us</p>
-        <div className={"flex justify-center"}>
-          <a href="">
-            <Linkedin className={"h-8 w-8"} />
-          </a>
+        <div className={"flex flex-col gap-2"}>
+          <p className={"font-bold"}>Follow us</p>
+          <div className={"flex justify-center md:justify-start"}>
+            <a href="http://www.linkedin.com/in/michał-leśkiewicz-0b964425b">
+              <Linkedin className={"h-8 w-8"} />
+            </a>
+          </div>
         </div>
-      </div>
+        <p className={"font-bold"}>© Aquila University 2023</p>
+      </section>
     </footer>
   );
 }
