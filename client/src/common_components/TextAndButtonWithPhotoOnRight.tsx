@@ -22,8 +22,8 @@ export default function TextAndButtonWithPhotoOnRight(
         className="w-full lg:w-1/2 lg:order-2"
         alt="School building"
       />
-      <div className="flex flex-col lg:justify-center pl-8 pr-8 lg:pl-0 lg:pr-0 gap-4 pt-8 lg:order-1">
-        <h2 className="text-5xl font-extrabold text-primary">{heading}</h2>
+      <div className="flex flex-col lg:justify-center gap-4 pt-8 lg:pt-0 lg:order-1 lg:mr-5">
+        <h2 className="text-4xl font-bold text-primary">{heading}</h2>
         <p>{text}</p>
         <LinkButtonPrimary
           text={"Browse the degree catalogue"}

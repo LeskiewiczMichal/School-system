@@ -22,48 +22,6 @@ export default function ArticlesDisplay(props: ArticlesDisplayProps) {
   const links = useAppSelector((state) => state.links);
 
   useEffect(() => {
-    // const handleFetchArticles = async () => {
-    //   // Prepare the link
-    //   let link: APILink | null = links.articles;
-    //   let params = {};
-    //   if (faculty) {
-    //     link = links.articlesSearch;
-    //     params = {
-    //       ...params,
-    //       faculty: faculty,
-    //     };
-    //   }
-    //   if (category) {
-    //     link = links.articlesSearch;
-    //     params = {
-    //       ...params,
-    //       category: category,
-    //     };
-    //   }
-    //
-    //   if (!link) {
-    //     return;
-    //   }
-    //
-    //   // Call the API
-    //   const responseData = await RequestService.performGetRequest({
-    //     link: link,
-    //     pagination: {
-    //       page: 0,
-    //       size: 3,
-    //       sort: ["id", SortDirection.ASC],
-    //     },
-    //     params: params,
-    //   });
-    //
-    //   // Convert the response data into articles
-    //   const articlesArr: Article[] =
-    //     ArticleMapper.mapArticleArrayFromServerData(
-    //       responseData._embedded.articles,
-    //     );
-    //   setArticles(articlesArr);
-    // };
-
     const handleFetchArticles = async () => {
       // Prepare the link
       let link: APILink | null = links.articles;

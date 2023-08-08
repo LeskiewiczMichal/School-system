@@ -45,7 +45,7 @@ export default function Home() {
     <main className="">
       <Greeting />
       <section className="flex flex-col px-4 md:px-32 my-16 gap-10">
-        <ArticlesDisplay heading="NEWS" />
+        <ArticlesDisplay heading="NEWS" category={ArticleCategory.NEWS} />
         <Link
           to="#"
           type="button"
@@ -67,11 +67,12 @@ export default function Home() {
         <TextAndButtonWithPhotoOnRight
           heading={"THE TRANSFORMATIVE POWER OF HIGHER EDUCATION"}
           text={
-            "Unlock your full potential through the transformative journey of higher education. Explore the research behind innovative teaching methodologies, personalized learning, and interdisciplinary programs. Embrace a holistic approach to education that fosters critical thinking, creativity, and adaptability, preparing you to thrive in an ever-changing world."
+            "Unlock your full potential through the transformative journey of higher education. Explore the research behind innovative teaching methodologies, personalized learning, and interdisciplinary programs. Embrace a holistic approach to education that fosters critical thinking, creativity, and adaptability."
           }
           buttonLink={"/science"}
           imageLink={GlassBuilding}
         />
+        <ArticlesDisplay heading="NEWS" />
       </section>
     </main>
   );
