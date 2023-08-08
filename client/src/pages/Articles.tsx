@@ -4,6 +4,7 @@ import { Article, ArticleCategory } from "../features/article";
 import { SidebarButtonProps } from "../sidebar/components/SidebarButton";
 import { useAppSelector } from "../hooks";
 import ArticleRequest from "../features/article/services/ArticleRequest";
+import DarkBackgroundWithPhotoOnRight from "../common_components/Card/DarkBackgroundWithPhotoOnRight";
 
 export default function Articles() {
   const links = useAppSelector((state) => state.links);
@@ -77,6 +78,13 @@ export default function Articles() {
     <div className={"flex h-full"}>
       <Sidebar buttons={sidebarButtons} />
       <main className={"h-full w-full flex flex-col px-8 py-8"}>
+        <DarkBackgroundWithPhotoOnRight
+          heading={"Aquila's news"}
+          text={"Checkout out latest news from our University"}
+          buttonLink={"/"}
+          buttonText={"See what is new in our faculties"}
+          imageLink={"../assets/images/pexels2/entrence.jpg"}
+        />
         qewr
         <p>qwer</p>
         <p>qwer</p>

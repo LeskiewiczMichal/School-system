@@ -4,9 +4,9 @@ import { Article, ArticleCategory, ArticlesDisplay } from "../features/article";
 import { useAppSelector } from "../hooks";
 import { Link } from "react-router-dom";
 import { ReactComponent as ArrowRight } from "../assets/icons/arrow/arrow-right-primary.svg";
-import BigCardWithOptionalHeader from "../common_components/BigCardWithOptionalHeader";
+import BigCardWithOptionalHeader from "../common_components/Card/BigCardWithOptionalHeader";
 import ArticleRequest from "../features/article/services/ArticleRequest";
-import TextAndButtonWithPhotoOnRight from "../common_components/TextAndButtonWithPhotoOnRight";
+import TextAndButtonWithPhotoOnRight from "../common_components/Card/TextAndButtonWithPhotoOnRight";
 import GlassBuilding from "../features/main-page/assets/glass-building.webp";
 
 export default function Home() {

@@ -1,5 +1,5 @@
 import Card from "./Card";
-import { Article } from "../features/article";
+import { Article } from "../../features/article";
 
 interface BigCardWithOptionalHeaderProps {
   title: string;

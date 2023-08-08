@@ -1,4 +1,4 @@
-import Card from "../../../common_components/Card";
+import Card from "../../../common_components/Card/Card";
 import NullableString from "../../../type/NullableString";
 import ArticleCategory from "../Types/ArticleCategory";
 import { useEffect, useState } from "react";

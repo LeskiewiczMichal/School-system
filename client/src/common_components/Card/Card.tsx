@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import NullableString from "../type/NullableString";
+import NullableString from "../../type/NullableString";
 
 export interface CardProps {
   title: string;
