@@ -93,9 +93,11 @@ export default function Articles() {
             imageLink={GroupOfStundetsPhoto}
           />
         </section>
-        <section className={"flex flex-col w-full"}>
+        <section className={"flex flex-col w-full px-8"}>
           <MyHeading heading={"LATEST ARTICLES"} />
-          <div className={"grid grid-cols-3 gap-4"}>
+          <div
+            className={"grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4"}
+          >
             {articles.map((article) => {
               return (
                 <Card
