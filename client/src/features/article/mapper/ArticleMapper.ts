@@ -7,9 +7,21 @@ const mapArticleFromServerData = (data: any): Article => {
     header: data.header,
     preview: data.preview,
     category: data.category,
-    faculty: data.faculty,
+    faculty: {
+      name: data.faculty,
+      link: {
+        href: data._links.faculty.href,
+        templated: data._links.faculty.templated === true,
+      },
+    },
     content: data.content,
-    author: data.author,
+    author: {
+      name: data.author,
+      link: {
+        href: data._links.author.href,
+        templated: data._links.author.templated === true,
+      },
+    },
     imgPath: data.imgPath,
   };
 };

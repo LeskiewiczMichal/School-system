@@ -1,5 +1,6 @@
 import NullableString from "../../../type/NullableString";
 import ArticleCategory from "./ArticleCategory";
+import APILink from "../../../type/APILink";
 
 interface Article {
   id: bigint;
@@ -7,9 +8,15 @@ interface Article {
   header: string;
   preview: string;
   category: ArticleCategory;
-  faculty: NullableString;
+  faculty: {
+    name: string;
+    link: APILink;
+  } | null;
   content: NullableString;
-  author: NullableString;
+  author: {
+    name: string;
+    link: APILink;
+  } | null;
   imgPath: NullableString;
 }
 

@@ -105,8 +105,8 @@ CREATE TABLE course_file (
 
 CREATE TABLE article(
                         id BIGINT NOT NULL AUTO_INCREMENT,
-                        title VARCHAR(100) NOT NULL,
-                        preview VARCHAR(200) NOT NULL,
+                        title VARCHAR(300) NOT NULL,
+                        preview VARCHAR(600) NOT NULL,
                         content LONGTEXT NOT NULL,
                         author_id BIGINT,
                         category VARCHAR(50) NOT NULL,

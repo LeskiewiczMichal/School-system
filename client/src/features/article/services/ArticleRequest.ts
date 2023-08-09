@@ -90,10 +90,20 @@ const getArticles = async (
   };
 };
 
-// const getFullArticle = async (link: APILink): Promise<Article> => {
+const getFullArticle = async (
+  props: FetchFullArticleProps,
+): Promise<Article> => {
+  const { link } = props;
+  const responseData = await RequestService.performGetByIdRequest({
+    link: link,
+  });
+
+  return ArticleMapper.mapArticleFromServerData(responseData);
+};
 
 const ArticleRequest = {
   getArticles,
+  getFullArticle,
 };
 
 export default ArticleRequest;

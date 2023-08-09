@@ -50,7 +50,46 @@ const performGetRequest = async (args: ApiGetParams) => {
     }
   }
 
-  console.log(apiLink);
+  return new Promise<any>(async (resolve, reject) => {
+    try {
+      // Send request
+      const response = await axios.get(apiLink);
+      resolve(response.data);
+    } catch (error: any) {
+      console.error(error);
+      reject(new Error(error.response.data.message));
+    }
+  });
+};
+
+interface ApiGetByIdParams {
+  link: APILink;
+  id?: string;
+  params?: Record<string, any>;
+}
+
+const performGetByIdRequest = async (props: ApiGetByIdParams) => {
+  const { link, id, params = {} } = props;
+
+  // Create API link
+  let apiLink: string = link.href;
+
+  if (link.templated && id) {
+    // Process templated link to get the correct href
+    if (link.href.match(/\{id\}/g)) {
+      apiLink = link.href.replace("{id}", id);
+    }
+  }
+
+  // Append optional parameters to the API link
+  let separator = apiLink.includes("?") ? "&" : "?"; // Check if '?' is already present
+  for (const key in params) {
+    if (params.hasOwnProperty(key)) {
+      apiLink += `${separator}${key}=${params[key]}`;
+      separator = "&"; // Set the separator to '&' after the first parameter
+    }
+  }
+
   return new Promise<any>(async (resolve, reject) => {
     try {
       // Send request
@@ -65,6 +104,7 @@ const performGetRequest = async (args: ApiGetParams) => {
 
 const RequestService = {
   performGetRequest,
+  performGetByIdRequest,
 };
 
 export default RequestService;
