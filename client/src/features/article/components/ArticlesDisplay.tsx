@@ -8,7 +8,9 @@ import { useAppSelector } from "../../../hooks";
 import { SortDirection } from "../../../type/PaginationParams";
 import APILink from "../../../type/APILink";
 import ArticleMapper from "../mapper/ArticleMapper";
-import ArticleRequest from "../services/ArticleRequest";
+import ArticleRequest, {
+  GetArticlesResponse,
+} from "../services/ArticleRequest";
 
 interface ArticlesDisplayProps {
   heading?: string;
@@ -33,7 +35,7 @@ export default function ArticlesDisplay(props: ArticlesDisplayProps) {
       }
 
       // Call the api
-      const articles: Article[] = await ArticleRequest.getArticles({
+      const response: GetArticlesResponse = await ArticleRequest.getArticles({
         link,
         faculty: faculty ? faculty : undefined,
         category: category ? category : undefined,
@@ -41,7 +43,7 @@ export default function ArticlesDisplay(props: ArticlesDisplayProps) {
       });
 
       // Set the articles
-      setArticles(articles);
+      setArticles(response.articles);
     };
 
     handleFetchArticles();

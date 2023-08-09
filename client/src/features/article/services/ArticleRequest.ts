@@ -8,6 +8,8 @@ import {
 import Article from "../Types/Article";
 import ArticleMapper from "../mapper/ArticleMapper";
 import ArticleCategory from "../Types/ArticleCategory";
+import mapPaginationInfoFromServer from "../../../utils/MapPaginationInfoFromServer";
+import PaginationInfo from "../../../type/PaginationInfo";
 
 export type FetchArticlesProps = {
   link: APILink;
@@ -15,6 +17,11 @@ export type FetchArticlesProps = {
   category?: ArticleCategory;
   pagination?: OptionalPaginationParams;
 };
+
+export interface GetArticlesResponse {
+  articles: Article[];
+  paginationInfo: PaginationInfo;
+}
 
 /**
  * Fetch articles from the API (using search or not)
@@ -25,7 +32,9 @@ export type FetchArticlesProps = {
  * category {@link ArticleCategory} (optional) and pagination {@link OptionalPaginationParams} (optional)
  * @returns Promise of an array of {@link Article} objects
  */
-const getArticles = async (props: FetchArticlesProps): Promise<Article[]> => {
+const getArticles = async (
+  props: FetchArticlesProps,
+): Promise<GetArticlesResponse> => {
   // Prepare the link
   const { link, faculty, category, pagination } = props;
 
@@ -69,7 +78,12 @@ const getArticles = async (props: FetchArticlesProps): Promise<Article[]> => {
     responseData._embedded.articles,
   );
 
-  return articlesArr;
+  const paginationInfo: PaginationInfo =
+    mapPaginationInfoFromServer(responseData);
+  return {
+    articles: articlesArr,
+    paginationInfo: paginationInfo,
+  };
 };
 
 const ArticleRequest = {

@@ -5,7 +5,9 @@ import { useAppSelector } from "../hooks";
 import { Link } from "react-router-dom";
 import { ReactComponent as ArrowRight } from "../assets/icons/arrow/arrow-right-primary.svg";
 import BigCardWithOptionalHeader from "../common_components/Card/BigCardWithOptionalHeader";
-import ArticleRequest from "../features/article/services/ArticleRequest";
+import ArticleRequest, {
+  GetArticlesResponse,
+} from "../features/article/services/ArticleRequest";
 import TextAndButtonWithPhotoOnRight from "../common_components/Card/TextAndButtonWithPhotoOnRight";
 import GlassBuilding from "../features/main-page/assets/glass-building.webp";
 
@@ -23,14 +25,14 @@ export default function Home() {
       }
 
       // Call the api
-      const articles: Article[] = await ArticleRequest.getArticles({
+      const response: GetArticlesResponse = await ArticleRequest.getArticles({
         link: links.articlesSearch,
         category: ArticleCategory.NEWS,
         pagination: { size: 1 },
       });
 
       // Set the articles
-      setScienceArticles(articles);
+      setScienceArticles(response.articles);
       setIsLoading(false);
     };
 

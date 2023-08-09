@@ -3,13 +3,16 @@ import { useEffect, useState } from "react";
 import { Article, ArticleCategory } from "../features/article";
 import { SidebarButtonProps } from "../sidebar/components/SidebarButton";
 import { useAppSelector } from "../hooks";
-import ArticleRequest from "../features/article/services/ArticleRequest";
+import ArticleRequest, {
+  GetArticlesResponse,
+} from "../features/article/services/ArticleRequest";
 import DarkBackgroundWithPhotoOnRight from "../common_components/Card/DarkBackgroundWithPhotoOnRight";
 import GroupOfStundetsPhoto from "../features/article/assets/group.webp";
 import Card from "../common_components/Card/Card";
 import MyHeading from "../common_components/MyHeading";
 import { ReactComponent as ChevronLeft } from "../assets/icons/chevron/chevron-left.svg";
 import { ReactComponent as ChevronRight } from "../assets/icons/chevron/chevron-right.svg";
+import PaginationInfo from "../type/PaginationInfo";
 
 export default function Articles() {
   const links = useAppSelector((state) => state.links);
@@ -19,6 +22,12 @@ export default function Articles() {
   const [articles, setArticles] = useState<Article[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [page, setPage] = useState<number>(0);
+  const [paginationInfo, setPaginationInfo] = useState<PaginationInfo>({
+    page: 0,
+    size: 0,
+    totalElements: 0,
+    totalPages: 0,
+  });
 
   const sidebarButtons: SidebarButtonProps[] = [
     {
@@ -71,14 +80,15 @@ export default function Articles() {
       }
 
       // Call the api
-      const articles: Article[] = await ArticleRequest.getArticles({
+      const response: GetArticlesResponse = await ArticleRequest.getArticles({
         link: links.articlesSearch,
         category: articleCategory,
         pagination: { size: 9, page: page },
       });
 
       // Set the articles
-      setArticles(articles);
+      setArticles(response.articles);
+      setPaginationInfo(response.paginationInfo);
       setIsLoading(false);
     };
 
@@ -136,24 +146,28 @@ export default function Articles() {
           </div>
           {/* Pagination buttons */}
           <div className={"flex w-full items-center justify-end pt-6 gap-8"}>
-            <button
-              type={"button"}
-              onClick={() => changePage("previous")}
-              className={
-                "flex items-center font-bold w-32 justify-center border-brandMainNearlyBlack text-brandMainNearlyBlack pr-2 py-2"
-              }
-            >
-              <ChevronLeft className={"h-8 w-8"} /> Previous
-            </button>
-            <button
-              type={"button"}
-              onClick={() => changePage("next")}
-              className={
-                "flex items-center font-bold w-32 justify-center border-brandMainNearlyBlack text-brandMainNearlyBlack pl-2 py-2"
-              }
-            >
-              Next <ChevronRight className={"h-8 w-8"} />
-            </button>
+            {page > 0 && (
+              <button
+                type={"button"}
+                onClick={() => changePage("previous")}
+                className={
+                  "flex items-center font-bold w-32 justify-center border-brandMainNearlyBlack text-brandMainNearlyBlack pr-2 py-2"
+                }
+              >
+                <ChevronLeft className={"h-8 w-8"} /> Previous
+              </button>
+            )}
+            {paginationInfo.totalPages > page && (
+              <button
+                type={"button"}
+                onClick={() => changePage("next")}
+                className={
+                  "flex items-center font-bold w-32 justify-center border-brandMainNearlyBlack text-brandMainNearlyBlack pl-2 py-2"
+                }
+              >
+                Next <ChevronRight className={"h-8 w-8"} />
+              </button>
+            )}
           </div>
         </section>
       </main>
