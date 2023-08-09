@@ -1,4 +1,4 @@
-import { ReactComponent as ChevronRight } from "../../assets/icons/chevron/chevron-right-bright.svg";
+import { ReactComponent as ChevronRight } from "../../../assets/icons/chevron/chevron-right-bright.svg";
 
 export interface SidebarLinkProps {
   active?: boolean;

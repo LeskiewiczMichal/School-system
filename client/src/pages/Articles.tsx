@@ -1,7 +1,7 @@
-import { Sidebar } from "../sidebar";
+import { Sidebar } from "../features/sidebar";
 import { useEffect, useState } from "react";
 import { Article, ArticleCategory } from "../features/article";
-import { SidebarButtonProps } from "../sidebar/components/SidebarButton";
+import { SidebarButtonProps } from "../features/sidebar/components/SidebarButton";
 import { useAppSelector } from "../hooks";
 import ArticleRequest, {
   GetArticlesResponse,
@@ -139,35 +139,40 @@ export default function Articles() {
                   imageUrl={article.imgPath}
                   imageAlt={"Article preview photo"}
                   articleId={article.id.toString()}
-                  redirectUrl={"#"}
+                  redirectUrl={"/articles"}
                 />
               );
             })}
           </div>
           {/* Pagination buttons */}
-          <div className={"flex w-full items-center justify-end pt-6 gap-8"}>
-            {page > 0 && (
-              <button
-                type={"button"}
-                onClick={() => changePage("previous")}
-                className={
-                  "flex items-center font-bold w-32 justify-center border-brandMainNearlyBlack text-brandMainNearlyBlack pr-2 py-2"
-                }
-              >
-                <ChevronLeft className={"h-8 w-8"} /> Previous
-              </button>
-            )}
-            {paginationInfo.totalPages > page && (
-              <button
-                type={"button"}
-                onClick={() => changePage("next")}
-                className={
-                  "flex items-center font-bold w-32 justify-center border-brandMainNearlyBlack text-brandMainNearlyBlack pl-2 py-2"
-                }
-              >
-                Next <ChevronRight className={"h-8 w-8"} />
-              </button>
-            )}
+          <div>
+            {/*<span className={"flex w-full items-center justify-end pt-6"}>*/}
+            {/*  Page {page + 1} of {paginationInfo.totalPages}*/}
+            {/*</span>*/}
+            <div className={"flex w-full items-center justify-end pt-6 gap-8"}>
+              {page > 0 && (
+                <button
+                  type={"button"}
+                  onClick={() => changePage("previous")}
+                  className={
+                    "flex items-center font-bold w-32 justify-center border-brandMainNearlyBlack text-brandMainNearlyBlack pr-2 py-2"
+                  }
+                >
+                  <ChevronLeft className={"h-8 w-8"} /> Previous
+                </button>
+              )}
+              {paginationInfo.totalPages > page + 1 && (
+                <button
+                  type={"button"}
+                  onClick={() => changePage("next")}
+                  className={
+                    "flex items-center font-bold w-32 justify-center border-brandMainNearlyBlack text-brandMainNearlyBlack pl-2 py-2"
+                  }
+                >
+                  Next <ChevronRight className={"h-8 w-8"} />
+                </button>
+              )}
+            </div>
           </div>
         </section>
       </main>

@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { ReactComponent as ChevronLeft } from "../../assets/icons/chevron/chevron-left.svg";
-import { useAppDispatch, useAppSelector } from "../../hooks";
+import { ReactComponent as ChevronLeft } from "../../../assets/icons/chevron/chevron-left.svg";
+import { useAppDispatch, useAppSelector } from "../../../hooks";
 import SidebarLink, { SidebarLinkProps } from "./SidebarLink";
-import DarkenLayoutBelowIndexZ from "../../common_components/DarkenLayoutBelowIndexZ";
-import { IntegrationSliceActions } from "../../store";
+import DarkenLayoutBelowIndexZ from "../../../common_components/DarkenLayoutBelowIndexZ";
+import { IntegrationSliceActions } from "../../../store";
 import SidebarButton, { SidebarButtonProps } from "./SidebarButton";
 
 export interface SidebarProps {
@@ -45,7 +45,7 @@ export default function Sidebar(props: SidebarProps) {
 
   if (!mobileNavView) {
     return (
-      <div className="flex flex-col gap-6 bg-grayscaleLight w-72 px-8 py-10 border-r h-screen sticky top-0">
+      <div className="flex flex-col gap-6 bg-grayscaleLight w-72 px-8 py-10 border-r border-grayscaleMediumDark h-screen sticky top-0">
         {/*  Back button */}
         <button
           onClick={() => {
