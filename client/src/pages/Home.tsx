@@ -80,7 +80,3 @@ export default function Home() {
     </main>
   );
 }
-
-// Education text
-// THE TRANSFORMATIVE POWER OF HIGHER EDUCATION
-// Unlock your full potential through the transformative journey of higher education. Explore the research behind innovative teaching methodologies, personalized learning, and interdisciplinary programs. Embrace a holistic approach to education that fosters critical thinking, creativity, and adaptability, preparing you to thrive in an ever-changing world.
