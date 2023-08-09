@@ -29,7 +29,7 @@ export default function Card(props: CardProps) {
   return (
     <Link
       to={`${redirectUrl}/${articleId}`}
-      className={`flex flex-col w-full  bg-hoverGray border border-gray-200 rounded shadow  hover:bg-grey ${
+      className={` flex flex-col w-full  bg-hoverGray border border-gray-200 rounded shadow  hover:bg-grey ${
         wide ? "lg:flex-row items-center" : ""
       }`}
     >

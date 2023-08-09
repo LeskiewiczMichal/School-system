@@ -1,7 +1,9 @@
-// // te
-//
-// export default function MyHeading() {
-//   return <h4 className="my-header text-brandMainNearlyBlack">{heading}</h4>;
-// }
+interface MyHeadingProps {
+  heading: string;
+}
 
-export {};
+export default function MyHeading(props: MyHeadingProps) {
+  const { heading } = props;
+
+  return <h4 className="my-header text-brandMainNearlyBlack">{heading}</h4>;
+}

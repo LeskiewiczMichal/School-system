@@ -6,6 +6,8 @@ import { useAppSelector } from "../hooks";
 import ArticleRequest from "../features/article/services/ArticleRequest";
 import DarkBackgroundWithPhotoOnRight from "../common_components/Card/DarkBackgroundWithPhotoOnRight";
 import GroupOfStundetsPhoto from "../features/article/assets/group.webp";
+import Card from "../common_components/Card/Card";
+import MyHeading from "../common_components/MyHeading";
 
 export default function Articles() {
   const links = useAppSelector((state) => state.links);
@@ -64,7 +66,7 @@ export default function Articles() {
       const articles: Article[] = await ArticleRequest.getArticles({
         link: links.articlesSearch,
         category: articleCategory,
-        pagination: { size: 10 },
+        pagination: { size: 9 },
       });
 
       // Set the articles
@@ -79,7 +81,7 @@ export default function Articles() {
     <div className={"flex h-full"}>
       <Sidebar buttons={sidebarButtons} />
       <main className={"h-full w-full flex flex-col lg:px-8 py-8"}>
-        <div className={"w-full flex flex-col"}>
+        <section className={"w-full flex flex-col mb-24"}>
           <h1 className="page-title_h1 text-brandMainNearlyBlack">
             {articleCategory}
           </h1>
@@ -90,41 +92,25 @@ export default function Articles() {
             buttonText={"See what is new in our faculties"}
             imageLink={GroupOfStundetsPhoto}
           />
-        </div>
-        qewr
-        <p>qwer</p>
-        <p>qwer</p>
-        <p>qwerdfds</p>
-        <p>qwer</p>
-        <p>qwer</p>
-        <p>qwerdfds</p>
-        <p>qwer</p>
-        <p>qwer</p>
-        <p>qwerdfds</p>
-        <p>qwer</p>
-        <p>qwer</p>
-        <p>qwerdfds</p>
-        <p>qwer</p>
-        <p>qwer</p>
-        <p>qwerdfds</p>
-        <p>qwer</p>
-        <p>qwer</p>
-        <p>qwerdfds</p>
-        <p>qwer</p>
-        <p>qwer</p>
-        <p>qwerdfds</p>
-        <p>qwer</p>
-        <p>qwer</p>
-        <p>qwerdfds</p>
-        <p>qwer</p>
-        <p>qwer</p>
-        <p>qwerdfds</p>
-        <p>qwer</p>
-        <p>qwer</p>
-        <p>qwerdfds</p>
-        <p>qwer</p>
-        <p>qwer</p>
-        <p>qwerdfds</p>
+        </section>
+        <section className={"flex flex-col w-full"}>
+          <MyHeading heading={"LATEST ARTICLES"} />
+          <div className={"grid grid-cols-3 gap-4"}>
+            {articles.map((article) => {
+              return (
+                <Card
+                  key={article.id.toString()}
+                  title={article.title}
+                  text={article.preview}
+                  imageUrl={article.imgPath}
+                  imageAlt={"Article preview photo"}
+                  articleId={article.id.toString()}
+                  redirectUrl={"#"}
+                />
+              );
+            })}
+          </div>
+        </section>
       </main>
     </div>
   );
