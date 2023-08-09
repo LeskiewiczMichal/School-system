@@ -47,7 +47,8 @@ export default function Article() {
           <p className={"text-grayscaleDarkText"}>{article.preview}</p>
         </section>
         <div className={"flex flex-col xl:flex-row "}>
-          <section className={"grow px-8 text-grayscaleDarkText"}>
+          <ArticlesSidebar category={article.category} />
+          <section className={"grow px-8 text-grayscaleDarkText xl:order-1"}>
             {article.imgPath && (
               <img src={article.imgPath} alt="Article" className={"mb-16"} />
             )}
@@ -57,7 +58,6 @@ export default function Article() {
               }}
             ></div>
           </section>
-          <ArticlesSidebar />
         </div>
       </main>
     </div>
