@@ -79,7 +79,8 @@ export default function Articles() {
     <div className={"flex h-full"}>
       <Sidebar buttons={sidebarButtons} />
       <main className={"h-full w-full flex flex-col lg:px-8 py-8"}>
-        <div className={"w-full flex justify-center"}>
+        <div className={"w-full flex flex-col"}>
+          <h1 className="page-title_h1 text-brandMainNearlyBlack">NEWS</h1>
           <DarkBackgroundWithPhotoOnRight
             heading={"Aquila's news"}
             text={"Checkout out latest news from our University"}

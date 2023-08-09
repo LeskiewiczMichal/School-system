@@ -3,79 +3,86 @@
 @tailwind utilities;
 
 @layer utilities {
-  @variants responsive {
-    /*!* Hide scrollbar for Chrome, Safari and Opera *!*/
-    /*.no-scrollbar::-webkit-scrollbar {*/
-    /*  display: none;*/
-    /*}*/
+    @variants responsive {
+        /*!* Hide scrollbar for Chrome, Safari and Opera *!*/
+        /*.no-scrollbar::-webkit-scrollbar {*/
+        /*  display: none;*/
+        /*}*/
+        /*!* Hide scrollbar for IE, Edge and Firefox *!*/
+        /*.no-scrollbar {*/
+        /*  -ms-overflow-style: none; !* IE and Edge *!*/
+        /*  scrollbar-width: none; !* Firefox *!*/
+        /*}*/
+        .my-header {
+            margin-bottom: 2rem;
+            font-size: 2.25rem; /* 36px */
+            line-height: 2.5rem; /* 40px */
+            font-weight: 700;
+        }
 
-    /*!* Hide scrollbar for IE, Edge and Firefox *!*/
-    /*.no-scrollbar {*/
-    /*  -ms-overflow-style: none; !* IE and Edge *!*/
-    /*  scrollbar-width: none; !* Firefox *!*/
-    /*}*/
+        .sidebar {
+            /*position: -webkit-sticky;*/
+            position: sticky;
+            top: 0;
+        }
 
-    .my-header {
-      margin-bottom: 2rem;
-      font-size: 2.25rem; /* 36px */
-      line-height: 2.5rem; /* 40px */
-        font-weight: 700;
+        .page-title_h1 {
+            font-size: 2.875rem;
+            line-height: 54px;
+            letter-spacing: -1.15px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+        }
     }
-
-    .sidebar {
-      /*position: -webkit-sticky;*/
-      position: sticky;
-      top: 0;
-    }
-  }
 }
 
 body {
-  margin: 0;
-  font-family: "Open Sans",Helvetica,Arial, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    margin: 0;
+    font-family: "Open Sans", Helvetica, Arial, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: #f8f8f8;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: #f8f8f8;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
 
 :root {
-  --primary: #112c4a;
-  --primary-darkened: #05152a;
-  --primary-lighter: #244264;
-  --blue-lighter: #3c4b62;
-  --grey: #efecec;
-  --secondary: #bc1b21;
-  --lemon: #FBF2C0;
-  --cyan: #588B8B;
-  --glaucous: #7D8CC4;
+    --primary: #112c4a;
+    --primary-darkened: #05152a;
+    --primary-lighter: #244264;
+    --blue-lighter: #3c4b62;
+    --grey: #efecec;
+    --secondary: #bc1b21;
+    --lemon: #FBF2C0;
+    --cyan: #588B8B;
+    --glaucous: #7D8CC4;
 
-  --brand-main: #244264;
-  --brand-main-soft: #5A6D80FF;
-  --brand-main-light: #20587e;
-  --brand-main-bright: #2D7BB0;
-  --brand-main-active: #112c4a;
-  --brand-main-dark: #162738FF;
-  --brand-main-nearly-black: #000222;
-  --link-blue: #0479a4;
-  --link-disabled: #767676;
-  --grayscale-slightly-gray: #fefefe;
-  --grayscale-light: #f8f8f8;
-  --grayscale-medium: #d2d2d2;
-  --grayscale-background-box: #f5f5f5;
-  --grayscale-medium-dark: #979797;
-  --grayscale-dark: #555555;
-  --grayscale-dark-text: #222222;
-  --hover-gray: #eaeaea;
-  /*--primary-lighter: #6366f1;*/
-  /*--background-white: rgb(248 250 252);*/
-  /*--background-dark: rgb(31 41 55);*/
-  /*--text-gray-dark: rgb(156 163 175);*/
-  /*--white-dark: rgb(243 244 246);*/
+    --brand-main: #244264;
+    --brand-main-soft: #5A6D80FF;
+    --brand-main-light: #20587e;
+    --brand-main-bright: #2D7BB0;
+    --brand-main-active: #112c4a;
+    --brand-main-dark: #162738FF;
+    --brand-main-nearly-black: #000222;
+    --link-blue: #0479a4;
+    --link-disabled: #767676;
+    --grayscale-slightly-gray: #fefefe;
+    --grayscale-light: #f8f8f8;
+    --grayscale-medium: #d2d2d2;
+    --grayscale-background-box: #f5f5f5;
+    --grayscale-medium-dark: #979797;
+    --grayscale-dark: #555555;
+    --grayscale-dark-text: #222222;
+    --hover-gray: #eaeaea;
+    /*--primary-lighter: #6366f1;*/
+    /*--background-white: rgb(248 250 252);*/
+    /*--background-dark: rgb(31 41 55);*/
+    /*--text-gray-dark: rgb(156 163 175);*/
+    /*--white-dark: rgb(243 244 246);*/
 }
