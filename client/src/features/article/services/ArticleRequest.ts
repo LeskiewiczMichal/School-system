@@ -48,7 +48,7 @@ const getArticles = async (props: FetchArticlesProps): Promise<Article[]> => {
   let paginationParams: PaginationParams = {
     page: 0,
     size: 10,
-    sort: ["id", SortDirection.ASC],
+    sort: ["id", SortDirection.DESC],
   };
   if (pagination) {
     paginationParams = {
