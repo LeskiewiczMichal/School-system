@@ -47,7 +47,7 @@ export default function Home() {
       <section className="flex flex-col px-4 md:px-32 my-16 gap-10">
         <ArticlesDisplay heading="NEWS" category={ArticleCategory.NEWS} />
         <Link
-          to="#"
+          to="/articles"
           type="button"
           className="mb-16 w-2/3 lg:w-1/4 flex items-center border-4 border-primary gap-3 px-4 py-2 text-brandMain hover:border-brandMainActive hover:text-brandMainActive font-bold text-lg"
         >
