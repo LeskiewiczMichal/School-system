@@ -8,8 +8,11 @@ interface LinksState {
   degrees: APILink | null;
   faculties: APILink | null;
   files: APILink | null;
-  articles: APILink | null;
-  articlesSearch: APILink | null;
+  articles: {
+    getArticles: APILink | null;
+    getById: APILink | null;
+    search: APILink | null;
+  };
 }
 
 export default LinksState;

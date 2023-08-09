@@ -75,13 +75,13 @@ export default function Articles() {
   useEffect(() => {
     const handleFetchArticles = async () => {
       // Prepare the link
-      if (!links.articlesSearch) {
+      if (!links.articles.search) {
         return;
       }
 
       // Call the api
       const response: GetArticlesResponse = await ArticleRequest.getArticles({
-        link: links.articlesSearch,
+        link: links.articles.search,
         category: articleCategory,
         pagination: { size: 9, page: page },
       });
@@ -95,7 +95,6 @@ export default function Articles() {
     handleFetchArticles();
   }, [articleCategory, page, links]);
 
-  // TODO: add pagination info to the response
   const changePage = (direction: "next" | "previous") => {
     setPage((prevPage) => {
       if (direction === "next") {
@@ -146,6 +145,7 @@ export default function Articles() {
           </div>
           {/* Pagination buttons */}
           <div>
+            {/*// TODO: Show the page number*/}
             {/*<span className={"flex w-full items-center justify-end pt-6"}>*/}
             {/*  Page {page + 1} of {paginationInfo.totalPages}*/}
             {/*</span>*/}

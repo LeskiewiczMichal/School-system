@@ -26,9 +26,9 @@ export default function ArticlesDisplay(props: ArticlesDisplayProps) {
   useEffect(() => {
     const handleFetchArticles = async () => {
       // Prepare the link
-      let link: APILink | null = links.articles;
+      let link: APILink | null = links.articles.getArticles;
       if (faculty || category) {
-        link = links.articlesSearch;
+        link = links.articles.search;
       }
       if (!link) {
         return;

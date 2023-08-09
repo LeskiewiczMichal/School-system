@@ -3,6 +3,7 @@ package com.leskiewicz.schoolsystem.controller;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import com.leskiewicz.schoolsystem.article.Article;
 import com.leskiewicz.schoolsystem.article.ArticleController;
 import com.leskiewicz.schoolsystem.authentication.AuthenticationController;
 import com.leskiewicz.schoolsystem.authentication.SecurityService;
@@ -17,6 +18,7 @@ import org.springframework.hateoas.Affordance;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.mediatype.Affordances;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -102,12 +104,18 @@ public class ApiController {
     String uriTemplate = articlesLink.getHref() + PAGINATION_PARAMETERS;
     articlesLink = Link.of(uriTemplate).withRel("articles");
 
+    Link getByIdLink =
+        linkTo(methodOn(ArticleController.class).getArticleById(null))
+            .withRel("articles")
+            .withTitle("Get by id");
+
     Link searchLink =
         linkTo(methodOn(ArticleController.class).searchArticles(null, null, null))
             .withRel("articles")
             .withTitle("Search");
 
     model.add(articlesLink);
+    model.add(getByIdLink);
     model.add(searchLink);
   }
 }

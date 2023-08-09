@@ -11,6 +11,10 @@ import ArticleCategory from "../Types/ArticleCategory";
 import mapPaginationInfoFromServer from "../../../utils/MapPaginationInfoFromServer";
 import PaginationInfo from "../../../type/PaginationInfo";
 
+export interface FetchFullArticleProps {
+  link: APILink;
+}
+
 export type FetchArticlesProps = {
   link: APILink;
   faculty?: string;
@@ -85,6 +89,8 @@ const getArticles = async (
     paginationInfo: paginationInfo,
   };
 };
+
+// const getFullArticle = async (link: APILink): Promise<Article> => {
 
 const ArticleRequest = {
   getArticles,

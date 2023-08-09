@@ -20,13 +20,13 @@ export default function Home() {
   useEffect(() => {
     const handleFetchArticles = async () => {
       // Prepare the link
-      if (!links.articlesSearch) {
+      if (!links.articles.search) {
         return;
       }
 
       // Call the api
       const response: GetArticlesResponse = await ArticleRequest.getArticles({
-        link: links.articlesSearch,
+        link: links.articles.search,
         category: ArticleCategory.NEWS,
         pagination: { size: 1 },
       });
