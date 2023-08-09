@@ -16,7 +16,7 @@ export default function LinkButtonBorderOnly(props: LinkButtonBorderOnlyProps) {
     <Link
       to={link}
       type="button"
-      className={`mb-16 w-3/5 flex items-center border-4 border-${color} gap-3 px-4 py-2 text-${color} ${
+      className={`w-3/5 flex items-center border-4 border-${color} gap-3 px-4 py-2 text-${color} ${
         color === "brandMain"
           ? "hover:border-brandMainActive hover:text-brandMainActive"
           : ""

@@ -78,7 +78,7 @@ export default function Articles() {
   return (
     <div className={"flex h-full"}>
       <Sidebar buttons={sidebarButtons} />
-      <main className={"h-full w-full flex flex-col px-8 py-8"}>
+      <main className={"h-full w-full flex flex-col lg:px-8 py-8"}>
         <div className={"w-full flex justify-center"}>
           <DarkBackgroundWithPhotoOnRight
             heading={"Aquila's news"}
