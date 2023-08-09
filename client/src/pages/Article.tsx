@@ -38,7 +38,7 @@ export default function Article() {
   return (
     <div className={"flex h-full"}>
       <Sidebar />
-      <main>
+      <main className={"pb-16 border-b border-grayscaleMediumDark"}>
         {/* Heading */}
         <section className={"lg:px-8 lg:pr-28 py-8 mb-4"}>
           <h1 className="page-title_h1 text-brandMainNearlyBlack">
@@ -46,9 +46,11 @@ export default function Article() {
           </h1>
           <p className={"text-grayscaleDarkText"}>{article.preview}</p>
         </section>
-        <div className={"flex flex-col xl:flex-row w-full "}>
+        <div className={"flex flex-col xl:flex-row "}>
           <section className={"grow px-8 text-grayscaleDarkText"}>
-            {article.imgPath && <img src={article.imgPath} alt="Article" />}
+            {article.imgPath && (
+              <img src={article.imgPath} alt="Article" className={"mb-16"} />
+            )}
             <div
               dangerouslySetInnerHTML={{
                 __html: marked.marked(article.content!),
