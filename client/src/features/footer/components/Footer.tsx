@@ -7,7 +7,7 @@ export default function Footer() {
     <footer className="z-50 flex gap-4 flex-auto flex-col md:flex-row text-white justify-center items-center py-6 px-4 md:px-12 bg-brandMain">
       <section
         className={
-          "grid grid-cols-1 sm:grid-cols-2 gap-x-4 w-full h-full place-content-center justify-center items-center md:order-2 md:max-w-xl"
+          "grid grid-cols-1 sm:grid-cols-2 gap-x-4 w-full  place-content-center justify-center items-center md:order-2 md:max-w-xl"
         }
       >
         <LinkButtonNoBorderOrBackground
@@ -24,7 +24,9 @@ export default function Footer() {
         />
       </section>
       <section
-        className={"flex flex-col items-center gap-6 md:items-start md:w-3/5"}
+        className={
+          "flex flex-col items-center gap-6 md:items-start md:order-1 md:w-3/5"
+        }
       >
         <div className={""}>
           <div className={"flex gap-3 items-center"}>
