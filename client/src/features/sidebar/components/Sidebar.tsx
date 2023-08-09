@@ -45,7 +45,7 @@ export default function Sidebar(props: SidebarProps) {
 
   if (!mobileNavView) {
     return (
-      <div className="flex flex-col gap-6 bg-grayscaleLight w-72 px-8 py-10 border-r border-grayscaleMediumDark h-screen sticky top-0">
+      <div className="flex flex-col flex-none gap-6 bg-grayscaleLight w-72 px-8 py-10 border-r border-grayscaleMediumDark  h-screen sticky top-0">
         {/*  Back button */}
         <button
           onClick={() => {

@@ -13,6 +13,7 @@ import PaginationInfo from "../../../type/PaginationInfo";
 
 export interface FetchFullArticleProps {
   link: APILink;
+  id: string;
 }
 
 export type FetchArticlesProps = {
@@ -93,9 +94,10 @@ const getArticles = async (
 const getFullArticle = async (
   props: FetchFullArticleProps,
 ): Promise<Article> => {
-  const { link } = props;
+  const { link, id } = props;
   const responseData = await RequestService.performGetByIdRequest({
     link: link,
+    id: id,
   });
 
   return ArticleMapper.mapArticleFromServerData(responseData);
