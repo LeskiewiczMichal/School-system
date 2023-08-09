@@ -85,6 +85,7 @@ export default function Articles() {
     handleFetchArticles();
   }, [articleCategory, page, links]);
 
+  // TODO: add pagination info to the response
   const changePage = (direction: "next" | "previous") => {
     setPage((prevPage) => {
       if (direction === "next") {
