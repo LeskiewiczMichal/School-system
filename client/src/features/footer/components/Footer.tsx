@@ -4,7 +4,7 @@ import LinkButtonNoBorderOrBackground from "./LinkButtonNoBorderOrBackground";
 
 export default function Footer() {
   return (
-    <footer className="z-50 flex gap-4 flex-auto flex-col md:flex-row text-white justify-center items-center py-6 px-4 md:px-12 bg-brandMain">
+    <footer className="z-50 relative flex gap-4 flex-auto flex-col md:flex-row text-white justify-center items-center py-6 px-4 md:px-12 bg-brandMain">
       <section
         className={
           "grid grid-cols-1 sm:grid-cols-2 gap-x-4 w-full  place-content-center justify-center items-center md:order-2 md:max-w-xl"

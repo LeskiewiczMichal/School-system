@@ -2,8 +2,9 @@ import { Sidebar } from "../features/sidebar";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAppSelector } from "../hooks";
-import { ArticleRequest } from "../features/article";
+import { ArticleRequest, ArticlesSidebar } from "../features/article";
 import { Article as ArticleType } from "../features/article";
+import * as marked from "marked";
 
 export default function Article() {
   const { id } = useParams<{ id: string }>();
@@ -37,12 +38,25 @@ export default function Article() {
   return (
     <div className={"flex h-full"}>
       <Sidebar />
-      <main className={"lg:px-8 lg:pr-28 py-8"}>
+      <main>
         {/* Heading */}
-        <h1 className="page-title_h1 text-brandMainNearlyBlack">
-          {article.title}
-        </h1>
-        <p className={"text-grayscaleDarkText"}>{article.preview}</p>
+        <section className={"lg:px-8 lg:pr-28 py-8 mb-4"}>
+          <h1 className="page-title_h1 text-brandMainNearlyBlack">
+            {article.title}
+          </h1>
+          <p className={"text-grayscaleDarkText"}>{article.preview}</p>
+        </section>
+        <div className={"flex flex-col xl:flex-row w-full "}>
+          <section className={"grow px-8 text-grayscaleDarkText"}>
+            {article.imgPath && <img src={article.imgPath} alt="Article" />}
+            <div
+              dangerouslySetInnerHTML={{
+                __html: marked.marked(article.content!),
+              }}
+            ></div>
+          </section>
+          <ArticlesSidebar />
+        </div>
       </main>
     </div>
   );
