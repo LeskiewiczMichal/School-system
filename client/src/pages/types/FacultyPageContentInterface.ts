@@ -5,4 +5,5 @@ export default interface FacultyPageContentInterface {
   greetingsImageLink: string;
   newsDisplayHeading: string;
   newsDisplayText: string;
+  informationHeading: string;
 }

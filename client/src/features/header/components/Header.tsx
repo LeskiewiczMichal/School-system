@@ -71,7 +71,9 @@ export default function Header() {
           </div>
           <Link
             to={"/"}
-            className={"font-bold text-sm flex items-center gap-1 lg:gap-2"}
+            className={
+              "font-bold text-sm flex items-center gap-1 lg:gap-2 hover:underline"
+            }
           >
             University main page <ArrowRightWhite className={"h-4 w-4"} />
           </Link>
