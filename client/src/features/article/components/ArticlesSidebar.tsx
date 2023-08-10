@@ -18,7 +18,7 @@ export default function ArticlesSidebar(props: ArticlesSidebarProps) {
   return (
     <div
       className={
-        "flex justify-between xl:justify-start xl:flex-col z-40 flex-none gap-6 border-b border-t xl:border-b-0 xl:border-t-0 bg-grayscaleLight w-full xl:w-56 mt-8 xl:order-2 xl:mt-0 py-8 xl:py-4 px-8 xl:px-0 xl:max-h-screen xl:sticky xl:top-0 mb-4 xl:mb-0"
+        "flex justify-between xl:justify-start xl:flex-col z-40 flex-none gap-6 border-b border-t border-grayscaleMediumDark xl:border-b-0 xl:border-t-0 bg-grayscaleLight w-full xl:w-56 mt-8 xl:order-2 xl:mt-0 py-8 xl:py-4 px-8 xl:px-0 xl:max-h-screen xl:sticky xl:top-0 mb-8 xl:mb-0"
       }
     >
       <div className={"flex flex-col text-brandMain font-bold gap-4"}>

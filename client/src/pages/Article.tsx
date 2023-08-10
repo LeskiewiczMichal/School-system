@@ -40,7 +40,7 @@ export default function Article() {
       <Sidebar />
       <main className={"pb-16 border-b border-grayscaleMediumDark"}>
         {/* Heading */}
-        <section className={"lg:px-8 lg:pr-28 py-8 mb-4"}>
+        <section className={"px-4 lg:px-8 lg:pr-28 py-8 mb-4"}>
           <h1 className="page-title_h1 text-brandMainNearlyBlack">
             {article.title}
           </h1>
@@ -48,11 +48,14 @@ export default function Article() {
         </section>
         <div className={"flex flex-col xl:flex-row "}>
           <ArticlesSidebar category={article.category} />
-          <section className={"grow px-8 text-grayscaleDarkText xl:order-1"}>
+          <section
+            className={"grow px-0 lg:px-8 text-grayscaleDarkText xl:order-1"}
+          >
             {article.imgPath && (
               <img src={article.imgPath} alt="Article" className={"mb-16"} />
             )}
             <div
+              className={"px-4 lg:px-0"}
               dangerouslySetInnerHTML={{
                 __html: marked.marked(article.content!),
               }}
