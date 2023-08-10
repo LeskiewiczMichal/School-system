@@ -13,6 +13,7 @@ import MyHeading from "../common_components/MyHeading";
 import { ReactComponent as ChevronLeft } from "../assets/icons/chevron/chevron-left.svg";
 import { ReactComponent as ChevronRight } from "../assets/icons/chevron/chevron-right.svg";
 import PaginationInfo from "../type/PaginationInfo";
+import { AppPaths } from "../App";
 
 export default function Articles() {
   const links = useAppSelector((state) => state.links);
@@ -138,7 +139,7 @@ export default function Articles() {
                   imageUrl={article.imgPath}
                   imageAlt={"Article preview photo"}
                   articleId={article.id.toString()}
-                  redirectUrl={"/articles"}
+                  redirectUrl={AppPaths.ARTICLES}
                 />
               );
             })}

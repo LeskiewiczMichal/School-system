@@ -75,7 +75,11 @@ public class ApiController {
     Link facultiesLink = linkTo(FacultyController.class).withRel("faculties");
     String uriTemplate = facultiesLink.getHref() + PAGINATION_PARAMETERS;
     facultiesLink = Link.of(uriTemplate).withRel("faculties");
+
+    Link getByIdLink = linkTo(methodOn(FacultyController.class).getFacultyById(null)).withRel("faculties");
+
     model.add(facultiesLink);
+    model.add(getByIdLink);
   }
 
   private void addDegreesLink(RepresentationModel<?> model) {

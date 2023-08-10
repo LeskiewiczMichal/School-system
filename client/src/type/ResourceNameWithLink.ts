@@ -1,5 +1,6 @@
 interface ResourceNameWithLink {
   name: string;
+  id: bigint;
   link: string;
 }
 

@@ -10,6 +10,7 @@ import ArticleRequest, {
 } from "../features/article/services/ArticleRequest";
 import TextAndButtonWithPhotoOnRight from "../common_components/Card/TextAndButtonWithPhotoOnRight";
 import GlassBuilding from "../features/main-page/assets/glass-building.webp";
+import { AppPaths } from "../App";
 
 export default function Home() {
   const links = useAppSelector((state) => state.links);
@@ -49,7 +50,7 @@ export default function Home() {
       <section className="flex flex-col px-4 md:px-32 my-16 gap-10">
         <ArticlesDisplay heading="NEWS" category={ArticleCategory.NEWS} />
         <Link
-          to="/articles"
+          to={AppPaths.ARTICLES}
           type="button"
           className="mb-16 w-2/3 lg:w-1/4 flex items-center border-4 border-primary gap-3 px-4 py-2 text-brandMain hover:border-brandMainActive hover:text-brandMainActive font-bold text-lg"
         >

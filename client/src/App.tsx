@@ -6,6 +6,13 @@ import { Header } from "./features/header";
 import { fetchBasicLinks } from "./features/links";
 import { Footer } from "./features/footer";
 
+export enum AppPaths {
+  HOME = "/",
+  LOGIN = "/login",
+  ARTICLES = "/articles",
+  FACULTIES = "/faculties",
+}
+
 function App() {
   const dispatch = useAppDispatch();
   // const isAuthenticated: boolean = useAppSelector(
@@ -30,6 +37,7 @@ function App() {
           <Route path="/login" element={<Pages.Login />} />
           <Route path="/articles" element={<Pages.Articles />} />
           <Route path="/articles/:id" element={<Pages.Article />} />
+          <Route path="/faculties/:id" element={<Pages.Faculty />} />
         </Routes>
         <Footer />
       </>

@@ -7,6 +7,7 @@ import APILink from "../../../type/APILink";
 import ResourceNameWithLink from "../../../type/ResourceNameWithLink";
 import { SortDirection } from "../../../type/PaginationParams";
 import DarkenLayoutBelowIndexZ from "../../../common_components/DarkenLayoutBelowIndexZ";
+import { AppPaths } from "../../../App";
 
 export default function FacultiesDropdown() {
   const navigate = useNavigate();
@@ -60,6 +61,7 @@ export default function FacultiesDropdown() {
           const facultyNameWithLink: ResourceNameWithLink = {
             name: faculty.name,
             link: faculty._links.self.href,
+            id: faculty.id,
           };
           facultiesArr.push(facultyNameWithLink);
         });
@@ -109,7 +111,7 @@ export default function FacultiesDropdown() {
           {faculties.map((faculty) => (
             <div className="w-full flex justify-center" key={faculty.name}>
               <a
-                href={faculty.link}
+                href={AppPaths.FACULTIES + "/" + faculty.id}
                 className="flex w-fit italic justify-center items-center text-xl text-primary hover:text-primaryDarkened"
               >
                 {faculty.name}
