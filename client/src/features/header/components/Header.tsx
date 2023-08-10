@@ -1,12 +1,18 @@
 import { ReactComponent as Logo } from "../../../assets/logo/logo.svg";
 import { ReactComponent as MenuIcon } from "../assets/menu.svg";
 import FacultiesDropdown from "./FacultiesDropdown";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { IntegrationSliceActions } from "../../../store";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 
 export default function Header() {
+  const location = useLocation();
+
+  // Example conditional rendering logic
+  const shouldContainSidebar = location.pathname.includes("/articles");
+  const isFacultyPage = location.pathname.includes("/faculties");
+
   const dispatch = useAppDispatch();
   const [mobileNavView, setMobileNavView] = useState<boolean>(
     window.innerWidth <= 1024,
@@ -60,7 +66,7 @@ export default function Header() {
         >
           Sign In
         </Link>
-        {mobileNavView && (
+        {mobileNavView && shouldContainSidebar && (
           <button
             type="button"
             className="inline-block min-w-fit text-md font-bold text-primary align-baseline hover:text-primaryLighter"
