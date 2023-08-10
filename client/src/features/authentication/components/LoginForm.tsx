@@ -35,7 +35,7 @@ export default function LoginForm() {
   };
 
   return (
-    <form className="self-center w-96 lg:w-1/3 border p-8 pt-0 bg-grey rounded">
+    <form className="self-center w-96 lg:w-1/3 border p-8 pt-0 bg-grayscaleSlightlyGray rounded">
       <Logo
         style={{
           maxWidth: "100%",
@@ -45,7 +45,7 @@ export default function LoginForm() {
       />
       <div className="mb-4">
         <label
-          className="block mb-2 text-sm font-bold text-gray-700"
+          className="block mb-2 text-sm font-bold text-grayscaleDarkText"
           htmlFor="email"
         >
           Email
@@ -62,7 +62,7 @@ export default function LoginForm() {
       </div>
       <div className="mb-6">
         <label
-          className="block mb-2 text-sm font-bold text-gray-700"
+          className="block mb-2 text-sm font-bold text-grayscaleDarkText"
           htmlFor="password"
         >
           Password
@@ -84,14 +84,14 @@ export default function LoginForm() {
       )}
       <div className="flex mb-2 items-center justify-between">
         <button
-          className="px-4 py-2 font-bold text-white bg-primary rounded hover:bg-primaryLighter focus:outline-none focus:shadow-outline"
+          className="px-4 py-2 font-bold text-white bg-brandMain rounded hover:bg-brandMainActive focus:outline-none focus:shadow-outline"
           type="button"
           onClick={handleLogin}
         >
           Sign In
         </button>
         <a
-          className="inline-block text-sm font-bold text-primary align-baseline hover:text-primaryLighter"
+          className="inline-block text-sm font-bold text-brandMain align-baseline hover:text-brandMainActive"
           href="#"
         >
           Forgot Password?
@@ -99,7 +99,7 @@ export default function LoginForm() {
       </div>
       <div className="flex items-center">
         <button
-          className="w-full px-4 py-2 font-bold text-white bg-primary rounded hover:bg-primaryLighter focus:outline-none focus:shadow-outline"
+          className="w-full px-4 py-2 font-bold text-white bg-brandMain rounded hover:bg-brandMainActive focus:outline-none focus:shadow-outline"
           type="button"
         >
           Try out on pre-made account
