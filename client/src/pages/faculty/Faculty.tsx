@@ -4,6 +4,7 @@ import LinkButtonBorderOnly from "../../common_components/button/LinkButtonBorde
 import { AppPaths } from "../../App";
 import { useParams } from "react-router-dom";
 import FacultyPageContentInterface from "../types/FacultyPageContentInterface";
+import BigCardWithOptionalHeader from "../../common_components/Card/BigCardWithOptionalHeader";
 
 export default function Faculty() {
   const { facultyId } = useParams<{ facultyId: string }>();
@@ -43,6 +44,7 @@ export default function Faculty() {
             category={ArticleCategory.NEWS}
             faculty={"101"}
           />
+          {/*  TODO: ADD TWO BIG CARDS WITH INFO  */}
         </div>
       </section>
     </main>
