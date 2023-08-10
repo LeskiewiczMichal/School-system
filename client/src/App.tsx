@@ -37,7 +37,7 @@ function App() {
           <Route path="/login" element={<Pages.Login />} />
           <Route path="/articles" element={<Pages.Articles />} />
           <Route path="/articles/:id" element={<Pages.Article />} />
-          <Route path="/faculties/:id" element={<Pages.Faculty />} />
+          <Route path="/faculties/:facultyId" element={<Pages.Faculty />} />
         </Routes>
         <Footer />
       </>
