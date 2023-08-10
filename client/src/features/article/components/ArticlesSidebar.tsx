@@ -1,4 +1,10 @@
 import ArticleCategory from "../Types/ArticleCategory";
+import {
+  FacebookShareButton,
+  FacebookIcon,
+  TwitterShareButton,
+  TwitterIcon,
+} from "react-share";
 
 export interface ArticlesSidebarProps {
   category: ArticleCategory;
@@ -18,6 +24,22 @@ export default function ArticlesSidebar(props: ArticlesSidebarProps) {
       <div className={"flex flex-col text-brandMain font-bold gap-4 xl:mt-6"}>
         <span>Share this page</span>
         {/*    TODO: SHARE BUTTONS*/}
+        <div className={"flex"}>
+          <FacebookShareButton
+            quote={"Check out this article from the Aquila University"}
+            hashtag={"#AquilaUniversity"}
+            url={window.location.href}
+          >
+            <FacebookIcon className={"w-10  h-10 rounded"} />
+          </FacebookShareButton>
+          <TwitterShareButton
+            title={"Check out this article from the Aquila University"}
+            hashtags={["#AquilaUniversity"]}
+            url={window.location.href}
+          >
+            <TwitterIcon className={"w-10  h-10 rounded"} />
+          </TwitterShareButton>
+        </div>
       </div>
     </div>
   );
