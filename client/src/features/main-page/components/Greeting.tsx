@@ -13,7 +13,7 @@ export default function Greeting() {
         <h2 className="text-5xl font-extrabold text-brandMain">
           EMBRACE THE FUTURE AND UNLOCK YOUR POTENTIAL
         </h2>
-        <p>
+        <p className={"text-brandMainNearlyBlack"}>
           Welcome to our university's virtual campus, offering an array of
           opportunities for the upcoming academic adventure.
         </p>
