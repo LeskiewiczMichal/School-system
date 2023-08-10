@@ -2,7 +2,11 @@ import { Sidebar } from "../features/sidebar";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAppSelector } from "../hooks";
-import { ArticleRequest, ArticlesSidebar } from "../features/article";
+import {
+  ArticleRequest,
+  ArticlesDisplay,
+  ArticlesSidebar,
+} from "../features/article";
 import { Article as ArticleType } from "../features/article";
 import * as marked from "marked";
 
@@ -61,6 +65,16 @@ export default function Article() {
               }}
             ></div>
           </section>
+        </div>
+        <div
+          className={
+            "px-4 lg:px-8 mt-16 pt-12 border-t border-grayscaleMediumDark"
+          }
+        >
+          <ArticlesDisplay
+            heading={"Related articles"}
+            category={article.category}
+          />
         </div>
       </main>
     </div>
