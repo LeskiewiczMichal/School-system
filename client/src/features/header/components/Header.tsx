@@ -82,21 +82,21 @@ export default function Header() {
         {/* Bottom */}
         <section className="max-h-24 flex flex-auto justify-between items-center py-6 pr-8 bg-white border-b-2 border-primary lg:px-6">
           {/* Navigation */}
-          <div className="flex items-center  justify-end gap-4">
+          <div className="flex items-center w-full gap-4">
             <h1>FACULTY OF </h1>
-            {/*<FacultiesDropdown />*/}
+            {}
             {/* Login */}
-            <Link
-              to="/login"
-              className="inline-block min-w-fit text-md font-bold text-primary align-baseline hover:text-primaryLighter"
-            >
-              Sign In
-            </Link>
+            {/*<Link*/}
+            {/*  to="/login"*/}
+            {/*  className="inline-block min-w-fit text-md font-bold text-primary align-baseline hover:text-primaryLighter"*/}
+            {/*>*/}
+            {/*  Sign In*/}
+            {/*</Link>*/}
             {/* Hamburger menu to open sidebar */}
-            {mobileNavView && shouldContainSidebar && (
+            {mobileNavView && (
               <button
                 type="button"
-                className="inline-block min-w-fit text-md font-bold text-primary align-baseline hover:text-primaryLighter"
+                className="inline-block ml-auto min-w-fit text-md font-bold text-primary align-baseline hover:text-primaryLighter"
                 onClick={handleClickOpenMenu}
               >
                 <MenuIcon className="h-6 w-6" />
