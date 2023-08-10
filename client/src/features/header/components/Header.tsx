@@ -8,6 +8,9 @@ import { useEffect, useState } from "react";
 import { IntegrationSliceActions } from "../../../store";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { Faculty } from "../../faculty";
+import { Sidebar } from "../../sidebar";
+import { SidebarLinkProps } from "../../sidebar/components/SidebarLink";
+import facultyNamesMap from "../../../type/FacultyNamesMap";
 
 export default function Header() {
   const dispatch = useAppDispatch();
@@ -16,14 +19,23 @@ export default function Header() {
   const location = useLocation();
   const shouldContainSidebar = location.pathname.includes("/articles");
   const isFacultyPage = location.pathname.includes("/faculties");
-  const { facultyId } = useParams<{ facultyId: string }>();
+
+  // Extract faculty id from the path
+  let facultyId: string = "";
+  if (isFacultyPage) {
+    // Split the pathname by '/'
+    const pathParts = location.pathname.split("/");
+
+    // Get the content between the second '/' and third '/'
+    facultyId = pathParts[2];
+  }
 
   // If it's Faculty's page header
   const [faculty, setFaculty] = useState<Faculty | null>(null);
 
-  useEffect(() => {
-    const handleFetchFaculty = async () => {};
-  }, [facultyId]);
+  // useEffect(() => {
+  //   const handleFetchFaculty = async () => {};
+  // }, [facultyId]);
 
   // Needed for mobile view
   const [mobileNavView, setMobileNavView] = useState<boolean>(
@@ -53,7 +65,28 @@ export default function Header() {
     dispatch(IntegrationSliceActions.setSidebarMenuActive(!sidebarMenuActive));
   };
 
+  const facultyHeaderLinks: SidebarLinkProps[] = [
+    {
+      title: "News",
+      redirectUrl: `/faculties/${facultyId}/news`,
+    },
+    {
+      title: "Teaching and Studying",
+      redirectUrl: `/faculties/${facultyId}/teaching-and-studying`,
+    },
+    {
+      title: "Research",
+      redirectUrl: `/faculties/${facultyId}/research`,
+    },
+    {
+      title: "Contact",
+      redirectUrl: `/faculties/${facultyId}/contact`,
+    },
+  ];
+
   if (isFacultyPage) {
+    console.log(facultyId);
+
     return (
       <header className={"z-50"}>
         {/* Top */}
@@ -82,9 +115,26 @@ export default function Header() {
         {/* Bottom */}
         <section className="max-h-24 flex flex-auto justify-between items-center py-6 pr-8 bg-white border-b-2 border-primary lg:px-6">
           {/* Navigation */}
-          <div className="flex items-center w-full gap-4">
-            <h1>FACULTY OF </h1>
-            {}
+          <div className="flex text-brandMain font-bold items-center w-full gap-12">
+            <h1 className={"pl-6 text-2xl"}>
+              {facultyNamesMap.get(facultyId!)}
+            </h1>
+
+            {!mobileNavView && (
+              <div className={"flex items-center h-full gap-4"}>
+                {facultyHeaderLinks.map((link) => (
+                  <Link
+                    to={link.redirectUrl!}
+                    className={
+                      "inline-block min-w-fit text-md font-bold text-brandMain align-baseline hover:text-brandMainActive"
+                    }
+                  >
+                    {link.title}
+                  </Link>
+                ))}
+                <FacultiesDropdown facultyHeader />
+              </div>
+            )}
             {/* Login */}
             {/*<Link*/}
             {/*  to="/login"*/}
@@ -104,6 +154,7 @@ export default function Header() {
             )}
           </div>
         </section>
+        {mobileNavView && <Sidebar links={facultyHeaderLinks} />}
       </header>
     );
   }

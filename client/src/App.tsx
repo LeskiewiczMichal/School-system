@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "./hooks";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useParams } from "react-router-dom";
 import * as Pages from "./pages";
 import { Header } from "./features/header";
 import { fetchBasicLinks } from "./features/links";

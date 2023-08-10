@@ -9,7 +9,13 @@ import { SortDirection } from "../../../type/PaginationParams";
 import DarkenLayoutBelowIndexZ from "../../../common_components/DarkenLayoutBelowIndexZ";
 import { AppPaths } from "../../../App";
 
-export default function FacultiesDropdown() {
+export interface FacultiesDropdownProps {
+  facultyHeader?: boolean;
+}
+
+export default function FacultiesDropdown(props: FacultiesDropdownProps) {
+  const { facultyHeader } = props;
+
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
@@ -79,7 +85,7 @@ export default function FacultiesDropdown() {
       {/* User picture button */}
       <button
         id="profileButton"
-        className="flex flex-col items-center inline-block text-md font-bold text-primary align-baseline hover:text-primaryLighter h-full"
+        className="flex items-center inline-block text-md font-bold text-brandMain align-baseline hover:text-brandMainActive h-full"
         type="button"
         onClick={handleDropDown}
       >
@@ -96,9 +102,9 @@ export default function FacultiesDropdown() {
       {/* Dropdown */}
       <nav
         aria-labelledby="profileButton"
-        className={`z-50 flex flex-col items-center bg-white border-b rounded-b-lg w-screen left-0  top-20 px-16 py-16  ${
-          profileMenuOpen ? "absolute" : "hidden"
-        }`}
+        className={`z-50 flex flex-col items-center bg-white border-b rounded-b-lg w-screen left-0 ${
+          facultyHeader ? "top-28" : "top-20"
+        }  px-16 py-16  ${profileMenuOpen ? "absolute" : "hidden"}`}
       >
         {/* Faculties */}
         <Link
