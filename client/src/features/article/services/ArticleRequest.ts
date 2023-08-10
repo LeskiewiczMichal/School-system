@@ -91,6 +91,12 @@ const getArticles = async (
   };
 };
 
+/**
+ * Fetch a full article from the API
+ *
+ * @param props {@link FetchFullArticleProps} object, containing the link {@link APILink} and the string - article id
+ * @returns Promise of an {@link Article} object
+ */
 const getFullArticle = async (
   props: FetchFullArticleProps,
 ): Promise<Article> => {

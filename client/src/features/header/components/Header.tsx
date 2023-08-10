@@ -21,7 +21,9 @@ export default function Header() {
   // If it's Faculty's page header
   const [faculty, setFaculty] = useState<Faculty | null>(null);
 
-  useEffect(() => {}, [facultyId]);
+  useEffect(() => {
+    const handleFetchFaculty = async () => {};
+  }, [facultyId]);
 
   // Needed for mobile view
   const [mobileNavView, setMobileNavView] = useState<boolean>(
@@ -61,13 +63,11 @@ export default function Header() {
           }
         >
           {/* Logo */}
-          <div className="flex items-center">
+          <div className="flex items-center lg:mr-6">
             <Link to="/" className="h-12 w-12">
               <LogoWhite className="h-full w-full" />
             </Link>
-            <h1 className="text-xl w-full font-bold italic">
-              Aquila University
-            </h1>
+            <h1 className="text-xl w-full font-bold">Aquila University</h1>
           </div>
           <Link
             to={"/"}
