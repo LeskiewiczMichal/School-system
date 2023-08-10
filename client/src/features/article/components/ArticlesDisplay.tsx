@@ -14,12 +14,13 @@ import ArticleRequest, {
 
 interface ArticlesDisplayProps {
   heading?: string;
+  text?: string;
   faculty?: string;
   category?: ArticleCategory;
 }
 
 export default function ArticlesDisplay(props: ArticlesDisplayProps) {
-  const { heading, faculty = null, category = null } = props;
+  const { heading, faculty = null, category = null, text } = props;
   const [articles, setArticles] = useState<Article[]>([]);
   const links = useAppSelector((state) => state.links);
 
@@ -54,6 +55,7 @@ export default function ArticlesDisplay(props: ArticlesDisplayProps) {
       {heading ? (
         <h4 className="my-header text-brandMainNearlyBlack">{heading}</h4>
       ) : null}
+      {text && <p className={"text-grayscaleDarkText mb-6"}>{text}</p>}
       <div className="grid grid-cols-1 lg:grid-cols-3  gap-4">
         {articles.map((article) => {
           return (
