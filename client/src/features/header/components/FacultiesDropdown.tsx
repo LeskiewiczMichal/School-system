@@ -15,7 +15,7 @@ export default function FacultiesDropdown() {
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const facultiesLink: APILink | null = useAppSelector(
-    (state) => state.links.faculties,
+    (state) => state.links.faculties.getFaculties,
   );
   const [faculties, setFaculties] = useState<ResourceNameWithLink[]>([]);
 

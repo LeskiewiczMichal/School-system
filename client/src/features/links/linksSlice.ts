@@ -7,7 +7,10 @@ const initialState: LinksState = {
   users: null,
   courses: null,
   degrees: null,
-  faculties: null,
+  faculties: {
+    getFaculties: null,
+    getById: null,
+  },
   files: null,
   articles: {
     getArticles: null,
