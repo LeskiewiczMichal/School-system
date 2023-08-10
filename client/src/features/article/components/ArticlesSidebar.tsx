@@ -10,10 +10,11 @@ import {
 
 export interface ArticlesSidebarProps {
   category: ArticleCategory;
+  faculty: string | undefined;
 }
 
 export default function ArticlesSidebar(props: ArticlesSidebarProps) {
-  const { category } = props;
+  const { category, faculty } = props;
 
   return (
     <div
@@ -22,11 +23,14 @@ export default function ArticlesSidebar(props: ArticlesSidebarProps) {
       }
     >
       <div className={"flex flex-col text-brandMain font-bold gap-4"}>
+        {/* Text at the top level */}
         <span className={""}>Aquila University</span>
+        {faculty && <span>{faculty}</span>}
         <span className={"bg-brandMain text-white w-fit px-2 py-1"}>
           {category}
         </span>
       </div>
+      {/* Share buttons */}
       <div className={"flex flex-col text-brandMain font-bold gap-2 xl:mt-6"}>
         <span>Share this page</span>
         <div className={"flex gap-4"}>
