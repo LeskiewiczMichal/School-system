@@ -82,10 +82,6 @@ export default function Header() {
       title: "Degree Programmes",
       redirectUrl: `/faculties/${facultyId}/degree-programmes`,
     },
-    // {
-    //   title: "Contact",
-    //   redirectUrl: `/faculties/${facultyId}/contact`,
-    // },
   ];
 
   // If it's Faculty's page header

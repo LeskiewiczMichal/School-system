@@ -13,12 +13,15 @@ import { Article, ArticleCategory } from "../../features/article";
 import { useParams } from "react-router-dom";
 import BigCardWithOptionalHeader from "../../common_components/Card/BigCardWithOptionalHeader";
 import MyHeadingWithLine from "../../common_components/MyHeadingWithLine";
+import TeachingAndStudyingPageContentInterface from "./TeachingAndStudyingPageContentInterface";
 
 export default function TeachingAndStudying() {
   const links = useAppSelector((state) => state.links);
   const facultyId = useParams().facultyId;
   const [articles, setArticles] = useState<Article[]>([]);
   // const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  const teachingAndStudyingPageContent: TeachingAndStudyingPageContentInterface = require(`./json/teachingAndStudying-${facultyId}.json`);
 
   useEffect(() => {
     const handleFetchArticles = async () => {
@@ -30,7 +33,7 @@ export default function TeachingAndStudying() {
       // Call the api
       const response: GetArticlesResponse = await ArticleRequest.getArticles({
         link: links.articles.search,
-        category: ArticleCategory.SCIENCE,
+        category: ArticleCategory.EVENTS,
         faculty: facultyId,
         pagination: { size: 4 },
       });
@@ -49,20 +52,25 @@ export default function TeachingAndStudying() {
       <main className={"h-full w-full flex flex-col lg:px-8 py-8"}>
         <section className={"w-full flex flex-col mb-24"}>
           <h1 className="page-title_h1 text-brandMainNearlyBlack">
-            TEACHING AT THE FACULTY
+            {teachingAndStudyingPageContent.title}
           </h1>
+          <p className={"text-grayscaleDarkText mb-6"}>
+            {teachingAndStudyingPageContent.textUnderTitle}
+          </p>
           {/* Informative Card */}
-          <ColoredBackgroundWithPhotoOnRight //////// FULL THIS
-            heading={"Aquila's news"}
-            text={"Checkout out Faculty of Science "}
-            buttonLink={"/"}
-            buttonText={"See what is new in our faculties"}
-            imageLink={GroupOfStundetsPhoto}
-            backgroundColor={"brandMain"}
+          <ColoredBackgroundWithPhotoOnRight
+            heading={teachingAndStudyingPageContent.cardHeading}
+            text={teachingAndStudyingPageContent.cardText}
+            buttonLink={teachingAndStudyingPageContent.cardButtonLink}
+            buttonText={teachingAndStudyingPageContent.cardButtonText}
+            imageLink={require(`../assets/${teachingAndStudyingPageContent.cardImage}`)}
+            backgroundColor={teachingAndStudyingPageContent.cardBackgroundColor}
           />
         </section>
         <section className={"flex flex-col w-full px-8"}>
-          <MyHeadingWithLine heading={"Latest articles about science"} />
+          <MyHeadingWithLine
+            heading={teachingAndStudyingPageContent.articlesHeading}
+          />
           {/* Articles */}
           {articles.length !== 0 && (
             <div
