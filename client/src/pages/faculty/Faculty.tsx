@@ -3,7 +3,7 @@ import { ArticleCategory, ArticlesDisplay } from "../../features/article";
 import LinkButtonBorderOnly from "../../common_components/button/LinkButtonBorderOnly";
 import { AppPaths } from "../../App";
 import { useParams } from "react-router-dom";
-import FacultyPageContentInterface from "../types/FacultyPageContentInterface";
+import FacultyPageContentInterface from "./FacultyPageContentInterface";
 import BigCardWithOptionalHeader from "../../common_components/Card/BigCardWithOptionalHeader";
 
 export default function Faculty() {

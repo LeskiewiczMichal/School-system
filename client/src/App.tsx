@@ -38,6 +38,10 @@ function App() {
           <Route path="/articles" element={<Pages.Articles />} />
           <Route path="/articles/:id" element={<Pages.Article />} />
           <Route path="/faculties/:facultyId" element={<Pages.Faculty />} />
+          <Route
+            path="/faculties/:facultyId/teaching-and-studying"
+            element={<Pages.TeachingAndStudying />}
+          />
         </Routes>
         <Footer />
       </>

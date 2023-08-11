@@ -88,9 +88,8 @@ export default function Header() {
     // },
   ];
 
+  // If it's Faculty's page header
   if (isFacultyPage) {
-    console.log(facultyId);
-
     return (
       <header className={"z-50"}>
         {/* Top */}
@@ -119,9 +118,9 @@ export default function Header() {
         <section className="max-h-24 flex flex-auto justify-between items-center py-6 pr-8 bg-white border-b-2 border-primary lg:px-6">
           {/* Navigation */}
           <div className="flex text-brandMain font-bold items-center w-full gap-12">
-            <h1 className={"pl-6 text-2xl"}>
+            <Link to={`/faculties/${facultyId}`} className={"pl-6 text-2xl"}>
               {facultyNamesMap.get(facultyId!)}
-            </h1>
+            </Link>
 
             {!mobileNavView && (
               <div className={"flex items-center h-full gap-4"}>
