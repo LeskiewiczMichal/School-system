@@ -1,5 +1,5 @@
 import { Sidebar } from "../../features/sidebar";
-import DarkBackgroundWithPhotoOnRight from "../../common_components/Card/DarkBackgroundWithPhotoOnRight";
+import ColoredBackgroundWithPhotoOnRight from "../../common_components/Card/ColoredBackgroundWithPhotoOnRight";
 import GroupOfStundetsPhoto from "../../features/article/assets/group.webp";
 import MyHeading from "../../common_components/MyHeading";
 import Card from "../../common_components/Card/Card";
@@ -12,6 +12,7 @@ import { useAppSelector } from "../../hooks";
 import { Article, ArticleCategory } from "../../features/article";
 import { useParams } from "react-router-dom";
 import BigCardWithOptionalHeader from "../../common_components/Card/BigCardWithOptionalHeader";
+import MyHeadingWithLine from "../../common_components/MyHeadingWithLine";
 
 export default function TeachingAndStudying() {
   const links = useAppSelector((state) => state.links);
@@ -51,22 +52,17 @@ export default function TeachingAndStudying() {
             TEACHING AT THE FACULTY
           </h1>
           {/* Informative Card */}
-          <DarkBackgroundWithPhotoOnRight
+          <ColoredBackgroundWithPhotoOnRight //////// FULL THIS
             heading={"Aquila's news"}
-            text={"Checkout out latest news from our University"}
+            text={"Checkout out Faculty of Science "}
             buttonLink={"/"}
             buttonText={"See what is new in our faculties"}
             imageLink={GroupOfStundetsPhoto}
+            backgroundColor={"brandMain"}
           />
         </section>
         <section className={"flex flex-col w-full px-8"}>
-          <div className={"flex mb-8 w-full items-center"}>
-            {/*<MyHeading heading={"Latest articles about science"} />*/}
-            <h4 className="my-header text-brandMainNearlyBlack">
-              Latest articles about science
-            </h4>
-            <div className={"h-[1px] grow bg-black ml-6"}></div>
-          </div>
+          <MyHeadingWithLine heading={"Latest articles about science"} />
           {/* Articles */}
           {articles.length !== 0 && (
             <div

@@ -6,7 +6,7 @@ import { useAppSelector } from "../hooks";
 import ArticleRequest, {
   GetArticlesResponse,
 } from "../features/article/services/ArticleRequest";
-import DarkBackgroundWithPhotoOnRight from "../common_components/Card/DarkBackgroundWithPhotoOnRight";
+import ColoredBackgroundWithPhotoOnRight from "../common_components/Card/ColoredBackgroundWithPhotoOnRight";
 import GroupOfStundetsPhoto from "../features/article/assets/group.webp";
 import Card from "../common_components/Card/Card";
 import MyHeading from "../common_components/MyHeading";
@@ -116,7 +116,7 @@ export default function Articles() {
             {articleCategory}
           </h1>
           {/* Informative Card */}
-          <DarkBackgroundWithPhotoOnRight
+          <ColoredBackgroundWithPhotoOnRight
             heading={"Aquila's news"}
             text={"Checkout out latest news from our University"}
             buttonLink={"/"}

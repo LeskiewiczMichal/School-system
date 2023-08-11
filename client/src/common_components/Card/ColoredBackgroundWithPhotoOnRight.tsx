@@ -10,12 +10,20 @@ export interface DarkBackgroundWithPhotoOnRightProps {
   buttonLink: string;
   buttonText: string;
   imageLink: string;
+  backgroundColor?: string;
 }
 
-export default function DarkBackgroundWithPhotoOnRight(
+export default function ColoredBackgroundWithPhotoOnRight(
   props: DarkBackgroundWithPhotoOnRightProps,
 ) {
-  const { heading, text, buttonLink, imageLink, buttonText } = props;
+  const {
+    heading,
+    text,
+    buttonLink,
+    imageLink,
+    buttonText,
+    backgroundColor = "black",
+  } = props;
 
   return (
     <section className="col-span-3 w-full flex flex-col items-center lg:flex-row h-full ">
@@ -24,7 +32,9 @@ export default function DarkBackgroundWithPhotoOnRight(
         className="w-full  lg:w-1/2 lg:h-96 lg:py-2 lg:order-2"
         alt="School building"
       />
-      <div className="px-6 w-full lg:w-1/2 lg:h-96 flex flex-col bg-black text-white lg:justify-center py-12 lg:py-20 lg:order-1 ">
+      <div
+        className={`px-6 w-full lg:w-1/2 lg:h-96 flex flex-col bg-${backgroundColor} text-white lg:justify-center py-12 lg:py-20 lg:order-1 `}
+      >
         <h2 className="text-4xl font-bold text-white mb-2">{heading}</h2>
         <p className={"mb-4"}>{text}</p>
         <LinkButtonBorderOnly
