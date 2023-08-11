@@ -2,8 +2,8 @@ import Card from "./Card";
 import { Article } from "../../features/article";
 
 interface BigCardWithOptionalHeaderProps {
-  title: string;
-  text: string;
+  title?: string;
+  text?: string;
   article: Article;
 }
 
@@ -14,8 +14,10 @@ export default function BigCardWithOptionalHeader(
 
   return (
     <section className="col-span-3">
-      <h4 className="my-header text-brandMainNearlyBlack">{title}</h4>
-      <p className="mb-6 text-grayscaleDarkText">{text}</p>
+      {title && (
+        <h4 className="my-header text-brandMainNearlyBlack">{title}</h4>
+      )}
+      {text && <p className="mb-6 text-grayscaleDarkText">{text}</p>}
 
       <Card
         imageUrl={article.imgPath}
