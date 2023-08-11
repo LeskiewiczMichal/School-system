@@ -79,9 +79,13 @@ export default function Header() {
       redirectUrl: `/faculties/${facultyId}/research`,
     },
     {
-      title: "Contact",
-      redirectUrl: `/faculties/${facultyId}/contact`,
+      title: "Degree Programmes",
+      redirectUrl: `/faculties/${facultyId}/degree-programmes`,
     },
+    // {
+    //   title: "Contact",
+    //   redirectUrl: `/faculties/${facultyId}/contact`,
+    // },
   ];
 
   if (isFacultyPage) {
@@ -97,9 +101,8 @@ export default function Header() {
         >
           {/* Logo */}
           <div className="flex items-center lg:mr-6">
-            <Link to="/" className="h-12 w-12">
-              <LogoWhite className="h-full w-full" />
-            </Link>
+            <LogoWhite className="h-12 w-12" />
+
             <h1 className="text-xl w-full font-bold">Aquila University</h1>
           </div>
           <Link
