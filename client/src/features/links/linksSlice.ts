@@ -6,7 +6,10 @@ const initialState: LinksState = {
   register: null,
   users: null,
   courses: null,
-  degrees: null,
+  degrees: {
+    getDegrees: null,
+    getById: null,
+  },
   faculties: {
     getFaculties: null,
     getById: null,
