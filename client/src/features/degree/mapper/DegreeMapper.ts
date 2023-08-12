@@ -21,8 +21,13 @@ const mapFromServerData = (data: any): Degree => {
   };
 };
 
+const mapArrayFromServerData = (data: any[]): Degree[] => {
+  return data.map((degree) => mapFromServerData(degree));
+};
+
 const DegreeMapper = {
   mapFromServerData,
+  mapArrayFromServerData,
 };
 
 export default DegreeMapper;
