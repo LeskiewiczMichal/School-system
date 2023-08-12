@@ -1,0 +1,9 @@
+enum DegreeTitle {
+  BACHELOR = "BACHELOR",
+  BACHELOR_OF_SCIENCE = "BACHELOR_OF_SCIENCE",
+  MASTER = "MASTER",
+  DOCTOR = "DOCTOR",
+  PROFESSOR = "PROFESSOR",
+}
+
+export default DegreeTitle;

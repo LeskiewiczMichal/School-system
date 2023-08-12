@@ -62,6 +62,10 @@ function App() {
             path="/faculties/:facultyId/research"
             element={<Pages.Research />}
           />
+          <Route
+            path="/degree-programmes"
+            element={<Pages.DegreeProgrammes />}
+          />
         </Routes>
         <Footer />
       </>
