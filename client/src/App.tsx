@@ -5,6 +5,8 @@ import * as Pages from "./pages";
 import { Header } from "./features/header";
 import { fetchBasicLinks } from "./features/links";
 import { Footer } from "./features/footer";
+import { WINDOW_WIDTH_CUSTOM_BREAKPOINT } from "./utils/Constants";
+import { IntegrationSliceActions } from "./store";
 
 export enum AppPaths {
   HOME = "/",
@@ -28,6 +30,20 @@ function App() {
     handleFetchLinks();
   }, [dispatch]);
 
+  // Switch navigation view on resize
+  useEffect(() => {
+    const handleResize = () => {
+      dispatch(
+        IntegrationSliceActions.setMobileNavView(
+          window.innerWidth <= WINDOW_WIDTH_CUSTOM_BREAKPOINT,
+        ),
+      );
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  });
+
   return (
     <BrowserRouter>
       <>
@@ -41,6 +57,10 @@ function App() {
           <Route
             path="/faculties/:facultyId/teaching-and-studying"
             element={<Pages.TeachingAndStudying />}
+          />
+          <Route
+            path="/faculties/:facultyId/research"
+            element={<Pages.Research />}
           />
         </Routes>
         <Footer />
