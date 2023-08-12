@@ -1,7 +1,6 @@
 import { ReactComponent as ChevronRight } from "../../../assets/icons/chevron/chevron-right-bright.svg";
 import { WINDOW_WIDTH_CUSTOM_BREAKPOINT } from "../../../utils/Constants";
 import { useEffect, useState } from "react";
-import { IntegrationSliceActions } from "../../../store";
 
 export interface SidebarLinkProps {
   active?: boolean;

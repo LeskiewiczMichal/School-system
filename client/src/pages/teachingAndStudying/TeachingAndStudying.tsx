@@ -14,7 +14,7 @@ import MyHeadingWithLine from "../../common_components/MyHeadingWithLine";
 import TeachingAndStudyingPageContentInterface from "./TeachingAndStudyingPageContentInterface";
 import { SidebarLinkProps } from "../../features/sidebar/components/SidebarLink";
 import { WINDOW_WIDTH_CUSTOM_BREAKPOINT } from "../../utils/Constants";
-import createFacultyNavigationLinks from "../../features/faculty/createFacultyNavigationLinks";
+import createFacultyNavigationLinks from "../../features/faculty/FacultyNavLinksCreator";
 
 export default function TeachingAndStudying() {
   const links = useAppSelector((state) => state.links);
@@ -46,15 +46,14 @@ export default function TeachingAndStudying() {
       redirectUrl: `/faculties/${facultyId}/research`,
     },
     {
-      title: "Degree Programmes",
-      redirectUrl: `/faculties/${facultyId}/degree-programmes`,
+      title: "Articles",
+      redirectUrl: `/faculties/${facultyId}/articles`,
     },
   ];
 
-  let mobileSidebarLinks: SidebarLinkProps[] = [
-    ...createFacultyNavigationLinks(facultyId!),
-    ...sidebarLinks,
-  ];
+  let mobileSidebarLinks: SidebarLinkProps[] = createFacultyNavigationLinks(
+    facultyId!,
+  );
 
   useEffect(() => {
     const handleFetchArticles = async () => {

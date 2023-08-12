@@ -11,7 +11,7 @@ import { Faculty } from "../../faculty";
 import { Sidebar } from "../../sidebar";
 import { SidebarLinkProps } from "../../sidebar/components/SidebarLink";
 import facultyNamesMap from "../../../type/FacultyNamesMap";
-import createFacultyNavigationLinks from "../../faculty/createFacultyNavigationLinks";
+import FacultyNavLinksCreator from "../../faculty/FacultyNavLinksCreator";
 import { WINDOW_WIDTH_CUSTOM_BREAKPOINT } from "../../../utils/Constants";
 
 export default function Header() {
@@ -67,7 +67,8 @@ export default function Header() {
     dispatch(IntegrationSliceActions.setSidebarMenuActive(!sidebarMenuActive));
   };
 
-  const facultyHeaderLinks = createFacultyNavigationLinks(facultyId);
+  const facultyHeaderLinks =
+    FacultyNavLinksCreator.createFacultyNavigationLinks(facultyId);
 
   // If it's Faculty's page header
   if (isFacultyPage) {
