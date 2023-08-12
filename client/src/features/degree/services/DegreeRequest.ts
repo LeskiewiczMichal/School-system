@@ -32,7 +32,7 @@ export interface GetDegreesResponse {
  * title {@link DegreeTitle} (optional) and pagination {@link OptionalPaginationParams} (optional)
  * @returns Promise of an array of {@link Degree} objects
  */
-const getDegrees = async (
+const getList = async (
   props: FetchDegreesProps,
 ): Promise<GetDegreesResponse> => {
   // Prepare the link
@@ -86,8 +86,25 @@ const getDegrees = async (
   };
 };
 
+export interface FetchSingleDegreeProps {
+  link: APILink;
+  id: string;
+}
+
+const getSingle = async (props: FetchSingleDegreeProps): Promise<Degree> => {
+  const { link, id } = props;
+
+  const responseData = await RequestService.performGetByIdRequest({
+    link: link,
+    id: id,
+  });
+
+  return DegreeMapper.mapFromServerData(responseData);
+};
+
 const DegreeRequest = {
-  getDegrees,
+  getList,
+  getSingle,
 };
 
 export default DegreeRequest;
