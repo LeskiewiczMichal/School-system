@@ -11,6 +11,8 @@ import { Faculty } from "../../faculty";
 import { Sidebar } from "../../sidebar";
 import { SidebarLinkProps } from "../../sidebar/components/SidebarLink";
 import facultyNamesMap from "../../../type/FacultyNamesMap";
+import createFacultyNavigationLinks from "../../faculty/createFacultyNavigationLinks";
+import { WINDOW_WIDTH_CUSTOM_BREAKPOINT } from "../../../utils/Constants";
 
 export default function Header() {
   const dispatch = useAppDispatch();
@@ -39,7 +41,7 @@ export default function Header() {
 
   // Needed for mobile view
   const [mobileNavView, setMobileNavView] = useState<boolean>(
-    window.innerWidth <= 1024,
+    window.innerWidth <= WINDOW_WIDTH_CUSTOM_BREAKPOINT,
   );
   const sidebarMenuActive = useAppSelector(
     (state) => state.integration.sidebarMenuActive,
@@ -47,7 +49,7 @@ export default function Header() {
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth > 1024) {
+      if (window.innerWidth > WINDOW_WIDTH_CUSTOM_BREAKPOINT) {
         setMobileNavView(false);
         dispatch(IntegrationSliceActions.setSidebarMenuActive(false));
       } else {
@@ -65,24 +67,7 @@ export default function Header() {
     dispatch(IntegrationSliceActions.setSidebarMenuActive(!sidebarMenuActive));
   };
 
-  const facultyHeaderLinks: SidebarLinkProps[] = [
-    {
-      title: "News",
-      redirectUrl: `/faculties/${facultyId}/news`,
-    },
-    {
-      title: "Teaching and Studying",
-      redirectUrl: `/faculties/${facultyId}/teaching-and-studying`,
-    },
-    {
-      title: "Research",
-      redirectUrl: `/faculties/${facultyId}/research`,
-    },
-    {
-      title: "Degree Programmes",
-      redirectUrl: `/faculties/${facultyId}/degree-programmes`,
-    },
-  ];
+  const facultyHeaderLinks = createFacultyNavigationLinks(facultyId);
 
   // If it's Faculty's page header
   if (isFacultyPage) {
