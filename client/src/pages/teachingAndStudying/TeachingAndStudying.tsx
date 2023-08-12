@@ -14,7 +14,6 @@ import MyHeadingWithLine from "../../common_components/MyHeadingWithLine";
 import TeachingAndStudyingPageContentInterface from "./TeachingAndStudyingPageContentInterface";
 import { SidebarLinkProps } from "../../features/sidebar/components/SidebarLink";
 import { WINDOW_WIDTH_CUSTOM_BREAKPOINT } from "../../utils/Constants";
-import createFacultyNavigationLinks from "../../features/faculty/FacultyNavLinksCreator";
 import FacultyNavLinksCreator, {
   PageType,
 } from "../../features/faculty/FacultyNavLinksCreator";
@@ -26,10 +25,11 @@ export default function TeachingAndStudying() {
   const [mobileNavView, setMobileNavView] = useState<boolean>(
     window.innerWidth <= WINDOW_WIDTH_CUSTOM_BREAKPOINT,
   );
-  // const [isLoading, setIsLoading] = useState<boolean>(true);
 
+  // Get the page content
   const teachingAndStudyingPageContent: TeachingAndStudyingPageContentInterface = require(`./json/teachingAndStudying-${facultyId}.json`);
 
+  // Prepare sidebar links
   const sidebarLinks: SidebarLinkProps[] = mobileNavView
     ? FacultyNavLinksCreator.createFacultyNavigationLinks(facultyId!)
     : FacultyNavLinksCreator.createFacultyNavigationLinksDesktop(
@@ -54,13 +54,13 @@ export default function TeachingAndStudying() {
 
       // Set the articles
       setArticles(response.articles);
-      // setIsLoading(false);
     };
 
     handleFetchArticles();
   }, [links, facultyId]);
 
   useEffect(() => {
+    // Set the mobile nav view
     const handleResize = () => {
       if (window.innerWidth <= WINDOW_WIDTH_CUSTOM_BREAKPOINT) {
         setMobileNavView(true);
@@ -73,15 +73,13 @@ export default function TeachingAndStudying() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  if (!facultyId) {
-    return <div>Faculty id is not provided</div>;
-  }
-
   return (
     <div className={"flex h-full"}>
+      {/* Sidebar */}
       <Sidebar links={sidebarLinks} />
       <main className={"h-full w-full flex flex-col lg:px-8 py-8"}>
         <section className={"w-full flex flex-col mb-24"}>
+          {/* Title and text */}
           <h1 className="page-title_h1 text-brandMainNearlyBlack">
             {teachingAndStudyingPageContent.title}
           </h1>
