@@ -81,7 +81,7 @@ export default function Research() {
                   imageUrl={article.imgPath}
                   imageAlt="Article Preview"
                   articleId={article.id.toString()}
-                  redirectUrl="/article"
+                  redirectUrl={`/article/${article.id}`}
                   key={article.id.toString()}
                 />
               );
@@ -91,12 +91,10 @@ export default function Research() {
         <FullWidthColoredBackground
           color={"brandMain"}
           textColor={"white"}
-          heading={"RESEARCH COOPERATION"}
-          text={
-            "We actively cooperate across disciplinary and institutional boundaries. Cooperation makes our research increasingly impactful."
-          }
-          buttonText={"Learn more about the units we cooperate with"}
-          buttonLink={"/"}
+          heading={researchPageContent.coloredBgCardHeading}
+          text={researchPageContent.coloredBgCardText}
+          buttonText={researchPageContent.coloredBgCardButtonText}
+          buttonLink={researchPageContent.coloredBgCardButtonLink}
         />
       </main>
     </div>
