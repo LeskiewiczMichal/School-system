@@ -1,6 +1,6 @@
 import DegreeTitle from "./types/DegreeTitle";
 import Degree from "./types/Degree";
-import DegreeReq
+import DegreeRequest from "./services/DegreeRequest";
 
-export {DegreeTitle}
-export type {Degree}
+export { DegreeTitle, DegreeRequest };
+export type { Degree };

@@ -27,8 +27,8 @@ export interface GetDegreesResponse {
  * Fetch degrees from the API (using search or not)
  *
  * @param props {@link FetchDegreesProps} object,
- * containing the link {@link APILink} - either a search link or a link to all articles,
- * faculty id (optional),
+ * containing the link {@link APILink} - either a search link or a link to all degrees,
+ * degree id (optional),
  * title {@link DegreeTitle} (optional) and pagination {@link OptionalPaginationParams} (optional)
  * @returns Promise of an array of {@link Degree} objects
  */
@@ -91,6 +91,12 @@ export interface FetchSingleDegreeProps {
   id: string;
 }
 
+/**
+ * Fetch a single degree by id from the API
+ *
+ * @param props {@link FetchSingleDegreeProps} object, containing the link {@link APILink} and the string - degree id
+ * @returns Promise of an {@link Degree} object
+ */
 const getSingle = async (props: FetchSingleDegreeProps): Promise<Degree> => {
   const { link, id } = props;
 
