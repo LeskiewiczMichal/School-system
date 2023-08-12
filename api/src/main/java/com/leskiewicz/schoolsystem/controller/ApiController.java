@@ -76,7 +76,8 @@ public class ApiController {
     String uriTemplate = facultiesLink.getHref() + PAGINATION_PARAMETERS;
     facultiesLink = Link.of(uriTemplate).withRel("faculties");
 
-    Link getByIdLink = linkTo(methodOn(FacultyController.class).getFacultyById(null)).withRel("faculties");
+    Link getByIdLink =
+        linkTo(methodOn(FacultyController.class).getFacultyById(null)).withRel("faculties");
 
     model.add(facultiesLink);
     model.add(getByIdLink);
@@ -86,13 +87,19 @@ public class ApiController {
     Link degreesLink = linkTo(DegreeController.class).withRel("degrees");
     String uriTemplate = degreesLink.getHref() + PAGINATION_PARAMETERS;
     degreesLink = Link.of(uriTemplate).withRel("degrees");
+
+    Link getByIdLink =
+        linkTo(methodOn(DegreeController.class).getDegreeById(null)).withRel("degrees");
+
     model.add(degreesLink);
+    model.add(getByIdLink);
   }
 
   private void addCoursesLink(RepresentationModel<?> model) {
     Link coursesLink = linkTo(CourseController.class).withRel("courses");
     String uriTemplate = coursesLink.getHref() + PAGINATION_PARAMETERS;
     coursesLink = Link.of(uriTemplate).withRel("courses");
+
     model.add(coursesLink);
   }
 
