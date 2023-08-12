@@ -15,6 +15,9 @@ import TeachingAndStudyingPageContentInterface from "./TeachingAndStudyingPageCo
 import { SidebarLinkProps } from "../../features/sidebar/components/SidebarLink";
 import { WINDOW_WIDTH_CUSTOM_BREAKPOINT } from "../../utils/Constants";
 import createFacultyNavigationLinks from "../../features/faculty/FacultyNavLinksCreator";
+import FacultyNavLinksCreator, {
+  PageType,
+} from "../../features/faculty/FacultyNavLinksCreator";
 
 export default function TeachingAndStudying() {
   const links = useAppSelector((state) => state.links);
@@ -27,33 +30,12 @@ export default function TeachingAndStudying() {
 
   const teachingAndStudyingPageContent: TeachingAndStudyingPageContentInterface = require(`./json/teachingAndStudying-${facultyId}.json`);
 
-  let sidebarLinks: SidebarLinkProps[] = [
-    {
-      title: "Home",
-      redirectUrl: `/faculties/${facultyId}`,
-    },
-    {
-      title: "Education",
-      redirectUrl: `/faculties/${facultyId}/teaching-and-studying`,
-      active: true,
-    },
-    {
-      title: "Our degrees",
-      redirectUrl: `/faculties/${facultyId}/degree-programmes`,
-    },
-    {
-      title: "Science and research",
-      redirectUrl: `/faculties/${facultyId}/research`,
-    },
-    {
-      title: "Articles",
-      redirectUrl: `/faculties/${facultyId}/articles`,
-    },
-  ];
-
-  let mobileSidebarLinks: SidebarLinkProps[] = createFacultyNavigationLinks(
-    facultyId!,
-  );
+  const sidebarLinks: SidebarLinkProps[] = mobileNavView
+    ? FacultyNavLinksCreator.createFacultyNavigationLinks(facultyId!)
+    : FacultyNavLinksCreator.createFacultyNavigationLinksDesktop(
+        facultyId!,
+        PageType.TEACHING_AND_STUDYING,
+      );
 
   useEffect(() => {
     const handleFetchArticles = async () => {
@@ -78,8 +60,6 @@ export default function TeachingAndStudying() {
     handleFetchArticles();
   }, [links, facultyId]);
 
-  const usedSidebar = mobileNavView ? mobileSidebarLinks : sidebarLinks;
-
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth <= WINDOW_WIDTH_CUSTOM_BREAKPOINT) {
@@ -99,7 +79,7 @@ export default function TeachingAndStudying() {
 
   return (
     <div className={"flex h-full"}>
-      <Sidebar links={usedSidebar} />
+      <Sidebar links={sidebarLinks} />
       <main className={"h-full w-full flex flex-col lg:px-8 py-8"}>
         <section className={"w-full flex flex-col mb-24"}>
           <h1 className="page-title_h1 text-brandMainNearlyBlack">

@@ -23,7 +23,7 @@ const createFacultyNavigationLinks = (
   ];
 };
 
-enum PageType {
+export enum PageType {
   HOME,
   TEACHING_AND_STUDYING,
   DEGREE_PROGRAMMES,
