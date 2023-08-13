@@ -28,8 +28,8 @@ public interface DegreeRepository extends JpaRepository<Degree, Long> {
           + "AND (:title is null or d.title = :title) "
           + "AND (:fieldOfStudy is null or d.fieldOfStudy LIKE CONCAT('%', :fieldOfStudy, '%'))")
   Page<Degree> searchByFacultyNameAndTitleAndFieldOfStudy(
+      @Param("fieldOfStudy") String fieldOfStudy,
       @Param("facultyId") Long facultyId,
       @Param("title") DegreeTitle title,
-      @Param("fieldOfStudy") String fieldOfStudy,
       Pageable pageable);
 }

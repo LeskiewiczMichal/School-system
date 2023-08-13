@@ -81,6 +81,38 @@ public class DegreeServiceGettersTest {
         degreeService::getDegrees);
   }
 
+  @Test
+  public void searchReturnsPagedDegrees() {
+    // Set up test data
+    List<Degree> degreeList =
+        Arrays.asList(
+            Degree.builder().id(1L).title(DegreeTitle.BACHELOR_OF_SCIENCE).build(),
+            Degree.builder().id(2L).title(DegreeTitle.BACHELOR_OF_SCIENCE).build());
+    List<DegreeDto> degreeDtoList =
+        Arrays.asList(
+            DegreeDto.builder().id(1L).title(DegreeTitle.BACHELOR_OF_SCIENCE).build(),
+            DegreeDto.builder().id(2L).title(DegreeTitle.BACHELOR_OF_SCIENCE).build());
+    Page<Degree> degreePage = new PageImpl<>(degreeList);
+
+    // Mocks
+    given(
+            degreeRepository.searchByFacultyNameAndTitleAndFieldOfStudy(any(String.class), any(Long.class), any(DegreeTitle.class), any(Pageable.class))
+    ).willReturn(degreePage);
+    given(degreeMapper.convertToDto(any(Degree.class))).willReturn(degreeDtoList.get(0), degreeDtoList.get(1));
+
+    // Call method
+    Page<DegreeDto> result = degreeService.search("qwer", 1L, DegreeTitle.BACHELOR_OF_SCIENCE, PageRequest.of(0, 2));
+
+    // Assertions
+    Assertions.assertEquals(2, result.getTotalElements());
+    Assertions.assertEquals(1, result.getTotalPages());
+    Assertions.assertEquals(2, result.getNumberOfElements());
+    Assertions.assertEquals(0, result.getNumber());
+    Assertions.assertEquals(2, result.getSize());
+    Assertions.assertEquals(degreeDtoList.get(0), result.getContent().get(0));
+    Assertions.assertEquals(degreeDtoList.get(1), result.getContent().get(1));
+  }
+
   /// *** GetById *** ///
   @Test
   public void getByIdReturnsCorrectDegree() {

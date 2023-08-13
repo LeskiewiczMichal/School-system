@@ -73,6 +73,11 @@ public class DegreeControllerTest {
   }
 
   @Test
+  public void searchDegrees() {
+
+  }
+
+  @Test
   public void createDegree() {
     DegreeDto degreeDto = TestHelper.createDegreeDto("Faculty");
 

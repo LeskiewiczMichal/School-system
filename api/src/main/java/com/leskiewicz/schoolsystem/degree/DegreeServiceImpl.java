@@ -109,7 +109,7 @@ public class DegreeServiceImpl implements DegreeService {
       String fieldOfStudy, Long facultyId, DegreeTitle title, Pageable pageable) {
     Page<Degree> degrees =
         degreeRepository.searchByFacultyNameAndTitleAndFieldOfStudy(
-            facultyId, title, fieldOfStudy, pageable);
+                fieldOfStudy, facultyId, title, pageable);
     return degrees.map(degreeMapper::convertToDto);
   }
 

@@ -162,6 +162,5 @@ public class DegreeController {
             HalModelBuilder.halModelOf(degreePagedResourcesAssembler.toModel(degrees))
                     .links(List.of(selfLink, degreesLink, getByIdLink))
                     .build());
-
   }
 }

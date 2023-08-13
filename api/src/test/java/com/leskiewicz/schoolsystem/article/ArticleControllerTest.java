@@ -263,7 +263,7 @@ public class ArticleControllerTest {
 
   @Test
   public void testSearchArticlesWithFacultyIdAndCategory() throws Exception {
-    // Mock your articleDto and pageableRequest if needed
+    // Prepare test data
     List<ArticleDto> articleDto =
         Arrays.asList(TestHelper.createArticleDto()); // Replace this with your mocked ArticleDto
     Page<ArticleDto> articlePage = new PageImpl<>(articleDto);
