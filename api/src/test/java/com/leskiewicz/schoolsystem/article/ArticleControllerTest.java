@@ -1,6 +1,13 @@
 package com.leskiewicz.schoolsystem.article;
 
-import com.fasterxml.jackson.core.type.TypeReference;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.leskiewicz.schoolsystem.article.dto.ArticleDto;
 import com.leskiewicz.schoolsystem.article.dto.CreateArticleRequest;
@@ -8,11 +15,12 @@ import com.leskiewicz.schoolsystem.article.utils.ArticleDtoAssembler;
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.error.DefaultExceptionHandler;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
-import com.leskiewicz.schoolsystem.generic.CommonTests;
 import com.leskiewicz.schoolsystem.testUtils.TestHelper;
 import com.leskiewicz.schoolsystem.user.User;
 import jakarta.persistence.EntityNotFoundException;
-import org.junit.jupiter.api.Assertions;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,28 +32,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
-import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockPart;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
 public class ArticleControllerTest {
@@ -265,7 +257,7 @@ public class ArticleControllerTest {
   public void testSearchArticlesWithFacultyIdAndCategory() throws Exception {
     // Prepare test data
     List<ArticleDto> articleDto =
-        Arrays.asList(TestHelper.createArticleDto()); // Replace this with your mocked ArticleDto
+        Arrays.asList(TestHelper.createArticleDto());
     Page<ArticleDto> articlePage = new PageImpl<>(articleDto);
     PagedModel<ArticleDto> pagedModel =
         PagedModel.of(articleDto, new PagedModel.PageMetadata(1, 1, 1, 1));
@@ -277,7 +269,6 @@ public class ArticleControllerTest {
                 any(Long.class), any(ArticleCategory.class), any(Pageable.class)))
         .willReturn(articlePage);
     given(articleModelAssembler.toModel(any(ArticleDto.class))).willReturn(articleDto.get(0));
-    //    given(articlePagedResourcesAssembler.toModel(any(Page.class))).willReturn(pagedModel);
     given(articlePagedResourcesAssembler.toModel(any(Page.class))).willReturn(pagedModel);
 
     mvc.perform(
@@ -293,6 +284,7 @@ public class ArticleControllerTest {
         .andExpect(jsonPath("$.links[2].rel").value("article"))
         .andReturn();
 
+    // Verify function calls
     verify(articleService, times(1))
         .getByFacultyAndCategory(any(Long.class), any(ArticleCategory.class), any(Pageable.class));
     verify(articleModelAssembler, times(1)).toModel(any(ArticleDto.class));
