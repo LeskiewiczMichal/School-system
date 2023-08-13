@@ -93,15 +93,18 @@ export default function DegreeProgrammes() {
       <Sidebar />
       <main className={"h-full w-full flex flex-col lg:px-8 py-8"}>
         {/* Title and text */}
-        <h1 className="page-title_h1 text-brandMainNearlyBlack">
+        <h1 className="page-title_h1 px-4 text-brandMainNearlyBlack lg:px-0">
           Our degree programmes
         </h1>
-        <p className={"text-grayscaleDarkText mb-6"}>
+        <p className={"text-grayscaleDarkText px-4 mb-6 lg:px-0"}>
           Aquila university has {paginationInfo.totalElements} degree
           programmes. Find something that fits you and study with us.
         </p>
-        <form>
-          <div className="flex">
+        <form className={"border border-grayscaleDark px-4 py-8"}>
+          <h6 className={"font-bold text-brandMainNearlyBlack text-lg mb-8"}>
+            Search in our programmes
+          </h6>
+          <div className="flex mb-8">
             <label
               htmlFor="search-dropdown"
               className="mb-2 text-sm font-medium text-gray-900 sr-only"
@@ -109,17 +112,17 @@ export default function DegreeProgrammes() {
               Field of study
             </label>
             {/* Search by field of study */}
-            <div className="relative w-full">
+            <div className="relative w-full lg:w-2/3">
               <input
                 type="search"
                 id="search-dropdown"
-                className="block p-4 w-full font-bold text-sm text-black bg-grayscaleLight  border border-grayscaleMedium focus:ring-blue-500 focus:border-blue-500"
+                className="block p-4 w-full font-bold text-sm text-black bg-grayscaleLight border-2 border-grayscaleMediumDark focus:outline-none focus:ring-none focus:border-brandMain"
                 placeholder="Search for a field of study..."
                 required
               />
               <button
                 type="submit"
-                className="absolute top-0 right-0 p-2.5 text-sm font-medium h-full text-white bg-blue-700 rounded-r-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                className="absolute top-0 right-0 p-2.5 text-sm font-medium h-full text-white bg-brandMain px-4 hover:bg-brandMainActive focus:ring-4 focus:outline-none focus:ring-blue-300"
               >
                 <svg
                   className="w-4 h-4"
@@ -140,16 +143,28 @@ export default function DegreeProgrammes() {
               </button>
             </div>
           </div>
-          <div className={"flex"}>
+          <div className={"flex gap-8"}>
             {/* Faculties dropdown */}
             <select
               name="faculty"
               id="faculty"
               className={
-                " w-3/5 block p-2 mb-6 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                "w-full lg:w-1/5 p-2 mb-6  text-brandMain font-bold border border-grayscaleMediumDark focus:ring-bradMain focus:outline-none focus:border-brandMain"
               }
             >
               <option value={"null"}>All faculties</option>
+              {faculties.map((faculty) => (
+                <option value={faculty.id.toString()}>{faculty.name}</option>
+              ))}
+            </select>
+            <select
+              name="title"
+              id="title"
+              className={
+                "w-full lg:w-1/5 p-2 mb-6  text-brandMain font-bold border border-grayscaleMediumDark focus:ring-bradMain focus:outline-none focus:border-brandMain"
+              }
+            >
+              <option value={"null"}>Degree level</option>
               {faculties.map((faculty) => (
                 <option value={faculty.id.toString()}>{faculty.name}</option>
               ))}
