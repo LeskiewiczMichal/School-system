@@ -8,6 +8,7 @@ interface LinksState {
   degrees: {
     getDegrees: APILink | null;
     getById: APILink | null;
+    search: APILink | null;
   };
   faculties: {
     getFaculties: APILink | null;
