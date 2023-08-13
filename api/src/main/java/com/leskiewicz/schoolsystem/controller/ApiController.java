@@ -89,10 +89,17 @@ public class ApiController {
     degreesLink = Link.of(uriTemplate).withRel("degrees");
 
     Link getByIdLink =
-        linkTo(methodOn(DegreeController.class).getDegreeById(null)).withRel("degrees");
+        linkTo(methodOn(DegreeController.class).getDegreeById(null))
+            .withRel("degrees")
+            .withTitle("Get by id");
+    Link searchLink =
+        linkTo(methodOn(DegreeController.class).searchDegrees(null, null, null, null))
+            .withRel("degrees")
+            .withTitle("Search");
 
     model.add(degreesLink);
     model.add(getByIdLink);
+    model.add(searchLink);
   }
 
   private void addCoursesLink(RepresentationModel<?> model) {
