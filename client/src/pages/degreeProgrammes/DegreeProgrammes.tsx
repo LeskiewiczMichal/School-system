@@ -1,4 +1,4 @@
-import { Degree, DegreeRequest } from "../../features/degree";
+import { Degree, DegreeRequest, DegreeTitle } from "../../features/degree";
 import { useEffect, useState } from "react";
 import { useAppSelector } from "../../hooks";
 import { GetDegreesResponse } from "../../features/degree/services/DegreeRequest";
@@ -133,9 +133,9 @@ export default function DegreeProgrammes() {
                 >
                   <path
                     stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
                     d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
                   />
                 </svg>
@@ -157,6 +157,7 @@ export default function DegreeProgrammes() {
                 <option value={faculty.id.toString()}>{faculty.name}</option>
               ))}
             </select>
+            {/* Degree titles dropdown */}
             <select
               name="title"
               id="title"
@@ -165,9 +166,13 @@ export default function DegreeProgrammes() {
               }
             >
               <option value={"null"}>Degree level</option>
-              {faculties.map((faculty) => (
-                <option value={faculty.id.toString()}>{faculty.name}</option>
-              ))}
+              <option value={DegreeTitle.BACHELOR}>Bachelor</option>
+              <option value={DegreeTitle.BACHELOR_OF_SCIENCE}>
+                Bachelor of science
+              </option>
+              <option value={DegreeTitle.MASTER}>Master</option>
+              <option value={DegreeTitle.DOCTOR}>Doctoral</option>
+              <option value={DegreeTitle.PROFESSOR}>Professor</option>
             </select>
           </div>
         </form>
