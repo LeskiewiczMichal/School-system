@@ -53,7 +53,7 @@ const getList = async (
       degreeTitle: title,
     };
   }
-  if (fieldOfStudy) {
+  if (fieldOfStudy && fieldOfStudy !== "") {
     params = {
       ...params,
       fieldOfStudy: fieldOfStudy,
@@ -80,10 +80,13 @@ const getList = async (
     params: params,
   });
 
-  // Convert the response data into degrees
-  const degreesArr: Degree[] = DegreeMapper.mapArrayFromServerData(
-    responseData._embedded.degrees,
-  );
+  let degreesArr: Degree[] = [];
+  if (responseData._embedded && responseData._embedded.degrees) {
+    // Convert the response data into degrees
+    degreesArr = DegreeMapper.mapArrayFromServerData(
+      responseData._embedded.degrees,
+    );
+  }
   const paginationInfo: PaginationInfo =
     mapPaginationInfoFromServer(responseData);
 

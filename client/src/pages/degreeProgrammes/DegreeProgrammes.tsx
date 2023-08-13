@@ -65,25 +65,33 @@ export default function DegreeProgrammes() {
     handleFetchFaculties();
   }, [links]);
 
+  const handleFetchDegrees = async () => {
+    // Prepare the link
+    if (!links.degrees.getDegrees || !links.degrees.search) {
+      return;
+    }
+
+    let apiLink = links.degrees.getDegrees;
+    if (faculty || fieldOfStudy !== "" || title) {
+      apiLink = links.degrees.search;
+    }
+
+    // Call the api
+    const response: GetDegreesResponse = await DegreeRequest.getList({
+      link: apiLink,
+      pagination: { page: page },
+      faculty: faculty,
+      fieldOfStudy: fieldOfStudy,
+      title: title,
+    });
+
+    setDegrees(response.degrees);
+    setPaginationInfo(response.paginationInfo);
+  };
+
   useEffect(() => {
-    const handleFetchDegrees = async () => {
-      // Prepare the link
-      if (!links.degrees.getDegrees) {
-        return;
-      }
-
-      // Call the api
-      const response: GetDegreesResponse = await DegreeRequest.getList({
-        link: links.degrees.getDegrees,
-        pagination: { page: page },
-      });
-
-      setDegrees(response.degrees);
-      setPaginationInfo(response.paginationInfo);
-    };
-
     handleFetchDegrees();
-  }, [links, page]);
+  }, [links, page, faculty, title]);
 
   const changePage = (direction: "next" | "previous") => {
     setPage((prevPage) => {
@@ -118,8 +126,8 @@ export default function DegreeProgrammes() {
           Our degree programmes
         </h1>
         <p className={"text-grayscaleDarkText px-4 mb-6 lg:px-0"}>
-          Aquila university has {paginationInfo.totalElements} degree
-          programmes. Find something that fits you and study with us.
+          Aquila University offers a variety of degree programs. Find the
+          perfect fit for you and embark on your educational journey with us.
         </p>
         <form className={"border border-grayscaleDark px-4 py-8"}>
           <h6 className={"font-bold text-brandMainNearlyBlack text-lg mb-8"}>
@@ -145,7 +153,8 @@ export default function DegreeProgrammes() {
                 required
               />
               <button
-                type="submit"
+                type="button"
+                onClick={() => handleFetchDegrees()}
                 className="absolute top-0 right-0 p-2.5 text-sm font-medium h-full text-white bg-brandMain px-4 hover:bg-brandMainActive focus:ring-4 focus:outline-none focus:ring-blue-300"
               >
                 <svg
