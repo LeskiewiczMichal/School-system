@@ -104,6 +104,11 @@ public class DegreeServiceImpl implements DegreeService {
     return courses.map(courseMapper::convertToDto);
   }
 
+  @Override
+  public Page<DegreeDto> search(String fieldOfStudy, Long facultyId, DegreeTitle title, Pageable pageable) {
+    return null;
+  }
+
   private void degreeExistsCheck(Long degreeId) {
     if (!degreeRepository.existsById(degreeId)) {
       throw new EntityNotFoundException(ErrorMessages.objectWithIdNotFound("Degree", degreeId));

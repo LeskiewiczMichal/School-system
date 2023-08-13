@@ -91,6 +91,7 @@ public class ArticleController {
    * Search Articles
    *
    * @param facultyId (optional, param name "faculty") ID of the faculty to search by.
+   * @param category (optional, param name "category") {@link ArticleCategory} to search by.
    * @param request ${@link PageableRequest} with pagination parameters.
    * @return status 200 (OK) and in body the paged list of {@link ArticleDto} objects and page
    *     metadata. If there are no articles, an empty page is returned (without _embedded.articles

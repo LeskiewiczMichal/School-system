@@ -20,5 +20,6 @@ public interface DegreeService {
 
   Page<CourseDto> getDegreeCourses(Long degreeId, Pageable pageable);
 
+  Page<DegreeDto> search(String fieldOfStudy, Long facultyId, DegreeTitle title, Pageable pageable);
 
 }

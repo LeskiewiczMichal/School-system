@@ -1,5 +1,7 @@
 package com.leskiewicz.schoolsystem.degree;
 
+import com.leskiewicz.schoolsystem.article.ArticleCategory;
+import com.leskiewicz.schoolsystem.article.dto.ArticleDto;
 import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.course.utils.CourseDtoAssembler;
 import com.leskiewicz.schoolsystem.degree.dto.CreateDegreeRequest;
@@ -12,14 +14,18 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+
+import java.util.List;
 
 /**
  * REST controller for managing {@link Degree}.
@@ -119,5 +125,52 @@ public class DegreeController {
 
     return ResponseEntity.ok(
         HalModelBuilder.halModelOf(coursePagedResourcesAssembler.toModel(courses)).build());
+  }
+
+  /**
+   * Search degrees
+   *
+   * @param facultyId (optional, param name "faculty") ID of the faculty to search by.
+   * @param request ${@link PageableRequest} with pagination parameters.
+   * @return status 200 (OK) and in body the paged list of {@link DegreeDto} objects and page
+   *     metadata. If there are no articles, an empty page is returned (without _embedded.degrees
+   *     field).
+   */
+  @GetMapping("/search")
+  public ResponseEntity<RepresentationModel<DegreeDto>> searchDegrees(
+          @RequestParam(value = "fieldOfStudy", required = false) String fieldOfStudy,
+          @RequestParam(value = "faculty", required = false) Long facultyId,
+          @RequestParam(value = "degreeTitle", required = false) DegreeTitle title,
+          @ModelAttribute PageableRequest request) {
+//    Page<DegreeDto> degrees;
+//    if (facultyId != null && category != null) {
+//      degrees = articleService.getByFacultyAndCategory(facultyId, category, request.toPageable());
+//    } else if (facultyId != null) {
+//      degrees = articleService.getByFaculty(facultyId, request.toPageable());
+//    } else if (category != null) {
+//      degrees = articleService.getByCategory(category, request.toPageable());
+//    } else {
+//      return ResponseEntity.badRequest().build();
+//    }
+    Page<DegreeDto> degrees = degreeService.search(fieldOfStudy, facultyId, title, request.toPageable());
+
+    degrees = degrees.map(degreeDtoAssembler::toModel);
+
+    Link selfLink =
+            WebMvcLinkBuilder.linkTo(
+                            WebMvcLinkBuilder.methodOn(this.getClass()).searchDegrees(null, null, null))
+                    .withSelfRel();
+    Link degreesLink =
+            WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getDegrees(null))
+                    .withRel("articles");
+    Link getByIdLink =
+            WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getDegreeById(null))
+                    .withRel("article");
+
+    return ResponseEntity.ok(
+            HalModelBuilder.halModelOf(degreePagedResourcesAssembler.toModel(degrees))
+                    .links(List.of(selfLink, degreesLink, getByIdLink))
+                    .build());
+
   }
 }
