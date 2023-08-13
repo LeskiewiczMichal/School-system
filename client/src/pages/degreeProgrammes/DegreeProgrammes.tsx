@@ -12,11 +12,18 @@ export default function DegreeProgrammes() {
   const mobileNavView = useAppSelector(
     (state) => state.integration.mobileNavView,
   );
-  const [faculties, setFaculties] = useState<ResourceNameWithLink[]>([]);
   const links = useAppSelector((state) => state.links);
-  const [degrees, setDegrees] = useState<Degree[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  // Searching
+  const [faculties, setFaculties] = useState<ResourceNameWithLink[]>([]);
   const [page, setPage] = useState<number>(0);
+  const [fieldOfStudy, setFieldOfStudy] = useState<string>("");
+  const [faculty, setFaculty] = useState<string | undefined>(undefined);
+  const [title, setTitle] = useState<DegreeTitle | undefined>(undefined);
+
+  // Degree content
+  const [degrees, setDegrees] = useState<Degree[]>([]);
   const [paginationInfo, setPaginationInfo] = useState<PaginationInfo>({
     page: 0,
     size: 0,
@@ -88,6 +95,20 @@ export default function DegreeProgrammes() {
     });
   };
 
+  const formChangeHandler = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
+    if (event.target.name === "fieldOfStudy") {
+      setFieldOfStudy(event.target.value);
+    }
+    if (event.target.name === "faculty") {
+      setFaculty(event.target.value);
+    }
+    if (event.target.name === "title") {
+      setTitle(event.target.value as DegreeTitle);
+    }
+  };
+
   return (
     <div className={"flex h-full"}>
       <Sidebar />
@@ -115,9 +136,12 @@ export default function DegreeProgrammes() {
             <div className="relative w-full lg:w-2/3">
               <input
                 type="search"
-                id="search-dropdown"
+                id="fieldOfStudy"
+                name="fieldOfStudy"
                 className="block p-4 w-full font-bold text-sm text-black bg-grayscaleLight border-2 border-grayscaleMediumDark focus:outline-none focus:ring-none focus:border-brandMain"
                 placeholder="Search for a field of study..."
+                onChange={formChangeHandler}
+                value={fieldOfStudy}
                 required
               />
               <button
@@ -151,10 +175,17 @@ export default function DegreeProgrammes() {
               className={
                 "w-full lg:w-1/5 p-2 mb-6  text-brandMain font-bold border border-grayscaleMediumDark focus:ring-bradMain focus:outline-none focus:border-brandMain"
               }
+              onChange={formChangeHandler}
+              defaultValue={undefined}
             >
-              <option value={"null"}>All faculties</option>
+              <option value={undefined}>All faculties</option>
               {faculties.map((faculty) => (
-                <option value={faculty.id.toString()}>{faculty.name}</option>
+                <option
+                  key={faculty.id.toString()}
+                  value={faculty.id.toString()}
+                >
+                  {faculty.name}
+                </option>
               ))}
             </select>
             {/* Degree titles dropdown */}
@@ -164,8 +195,10 @@ export default function DegreeProgrammes() {
               className={
                 "w-full lg:w-1/5 p-2 mb-6  text-brandMain font-bold border border-grayscaleMediumDark focus:ring-bradMain focus:outline-none focus:border-brandMain"
               }
+              onChange={formChangeHandler}
+              defaultValue={undefined}
             >
-              <option value={"null"}>Degree level</option>
+              <option value={undefined}>Degree level</option>
               <option value={DegreeTitle.BACHELOR}>Bachelor</option>
               <option value={DegreeTitle.BACHELOR_OF_SCIENCE}>
                 Bachelor of science
