@@ -105,8 +105,12 @@ public class DegreeServiceImpl implements DegreeService {
   }
 
   @Override
-  public Page<DegreeDto> search(String fieldOfStudy, Long facultyId, DegreeTitle title, Pageable pageable) {
-    return null;
+  public Page<DegreeDto> search(
+      String fieldOfStudy, Long facultyId, DegreeTitle title, Pageable pageable) {
+    Page<Degree> degrees =
+        degreeRepository.searchByFacultyNameAndTitleAndFieldOfStudy(
+            facultyId, title, fieldOfStudy, pageable);
+    return degrees.map(degreeMapper::convertToDto);
   }
 
   private void degreeExistsCheck(Long degreeId) {

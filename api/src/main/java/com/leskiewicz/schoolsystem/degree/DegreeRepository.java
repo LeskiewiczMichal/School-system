@@ -24,11 +24,12 @@ public interface DegreeRepository extends JpaRepository<Degree, Long> {
   Page<Degree> findDegreesByFacultyId(Long facultyId, Pageable pageable);
 
   @Query(
-          "SELECT d FROM Degree d WHERE (:facultyId is null or d.faculty.id = :facultyId) " +
-                  "AND (:title is null or d.title = :title) " +
-                  "AND (:fieldOfStudy is null or d.fieldOfStudy LIKE CONCAT('%', :fieldOfStudy, '%'))")
+      "SELECT d FROM Degree d WHERE (:facultyId is null or d.faculty.id = :facultyId) "
+          + "AND (:title is null or d.title = :title) "
+          + "AND (:fieldOfStudy is null or d.fieldOfStudy LIKE CONCAT('%', :fieldOfStudy, '%'))")
   Page<Degree> searchByFacultyNameAndTitleAndFieldOfStudy(
-          @Param("facultyId") String facultyId,
-          @Param("title") DegreeTitle title,
-          @Param("fieldOfStudy") String fieldOfStudy);
+      @Param("facultyId") Long facultyId,
+      @Param("title") DegreeTitle title,
+      @Param("fieldOfStudy") String fieldOfStudy,
+      Pageable pageable);
 }
