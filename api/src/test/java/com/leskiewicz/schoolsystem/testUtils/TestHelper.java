@@ -107,6 +107,7 @@ public class TestHelper {
         .title(DegreeTitle.BACHELOR_OF_SCIENCE)
         .fieldOfStudy("Computer Science")
         .faculty(faculty)
+            .description("TestDescription")
         .build();
   }
 

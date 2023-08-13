@@ -32,6 +32,12 @@ public class Degree {
   private String fieldOfStudy;
 
   @NotNull
+  @Lob
+  @Basic(fetch = FetchType.LAZY)
+  @Column(name = "description")
+  private String description;
+
+  @NotNull
   @Singular
   @ManyToMany
   @JoinTable(

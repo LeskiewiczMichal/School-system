@@ -48,12 +48,12 @@ public class CreateDegreeTest {
 
   static Stream<Arguments> throwsConstraintViolationExceptionOnRequestInvalidProvider() {
     return Stream.of(
-        Arguments.of(new CreateDegreeRequest(null, "Computer Science", "Software Engineering")),
+        Arguments.of(new CreateDegreeRequest(null, "Computer Science", "Software Engineering", "Description")),
         Arguments.of(
-            new CreateDegreeRequest(DegreeTitle.BACHELOR_OF_SCIENCE, null, "Software Engineering")),
+            new CreateDegreeRequest(DegreeTitle.BACHELOR_OF_SCIENCE, null, "Software Engineering", "Description")),
         Arguments.of(
-            new CreateDegreeRequest(DegreeTitle.BACHELOR_OF_SCIENCE, "Computer Science", null)),
-        Arguments.of(new CreateDegreeRequest(null, null, null)));
+            new CreateDegreeRequest(DegreeTitle.BACHELOR_OF_SCIENCE, "Computer Science", null, "Description")),
+        Arguments.of(new CreateDegreeRequest(null, null, null, "Description")));
   }
 
   @BeforeEach
@@ -70,6 +70,7 @@ public class CreateDegreeTest {
             .facultyName("Informatics")
             .title(DegreeTitle.BACHELOR)
             .fieldOfStudy("Computer Science")
+            .description("This is description")
             .build();
 
     // Mock the behavior of degreeRepository.findByFacultyNameAndTitleAndFieldOfStudy()
@@ -112,7 +113,7 @@ public class CreateDegreeTest {
   public void throwsEntityAlreadyExistsExceptionWhenDegreeAlreadyExists() {
     CreateDegreeRequest request =
         new CreateDegreeRequest(
-            DegreeTitle.BACHELOR_OF_SCIENCE, "Computer Science", "Software Engineering");
+            DegreeTitle.BACHELOR_OF_SCIENCE, "Computer Science", "Software Engineering", "Description");
     given(
             degreeRepository.findByFacultyNameAndTitleAndFieldOfStudy(
                 request.getFacultyName(), request.getTitle(), request.getFieldOfStudy()))

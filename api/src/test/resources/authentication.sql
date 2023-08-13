@@ -1,8 +1,8 @@
 INSERT INTO faculty (id, name)
 VALUES (1, 'Informatics');
 
-INSERT INTO degree (id, title, field_of_study, faculty)
-VALUES (1, 'BACHELOR_OF_SCIENCE', 'Computer Science', 1);
+INSERT INTO degree (id, title, field_of_study, faculty, description)
+VALUES (1, 'BACHELOR_OF_SCIENCE', 'Computer Science', 1, 'This is test description');
 
 INSERT INTO users (first_name, last_name, email, password, faculty, degree, role)
 VALUES ('John', 'Doe', 'johndoe@example.com', '12345', 1, 1, 'ROLE_STUDENT');
@@ -22,8 +22,8 @@ VALUES (1, 2);
 INSERT INTO users (first_name, last_name, email, password, faculty, role)
 VALUES ('Bob', 'Johnson', 'bobjohnson@example.com', 'abcde', 1, 'ROLE_TEACHER');
 
-INSERT INTO degree (id, title, field_of_study, faculty)
-VALUES (2, 'MASTER', 'Software Engineering', 1);
+INSERT INTO degree (id, title, field_of_study, faculty, description)
+VALUES (2, 'MASTER', 'Software Engineering', 1, 'This is test description');
 
 INSERT INTO users (first_name, last_name, email, password, faculty, degree, role)
 VALUES ('Emily', 'Wilson', 'emilywilson@example.com', 'qwerty', 1, 2, 'ROLE_STUDENT');

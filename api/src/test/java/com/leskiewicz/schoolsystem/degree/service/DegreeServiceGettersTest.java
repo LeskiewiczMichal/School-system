@@ -122,7 +122,7 @@ public class DegreeServiceGettersTest {
         degree,
         TestHelper.createDegreeDto("Bachelor of Science"),
         degreeRepository::findById,
-        degreeMapper::convertToDto,
+        degreeMapper::convertToDtoFull,
         degreeService::getById);
   }
 

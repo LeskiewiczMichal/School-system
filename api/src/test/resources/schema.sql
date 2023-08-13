@@ -24,6 +24,7 @@ CREATE TABLE degree (
                         title VARCHAR(100) NOT NULL,
                         field_of_study VARCHAR(100) NOT NULL,
                         faculty BIGINT NOT NULL,
+                        description TEXT NOT NULL,
                         PRIMARY KEY (id),
                         FOREIGN KEY (faculty) REFERENCES faculty(id)
 );

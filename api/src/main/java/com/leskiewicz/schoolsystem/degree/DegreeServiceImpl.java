@@ -42,7 +42,7 @@ public class DegreeServiceImpl implements DegreeService {
 
   @Override
   public DegreeDto getById(Long id) {
-    return degreeMapper.convertToDto(
+    return degreeMapper.convertToDtoFull(
         degreeRepository
             .findById(id)
             .orElseThrow(
@@ -88,6 +88,7 @@ public class DegreeServiceImpl implements DegreeService {
             .title(request.getTitle())
             .fieldOfStudy(StringUtils.capitalizeFirstLetterOfEveryWord(request.getFieldOfStudy()))
             .faculty(faculty)
+            .description(request.getDescription())
             .build();
 
     ValidationUtils.validate(degree);
@@ -109,7 +110,7 @@ public class DegreeServiceImpl implements DegreeService {
       String fieldOfStudy, Long facultyId, DegreeTitle title, Pageable pageable) {
     Page<Degree> degrees =
         degreeRepository.searchByFacultyNameAndTitleAndFieldOfStudy(
-                fieldOfStudy, facultyId, title, pageable);
+            fieldOfStudy, facultyId, title, pageable);
     return degrees.map(degreeMapper::convertToDto);
   }
 

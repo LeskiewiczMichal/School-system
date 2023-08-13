@@ -6,4 +6,6 @@ import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
 public interface DegreeMapper {
 
   DegreeDto convertToDto(Degree degree);
+
+  DegreeDto convertToDtoFull(Degree degree);
 }
