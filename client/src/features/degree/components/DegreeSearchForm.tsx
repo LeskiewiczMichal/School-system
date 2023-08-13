@@ -55,7 +55,7 @@ export default function DegreeSearchForm(props: DegreeSearchFormProps) {
   }, [links]);
 
   return (
-    <form className={"border border-grayscaleDark px-4 py-8"}>
+    <form className={"border border-grayscaleDark px-4 py-8 mb-12"}>
       <h6 className={"font-bold text-brandMainNearlyBlack text-lg mb-8"}>
         Search in our programmes
       </h6>

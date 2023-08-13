@@ -12,6 +12,8 @@ import { Sidebar } from "../../features/sidebar";
 import RequestService from "../../utils/RequestService";
 import { SortDirection } from "../../type/PaginationParams";
 import ResourceNameWithLink from "../../type/ResourceNameWithLink";
+import MyHeading from "../../common_components/MyHeading";
+import { SidebarLinkProps } from "../../features/sidebar/components/SidebarLink";
 
 export default function DegreeProgrammes() {
   const mobileNavView = useAppSelector(
@@ -89,9 +91,17 @@ export default function DegreeProgrammes() {
     }
   };
 
+  const sidebarLinks: SidebarLinkProps[] = [
+    {
+      title: "Search for degree programmes",
+      redirectUrl: "#",
+      active: true,
+    },
+  ];
+
   return (
     <div className={"flex h-full"}>
-      <Sidebar />
+      <Sidebar links={sidebarLinks} />
       <main className={"h-full w-full flex flex-col lg:px-8 py-8"}>
         {/* Title and text */}
         <h1 className="page-title_h1 px-4 text-brandMainNearlyBlack lg:px-0">
@@ -106,6 +116,10 @@ export default function DegreeProgrammes() {
           formChangeHandler={formChangeHandler}
           handleFetchDegrees={handleFetchDegrees}
           setPage={setPage}
+        />
+        {/* Degree programmes */}
+        <MyHeading
+          heading={`Search results (${paginationInfo.totalElements})`}
         />
       </main>
     </div>
