@@ -16,7 +16,7 @@ import com.leskiewicz.schoolsystem.error.customexception.EntityAlreadyExistsExce
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.FacultyServiceImpl;
 import com.leskiewicz.schoolsystem.testUtils.TestHelper;
-import com.leskiewicz.schoolsystem.utils.Languages;
+import com.leskiewicz.schoolsystem.utils.Language;
 import io.jsonwebtoken.lang.Assert;
 import jakarta.validation.ConstraintViolationException;
 
@@ -59,7 +59,7 @@ public class CreateDegreeTest {
                 "Description",
                 3.0,
                 15000.00,
-                List.of(Languages.ENGLISH))),
+                List.of(Language.ENGLISH))),
         Arguments.of(
             new CreateDegreeRequest(
                 DegreeTitle.BACHELOR_OF_SCIENCE,
@@ -68,7 +68,7 @@ public class CreateDegreeTest {
                 "Description",
                 3.0,
                 15000.00,
-                List.of(Languages.ENGLISH))),
+                List.of(Language.ENGLISH))),
         Arguments.of(
             new CreateDegreeRequest(
                 DegreeTitle.BACHELOR_OF_SCIENCE,
@@ -77,10 +77,10 @@ public class CreateDegreeTest {
                 "Description",
                 3.0,
                 15000.00,
-                List.of(Languages.ENGLISH))),
+                List.of(Language.ENGLISH))),
         Arguments.of(
             new CreateDegreeRequest(
-                null, null, null, "Description", 3.0, 15000.00, List.of(Languages.ENGLISH))));
+                null, null, null, "Description", 3.0, 15000.00, List.of(Language.ENGLISH))));
   }
 
   @BeforeEach
@@ -98,7 +98,7 @@ public class CreateDegreeTest {
             .title(DegreeTitle.BACHELOR)
             .fieldOfStudy("Computer Science")
             .description("This is description")
-            .languages(List.of(Languages.ENGLISH))
+            .languages(List.of(Language.ENGLISH))
             .lengthOfStudy(3.0)
             .tuitionFeePerYear(15000.00)
             .build();
@@ -149,7 +149,7 @@ public class CreateDegreeTest {
             "Description",
             3.0,
             15000.00,
-            List.of(Languages.ENGLISH));
+            List.of(Language.ENGLISH));
     given(
             degreeRepository.findByFacultyNameAndTitleAndFieldOfStudy(
                 request.getFacultyName(), request.getTitle(), request.getFieldOfStudy()))

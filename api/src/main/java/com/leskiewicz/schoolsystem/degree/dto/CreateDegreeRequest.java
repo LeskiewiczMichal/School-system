@@ -1,7 +1,7 @@
 package com.leskiewicz.schoolsystem.degree.dto;
 
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
-import com.leskiewicz.schoolsystem.utils.Languages;
+import com.leskiewicz.schoolsystem.utils.Language;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,5 +33,5 @@ public class CreateDegreeRequest {
   private final Double tuitionFeePerYear;
 
   @NotNull(message = "Degree languages required")
-  private final List<Languages> languages;
+  private final List<Language> languages;
 }

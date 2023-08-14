@@ -33,7 +33,7 @@ public class DegreeMapperImpl implements DegreeMapper {
         degree.getLengthOfStudy(),
         degree.getDescription(),
         degree.getTuitionFeePerYear(),
-        degree.getLanguages(),
+        degree.getLanguage(),
         degreeFaculty.getId());
   }
 
@@ -41,8 +41,6 @@ public class DegreeMapperImpl implements DegreeMapper {
   public DegreeDto convertToDtoFull(Degree degree) {
     DegreeDto degreeDto = convertToDto(degree);
     degreeDto.setDescription(degree.getDescription());
-    degreeDto.setTuitionFeePerYear(degree.getTuitionFeePerYear());
-    degreeDto.setLanguages(degree.getLanguages());
     return degreeDto;
   }
 }

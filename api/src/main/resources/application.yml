@@ -11,7 +11,7 @@ spring:
   jpa:
     database: MYSQL
     hibernate:
-      dialect: org.hibernate.dialect.mySQL8Dialect
+      dialect: org.hibernate.dialect.MySQL8Dialect
 #   Base path for api
   data:
     rest:

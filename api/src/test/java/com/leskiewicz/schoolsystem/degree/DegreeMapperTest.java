@@ -2,13 +2,11 @@ package com.leskiewicz.schoolsystem.degree;
 
 import static org.mockito.BDDMockito.given;
 
-import com.leskiewicz.schoolsystem.degree.Degree;
-import com.leskiewicz.schoolsystem.degree.DegreeTitle;
 import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
 import com.leskiewicz.schoolsystem.degree.utils.DegreeMapperImpl;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.testUtils.TestHelper;
-import com.leskiewicz.schoolsystem.utils.Languages;
+import com.leskiewicz.schoolsystem.utils.Language;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,7 +42,7 @@ public class DegreeMapperTest {
             .title(DegreeTitle.BACHELOR_OF_SCIENCE)
             .faculty("DegreeTitle")
             .facultyId(0L)
-            .languages(List.of(Languages.ENGLISH, Languages.POLISH))
+            .languages(List.of(Language.ENGLISH, Language.POLISH))
             .tuitionFeePerYear(1000.0)
             .lengthOfStudy(3.0)
             .build();

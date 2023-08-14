@@ -2,7 +2,7 @@ package com.leskiewicz.schoolsystem.degree;
 
 import com.leskiewicz.schoolsystem.course.Course;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
-import com.leskiewicz.schoolsystem.utils.Languages;
+import com.leskiewicz.schoolsystem.utils.Language;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
@@ -40,12 +40,11 @@ public class Degree {
   @Column(name = "tuition_fee_per_year")
   private Double tuitionFeePerYear;
 
-  @ElementCollection
+  @ElementCollection(targetClass = Language.class)
   @CollectionTable(name = "languages_table", joinColumns = @JoinColumn(name = "degree_id"))
   @NotNull
-  @Column(name = "languages")
   @Enumerated(EnumType.STRING)
-  private List<Languages> languages;
+  private List<Language> language;
 
   @NotNull
   @Lob
@@ -82,7 +81,7 @@ public class Degree {
         + ", tuitionFeePerYear="
         + tuitionFeePerYear
         + ", languages="
-        + languages
+        + language
         + '\''
         + '}';
   }

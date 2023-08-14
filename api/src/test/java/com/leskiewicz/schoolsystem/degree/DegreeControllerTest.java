@@ -3,7 +3,6 @@ package com.leskiewicz.schoolsystem.degree;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
-import static org.springframework.security.config.http.MatcherType.mvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -20,7 +19,7 @@ import com.leskiewicz.schoolsystem.testUtils.TestHelper;
 import java.util.Arrays;
 import java.util.List;
 
-import com.leskiewicz.schoolsystem.utils.Languages;
+import com.leskiewicz.schoolsystem.utils.Language;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -146,7 +145,7 @@ public class DegreeControllerTest {
         degreeDto.add(WebMvcLinkBuilder.linkTo(DegreeController.class).withSelfRel()),
         CreateDegreeRequest.class,
         new CreateDegreeRequest(
-            degreeDto.getTitle(), degreeDto.getFieldOfStudy(), degreeDto.getFaculty(), "Description", 3.0, 15000.00, List.of(Languages.ENGLISH)),
+            degreeDto.getTitle(), degreeDto.getFieldOfStudy(), degreeDto.getFaculty(), "Description", 3.0, 15000.00, List.of(Language.ENGLISH)),
         degreeService::createDegree,
         degreeDtoAssembler::toModel,
         degreeController::createDegree);
