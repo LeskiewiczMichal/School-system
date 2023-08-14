@@ -41,65 +41,134 @@ VALUES (113, 'Economics');
 
 -- Degrees
 
-INSERT INTO degree (id, title, field_of_study, faculty)
-VALUES (101, 'BACHELOR_OF_SCIENCE', 'Computer Science', 101);
+INSERT INTO degree (id, title, field_of_study, faculty, description, length_of_study, tuition_fee_per_year)
+VALUES (101, 'BACHELOR_OF_SCIENCE', 'Computer Science', 101, 'This is test description', 3.0, 15000.00);
 
-INSERT INTO degree (id, title, field_of_study, faculty)
-VALUES (102, 'MASTER', 'Software Engineering', 101);
+INSERT INTO degree (id, title, field_of_study, faculty, description, length_of_study, tuition_fee_per_year)
+VALUES (102, 'MASTER', 'Software Engineering', 101, 'This is another description', 4.0, 21500.00);
 
-INSERT INTO degree (id, title, field_of_study, faculty)
-VALUES (103, 'BACHELOR', 'Nano', 102);
+INSERT INTO degree (id, title, field_of_study, faculty, description, length_of_study, tuition_fee_per_year)
+VALUES (103, 'BACHELOR', 'Nano', 102, 'This is test description', 3.5, 9000.00);
 
-INSERT INTO degree (id, title, field_of_study, faculty)
-VALUES (104, 'BACHELOR_OF_SCIENCE', 'Math', 102);
+INSERT INTO degree (id, title, field_of_study, faculty, description, length_of_study, tuition_fee_per_year)
+VALUES (104, 'BACHELOR_OF_SCIENCE', 'Math', 102, 'This is test description', 3.0, 15000.00);
 
-INSERT INTO degree (id, title, field_of_study, faculty)
-VALUES (105, 'PROFESSOR', 'Computer Science', 103);
+INSERT INTO degree (id, title, field_of_study, faculty, description, length_of_study, tuition_fee_per_year)
+VALUES (105, 'PROFESSOR', 'Computer Science', 103, 'This is test description', 3.0, 15000.00);
 
-INSERT INTO degree (id, title, field_of_study, faculty)
-VALUES (106, 'DOCTOR', 'Physics', 103);
+INSERT INTO degree (id, title, field_of_study, faculty, description, length_of_study, tuition_fee_per_year)
+VALUES (106, 'DOCTOR', 'Physics', 103, 'This is test description', 3.0, 15000.00);
 
-INSERT INTO degree (id, title, field_of_study, faculty)
-VALUES (107, 'BACHELOR', 'Nano', 104);
+INSERT INTO degree (id, title, field_of_study, faculty, description, length_of_study, tuition_fee_per_year)
+VALUES (107, 'BACHELOR', 'Nano', 104, 'This is test description', 3.0, 15000.00);
 
-INSERT INTO degree (id, title, field_of_study, faculty)
-VALUES (108, 'DOCTOR', 'Computer Science', 104);
+INSERT INTO degree (id, title, field_of_study, faculty, description, length_of_study, tuition_fee_per_year)
+VALUES (108, 'DOCTOR', 'Computer Science', 104, 'This is test description', 3.0, 15000.00);
 
-INSERT INTO degree (id, title, field_of_study, faculty)
-VALUES (109, 'BACHELOR_OF_SCIENCE', 'Math', 105);
+INSERT INTO degree (id, title, field_of_study, faculty, description, length_of_study, tuition_fee_per_year)
+VALUES (109, 'BACHELOR_OF_SCIENCE', 'Math', 105, 'This is test description', 3.0, 15000.00);
 
-INSERT INTO degree (id, title, field_of_study, faculty)
-VALUES (110, 'MASTER', 'Electronics', 105);
+INSERT INTO degree (id, title, field_of_study, faculty, description, length_of_study, tuition_fee_per_year)
+VALUES (110, 'MASTER', 'Electronics', 105, 'This is test description', 3.0, 15000.00);
 
-INSERT INTO degree (id, title, field_of_study, faculty)
-VALUES (111, 'DOCTOR', 'Nano', 106);
+INSERT INTO degree (id, title, field_of_study, faculty, description, length_of_study, tuition_fee_per_year)
+VALUES (111, 'DOCTOR', 'Nano', 106, 'This is test description', 3.0, 15000.00);
 
-INSERT INTO degree (id, title, field_of_study, faculty)
-VALUES (112, 'BACHELOR_OF_SCIENCE', 'Physics', 106);
+INSERT INTO degree (id, title, field_of_study, faculty, description, length_of_study, tuition_fee_per_year)
+VALUES (112, 'BACHELOR_OF_SCIENCE', 'Physics', 106, 'This is test description', 3.0, 15000.00);
 
-INSERT INTO degree (id, title, field_of_study, faculty)
-VALUES (113, 'DOCTOR', 'Math', 107);
+INSERT INTO degree (id, title, field_of_study, faculty, description, length_of_study, tuition_fee_per_year)
+VALUES (113, 'DOCTOR', 'Math', 107, 'This is test description', 3.0, 15000.00);
 
-INSERT INTO degree (id, title, field_of_study, faculty)
-VALUES (114, 'MASTER', 'Software Engineering', 107);
+INSERT INTO degree (id, title, field_of_study, faculty, description, length_of_study, tuition_fee_per_year)
+VALUES (114, 'MASTER', 'Software Engineering', 107, 'This is test description', 3.0, 15000.00);
 
-INSERT INTO degree (id, title, field_of_study, faculty)
-VALUES (115, 'BACHELOR', 'Electronics', 108);
+INSERT INTO degree (id, title, field_of_study, faculty, description, length_of_study, tuition_fee_per_year)
+VALUES (115, 'BACHELOR', 'Electronics', 108, 'This is test description', 3.0, 15000.00);
 
-INSERT INTO degree (id, title, field_of_study, faculty)
-VALUES (116, 'BACHELOR', 'Math', 108);
+INSERT INTO degree (id, title, field_of_study, faculty, description, length_of_study, tuition_fee_per_year)
+VALUES (116, 'BACHELOR', 'Math', 108, 'This is test description', 3.0, 15000.00);
 
-INSERT INTO degree (id, title, field_of_study, faculty)
-VALUES (117, 'DOCTOR', 'Nano', 109);
+INSERT INTO degree (id, title, field_of_study, faculty, description, length_of_study, tuition_fee_per_year)
+VALUES (117, 'DOCTOR', 'Nano', 109, 'This is test description', 3.0, 15000.00);
 
-INSERT INTO degree (id, title, field_of_study, faculty)
-VALUES (118, 'PROFESSOR', 'Electronics', 110);
+INSERT INTO degree (id, title, field_of_study, faculty, description, length_of_study, tuition_fee_per_year)
+VALUES (118, 'PROFESSOR', 'Electronics', 110, 'This is test description', 3.0, 15000.00);
 
-INSERT INTO degree (id, title, field_of_study, faculty)
-VALUES (119, 'BACHELOR', 'Physics', 111);
+INSERT INTO degree (id, title, field_of_study, faculty, description, length_of_study, tuition_fee_per_year)
+VALUES (119, 'BACHELOR', 'Physics', 111, 'This is test description', 3.0, 15000.00);
 
-INSERT INTO degree (id, title, field_of_study, faculty)
-VALUES (120, 'DOCTOR', 'Math', 112);
+INSERT INTO degree (id, title, field_of_study, faculty, description, length_of_study, tuition_fee_per_year)
+VALUES (120, 'DOCTOR', 'Math', 112, 'This is test description', 3.0, 15000.00);
+
+-- Degree languages
+
+INSERT INTO languages_table (degree_id, language)
+VALUES (101, 'ENGLISH');
+
+INSERT INTO languages_table (degree_id, language)
+VALUES (102, 'POLISH');
+
+INSERT INTO languages_table (degree_id, language)
+VALUES (103, 'ENGLISH');
+
+INSERT INTO languages_table (degree_id, language)
+VALUES (103, 'POLISH');
+
+INSERT INTO languages_table (degree_id, language)
+VALUES (104, 'ENGLISH');
+
+INSERT INTO languages_table (degree_id, language)
+VALUES (105, 'ENGLISH');
+
+INSERT INTO languages_table (degree_id, language)
+VALUES (106, 'POLISH');
+
+INSERT INTO languages_table (degree_id, language)
+VALUES (107, 'ENGLISH');
+
+INSERT INTO languages_table (degree_id, language)
+VALUES (108, 'ENGLISH');
+
+INSERT INTO languages_table (degree_id, language)
+VALUES (109, 'POLISH');
+
+INSERT INTO languages_table (degree_id, language)
+VALUES (110, 'ENGLISH');
+
+INSERT INTO languages_table (degree_id, language)
+VALUES (111, 'POLISH');
+
+INSERT INTO languages_table (degree_id, language)
+VALUES (112, 'ENGLISH');
+
+INSERT INTO languages_table (degree_id, language)
+VALUES (113, 'ENGLISH');
+
+INSERT INTO languages_table (degree_id, language)
+VALUES (114, 'POLISH');
+
+INSERT INTO languages_table (degree_id, language)
+VALUES (115, 'ENGLISH');
+
+INSERT INTO languages_table (degree_id, language)
+VALUES (116, 'ENGLISH');
+
+INSERT INTO languages_table (degree_id, language)
+VALUES (116, 'POLISH');
+
+INSERT INTO languages_table (degree_id, language)
+VALUES (117, 'ENGLISH');
+
+INSERT INTO languages_table (degree_id, language)
+VALUES (118, 'POLISH');
+
+INSERT INTO languages_table (degree_id, language)
+VALUES (119, 'ENGLISH');
+
+INSERT INTO languages_table (degree_id, language)
+VALUES (120, 'POLISH');
+
 
 
 -- Users
@@ -396,3 +465,26 @@ VALUES (119, 19);
 
 INSERT INTO degree_course (degree_id, course_id)
 VALUES (120, 20);
+
+-- ARTICLES
+
+INSERT INTO article (title, preview, content, author_id, category, faculty_id, image_name)
+VALUES('TO THE NEW STUDENTS: A HEARTFELT WELCOME TO OUR COMMUNITY!', 'The strong pull of the University of Helsinki persists: more than 30,000 individuals applied to UH and 4,000 of them were admitted. The most popular programmes were law and medicine. Nearly half of those who applied to a master’s programme applied to the new Programme in the Development of Health Care Services.', 'This year, the University of Helsinki was again the most popular higher education institution in Finland, in terms of both the total number of applicants in the spring joint application procedure and the number of first-priority applications. With the number of applicants in the joint application procedure growing by 1.5% from last year, the attractiveness of the University of Helsinki has remained very strong.   In the joint application procedure, 4000 new students were admitted to the University of Helsinki. There were about 27,300 applicants to bachelor''s programmes, of whom 13,1% received a student place. A total of 3,200 people applied for Finnish- and Swedish-language master''s programmes, of whom 13,7% were admitted.   I am excited and proud to welcome you, our new students, to our University! Congratulations on your admission -- you have earned this achievement thanks to your hard work and determination. The stage in your lives you are now embarking on will open the door to countless opportunities and new challenges, says Rector **Sari Lindblom**   Also keep in mind that learning at university is about more than just completing courses. It is a journey to self-awareness and personal growth. Don''t hesitate to turn to your teachers and supervisors when you need support. We are here for yo   The University of Helsinki and its community have been building the future and transforming the world for more than 380 years. Their aim is to continue to provide students with the best tools for studies and life.   We encourage independent and critical thinking and competent citizenship in our students. We strive to support the development of our students and provide them with the capacity to act as agents of change in society. Our University is a multicultural and international community where students meet peers from different cultures and backgrounds. This diversity opens up new perspectives for them and promotes international solidarity. At the same time, it prepares them for the global labour market and offers them valuable networking opportunities, Rector Lindblom notes.   Law and medicine the most popular degree programme  ----------------------------------------------------', 18, 'NEWS',101, '681c24e8-756f-462a-b119-8ed3cd68d830.webp');
+
+INSERT INTO article (title, preview, content, author_id, category, faculty_id, image_name)
+VALUES('TO THE NEW STUDENTS: A HEARTFELT WELCOME TO OUR COMMUNITY!', 'The strong pull of the University of Helsinki persists: more than 30,000 individuals applied to UH and 4,000 of them were admitted. The most popular programmes were law and medicine. Nearly half of those who applied to a master’s programme applied to the new Programme in the Development of Health Care Services.', 'This year, the University of Helsinki was again the most popular higher education institution in Finland, in terms of both the total number of applicants in the spring joint application procedure and the number of first-priority applications. With the number of applicants in the joint application procedure growing by 1.5% from last year, the attractiveness of the University of Helsinki has remained very strong.   In the joint application procedure, 4000 new students were admitted to the University of Helsinki. There were about 27,300 applicants to bachelor''s programmes, of whom 13,1% received a student place. A total of 3,200 people applied for Finnish- and Swedish-language master''s programmes, of whom 13,7% were admitted.   I am excited and proud to welcome you, our new students, to our University! Congratulations on your admission -- you have earned this achievement thanks to your hard work and determination. The stage in your lives you are now embarking on will open the door to countless opportunities and new challenges, says Rector **Sari Lindblom**   Also keep in mind that learning at university is about more than just completing courses. It is a journey to self-awareness and personal growth. Don''t hesitate to turn to your teachers and supervisors when you need support. We are here for yo   The University of Helsinki and its community have been building the future and transforming the world for more than 380 years. Their aim is to continue to provide students with the best tools for studies and life.   We encourage independent and critical thinking and competent citizenship in our students. We strive to support the development of our students and provide them with the capacity to act as agents of change in society. Our University is a multicultural and international community where students meet peers from different cultures and backgrounds. This diversity opens up new perspectives for them and promotes international solidarity. At the same time, it prepares them for the global labour market and offers them valuable networking opportunities, Rector Lindblom notes.   Law and medicine the most popular degree programme  ----------------------------------------------------', 12, 'NEWS',101, '681c24e8-756f-462a-b119-8ed3cd68d830.webp');
+
+INSERT INTO article (title, preview, content, author_id, category, faculty_id, image_name)
+VALUES('TO THE NEW STUDENTS: A HEARTFELT WELCOME TO OUR COMMUNITY!', 'The strong pull of the University of Helsinki persists: more than 30,000 individuals applied to UH and 4,000 of them were admitted. The most popular programmes were law and medicine. Nearly half of those who applied to a master’s programme applied to the new Programme in the Development of Health Care Services.', 'This year, the University of Helsinki was again the most popular higher education institution in Finland, in terms of both the total number of applicants in the spring joint application procedure and the number of first-priority applications. With the number of applicants in the joint application procedure growing by 1.5% from last year, the attractiveness of the University of Helsinki has remained very strong.   In the joint application procedure, 4000 new students were admitted to the University of Helsinki. There were about 27,300 applicants to bachelor''s programmes, of whom 13,1% received a student place. A total of 3,200 people applied for Finnish- and Swedish-language master''s programmes, of whom 13,7% were admitted.   I am excited and proud to welcome you, our new students, to our University! Congratulations on your admission -- you have earned this achievement thanks to your hard work and determination. The stage in your lives you are now embarking on will open the door to countless opportunities and new challenges, says Rector **Sari Lindblom**   Also keep in mind that learning at university is about more than just completing courses. It is a journey to self-awareness and personal growth. Don''t hesitate to turn to your teachers and supervisors when you need support. We are here for yo   The University of Helsinki and its community have been building the future and transforming the world for more than 380 years. Their aim is to continue to provide students with the best tools for studies and life.   We encourage independent and critical thinking and competent citizenship in our students. We strive to support the development of our students and provide them with the capacity to act as agents of change in society. Our University is a multicultural and international community where students meet peers from different cultures and backgrounds. This diversity opens up new perspectives for them and promotes international solidarity. At the same time, it prepares them for the global labour market and offers them valuable networking opportunities, Rector Lindblom notes.   Law and medicine the most popular degree programme  ----------------------------------------------------', 9, 'NEWS',101, '681c24e8-756f-462a-b119-8ed3cd68d830.webp');
+
+INSERT INTO article (title, preview, content, author_id, category, faculty_id, image_name)
+VALUES('TO THE NEW STUDENTS: A HEARTFELT WELCOME TO OUR COMMUNITY!', 'The strong pull of the University of Helsinki persists: more than 30,000 individuals applied to UH and 4,000 of them were admitted. The most popular programmes were law and medicine. Nearly half of those who applied to a master’s programme applied to the new Programme in the Development of Health Care Services.', 'This year, the University of Helsinki was again the most popular higher education institution in Finland, in terms of both the total number of applicants in the spring joint application procedure and the number of first-priority applications. With the number of applicants in the joint application procedure growing by 1.5% from last year, the attractiveness of the University of Helsinki has remained very strong.   In the joint application procedure, 4000 new students were admitted to the University of Helsinki. There were about 27,300 applicants to bachelor''s programmes, of whom 13,1% received a student place. A total of 3,200 people applied for Finnish- and Swedish-language master''s programmes, of whom 13,7% were admitted.   I am excited and proud to welcome you, our new students, to our University! Congratulations on your admission -- you have earned this achievement thanks to your hard work and determination. The stage in your lives you are now embarking on will open the door to countless opportunities and new challenges, says Rector **Sari Lindblom**   Also keep in mind that learning at university is about more than just completing courses. It is a journey to self-awareness and personal growth. Don''t hesitate to turn to your teachers and supervisors when you need support. We are here for yo   The University of Helsinki and its community have been building the future and transforming the world for more than 380 years. Their aim is to continue to provide students with the best tools for studies and life.   We encourage independent and critical thinking and competent citizenship in our students. We strive to support the development of our students and provide them with the capacity to act as agents of change in society. Our University is a multicultural and international community where students meet peers from different cultures and backgrounds. This diversity opens up new perspectives for them and promotes international solidarity. At the same time, it prepares them for the global labour market and offers them valuable networking opportunities, Rector Lindblom notes.   Law and medicine the most popular degree programme  ----------------------------------------------------', 1, 'NEWS',101, '681c24e8-756f-462a-b119-8ed3cd68d830.webp');
+
+INSERT INTO article (title, preview, content, author_id, category, faculty_id, image_name)
+VALUES('TO THE NEW STUDENTS: A HEARTFELT WELCOME TO OUR COMMUNITY!', 'The strong pull of the University of Helsinki persists: more than 30,000 individuals applied to UH and 4,000 of them were admitted. The most popular programmes were law and medicine. Nearly half of those who applied to a master’s programme applied to the new Programme in the Development of Health Care Services.', 'This year, the University of Helsinki was again the most popular higher education institution in Finland, in terms of both the total number of applicants in the spring joint application procedure and the number of first-priority applications. With the number of applicants in the joint application procedure growing by 1.5% from last year, the attractiveness of the University of Helsinki has remained very strong.   In the joint application procedure, 4000 new students were admitted to the University of Helsinki. There were about 27,300 applicants to bachelor''s programmes, of whom 13,1% received a student place. A total of 3,200 people applied for Finnish- and Swedish-language master''s programmes, of whom 13,7% were admitted.   I am excited and proud to welcome you, our new students, to our University! Congratulations on your admission -- you have earned this achievement thanks to your hard work and determination. The stage in your lives you are now embarking on will open the door to countless opportunities and new challenges, says Rector **Sari Lindblom**   Also keep in mind that learning at university is about more than just completing courses. It is a journey to self-awareness and personal growth. Don''t hesitate to turn to your teachers and supervisors when you need support. We are here for yo   The University of Helsinki and its community have been building the future and transforming the world for more than 380 years. Their aim is to continue to provide students with the best tools for studies and life.   We encourage independent and critical thinking and competent citizenship in our students. We strive to support the development of our students and provide them with the capacity to act as agents of change in society. Our University is a multicultural and international community where students meet peers from different cultures and backgrounds. This diversity opens up new perspectives for them and promotes international solidarity. At the same time, it prepares them for the global labour market and offers them valuable networking opportunities, Rector Lindblom notes.   Law and medicine the most popular degree programme  ----------------------------------------------------', 16, 'SCIENCE',101, '681c24e8-756f-462a-b119-8ed3cd68d830.webp');
+
+INSERT INTO article (title, preview, content, author_id, category, faculty_id, image_name)
+VALUES('TO THE NEW STUDENTS: A HEARTFELT WELCOME TO OUR COMMUNITY!', 'The strong pull of the University of Helsinki persists: more than 30,000 individuals applied to UH and 4,000 of them were admitted. The most popular programmes were law and medicine. Nearly half of those who applied to a master’s programme applied to the new Programme in the Development of Health Care Services.', 'This year, the University of Helsinki was again the most popular higher education institution in Finland, in terms of both the total number of applicants in the spring joint application procedure and the number of first-priority applications. With the number of applicants in the joint application procedure growing by 1.5% from last year, the attractiveness of the University of Helsinki has remained very strong.   In the joint application procedure, 4000 new students were admitted to the University of Helsinki. There were about 27,300 applicants to bachelor''s programmes, of whom 13,1% received a student place. A total of 3,200 people applied for Finnish- and Swedish-language master''s programmes, of whom 13,7% were admitted.   I am excited and proud to welcome you, our new students, to our University! Congratulations on your admission -- you have earned this achievement thanks to your hard work and determination. The stage in your lives you are now embarking on will open the door to countless opportunities and new challenges, says Rector **Sari Lindblom**   Also keep in mind that learning at university is about more than just completing courses. It is a journey to self-awareness and personal growth. Don''t hesitate to turn to your teachers and supervisors when you need support. We are here for yo   The University of Helsinki and its community have been building the future and transforming the world for more than 380 years. Their aim is to continue to provide students with the best tools for studies and life.   We encourage independent and critical thinking and competent citizenship in our students. We strive to support the development of our students and provide them with the capacity to act as agents of change in society. Our University is a multicultural and international community where students meet peers from different cultures and backgrounds. This diversity opens up new perspectives for them and promotes international solidarity. At the same time, it prepares them for the global labour market and offers them valuable networking opportunities, Rector Lindblom notes.   Law and medicine the most popular degree programme  ----------------------------------------------------', 7, 'SCIENCE',101, '681c24e8-756f-462a-b119-8ed3cd68d830.webp');
+
+INSERT INTO article (title, preview, content, author_id, category, faculty_id, image_name)
+VALUES('TO THE NEW STUDENTS: A HEARTFELT WELCOME TO OUR COMMUNITY!', 'The strong pull of the University of Helsinki persists: more than 30,000 individuals applied to UH and 4,000 of them were admitted. The most popular programmes were law and medicine. Nearly half of those who applied to a master’s programme applied to the new Programme in the Development of Health Care Services.', 'This year, the University of Helsinki was again the most popular higher education institution in Finland, in terms of both the total number of applicants in the spring joint application procedure and the number of first-priority applications. With the number of applicants in the joint application procedure growing by 1.5% from last year, the attractiveness of the University of Helsinki has remained very strong.   In the joint application procedure, 4000 new students were admitted to the University of Helsinki. There were about 27,300 applicants to bachelor''s programmes, of whom 13,1% received a student place. A total of 3,200 people applied for Finnish- and Swedish-language master''s programmes, of whom 13,7% were admitted.   I am excited and proud to welcome you, our new students, to our University! Congratulations on your admission -- you have earned this achievement thanks to your hard work and determination. The stage in your lives you are now embarking on will open the door to countless opportunities and new challenges, says Rector **Sari Lindblom**   Also keep in mind that learning at university is about more than just completing courses. It is a journey to self-awareness and personal growth. Don''t hesitate to turn to your teachers and supervisors when you need support. We are here for yo   The University of Helsinki and its community have been building the future and transforming the world for more than 380 years. Their aim is to continue to provide students with the best tools for studies and life.   We encourage independent and critical thinking and competent citizenship in our students. We strive to support the development of our students and provide them with the capacity to act as agents of change in society. Our University is a multicultural and international community where students meet peers from different cultures and backgrounds. This diversity opens up new perspectives for them and promotes international solidarity. At the same time, it prepares them for the global labour market and offers them valuable networking opportunities, Rector Lindblom notes.   Law and medicine the most popular degree programme  ----------------------------------------------------', 2, 'SCIENCE',101, '681c24e8-756f-462a-b119-8ed3cd68d830.webp');

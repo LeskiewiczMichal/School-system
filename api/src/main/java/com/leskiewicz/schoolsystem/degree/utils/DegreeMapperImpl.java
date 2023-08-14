@@ -31,9 +31,9 @@ public class DegreeMapperImpl implements DegreeMapper {
         degree.getFieldOfStudy(),
         degreeFaculty.getName(),
         degree.getLengthOfStudy(),
-        null,
-        null,
-        null,
+        degree.getDescription(),
+        degree.getTuitionFeePerYear(),
+        degree.getLanguages(),
         degreeFaculty.getId());
   }
 

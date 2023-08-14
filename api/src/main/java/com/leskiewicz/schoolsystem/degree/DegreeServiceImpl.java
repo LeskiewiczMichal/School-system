@@ -42,7 +42,7 @@ public class DegreeServiceImpl implements DegreeService {
 
   @Override
   public DegreeDto getById(Long id) {
-    return degreeMapper.convertToDtoFull(
+    return degreeMapper.convertToDto(
         degreeRepository
             .findById(id)
             .orElseThrow(

@@ -1,6 +1,7 @@
 package com.leskiewicz.schoolsystem.degree.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
 import com.leskiewicz.schoolsystem.utils.Languages;
 import jakarta.validation.constraints.NotNull;
@@ -25,8 +26,8 @@ public class DegreeDto extends RepresentationModel<DegreeDto> {
   @NotNull private final String fieldOfStudy;
   @NotNull private final String faculty;
   @NotNull private final Double lengthOfStudy;
-  private String description;
-  private Double tuitionFeePerYear;
-  private List<Languages> languages;
+  @NotNull private String description;
+  @NotNull private Double tuitionFeePerYear;
+  @NotNull private List<Languages> languages;
   @JsonIgnore @NotNull private final Long facultyId;
 }
