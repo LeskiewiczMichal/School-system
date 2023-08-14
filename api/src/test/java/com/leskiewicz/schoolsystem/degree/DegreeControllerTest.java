@@ -19,6 +19,8 @@ import com.leskiewicz.schoolsystem.generic.CommonTests;
 import com.leskiewicz.schoolsystem.testUtils.TestHelper;
 import java.util.Arrays;
 import java.util.List;
+
+import com.leskiewicz.schoolsystem.utils.Languages;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -144,7 +146,7 @@ public class DegreeControllerTest {
         degreeDto.add(WebMvcLinkBuilder.linkTo(DegreeController.class).withSelfRel()),
         CreateDegreeRequest.class,
         new CreateDegreeRequest(
-            degreeDto.getTitle(), degreeDto.getFieldOfStudy(), degreeDto.getFaculty(), "Description"),
+            degreeDto.getTitle(), degreeDto.getFieldOfStudy(), degreeDto.getFaculty(), "Description", 3.0, 15000.00, List.of(Languages.ENGLISH)),
         degreeService::createDegree,
         degreeDtoAssembler::toModel,
         degreeController::createDegree);

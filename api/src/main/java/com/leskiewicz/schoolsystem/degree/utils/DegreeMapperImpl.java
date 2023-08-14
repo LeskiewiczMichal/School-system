@@ -26,13 +26,23 @@ public class DegreeMapperImpl implements DegreeMapper {
 
     Faculty degreeFaculty = degree.getFaculty();
     return new DegreeDto(
-        degree.getId(), degree.getTitle(), degree.getFieldOfStudy(), degreeFaculty.getName(), null, degreeFaculty.getId());
+        degree.getId(),
+        degree.getTitle(),
+        degree.getFieldOfStudy(),
+        degreeFaculty.getName(),
+        degree.getLengthOfStudy(),
+        null,
+        null,
+        null,
+        degreeFaculty.getId());
   }
 
   @Override
   public DegreeDto convertToDtoFull(Degree degree) {
     DegreeDto degreeDto = convertToDto(degree);
     degreeDto.setDescription(degree.getDescription());
+    degreeDto.setTuitionFeePerYear(degree.getTuitionFeePerYear());
+    degreeDto.setLanguages(degree.getLanguages());
     return degreeDto;
   }
 }

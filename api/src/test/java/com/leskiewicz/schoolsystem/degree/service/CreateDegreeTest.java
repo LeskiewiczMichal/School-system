@@ -16,8 +16,11 @@ import com.leskiewicz.schoolsystem.error.customexception.EntityAlreadyExistsExce
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.FacultyServiceImpl;
 import com.leskiewicz.schoolsystem.testUtils.TestHelper;
+import com.leskiewicz.schoolsystem.utils.Languages;
 import io.jsonwebtoken.lang.Assert;
 import jakarta.validation.ConstraintViolationException;
+
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
@@ -48,12 +51,36 @@ public class CreateDegreeTest {
 
   static Stream<Arguments> throwsConstraintViolationExceptionOnRequestInvalidProvider() {
     return Stream.of(
-        Arguments.of(new CreateDegreeRequest(null, "Computer Science", "Software Engineering", "Description")),
         Arguments.of(
-            new CreateDegreeRequest(DegreeTitle.BACHELOR_OF_SCIENCE, null, "Software Engineering", "Description")),
+            new CreateDegreeRequest(
+                null,
+                "Computer Science",
+                "Software Engineering",
+                "Description",
+                3.0,
+                15000.00,
+                List.of(Languages.ENGLISH))),
         Arguments.of(
-            new CreateDegreeRequest(DegreeTitle.BACHELOR_OF_SCIENCE, "Computer Science", null, "Description")),
-        Arguments.of(new CreateDegreeRequest(null, null, null, "Description")));
+            new CreateDegreeRequest(
+                DegreeTitle.BACHELOR_OF_SCIENCE,
+                null,
+                "Software Engineering",
+                "Description",
+                3.0,
+                15000.00,
+                List.of(Languages.ENGLISH))),
+        Arguments.of(
+            new CreateDegreeRequest(
+                DegreeTitle.BACHELOR_OF_SCIENCE,
+                "Computer Science",
+                null,
+                "Description",
+                3.0,
+                15000.00,
+                List.of(Languages.ENGLISH))),
+        Arguments.of(
+            new CreateDegreeRequest(
+                null, null, null, "Description", 3.0, 15000.00, List.of(Languages.ENGLISH))));
   }
 
   @BeforeEach
@@ -71,6 +98,9 @@ public class CreateDegreeTest {
             .title(DegreeTitle.BACHELOR)
             .fieldOfStudy("Computer Science")
             .description("This is description")
+            .languages(List.of(Languages.ENGLISH))
+            .lengthOfStudy(3.0)
+            .tuitionFeePerYear(15000.00)
             .build();
 
     // Mock the behavior of degreeRepository.findByFacultyNameAndTitleAndFieldOfStudy()
@@ -113,7 +143,13 @@ public class CreateDegreeTest {
   public void throwsEntityAlreadyExistsExceptionWhenDegreeAlreadyExists() {
     CreateDegreeRequest request =
         new CreateDegreeRequest(
-            DegreeTitle.BACHELOR_OF_SCIENCE, "Computer Science", "Software Engineering", "Description");
+            DegreeTitle.BACHELOR_OF_SCIENCE,
+            "Computer Science",
+            "Software Engineering",
+            "Description",
+            3.0,
+            15000.00,
+            List.of(Languages.ENGLISH));
     given(
             degreeRepository.findByFacultyNameAndTitleAndFieldOfStudy(
                 request.getFacultyName(), request.getTitle(), request.getFieldOfStudy()))

@@ -15,6 +15,7 @@ import com.leskiewicz.schoolsystem.files.File;
 import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetails;
+import com.leskiewicz.schoolsystem.utils.Languages;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
@@ -108,6 +109,9 @@ public class TestHelper {
         .fieldOfStudy("Computer Science")
         .faculty(faculty)
             .description("TestDescription")
+            .lengthOfStudy(3.0)
+            .tuitionFeePerYear(1000.00)
+            .languages(List.of(Languages.ENGLISH, Languages.POLISH))
         .build();
   }
 

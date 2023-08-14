@@ -8,6 +8,7 @@ import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
 import com.leskiewicz.schoolsystem.degree.utils.DegreeMapperImpl;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.testUtils.TestHelper;
+import com.leskiewicz.schoolsystem.utils.Languages;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,6 +17,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 public class DegreeMapperTest {
@@ -41,6 +44,9 @@ public class DegreeMapperTest {
             .title(DegreeTitle.BACHELOR_OF_SCIENCE)
             .faculty("DegreeTitle")
             .facultyId(0L)
+            .languages(List.of(Languages.ENGLISH, Languages.POLISH))
+            .tuitionFeePerYear(1000.0)
+            .lengthOfStudy(3.0)
             .build();
 
     // Mocking
