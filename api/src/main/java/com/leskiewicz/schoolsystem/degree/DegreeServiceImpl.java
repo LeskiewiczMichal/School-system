@@ -89,6 +89,9 @@ public class DegreeServiceImpl implements DegreeService {
             .fieldOfStudy(StringUtils.capitalizeFirstLetterOfEveryWord(request.getFieldOfStudy()))
             .faculty(faculty)
             .description(request.getDescription())
+            .languages(request.getLanguages())
+            .tuitionFeePerYear(request.getTuitionFeePerYear())
+            .lengthOfStudy(request.getLengthOfStudy())
             .build();
 
     ValidationUtils.validate(degree);

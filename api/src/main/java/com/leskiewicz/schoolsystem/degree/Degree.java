@@ -2,6 +2,7 @@ package com.leskiewicz.schoolsystem.degree;
 
 import com.leskiewicz.schoolsystem.course.Course;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
+import com.leskiewicz.schoolsystem.utils.Languages;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
@@ -30,6 +31,21 @@ public class Degree {
   @NotNull
   @Column(name = "field_of_study")
   private String fieldOfStudy;
+
+  @NotNull
+  @Column(name = "length_of_study")
+  private Double lengthOfStudy;
+
+  @NotNull
+  @Column(name = "tuition_fee_per_year")
+  private Double tuitionFeePerYear;
+
+  @ElementCollection
+  @CollectionTable(name = "languages_table", joinColumns = @JoinColumn(name = "degree_id"))
+  @NotNull
+  @Column(name = "languages")
+  @Enumerated(EnumType.STRING)
+  private List<Languages> languages;
 
   @NotNull
   @Lob
@@ -61,6 +77,13 @@ public class Degree {
         + ", fieldOfStudy='"
         + fieldOfStudy
         + '\''
+        + ", lengthOfStudy="
+        + lengthOfStudy
+        + ", tuitionFeePerYear="
+        + tuitionFeePerYear
+        + ", languages="
+        + languages
+        + '\''
         + '}';
   }
 
@@ -72,8 +95,10 @@ public class Degree {
     return Objects.equals(id, degree.id)
         && title == degree.title
         && Objects.equals(fieldOfStudy, degree.fieldOfStudy)
-        && Objects.equals(courses, degree.courses)
-        && Objects.equals(faculty, degree.faculty);
+        && Objects.equals(faculty, degree.faculty)
+        && Objects.equals(description, degree.description)
+        && Objects.equals(lengthOfStudy, degree.lengthOfStudy)
+        && Objects.equals(tuitionFeePerYear, degree.tuitionFeePerYear);
   }
 
   @Override

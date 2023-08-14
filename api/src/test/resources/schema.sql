@@ -25,8 +25,17 @@ CREATE TABLE degree (
                         field_of_study VARCHAR(100) NOT NULL,
                         faculty BIGINT NOT NULL,
                         description TEXT NOT NULL,
+                        length_of_study DOUBLE NOT NULL,
+                        tuition_fee_per_year DOUBLE NOT NULL,
                         PRIMARY KEY (id),
                         FOREIGN KEY (faculty) REFERENCES faculty(id)
+);
+
+CREATE TABLE languages_table (
+                                 degree_id BIGINT,
+                                 language VARCHAR(45),
+                                 PRIMARY KEY (degree_id, language),
+                                 FOREIGN KEY (degree_id) REFERENCES degree (id)
 );
 
 
