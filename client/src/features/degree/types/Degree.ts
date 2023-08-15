@@ -1,5 +1,6 @@
 import DegreeTitle from "./DegreeTitle";
 import APILink from "../../../type/APILink";
+import Language from "../../../type/Language";
 
 export default interface Degree {
   id: bigint;
@@ -7,7 +8,7 @@ export default interface Degree {
   fieldOfStudy: string;
   lengthOfStudy: number;
   tuitionFeePerYear: number;
-  languages: string[];
+  languages: Language[];
   description: string;
   imageName: string | null;
   faculty: {

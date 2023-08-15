@@ -13,3 +13,6 @@ Icons:
     Arrow right: https://www.svgrepo.com/svg/533610/arrow-right
     Menu: https://www.svgrepo.com/svg/532195/menu?edit=true
     Clock: https://www.svgrepo.com/svg/522682/time
+    Language: https://www.svgrepo.com/svg/506518/language
+    Atom: https://www.svgrepo.com/svg/454121/education-learning-6
+    Dollar: https://www.svgrepo.com/svg/532432/dollar-sign
