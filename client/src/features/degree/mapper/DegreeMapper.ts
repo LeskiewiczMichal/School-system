@@ -10,6 +10,10 @@ const mapFromServerData = (data: any): Degree => {
       },
       name: data.faculty,
     },
+    description: data.description,
+    languages: data.languages,
+    lengthOfStudy: data.lengthOfStudy,
+    tuitionFeePerYear: data.tuitionFeePerYear,
     fieldOfStudy: data.fieldOfStudy,
     title: data.title,
     courses: {

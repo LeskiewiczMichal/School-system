@@ -80,8 +80,21 @@ public class DegreeController {
     Page<DegreeDto> degrees = degreeService.getDegrees(request.toPageable());
     degrees = degrees.map(degreeDtoAssembler::toModel);
 
+    Link selfLink =
+        WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getDegrees(null))
+            .withSelfRel();
+    Link getByIdLink =
+        WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getDegreeById(null))
+            .withRel("degree");
+    Link searchLink =
+        WebMvcLinkBuilder.linkTo(
+                WebMvcLinkBuilder.methodOn(this.getClass()).searchDegrees(null, null, null, null))
+            .withRel("degrees");
+
     return ResponseEntity.ok(
-        HalModelBuilder.halModelOf(degreePagedResourcesAssembler.toModel(degrees)).build());
+        HalModelBuilder.halModelOf(degreePagedResourcesAssembler.toModel(degrees))
+            .links(List.of(selfLink, getByIdLink, searchLink))
+            .build());
   }
 
   /**
@@ -115,7 +128,7 @@ public class DegreeController {
    *     metadata. If there are no courses, an empty page is returned (without _embedded.courses
    *     field).
    * @throws MethodArgumentNotValidException, returns status 400 and body with path, message about
-   *    missing fields, statusCode if the request is invalid.
+   *     missing fields, statusCode if the request is invalid.
    */
   @GetMapping("/{id}/courses")
   public ResponseEntity<RepresentationModel<CourseDto>> getDegreeCourses(
@@ -132,7 +145,8 @@ public class DegreeController {
    *
    * @param fieldOfStudy (optional, param name "fieldOfStudy") field of study to search by.
    * @param facultyId (optional, param name "faculty") ID of the faculty to search by.
-   * @param title (optional, param name "degreeTitle") {@link DegreeTitle} title of the degree to search by.
+   * @param title (optional, param name "degreeTitle") {@link DegreeTitle} title of the degree to
+   *     search by.
    * @param request ${@link PageableRequest} with pagination parameters.
    * @return status 200 (OK) and in body the paged list of {@link DegreeDto} objects and page
    *     metadata. If there are no articles, an empty page is returned (without _embedded.degrees
@@ -140,27 +154,28 @@ public class DegreeController {
    */
   @GetMapping("/search")
   public ResponseEntity<RepresentationModel<DegreeDto>> searchDegrees(
-          @RequestParam(value = "fieldOfStudy", required = false) String fieldOfStudy,
-          @RequestParam(value = "faculty", required = false) Long facultyId,
-          @RequestParam(value = "degreeTitle", required = false) DegreeTitle title,
-          @ModelAttribute PageableRequest request) {
-    Page<DegreeDto> degrees = degreeService.search(fieldOfStudy, facultyId, title, request.toPageable());
+      @RequestParam(value = "fieldOfStudy", required = false) String fieldOfStudy,
+      @RequestParam(value = "faculty", required = false) Long facultyId,
+      @RequestParam(value = "degreeTitle", required = false) DegreeTitle title,
+      @ModelAttribute PageableRequest request) {
+    Page<DegreeDto> degrees =
+        degreeService.search(fieldOfStudy, facultyId, title, request.toPageable());
     degrees = degrees.map(degreeDtoAssembler::toModel);
 
     Link selfLink =
-            WebMvcLinkBuilder.linkTo(
-                            WebMvcLinkBuilder.methodOn(this.getClass()).searchDegrees(null, null, null, null))
-                    .withSelfRel();
+        WebMvcLinkBuilder.linkTo(
+                WebMvcLinkBuilder.methodOn(this.getClass()).searchDegrees(null, null, null, null))
+            .withSelfRel();
     Link degreesLink =
-            WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getDegrees(null))
-                    .withRel("degrees");
+        WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getDegrees(null))
+            .withRel("degrees");
     Link getByIdLink =
-            WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getDegreeById(null))
-                    .withRel("degree");
+        WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getDegreeById(null))
+            .withRel("degree");
 
     return ResponseEntity.ok(
-            HalModelBuilder.halModelOf(degreePagedResourcesAssembler.toModel(degrees))
-                    .links(List.of(selfLink, degreesLink, getByIdLink))
-                    .build());
+        HalModelBuilder.halModelOf(degreePagedResourcesAssembler.toModel(degrees))
+            .links(List.of(selfLink, degreesLink, getByIdLink))
+            .build());
   }
 }
