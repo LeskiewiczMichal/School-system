@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 import { AppPaths } from "../../App";
 import DegreePageContentInterface from "./DegreePageContentInterface";
 import * as marked from "marked";
+import EnumMapper from "../../utils/EnumMapper";
 
 export default function Degree() {
   const { degreeId } = useParams<{ degreeId: string }>();
@@ -39,6 +40,8 @@ export default function Degree() {
     return <span>Loading</span>;
   }
 
+  const degreeLevel = EnumMapper.mapDegreeTitleToString(degree.title);
+
   return (
     <div>
       {/* Top greeting */}
@@ -56,7 +59,7 @@ export default function Degree() {
         ></div>
         <div
           className={
-            "bg-hoverGray flex flex-col h-fit py-2 px-4 w-1/3 flex-none gap-3"
+            "bg-hoverGray flex flex-col h-fit py-2 px-4 w-1/3 flex-none gap-4"
           }
         >
           <h5 className={"text-2xl text-brandMainNearlyBlack"}>
@@ -73,7 +76,18 @@ export default function Degree() {
             <Clock className={"h-8 w-8"} />
             <div className={"flex flex-col text-grayscaleDark"}>
               <span>Degree level</span>
-              <span className={"font-bold"}>{degree.lengthOfStudy} years</span>
+              <span className={"font-bold"}>{degreeLevel}</span>
+            </div>
+          </div>
+          <div className={"flex items-center gap-4"}>
+            <Clock className={"h-8 w-8"} />
+            <div className={"flex flex-col text-grayscaleDark"}>
+              <span>Languages</span>
+              <span className={"font-bold"}>
+                {degree.languages.map((language) => {
+                  return "English";
+                })}
+              </span>
             </div>
           </div>
         </div>

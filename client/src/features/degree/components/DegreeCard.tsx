@@ -35,7 +35,7 @@ export default function DegreeCard(props: DegreeCardProps) {
       >
         <div>
           <h5 className="mb-2 text-xl  font-bold tracking-tight text-brandMain">
-            {degree.fieldOfStudy} | {degreeLevel} programme
+            {degree.fieldOfStudy} | {degreeLevel}'s programme
           </h5>
           <p className="mb-3 font-normal text-grayscaleDarkText ">
             {truncatedText}
