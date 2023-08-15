@@ -7,7 +7,9 @@ import com.leskiewicz.schoolsystem.course.utils.CourseDtoAssembler;
 import com.leskiewicz.schoolsystem.degree.dto.CreateDegreeRequest;
 import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
 import com.leskiewicz.schoolsystem.degree.utils.DegreeDtoAssembler;
+import com.leskiewicz.schoolsystem.dto.request.MessageModel;
 import com.leskiewicz.schoolsystem.dto.request.PageableRequest;
+import com.leskiewicz.schoolsystem.error.APIResponses;
 import com.leskiewicz.schoolsystem.error.customexception.EntityAlreadyExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -18,14 +20,19 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 /**
  * REST controller for managing {@link Degree}.
@@ -81,14 +88,14 @@ public class DegreeController {
     degrees = degrees.map(degreeDtoAssembler::toModel);
 
     Link selfLink =
-        WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getDegrees(null))
+        linkTo(methodOn(this.getClass()).getDegrees(null))
             .withSelfRel();
     Link getByIdLink =
-        WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getDegreeById(null))
+        linkTo(methodOn(this.getClass()).getDegreeById(null))
             .withRel("degree");
     Link searchLink =
-        WebMvcLinkBuilder.linkTo(
-                WebMvcLinkBuilder.methodOn(this.getClass()).searchDegrees(null, null, null, null))
+        linkTo(
+                methodOn(this.getClass()).searchDegrees(null, null, null, null))
             .withRel("degrees");
 
     return ResponseEntity.ok(
@@ -163,19 +170,39 @@ public class DegreeController {
     degrees = degrees.map(degreeDtoAssembler::toModel);
 
     Link selfLink =
-        WebMvcLinkBuilder.linkTo(
-                WebMvcLinkBuilder.methodOn(this.getClass()).searchDegrees(null, null, null, null))
+        linkTo(
+                methodOn(this.getClass()).searchDegrees(null, null, null, null))
             .withSelfRel();
     Link degreesLink =
-        WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getDegrees(null))
+        linkTo(methodOn(this.getClass()).getDegrees(null))
             .withRel("degrees");
     Link getByIdLink =
-        WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getDegreeById(null))
+        linkTo(methodOn(this.getClass()).getDegreeById(null))
             .withRel("degree");
 
     return ResponseEntity.ok(
         HalModelBuilder.halModelOf(degreePagedResourcesAssembler.toModel(degrees))
             .links(List.of(selfLink, degreesLink, getByIdLink))
             .build());
+  }
+
+  /**
+   * Update image in degree with provided ID.
+   *
+   * @param id the ID of the degree to update image in.
+   * @param file the image file to upload.
+   * @return status 200 (OK) and in body the message about successful upload.
+   */
+  @PostMapping("/{id}/image")
+  public ResponseEntity<MessageModel> updateImage(
+      @PathVariable Long id, @RequestParam("file") MultipartFile file) {
+    degreeService.addImage(id, file);
+
+    // Create response
+    MessageModel message =
+            new MessageModel(APIResponses.fileUploaded(file.getOriginalFilename()));
+    message.add(linkTo(methodOn(this.getClass()).getDegreeById(id)).withRel("degree"));
+
+    return ResponseEntity.status(HttpStatus.OK).body(message);
   }
 }
