@@ -1,5 +1,6 @@
 import {
   Degree,
+  DegreeCard,
   DegreeRequest,
   DegreeSearchForm,
   DegreeTitle,
@@ -121,6 +122,14 @@ export default function DegreeProgrammes() {
         <MyHeading
           heading={`Search results (${paginationInfo.totalElements})`}
         />
+        <section>
+          {degrees.map((degree) => (
+            <DegreeCard
+              key={degree.id.toString()}
+              cardLink={`/degree-programmes/${degree.id}`}
+            />
+          ))}
+        </section>
       </main>
     </div>
   );

@@ -3,13 +3,6 @@ import Degree from "../types/Degree";
 const mapFromServerData = (data: any): Degree => {
   return {
     id: data.id,
-    faculty: {
-      link: {
-        href: data._links.faculty.href,
-        templated: data._links.faculty.templated === true,
-      },
-      name: data.faculty,
-    },
     description: data.description,
     languages: data.languages,
     lengthOfStudy: data.lengthOfStudy,
@@ -21,6 +14,13 @@ const mapFromServerData = (data: any): Degree => {
         href: data._links.courses.href,
         templated: data._links.courses.templated === true,
       },
+    },
+    faculty: {
+      link: {
+        href: data._links.faculty.href,
+        templated: data._links.faculty.templated === true,
+      },
+      name: data.faculty,
     },
   };
 };

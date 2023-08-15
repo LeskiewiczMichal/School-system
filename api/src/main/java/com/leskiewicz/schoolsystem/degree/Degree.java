@@ -52,6 +52,9 @@ public class Degree {
   @Column(name = "description")
   private String description;
 
+  @Column(name = "image_name")
+  private String imageName;
+
   @NotNull
   @Singular
   @ManyToMany

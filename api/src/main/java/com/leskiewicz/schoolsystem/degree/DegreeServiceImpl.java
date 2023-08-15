@@ -11,6 +11,7 @@ import com.leskiewicz.schoolsystem.error.ErrorMessages;
 import com.leskiewicz.schoolsystem.error.customexception.EntityAlreadyExistsException;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.FacultyService;
+import com.leskiewicz.schoolsystem.files.FileService;
 import com.leskiewicz.schoolsystem.user.utils.UserMapper;
 import com.leskiewicz.schoolsystem.utils.StringUtils;
 import com.leskiewicz.schoolsystem.authentication.utils.ValidationUtils;
@@ -22,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @AllArgsConstructor
@@ -30,8 +32,8 @@ public class DegreeServiceImpl implements DegreeService {
   // Repositories
   private final DegreeRepository degreeRepository;
   private final CourseRepository courseRepository;
-
   private final FacultyService facultyService;
+  private final FileService fileService;
 
   // Mappers
   private final UserMapper userMapper;
@@ -115,6 +117,27 @@ public class DegreeServiceImpl implements DegreeService {
         degreeRepository.searchByFacultyNameAndTitleAndFieldOfStudy(
             fieldOfStudy, facultyId, title, pageable);
     return degrees.map(degreeMapper::convertToDto);
+  }
+
+  @Override
+  public void addImage(Long degreeId, MultipartFile image) {
+    Degree degree =
+        degreeRepository
+            .findById(degreeId)
+            .orElseThrow(
+                () ->
+                    new EntityNotFoundException(
+                        ErrorMessages.objectWithIdNotFound("Degree", degreeId)));
+
+    // Handle the image if available
+    if (image != null) {
+      String filename = fileService.uploadImage(image);
+      degree.setImageName(filename);
+    } else {
+      throw new IllegalArgumentException("Image cannot be null");
+    }
+
+    degreeRepository.save(degree);
   }
 
   private void degreeExistsCheck(Long degreeId) {

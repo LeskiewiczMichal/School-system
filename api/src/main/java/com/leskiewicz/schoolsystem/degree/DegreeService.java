@@ -5,6 +5,7 @@ import com.leskiewicz.schoolsystem.degree.dto.CreateDegreeRequest;
 import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -21,5 +22,7 @@ public interface DegreeService {
   Page<CourseDto> getDegreeCourses(Long degreeId, Pageable pageable);
 
   Page<DegreeDto> search(String fieldOfStudy, Long facultyId, DegreeTitle title, Pageable pageable);
+
+  void addImage(Long degreeId, MultipartFile image);
 
 }
