@@ -12,3 +12,4 @@ Icons:
     Arrow down: https://www.svgrepo.com/svg/509905/dropdown-arrow
     Arrow right: https://www.svgrepo.com/svg/533610/arrow-right
     Menu: https://www.svgrepo.com/svg/532195/menu?edit=true
+    Clock: https://www.svgrepo.com/svg/522682/time

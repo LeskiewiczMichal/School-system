@@ -1,10 +1,10 @@
 import Greetings from "../../common_components/Card/Greetings";
+import { ReactComponent as Clock } from "../../assets/icons/clock-grey.svg";
 import { useEffect, useState } from "react";
 import { Degree as DegreeType, DegreeRequest } from "../../features/degree";
 import { useAppSelector } from "../../hooks";
 import { useParams } from "react-router-dom";
 import { AppPaths } from "../../App";
-import FacultyPageContentInterface from "../faculty/FacultyPageContentInterface";
 import DegreePageContentInterface from "./DegreePageContentInterface";
 import * as marked from "marked";
 
@@ -47,15 +47,35 @@ export default function Degree() {
         heading={degreePageContent.greetingsHeading}
         text={degreePageContent.greetingsText}
       />
-      <section className={"flex px-4 md:px-32 my-16"}>
+      <section className={"flex px-4 md:px-32 my-16 gap-8"}>
         <div
           className={"px-4 lg:px-0"}
           dangerouslySetInnerHTML={{
             __html: marked.marked(degree.description),
           }}
         ></div>
-        <div className={"bg-hoverGray flex flex-col h-fi"}>
-          <h2 className={"my-header"}>Basic information</h2>
+        <div
+          className={
+            "bg-hoverGray flex flex-col h-fit py-2 px-4 w-1/3 flex-none gap-3"
+          }
+        >
+          <h5 className={"text-2xl text-brandMainNearlyBlack"}>
+            Basic information
+          </h5>
+          <div className={"flex items-center gap-4"}>
+            <Clock className={"h-8 w-8"} />
+            <div className={"flex flex-col text-grayscaleDark"}>
+              <span>Length of studies</span>
+              <span className={"font-bold"}>{degree.lengthOfStudy} years</span>
+            </div>
+          </div>
+          <div className={"flex items-center gap-4"}>
+            <Clock className={"h-8 w-8"} />
+            <div className={"flex flex-col text-grayscaleDark"}>
+              <span>Degree level</span>
+              <span className={"font-bold"}>{degree.lengthOfStudy} years</span>
+            </div>
+          </div>
         </div>
       </section>
     </div>

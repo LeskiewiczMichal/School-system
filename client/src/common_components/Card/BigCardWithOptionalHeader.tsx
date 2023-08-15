@@ -15,7 +15,7 @@ export default function BigCardWithOptionalHeader(
   return (
     <section className="col-span-3">
       {title && (
-        <h4 className="my-header text-brandMainNearlyBlack">{title}</h4>
+        <h4 className="my-header mb-8 text-brandMainNearlyBlack">{title}</h4>
       )}
       {text && <p className="mb-6 text-grayscaleDarkText">{text}</p>}
 

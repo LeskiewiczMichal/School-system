@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import Degree from "../types/Degree";
 import DegreeCardPlaceholder from "../assets/degreeCardPlaceholder.jpg";
+import EnumMapper from "../../../utils/EnumMapper";
 
 export interface DegreeCardProps {
   degree: Degree;
@@ -14,27 +15,7 @@ export default function DegreeCard(props: DegreeCardProps) {
       ? degree.description.slice(0, 150) + "..."
       : degree.description;
 
-  let degreeLevel = "";
-  switch (degree.title) {
-    case "BACHELOR":
-      degreeLevel = "Bachelor's";
-      break;
-    case "BACHELOR_OF_SCIENCE":
-      degreeLevel = "Bachelor of Science";
-      break;
-    case "MASTER":
-      degreeLevel = "Master's";
-      break;
-    case "DOCTOR":
-      degreeLevel = "Doctor's";
-      break;
-    case "PROFESSOR":
-      degreeLevel = "Professor's";
-      break;
-    default:
-      degreeLevel = "Bachelor's";
-      break;
-  }
+  let degreeLevel = EnumMapper.mapDegreeTitleToString(degree.title);
 
   return (
     <Link
