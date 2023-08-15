@@ -47,14 +47,16 @@ export default function Degree() {
         heading={degreePageContent.greetingsHeading}
         text={degreePageContent.greetingsText}
       />
-      <section className={"flex flex-col px-4 md:px-32 my-16"}>
+      <section className={"flex px-4 md:px-32 my-16"}>
         <div
           className={"px-4 lg:px-0"}
           dangerouslySetInnerHTML={{
             __html: marked.marked(degree.description),
           }}
         ></div>
-        <div className={""}></div>
+        <div className={"bg-hoverGray flex flex-col h-fi"}>
+          <h2 className={"my-header"}>Basic information</h2>
+        </div>
       </section>
     </div>
   );
