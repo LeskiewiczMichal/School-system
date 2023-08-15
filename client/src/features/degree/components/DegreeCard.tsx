@@ -40,11 +40,11 @@ export default function DegreeCard(props: DegreeCardProps) {
     <Link
       to={`/degree-programmes/${degree.id.toString()}`}
       className={
-        "flex w-full bg-hoverGray border border-gray-200 rounded shadow  hover:bg-grey "
+        "flex w-full flex-col sm:flex-row bg-hoverGray border border-gray-200 rounded shadow  hover:bg-grey "
       }
     >
       <img
-        className={`rounded-t-lg h-96 lg:h-auto md:rounded-none md:rounded-l w-1/4 `}
+        className={`rounded-t-lg h-72 w-full sm:h-auto sm:w-1/4 md:rounded-none md:rounded-l `}
         src={degree.imageName || DegreeCardPlaceholder}
         alt={"Degree image"}
       />
