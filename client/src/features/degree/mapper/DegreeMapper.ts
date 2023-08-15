@@ -9,6 +9,7 @@ const mapFromServerData = (data: any): Degree => {
     tuitionFeePerYear: data.tuitionFeePerYear,
     fieldOfStudy: data.fieldOfStudy,
     title: data.title,
+    imageName: data.imageName,
     courses: {
       link: {
         href: data._links.courses.href,

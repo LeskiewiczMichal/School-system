@@ -122,12 +122,9 @@ export default function DegreeProgrammes() {
         <MyHeading
           heading={`Search results (${paginationInfo.totalElements})`}
         />
-        <section>
+        <section className={"flex flex-col gap-4"}>
           {degrees.map((degree) => (
-            <DegreeCard
-              key={degree.id.toString()}
-              cardLink={`/degree-programmes/${degree.id}`}
-            />
+            <DegreeCard key={degree.id.toString()} degree={degree} />
           ))}
         </section>
       </main>

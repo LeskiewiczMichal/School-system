@@ -9,6 +9,7 @@ export default interface Degree {
   tuitionFeePerYear: number;
   languages: string[];
   description: string;
+  imageName: string | null;
   faculty: {
     name: string;
     link: APILink;
