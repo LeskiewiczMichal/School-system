@@ -28,6 +28,7 @@ CREATE TABLE degree (
                         description TEXT NOT NULL,
                         length_of_study DOUBLE NOT NULL,
                         tuition_fee_per_year DOUBLE NOT NULL,
+                        image_name VARCHAR(120),
                         PRIMARY KEY (id),
                         FOREIGN KEY (faculty) REFERENCES faculty(id)
 );

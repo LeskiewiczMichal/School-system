@@ -34,6 +34,7 @@ public class DegreeMapperImpl implements DegreeMapper {
         degree.getDescription(),
         degree.getTuitionFeePerYear(),
         degree.getLanguage(),
+        degree.getImageName(),
         degreeFaculty.getId());
   }
 

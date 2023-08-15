@@ -45,6 +45,7 @@ public class DegreeMapperTest {
             .languages(List.of(Language.ENGLISH, Language.POLISH))
             .tuitionFeePerYear(1000.0)
             .lengthOfStudy(3.0)
+                .imageName(null)
             .build();
 
     // Mocking

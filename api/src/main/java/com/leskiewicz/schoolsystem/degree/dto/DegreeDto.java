@@ -28,5 +28,6 @@ public class DegreeDto extends RepresentationModel<DegreeDto> {
   @NotNull private String description;
   @NotNull private Double tuitionFeePerYear;
   @NotNull private List<Language> languages;
+  private String imageName;
   @JsonIgnore @NotNull private final Long facultyId;
 }
