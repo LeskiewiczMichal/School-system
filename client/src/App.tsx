@@ -13,6 +13,7 @@ export enum AppPaths {
   LOGIN = "/login",
   ARTICLES = "/articles",
   FACULTIES = "/faculties",
+  IMAGES = "/images",
 }
 
 function App() {
@@ -61,6 +62,10 @@ function App() {
           <Route
             path="/faculties/:facultyId/research"
             element={<Pages.Research />}
+          />
+          <Route
+            path="/degree-programmes/:degreeId"
+            element={<Pages.Degree />}
           />
           <Route
             path="/degree-programmes"

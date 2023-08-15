@@ -6,6 +6,7 @@ import Faculty from "./faculty/Faculty";
 import TeachingAndStudying from "./teachingAndStudying/TeachingAndStudying";
 import Research from "./Research/Research";
 import DegreeProgrammes from "./degreeProgrammes/DegreeProgrammes";
+import Degree from "./degree/Degree";
 
 export {
   Home,
@@ -16,4 +17,5 @@ export {
   TeachingAndStudying,
   Research,
   DegreeProgrammes,
+  Degree,
 };
