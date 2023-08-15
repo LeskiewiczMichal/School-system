@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.leskiewicz.schoolsystem.utils.Language;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,8 +33,10 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.multipart.MultipartFile;
 
 @ExtendWith(MockitoExtension.class)
 public class DegreeControllerTest {
@@ -145,7 +148,13 @@ public class DegreeControllerTest {
         degreeDto.add(WebMvcLinkBuilder.linkTo(DegreeController.class).withSelfRel()),
         CreateDegreeRequest.class,
         new CreateDegreeRequest(
-            degreeDto.getTitle(), degreeDto.getFieldOfStudy(), degreeDto.getFaculty(), "Description", 3.0, 15000.00, List.of(Language.ENGLISH)),
+            degreeDto.getTitle(),
+            degreeDto.getFieldOfStudy(),
+            degreeDto.getFaculty(),
+            "Description",
+            3.0,
+            15000.00,
+            List.of(Language.ENGLISH)),
         degreeService::createDegree,
         degreeDtoAssembler::toModel,
         degreeController::createDegree);
@@ -159,5 +168,28 @@ public class DegreeControllerTest {
         (Pageable pageable) -> degreeService.getDegreeCourses(1L, pageable),
         courseDtoAssembler::toModel,
         (PageableRequest request) -> degreeController.getDegreeCourses(1L, request));
+  }
+
+  @Test
+  public void uploadImage() throws Exception {
+    // Mock service method to do nothing
+    doNothing().when(degreeService).addImage(any(Long.class), any(MultipartFile.class));
+
+    // Create file for testing
+    MockMultipartFile file =
+        new MockMultipartFile(
+            "file", "test.txt", MediaType.TEXT_PLAIN_VALUE, "Hello, World!".getBytes());
+
+    // Perform request
+    mvc.perform(
+            multipart("/api/degrees/1/image")
+                .file(file)
+                .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.message").value("File with name: test.txt uploaded successfully"))
+        .andExpect(jsonPath("$.links[*].rel", Matchers.hasItems("degree")))
+        .andExpect(jsonPath("$.links[*].href", Matchers.hasSize(1)))
+        .andReturn();
   }
 }
