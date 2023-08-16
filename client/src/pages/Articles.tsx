@@ -14,12 +14,21 @@ import { ReactComponent as ChevronLeft } from "../assets/icons/chevron/chevron-l
 import { ReactComponent as ChevronRight } from "../assets/icons/chevron/chevron-right.svg";
 import PaginationInfo from "../type/PaginationInfo";
 import { AppPaths } from "../App";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function Articles() {
+  const navigate = useNavigate();
   const links = useAppSelector((state) => state.links);
-  const [articleCategory, setArticleCategory] = useState<ArticleCategory>(
-    ArticleCategory.NEWS,
-  );
+  const location = useLocation();
+
+  // Query parameters
+  const queryParams = new URLSearchParams(location.search);
+  const category =
+    ArticleCategory[
+      queryParams.get("category") as keyof typeof ArticleCategory
+    ] || ArticleCategory.NEWS;
+  const faculty = queryParams.get("faculty");
+
   const [articles, setArticles] = useState<Article[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [page, setPage] = useState<number>(0);
@@ -30,46 +39,52 @@ export default function Articles() {
     totalPages: 0,
   });
 
+  const changeCategory = (newCategory: ArticleCategory) => {
+    navigate(
+      `/articles?category=${newCategory}${faculty && "&faculty=" + faculty}`,
+    );
+  };
+
   const sidebarButtons: SidebarButtonProps[] = [
     {
       text: "News",
       onClick: () => {
-        setArticleCategory(ArticleCategory.NEWS);
-        setPage(0);
+        changeCategory(ArticleCategory.NEWS);
+        // setPage(0);
       },
-      active: articleCategory === ArticleCategory.NEWS,
+      active: category === ArticleCategory.NEWS,
     },
     {
       text: "Events",
       onClick: () => {
-        setArticleCategory(ArticleCategory.EVENTS);
-        setPage(0);
+        changeCategory(ArticleCategory.EVENTS);
+        // setPage(0);
       },
-      active: articleCategory === ArticleCategory.EVENTS,
+      active: category === ArticleCategory.EVENTS,
     },
     {
       text: "Sport",
       onClick: () => {
-        setArticleCategory(ArticleCategory.SPORT);
-        setPage(0);
+        changeCategory(ArticleCategory.SPORT);
+        // setPage(0);
       },
-      active: articleCategory === ArticleCategory.SPORT,
+      active: category === ArticleCategory.SPORT,
     },
     {
       text: "Science",
       onClick: () => {
-        setArticleCategory(ArticleCategory.SCIENCE);
-        setPage(0);
+        changeCategory(ArticleCategory.SCIENCE);
+        // setPage(0);
       },
-      active: articleCategory === ArticleCategory.SCIENCE,
+      active: category === ArticleCategory.SCIENCE,
     },
     {
       text: "Other",
       onClick: () => {
-        setArticleCategory(ArticleCategory.OTHER);
-        setPage(0);
+        changeCategory(ArticleCategory.OTHER);
+        // setPage(0);
       },
-      active: articleCategory === ArticleCategory.OTHER,
+      active: category === ArticleCategory.OTHER,
     },
   ];
 
@@ -83,7 +98,8 @@ export default function Articles() {
       // Call the api
       const response: GetArticlesResponse = await ArticleRequest.getArticles({
         link: links.articles.search,
-        category: articleCategory,
+        category: category,
+        faculty: faculty || undefined,
         pagination: { size: 9, page: page },
       });
 
@@ -94,7 +110,7 @@ export default function Articles() {
     };
 
     handleFetchArticles();
-  }, [articleCategory, page, links]);
+  }, [category, page, links]);
 
   const changePage = (direction: "next" | "previous") => {
     setPage((prevPage) => {
@@ -113,7 +129,7 @@ export default function Articles() {
         {/*Heading*/}
         <section className={"w-full flex flex-col mb-24"}>
           <h1 className="page-title_h1 text-brandMainNearlyBlack">
-            {articleCategory}
+            {category}
           </h1>
           {/* Informative Card */}
           <ColoredBackgroundWithPhotoOnRight
