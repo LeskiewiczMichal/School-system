@@ -12,11 +12,22 @@ import DegreePageContentInterface from "./DegreePageContentInterface";
 import * as marked from "marked";
 import EnumMapper from "../../utils/EnumMapper";
 import Language from "../../type/Language";
+import {
+  Article,
+  ArticleCategory,
+  ArticlesDisplay,
+} from "../../features/article";
+import ArticleRequest, {
+  GetArticlesResponse,
+} from "../../features/article/services/ArticleRequest";
+import article from "../../features/article/Types/Article";
 
 export default function Degree() {
   const { degreeId } = useParams<{ degreeId: string }>();
   const [degree, setDegree] = useState<DegreeType | null>(null);
   const degreesLinks = useAppSelector((state) => state.links.degrees);
+  const articlesLinks = useAppSelector((state) => state.links.articles);
+  const [articles, setArticles] = useState<Article[]>([]);
 
   const degreePageContent: DegreePageContentInterface = require(`./json/degree-${degreeId}.json`);
 
@@ -40,6 +51,27 @@ export default function Degree() {
     handleFetchDegree();
   }, [degreesLinks, degreeId]);
 
+  // useEffect(() => {
+  //   const handleFetchArticles = async () => {
+  //     // Prepare the link
+  //     if (!articlesLinks.search) {
+  //       return;
+  //     }
+  //
+  //     // Call the api
+  //     const response: GetArticlesResponse = await ArticleRequest.getArticles({
+  //       link: articlesLinks.search,
+  //       category: ArticleCategory.EVENTS,
+  //       pagination: { size: 3 },
+  //     });
+  //
+  //     // Set the articles
+  //     setArticles(response.articles);
+  //   };
+  //
+  //   handleFetchArticles();
+  // }, [articlesLinks]);
+
   if (!degree) {
     return <span>Loading</span>;
   }
@@ -57,7 +89,9 @@ export default function Degree() {
         heading={degreePageContent.greetingsHeading}
         text={degreePageContent.greetingsText}
       />
-      <section className={"flex px-4 md:px-32 my-16 gap-8"}>
+      <section
+        className={"flex flex-col px-4 md:px-32 my-16 gap-8 lg:flex-row"}
+      >
         <div
           className={"px-4 lg:px-0"}
           dangerouslySetInnerHTML={{
@@ -66,7 +100,7 @@ export default function Degree() {
         ></div>
         <div
           className={
-            "bg-hoverGray flex flex-col h-fit py-4 px-4 w-1/3 flex-none gap-4"
+            "bg-hoverGray flex flex-col h-fit py-4 px-4 w-full flex-none gap-4 lg:w-1/3"
           }
         >
           <h5 className={"text-2xl text-brandMainNearlyBlack"}>
@@ -101,6 +135,9 @@ export default function Degree() {
             </div>
           </div>
         </div>
+      </section>
+      <section className={"w-full px-4 md:px-32 my-16"}>
+        <ArticlesDisplay heading={"Studying at the Aquila University"} />
       </section>
     </div>
   );
