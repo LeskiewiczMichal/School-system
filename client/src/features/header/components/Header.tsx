@@ -13,6 +13,7 @@ import { SidebarLinkProps } from "../../sidebar/components/SidebarLink";
 import facultyNamesMap from "../../../type/FacultyNamesMap";
 import FacultyNavLinksCreator from "../../faculty/FacultyNavLinksCreator";
 import { WINDOW_WIDTH_CUSTOM_BREAKPOINT } from "../../../utils/Constants";
+import MainNavLinksCreator from "../utils/MainNavLinksCreator";
 
 export default function Header() {
   const dispatch = useAppDispatch();
@@ -143,25 +144,37 @@ export default function Header() {
     );
   }
 
+  const mainNavLinks = MainNavLinksCreator.createMainNavLinks();
+
   return (
-    <header className="z-50 max-h-24 flex flex-auto justify-between items-center py-6 pr-8 bg-white border-b-2 border-primary">
+    <header className="z-50 max-h-24 flex flex-auto justify-between items-center py-6 pr-8 bg-brandMain border-b-2 border-primary">
       <div className="flex  items-center">
         {/* Logo */}
         <Link to="/" className="h-28 w-28">
           <Logo className="h-full w-full" />
         </Link>
-        <h1 className="text-xl md:text-2xl w-full font-bold text-primary italic">
+        <h1 className="text-xl md:text-2xl w-full font-bold text-brandMain italic">
           Aquila University
         </h1>
       </div>
 
       {/* Navigation */}
       <div className="flex items-center  justify-end gap-4">
+        {mainNavLinks.map((link) => (
+          <Link
+            to={link.redirectUrl!}
+            className={
+              "inline-block min-w-fit text-md font-bold text-brandMain align-baseline hover:text-brandMainActive"
+            }
+          >
+            {link.title}
+          </Link>
+        ))}
         <FacultiesDropdown />
         {/* Login */}
         <Link
           to="/login"
-          className="inline-block min-w-fit text-md font-bold text-primary align-baseline hover:text-primaryLighter"
+          className="inline-block min-w-fit text-md font-bold text-brandMain align-baseline hover:text-brandMainActive"
         >
           Sign In
         </Link>

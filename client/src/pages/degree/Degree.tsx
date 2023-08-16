@@ -90,7 +90,7 @@ export default function Degree() {
         className={"flex flex-col px-4 md:px-32 my-16 gap-8 lg:flex-row"}
       >
         <div
-          className={"px-4 lg:px-0"}
+          className={"markdown-paragraph px-4 lg:px-0"}
           dangerouslySetInnerHTML={{
             __html: marked.marked(degree.description),
           }}

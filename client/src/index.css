@@ -38,56 +38,104 @@
             text-transform: uppercase;
             margin-bottom: 2rem;
         }
+
+        .markdown-paragraph {
+            & h1 {
+                @apply text-5xl;
+                /*font-size: 2.875rem;*/
+                line-height: 54px;
+                letter-spacing: -1.15px;
+                font-weight: 700;
+                margin-bottom: 0.3rem;
+                margin-top: 1.2rem;
+            }
+
+            & h2 {
+                @apply text-4xl;
+                line-height: 54px;
+                letter-spacing: -1.15px;
+                font-weight: 700;
+                margin-bottom: 0.3rem;
+                margin-top: 1.2rem;
+            }
+
+            & h3 {
+                @apply text-3xl;
+                line-height: 54px;
+                letter-spacing: -1.15px;
+                font-weight: 700;
+                margin-bottom: 0.3rem;
+                margin-top: 1.2rem;
+            }
+
+            & h4 {
+                @apply text-2xl;
+                line-height: 54px;
+                letter-spacing: -1.15px;
+                font-weight: 700;
+                margin-bottom: 0.3rem;
+                margin-top: 1.2rem;
+            }
+
+            & h5 {
+                @apply text-xl;
+                line-height: 54px;
+                letter-spacing: -1.15px;
+                font-weight: 700;
+                margin-bottom: 0.3rem;
+                margin-top: 1.2rem;
+            }
+        }
     }
 }
 
-@layer base {
-    h1 {
-        @apply text-5xl;
-        /*font-size: 2.875rem;*/
-        line-height: 54px;
-        letter-spacing: -1.15px;
-        font-weight: 700;
-        margin-bottom: 0.6rem;
-        margin-top: 1rem;
-    }
+/*@layer base {*/
+/*    h1 {*/
+/*        @apply text-5xl;*/
+/*        !*font-size: 2.875rem;*!*/
+/*        line-height: 54px;*/
+/*        letter-spacing: -1.15px;*/
+/*        font-weight: 700;*/
+/*        !*margin-bottom: 0.3rem;*!*/
+/*        margin-top: 1.2rem;*/
+/*    }*/
 
-    h2 {
-        @apply text-4xl;
-        line-height: 54px;
-        letter-spacing: -1.15px;
-        font-weight: 700;
-        margin-bottom: 0.6rem;
-        margin-top: 1rem;
-    }
+/*    h2 {*/
+/*        @apply text-4xl;*/
+/*        line-height: 54px;*/
+/*        letter-spacing: -1.15px;*/
+/*        font-weight: 700;*/
+/*        !*margin-bottom: 0.3rem;*!*/
+/*        margin-top: 1.2rem;*/
+/*    }*/
 
-    h3 {
-        @apply text-3xl;
-        line-height: 54px;
-        letter-spacing: -1.15px;
-        font-weight: 700;
-        margin-bottom: 0.6rem;
-        margin-top: 1rem;
-    }
+/*    h3 {*/
+/*        @apply text-3xl;*/
+/*        line-height: 54px;*/
+/*        letter-spacing: -1.15px;*/
+/*        font-weight: 700;*/
+/*        !*margin-bottom: 0.3rem;*!*/
+/*        margin-top: 1.2rem;*/
+/*    }*/
 
-    h4 {
-        @apply text-2xl;
-        line-height: 54px;
-        letter-spacing: -1.15px;
-        font-weight: 700;
-        margin-bottom: 0.6rem;
-        margin-top: 1rem;
-    }
+/*    h4 {*/
+/*        @apply text-2xl;*/
+/*        line-height: 54px;*/
+/*        letter-spacing: -1.15px;*/
+/*        font-weight: 700;*/
+/*        !*margin-bottom: 0.3rem;*!*/
+/*        margin-top: 1.2rem;*/
+/*    }*/
 
-    h5 {
-        @apply text-xl;
-        line-height: 54px;
-        letter-spacing: -1.15px;
-        font-weight: 700;
-        margin-bottom: 0.6rem;
-        margin-top: 1rem;
-    }
-}
+/*    h5 {*/
+/*        @apply text-xl;*/
+/*        line-height: 54px;*/
+/*        letter-spacing: -1.15px;*/
+/*        font-weight: 700;*/
+/*        !*margin-bottom: 0.3rem;*!*/
+/*        margin-top: 1.2rem;*/
+/*    }*/
+/*}*/
 
 body {
     margin: 0;

@@ -50,7 +50,6 @@ export default function Articles() {
       text: "News",
       onClick: () => {
         changeCategory(ArticleCategory.NEWS);
-        // setPage(0);
       },
       active: category === ArticleCategory.NEWS,
     },
@@ -58,7 +57,6 @@ export default function Articles() {
       text: "Events",
       onClick: () => {
         changeCategory(ArticleCategory.EVENTS);
-        // setPage(0);
       },
       active: category === ArticleCategory.EVENTS,
     },
@@ -66,7 +64,6 @@ export default function Articles() {
       text: "Sport",
       onClick: () => {
         changeCategory(ArticleCategory.SPORT);
-        // setPage(0);
       },
       active: category === ArticleCategory.SPORT,
     },
@@ -74,7 +71,6 @@ export default function Articles() {
       text: "Science",
       onClick: () => {
         changeCategory(ArticleCategory.SCIENCE);
-        // setPage(0);
       },
       active: category === ArticleCategory.SCIENCE,
     },
@@ -82,7 +78,6 @@ export default function Articles() {
       text: "Other",
       onClick: () => {
         changeCategory(ArticleCategory.OTHER);
-        // setPage(0);
       },
       active: category === ArticleCategory.OTHER,
     },

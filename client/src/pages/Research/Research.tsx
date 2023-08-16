@@ -17,6 +17,7 @@ import {
 } from "../../features/article";
 import Card from "../../common_components/Card/Card";
 import FullWidthColoredBackground from "../../common_components/Card/FullWidthColoredBackground";
+import * as marked from "marked";
 
 export default function Research() {
   const links = useAppSelector((state) => state.links);
@@ -27,20 +28,25 @@ export default function Research() {
   const [articles, setArticles] = useState<Article[]>([]);
 
   // Get the page content
-  const researchPageContent: ResearchPageContentInterface = require(`./json/research-${facultyId}.json`);
+  const researchPageContent: ResearchPageContentInterface = facultyId
+    ? require(`./json/research-${facultyId}.json`)
+    : require(`./json/research.json`);
 
   // Prepare sidebar links
-  const sidebarLinks: SidebarLinkProps[] = mobileNavView
-    ? FacultyNavLinksCreator.createFacultyNavigationLinks(facultyId!)
-    : FacultyNavLinksCreator.createFacultyNavigationLinksDesktop(
-        facultyId!,
-        PageType.RESEARCH,
-      );
+  let sidebarLinks: SidebarLinkProps[] = [];
+  if (facultyId) {
+    sidebarLinks = mobileNavView
+      ? FacultyNavLinksCreator.createFacultyNavigationLinks(facultyId!)
+      : FacultyNavLinksCreator.createFacultyNavigationLinksDesktop(
+          facultyId!,
+          PageType.RESEARCH,
+        );
+  }
 
   useEffect(() => {
     const handleFetchArticles = async () => {
       // Prepare the link
-      if (!links.articles.search || !facultyId) {
+      if (!links.articles.search) {
         return;
       }
 
@@ -48,7 +54,7 @@ export default function Research() {
       const response: GetArticlesResponse = await ArticleRequest.getArticles({
         link: links.articles.search,
         category: ArticleCategory.SCIENCE,
-        faculty: facultyId,
+        faculty: facultyId || undefined,
         pagination: { size: 6 },
       });
 
@@ -69,9 +75,14 @@ export default function Research() {
           <h1 className="page-title_h1 px-2 lg:px-0 text-brandMainNearlyBlack">
             {researchPageContent.title}
           </h1>
-          <p className={"text-grayscaleDarkText px-2 lg:px-0 mb-6"}>
-            {researchPageContent.textUnderTitle}
-          </p>
+          <p
+            className={
+              "markdown-paragraph text-grayscaleDarkText px-2 lg:px-0 mb-6"
+            }
+            dangerouslySetInnerHTML={{
+              __html: marked.marked(researchPageContent.textUnderTitle),
+            }}
+          ></p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mb-16  gap-4">
             {articles.map((article) => {
               return (
