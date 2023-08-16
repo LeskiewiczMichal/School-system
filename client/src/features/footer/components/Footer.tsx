@@ -21,7 +21,7 @@ export default function Footer() {
         />
         <LinkButtonNoBorderOrBackground
           text={"Give feedback"}
-          link={"/about-us/about-website"}
+          link={"/about-us/contact"}
         />
       </section>
       <section

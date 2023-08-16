@@ -14,6 +14,7 @@ export enum AppPaths {
   ARTICLES = "/articles",
   FACULTIES = "/faculties",
   IMAGES = "/images",
+  CONTACT = "/about-us/contact",
 }
 
 function App() {

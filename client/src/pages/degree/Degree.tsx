@@ -17,10 +17,7 @@ import {
   ArticleCategory,
   ArticlesDisplay,
 } from "../../features/article";
-import ArticleRequest, {
-  GetArticlesResponse,
-} from "../../features/article/services/ArticleRequest";
-import article from "../../features/article/Types/Article";
+import FullWidthColoredBackground from "../../common_components/Card/FullWidthColoredBackground";
 
 export default function Degree() {
   const { degreeId } = useParams<{ degreeId: string }>();
@@ -137,8 +134,24 @@ export default function Degree() {
         </div>
       </section>
       <section className={"w-full px-4 md:px-32 my-16"}>
-        <ArticlesDisplay heading={"Studying at the Aquila University"} />
+        // TODO: CHANGE ARTICLE CATEGORY TO EVENTS
+        <ArticlesDisplay
+          heading={"Studying at the Aquila University"}
+          category={ArticleCategory.NEWS}
+        />
       </section>
+      <div className={"w-full px-4 md:px-32 my-16"}>
+        <FullWidthColoredBackground
+          color={"black"}
+          textColor={"white"}
+          heading={"ADMISSION ASSISTANCE"}
+          text={
+            "Feel free to reach out to our Admission Assistance team at the University of Helsinki if you have any inquiries regarding the admissions procedure. We're here to provide you with the guidance and assistance you need."
+          }
+          buttonText={"Contact us"}
+          buttonLink={AppPaths.CONTACT}
+        />
+      </div>
     </div>
   );
 }
