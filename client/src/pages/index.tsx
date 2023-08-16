@@ -7,6 +7,7 @@ import TeachingAndStudying from "./teachingAndStudying/TeachingAndStudying";
 import Research from "./Research/Research";
 import DegreeProgrammes from "./degreeProgrammes/DegreeProgrammes";
 import Degree from "./degree/Degree";
+import AboutTheWebsite from "./aboutUs/AboutTheWebsite";
 
 export {
   Home,
@@ -18,4 +19,5 @@ export {
   Research,
   DegreeProgrammes,
   Degree,
+  AboutTheWebsite,
 };
