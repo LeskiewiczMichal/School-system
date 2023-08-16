@@ -85,7 +85,7 @@ export default function FacultiesDropdown(props: FacultiesDropdownProps) {
       {/* User picture button */}
       <button
         id="profileButton"
-        className="flex items-center inline-block text-md font-bold text-brandMain align-baseline hover:text-brandMainActive h-full"
+        className="flex items-center inline-block text-md font-bold text-white align-baseline hover:underline h-full"
         type="button"
         onClick={handleDropDown}
       >
@@ -103,22 +103,22 @@ export default function FacultiesDropdown(props: FacultiesDropdownProps) {
       <nav
         aria-labelledby="profileButton"
         className={`z-50 flex flex-col items-center bg-white border-b rounded-b-lg w-screen left-0 ${
-          facultyHeader ? "top-28" : "top-20"
+          facultyHeader ? "top-28" : "top-24"
         }  px-16 py-16  ${profileMenuOpen ? "absolute" : "hidden"}`}
       >
         {/* Faculties */}
         <Link
           to="/faculties"
-          className="mb-4 text-2xl text-primaryDarkened hover:text-primaryDarkened bold italic underline"
+          className="mb-4 text-2xl text-brandMain hover:text-brandMainActive font-bold italic underline"
         >
           Faculties and units
         </Link>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 w-full h-full place-content-center justify-center items-center text-xl text-primary">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 w-full h-full place-content-center justify-center items-center text-xl text-brandMain">
           {faculties.map((faculty) => (
             <div className="w-full flex justify-center" key={faculty.name}>
               <a
                 href={AppPaths.FACULTIES + "/" + faculty.id}
-                className="flex w-fit italic justify-center items-center text-xl text-primary hover:text-primaryDarkened"
+                className="flex w-fit italic justify-center items-center text-xl text-brandMain hover:text-brandMainActive"
               >
                 {faculty.name}
               </a>

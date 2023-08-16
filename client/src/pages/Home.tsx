@@ -11,9 +11,14 @@ import ArticleRequest, {
 import TextAndButtonWithPhotoOnRight from "../common_components/Card/TextAndButtonWithPhotoOnRight";
 import GlassBuilding from "../features/main-page/assets/glass-building.webp";
 import { AppPaths } from "../App";
+import { Sidebar } from "../features/sidebar";
+import MainNavLinksCreator from "../features/header/utils/MainNavLinksCreator";
 
 export default function Home() {
   const links = useAppSelector((state) => state.links);
+  const mobileNavView = useAppSelector(
+    (state) => state.integration.mobileNavView,
+  );
   const [scienceArticles, setScienceArticles] = useState<Article[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -43,6 +48,8 @@ export default function Home() {
   if (isLoading) {
     return <div>Loading...</div>;
   }
+
+  const sidebarLinks = MainNavLinksCreator.createMainNavLinks();
 
   return (
     <main className="">
@@ -80,6 +87,7 @@ export default function Home() {
           <ArticlesDisplay />
         </div>
       </section>
+      {mobileNavView && <Sidebar links={sidebarLinks} />}
     </main>
   );
 }

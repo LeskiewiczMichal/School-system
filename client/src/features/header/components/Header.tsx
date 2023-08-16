@@ -1,6 +1,7 @@
 import { ReactComponent as Logo } from "../../../assets/logo/logo.svg";
 import { ReactComponent as LogoWhite } from "../../../assets/logo/logo-white.svg";
 import { ReactComponent as MenuIcon } from "../assets/menu.svg";
+import { ReactComponent as MenuIconWhite } from "../assets/menu-white.svg";
 import { ReactComponent as ArrowRightWhite } from "../../../assets/icons/arrow/arrow-right-white.svg";
 import FacultiesDropdown from "./FacultiesDropdown";
 import { Link, useLocation, useParams } from "react-router-dom";
@@ -151,41 +152,46 @@ export default function Header() {
       <div className="flex  items-center">
         {/* Logo */}
         <Link to="/" className="h-28 w-28">
-          <Logo className="h-full w-full" />
+          <LogoWhite className="h-full w-full" />
         </Link>
-        <h1 className="text-xl md:text-2xl w-full font-bold text-brandMain italic">
+        <h1 className="text-xl md:text-2xl w-full font-bold text-white italic">
           Aquila University
         </h1>
       </div>
 
       {/* Navigation */}
       <div className="flex items-center  justify-end gap-4">
-        {mainNavLinks.map((link) => (
-          <Link
-            to={link.redirectUrl!}
-            className={
-              "inline-block min-w-fit text-md font-bold text-brandMain align-baseline hover:text-brandMainActive"
-            }
-          >
-            {link.title}
-          </Link>
-        ))}
         <FacultiesDropdown />
-        {/* Login */}
-        <Link
-          to="/login"
-          className="inline-block min-w-fit text-md font-bold text-brandMain align-baseline hover:text-brandMainActive"
-        >
-          Sign In
-        </Link>
+        {!mobileNavView && (
+          <>
+            {mainNavLinks.map((link) => (
+              <Link
+                to={link.redirectUrl!}
+                className={
+                  "inline-block min-w-fit text-md font-bold text-white align-baseline hover:underline"
+                }
+              >
+                {link.title}
+              </Link>
+            ))}
+            {/* Login */}
+            <Link
+              to="/login"
+              className="inline-block min-w-fit text-md font-bold text-white align-baseline hover:underline"
+            >
+              Sign In
+            </Link>
+          </>
+        )}
+
         {/* Hamburger menu to open sidebar */}
-        {mobileNavView && shouldContainSidebar && (
+        {mobileNavView && (
           <button
             type="button"
             className="inline-block min-w-fit text-md font-bold text-primary align-baseline hover:text-primaryLighter"
             onClick={handleClickOpenMenu}
           >
-            <MenuIcon className="h-6 w-6" />
+            <MenuIconWhite className="h-6 w-6" />
           </button>
         )}
       </div>
