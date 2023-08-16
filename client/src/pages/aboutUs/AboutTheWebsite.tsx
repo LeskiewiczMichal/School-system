@@ -1,9 +1,16 @@
 import { Sidebar } from "../../features/sidebar";
+import FooterLinksCreator, {
+  ActiveFooterPage,
+} from "../../features/footer/utils/FooterLinksCreator";
 
 export default function AboutTheWebsite() {
+  const links = FooterLinksCreator.createFooterNavigationLinks(
+    ActiveFooterPage.ABOUT_WEBSITE,
+  );
+
   return (
     <div className={"flex h-full"}>
-      <Sidebar />
+      <Sidebar links={links} />
       <main className={"h-full w-full flex flex-col py-8 px-8 lg:pr-32"}>
         <h1 className="page-title_h1 px-2 lg:px-0 text-brandMainNearlyBlack">
           ABOUT THE WEBSITE
@@ -14,7 +21,7 @@ export default function AboutTheWebsite() {
           offerings and opportunities.
         </span>
 
-        <h2 className={"my-header mb-2 mt-6"}>Discover Diverse Pathways</h2>
+        <h2 className={"my-header mb-2 mt-8"}>Discover Diverse Pathways</h2>
         <span>
           We proudly present details on our degree programs, as well as avenues
           for pursuing doctoral studies and lifelong learning experiences.
