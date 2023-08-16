@@ -17,7 +17,7 @@ export default function Footer() {
         />
         <LinkButtonNoBorderOrBackground
           text={"Cookie management"}
-          link={"/about-us/about-website"}
+          link={"/about-us/cookie-management"}
         />
         <LinkButtonNoBorderOrBackground
           text={"Give feedback"}

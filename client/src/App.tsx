@@ -53,9 +53,11 @@ function App() {
         <Routes>
           <Route path="/" element={<Pages.Home />} />
           <Route path="/login" element={<Pages.Login />} />
+          <Route path="/research" element={<Pages.Research />} />
+          {/* Articles */}
           <Route path="/articles" element={<Pages.Articles />} />
           <Route path="/articles/:id" element={<Pages.Article />} />
-          <Route path="/research" element={<Pages.Research />} />
+          {/* Faculty */}
           <Route path="/faculties/:facultyId" element={<Pages.Faculty />} />
           <Route
             path="/faculties/:facultyId/teaching-and-studying"
@@ -65,6 +67,7 @@ function App() {
             path="/faculties/:facultyId/research"
             element={<Pages.Research />}
           />
+          {/* Degree */}
           <Route
             path="/degree-programmes/:degreeId"
             element={<Pages.Degree />}
@@ -73,9 +76,14 @@ function App() {
             path="/degree-programmes"
             element={<Pages.DegreeProgrammes />}
           />
+          {/* About us */}
           <Route
             path="/about-us/about-website"
             element={<Pages.AboutTheWebsite />}
+          />
+          <Route
+            path="/about-us/cookie-management"
+            element={<Pages.CookieManagement />}
           />
         </Routes>
         <Footer />

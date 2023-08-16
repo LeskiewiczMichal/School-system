@@ -8,6 +8,7 @@ import Research from "./Research/Research";
 import DegreeProgrammes from "./degreeProgrammes/DegreeProgrammes";
 import Degree from "./degree/Degree";
 import AboutTheWebsite from "./aboutUs/AboutTheWebsite";
+import CookieManagement from "./aboutUs/CookieManagement";
 
 export {
   Home,
@@ -20,4 +21,5 @@ export {
   DegreeProgrammes,
   Degree,
   AboutTheWebsite,
+  CookieManagement,
 };
