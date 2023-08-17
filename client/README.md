@@ -16,3 +16,8 @@ Icons:
     Language: https://www.svgrepo.com/svg/506518/language
     Atom: https://www.svgrepo.com/svg/454121/education-learning-6
     Dollar: https://www.svgrepo.com/svg/532432/dollar-sign
+    User: https://www.svgrepo.com/svg/532362/user?edit=true
+    Email: https://www.svgrepo.com/svg/521128/email-1?edit=true
+    Identification card: https://www.svgrepo.com/svg/365490/identification-card-thin?edit=true
+    School campus/faculty: https://www.svgrepo.com/svg/19186/school-campus
+    Degree diploma: https://www.svgrepo.com/svg/260014/degree-diploma?edit=true

@@ -1,8 +1,11 @@
 import { Sidebar } from "../features/sidebar";
 import { useAppSelector } from "../hooks";
+import EnumMapper from "../utils/EnumMapper";
+import { BasicInformation } from "../features/user";
 
 export default function MyAccount() {
   const user = useAppSelector((state) => state.auth.data);
+  const userLinks = useAppSelector((state) => state.auth._links);
 
   if (!user) {
     return (
@@ -15,17 +18,18 @@ export default function MyAccount() {
   return (
     <div className={"flex h-full"}>
       <Sidebar />
-      <main className={"pb-16 border-b border-grayscaleMediumDark"}>
-        <section className={"px-4 lg:px-8 lg:pr-28 py-8 mb-4"}>
+      <main className={"pb-16 border-b border-grayscaleMediumDark w-full"}>
+        <section className={"px-4 lg:px-8 py-8 mb-4 w-full sm:w-fit"}>
           <h1 className="page-title_h1 text-brandMainNearlyBlack">
-            User Information
+            Hello, {user.firstName}
           </h1>
-          <div className={"border border-brandMain"}>
-            <span>Firstname: {user.firstName}</span>
-            <span>Lastname: {user.lastName}</span>
-            <span>Email: {user.email}</span>
-          </div>
+          <BasicInformation user={user} />
         </section>
+        <section
+          className={
+            "px-4 lg:px-8 lg:pr-28 py-8 mb-4 w-full border-t border-grayscaleMedium"
+          }
+        ></section>
       </main>
     </div>
   );
