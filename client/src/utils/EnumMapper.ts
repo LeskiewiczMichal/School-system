@@ -1,5 +1,6 @@
 import { DegreeTitle } from "../features/degree";
 import Language from "../type/Language";
+import Role from "../type/Role";
 
 const mapDegreeTitleToString = (degreeTitle: DegreeTitle): string => {
   switch (degreeTitle) {
@@ -28,6 +29,24 @@ const mapLanguageToString = (language: Language): string => {
       return "Unknown";
   }
 };
-const EnumMapper = { mapDegreeTitleToString, mapLanguageToString };
+
+const mapRoleToString = (role: Role): string => {
+  switch (role) {
+    case Role.ADMIN:
+      return "Admin";
+    case Role.STUDENT:
+      return "Student";
+    case Role.TEACHER:
+      return "Teacher";
+    default:
+      return "Unknown";
+  }
+};
+
+const EnumMapper = {
+  mapDegreeTitleToString,
+  mapLanguageToString,
+  mapRoleToString,
+};
 
 export default EnumMapper;

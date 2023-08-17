@@ -6,7 +6,7 @@ const createFacultyNavigationLinks = (
   return [
     {
       title: "News",
-      redirectUrl: `/faculties/${facultyId}/news`,
+      redirectUrl: `/articles?faculty=${facultyId}`,
     },
     {
       title: "Teaching and Studying",
@@ -15,10 +15,6 @@ const createFacultyNavigationLinks = (
     {
       title: "Research",
       redirectUrl: `/faculties/${facultyId}/research`,
-    },
-    {
-      title: "Degree Programmes",
-      redirectUrl: `/faculties/${facultyId}/degree-programmes`,
     },
   ];
 };

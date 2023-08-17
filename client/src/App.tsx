@@ -54,6 +54,7 @@ function App() {
           <Route path="/" element={<Pages.Home />} />
           <Route path="/login" element={<Pages.Login />} />
           <Route path="/research" element={<Pages.Research />} />
+          <Route path="/my-account" element={<Pages.MyAccount />} />
           {/* Articles */}
           <Route path="/articles" element={<Pages.Articles />} />
           <Route path="/articles/:id" element={<Pages.Article />} />
