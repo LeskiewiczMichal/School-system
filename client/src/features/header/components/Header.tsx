@@ -18,6 +18,9 @@ import MainNavLinksCreator from "../utils/MainNavLinksCreator";
 
 export default function Header() {
   const dispatch = useAppDispatch();
+  const isAuthenticated: boolean = useAppSelector(
+    (state) => state.auth.data !== null,
+  );
 
   // Get the current path
   const location = useLocation();
@@ -118,9 +121,25 @@ export default function Header() {
                     {link.title}
                   </Link>
                 ))}
-                <FacultiesDropdown facultyHeader />
+                <FacultiesDropdown facultyHeader brandMain />
+                {isAuthenticated ? (
+                  <Link
+                    to="/my-account"
+                    className="inline-block min-w-fit text-md font-bold text-brandMain align-baseline hover:text-brandMainActive"
+                  >
+                    My account
+                  </Link>
+                ) : (
+                  <Link
+                    to="/login"
+                    className="inline-block min-w-fit text-md font-bold text-brandMain align-baseline hover:text-brandMainActive"
+                  >
+                    Sign In
+                  </Link>
+                )}
               </div>
             )}
+
             {/* Login */}
             {/*<Link*/}
             {/*  to="/login"*/}
@@ -130,13 +149,16 @@ export default function Header() {
             {/*</Link>*/}
             {/* Hamburger menu to open sidebar */}
             {mobileNavView && (
-              <button
-                type="button"
-                className="inline-block ml-auto min-w-fit text-md font-bold text-primary align-baseline hover:text-primaryLighter"
-                onClick={handleClickOpenMenu}
-              >
-                <MenuIcon className="h-6 w-6" />
-              </button>
+              <div className={"flex gap-4 ml-auto"}>
+                <FacultiesDropdown facultyHeader brandMain />
+                <button
+                  type="button"
+                  className="inline-block ml-auto min-w-fit text-md font-bold text-primary align-baseline hover:text-primaryLighter"
+                  onClick={handleClickOpenMenu}
+                >
+                  <MenuIcon className="h-6 w-6" />
+                </button>
+              </div>
             )}
           </div>
         </section>
@@ -175,12 +197,21 @@ export default function Header() {
               </Link>
             ))}
             {/* Login */}
-            <Link
-              to="/login"
-              className="inline-block min-w-fit text-md font-bold text-white align-baseline hover:underline"
-            >
-              Sign In
-            </Link>
+            {isAuthenticated ? (
+              <Link
+                to="/my-account"
+                className="inline-block min-w-fit text-md font-bold text-white align-baseline hover:underline"
+              >
+                My account
+              </Link>
+            ) : (
+              <Link
+                to="/login"
+                className="inline-block min-w-fit text-md font-bold text-white align-baseline hover:underline"
+              >
+                Sign In
+              </Link>
+            )}
           </>
         )}
 

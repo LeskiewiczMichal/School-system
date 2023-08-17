@@ -5,15 +5,21 @@ import SidebarLink, { SidebarLinkProps } from "./SidebarLink";
 import DarkenLayoutBelowIndexZ from "../../../common_components/DarkenLayoutBelowIndexZ";
 import { IntegrationSliceActions } from "../../../store";
 import SidebarButton, { SidebarButtonProps } from "./SidebarButton";
+import { Link, useNavigate } from "react-router-dom";
 
 export interface SidebarProps {
   links?: SidebarLinkProps[];
   buttons?: SidebarButtonProps[];
+  backButtonLink?: string;
 }
 
 export default function Sidebar(props: SidebarProps) {
-  const { links, buttons } = props;
+  const navigate = useNavigate();
+  const { links, buttons, backButtonLink } = props;
   const dispatch = useAppDispatch();
+  const isAuthenticated: boolean = useAppSelector(
+    (state) => state.auth.data !== null,
+  );
 
   // Mobile view support for sidebar
   const [mobileNavView, setMobileNavView] = useState<boolean>(
@@ -43,14 +49,20 @@ export default function Sidebar(props: SidebarProps) {
     dispatch(IntegrationSliceActions.setSidebarMenuActive(false));
   };
 
+  const handleClickBack = () => {
+    if (backButtonLink) {
+      navigate(backButtonLink);
+    } else {
+      window.history.back();
+    }
+  };
+
   if (!mobileNavView) {
     return (
       <div className="flex flex-col flex-none gap-6 bg-grayscaleLight w-72 px-8 py-10 border-r border-grayscaleMediumDark  h-screen sticky top-0">
         {/*  Back button */}
         <button
-          onClick={() => {
-            window.history.back();
-          }}
+          onClick={handleClickBack}
           className={
             "flex items-center text-lg gap-4 font-bold text-brandMainBright hover:underline"
           }
@@ -100,15 +112,20 @@ export default function Sidebar(props: SidebarProps) {
 
         {/*  Back button */}
         <button
-          onClick={() => {
-            window.history.back();
-          }}
+          onClick={handleClickBack}
           className={
             "flex items-center text-lg gap-4 font-bold text-brandMainBright hover:underline"
           }
         >
           <ChevronLeft className={"h-6 w-6"} /> Back
         </button>
+
+        {/* Account */}
+        {isAuthenticated ? (
+          <SidebarLink title={"My account"} redirectUrl={"/my-account"} />
+        ) : (
+          <SidebarLink title={"Sign in"} redirectUrl={"/login"} />
+        )}
 
         {/* Buttons */}
         {buttons &&

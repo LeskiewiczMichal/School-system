@@ -18,7 +18,7 @@ export default function Greeting() {
           opportunities for the upcoming academic adventure.
         </p>
         <Link
-          to="/degrees"
+          to="/degree-programmes"
           className="bg-brandMain text-center text-white font-bold text-md py-2 px-4 hover:bg-brandMainActive"
         >
           Browse the degree catalogue

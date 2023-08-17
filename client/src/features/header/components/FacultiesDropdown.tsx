@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
-import { ReactComponent as DropdownArrow } from "../../../assets/icons/dropdown-arrow.svg";
+import { ReactComponent as DropdownArrow } from "../../../assets/icons/dropdownArrow/dropdown-arrow.svg";
+import { ReactComponent as DropdownArrowBrandMain } from "../../../assets/icons/dropdownArrow/dropdown-arrow-brandMain.svg";
 import RequestService from "../../../utils/RequestService";
 import APILink from "../../../type/APILink";
 import ResourceNameWithLink from "../../../type/ResourceNameWithLink";
@@ -11,10 +12,11 @@ import { AppPaths } from "../../../App";
 
 export interface FacultiesDropdownProps {
   facultyHeader?: boolean;
+  brandMain?: boolean;
 }
 
 export default function FacultiesDropdown(props: FacultiesDropdownProps) {
-  const { facultyHeader } = props;
+  const { facultyHeader, brandMain = false } = props;
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -85,12 +87,20 @@ export default function FacultiesDropdown(props: FacultiesDropdownProps) {
       {/* User picture button */}
       <button
         id="profileButton"
-        className="flex items-center inline-block text-md font-bold text-white align-baseline hover:underline h-full"
+        className={`flex items-center inline-block text-md font-bold align-baseline h-full ${
+          brandMain
+            ? "text-brandMain hover:text-brandMainActive"
+            : "text-white hover:underline"
+        }`}
         type="button"
         onClick={handleDropDown}
       >
         <span>Faculties</span>
-        <DropdownArrow className="h-5 w-6" />{" "}
+        {brandMain ? (
+          <DropdownArrowBrandMain className="h-5 w-6" />
+        ) : (
+          <DropdownArrow className="h-5 w-6" />
+        )}{" "}
       </button>
 
       {profileMenuOpen && (
