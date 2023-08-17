@@ -113,7 +113,7 @@ export default function FacultiesDropdown(props: FacultiesDropdownProps) {
       <nav
         aria-labelledby="profileButton"
         className={`z-50 flex flex-col items-center bg-white border-b rounded-b-lg w-screen left-0 ${
-          facultyHeader ? "top-28" : "top-24"
+          facultyHeader ? "top-32" : "top-24"
         }  px-16 py-16  ${profileMenuOpen ? "absolute" : "hidden"}`}
       >
         {/* Faculties */}
