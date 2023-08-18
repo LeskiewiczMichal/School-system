@@ -6,7 +6,6 @@ import {
   CourseRequest,
 } from "../../features/course";
 import { useAppSelector } from "../../hooks";
-import RequestService from "../../utils/RequestService";
 import axios from "axios";
 
 export default function Course() {
@@ -52,7 +51,9 @@ export default function Course() {
 
   return (
     <div>
-      <CourseInfoCard course={course} />
+      <div className={"w-full flex justify-center"}>
+        <CourseInfoCard course={course} />
+      </div>
     </div>
   );
 }
