@@ -25,7 +25,7 @@ const mapLanguageToString = (language: Language): string => {
     case Language.ENGLISH:
       return "English";
     case Language.POLISH:
-      return "German";
+      return "Polish";
     default:
       return "Unknown";
   }

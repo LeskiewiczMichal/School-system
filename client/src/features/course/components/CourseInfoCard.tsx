@@ -12,7 +12,7 @@ export default function CourseInfoCard(props: CourseInfoCardProps) {
 
   return (
     <section
-      className="flex px-6 py-8 lg:mt-10 mb-10 w-10/12 h-[32rem] "
+      className="flex px-6 py-8 lg:mt-10 mb-10 w-full sm:w-10/12 h-[32rem] "
       style={{
         backgroundImage: `url(${require(`../assets/courseInfoCardImages/course-${course.id}.webp`)})`,
         backgroundPosition: "center",
@@ -22,23 +22,30 @@ export default function CourseInfoCard(props: CourseInfoCardProps) {
       }}
     >
       <div className="flex flex-col w-full max-w-3xl text-grayscaleDarkText h-full bg-white p-8">
-        <h2 className="text-4xl font-extrabold text-brandMain">
+        <h2 className="text-4xl font-extrabold text-brandMain mb-6">
           {course.title}
         </h2>
+
         <span>
           <b>Duration:</b> {course.durationInHours} hours
         </span>
-        {/*/!*<span><b>ECTS:</b> {course.ects}</span>*!/ // TODO: Add ECTS to the API*/}
 
-        <span>
-          <b>Language:</b> {EnumMapper.mapLanguageToString(course.language)}
-        </span>
         <span>
           <b>Scope:</b>{" "}
           {course.scope
             .map((scope) => EnumMapper.mapScopeToString(scope))
             .join(", ")}
         </span>
+        {/*/!*<span><b>ECTS:</b> {course.ects}</span>*!/ // TODO: Add ECTS to the API*/}
+
+        <span>
+          Teaching language{" "}
+          <b>{EnumMapper.mapLanguageToString(course.language)}</b>
+        </span>
+
+        <span>The course is organized by {course.faculty.name}</span>
+
+        <span>The course is led by {course.teacher.name}</span>
       </div>
     </section>
   );
