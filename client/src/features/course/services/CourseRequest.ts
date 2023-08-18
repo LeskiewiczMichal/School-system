@@ -25,6 +25,15 @@ export interface FetchCoursesResponse {
   paginationInfo: PaginationInfo;
 }
 
+/**
+ * Fetch courses from the API (using search or not)
+ *
+ * @param props {@link FetchCoursesProps} object,
+ * containing the link {@link APILink} - either a search link or a link to all courses,
+ * degreeId id (optional),
+ * title (string, optional) and pagination {@link OptionalPaginationParams} (optional)
+ * @returns Promise of an array of {@link Course} objects
+ */
 const getList = async (
   props: FetchCoursesProps,
 ): Promise<FetchCoursesResponse> => {
@@ -88,8 +97,31 @@ const getList = async (
   };
 };
 
+export interface FetchSingleCourseProps {
+  link: APILink;
+  id: string;
+}
+
+/**
+ * Fetch a single course by id from the API
+ *
+ * @param props {@link FetchSingleCourseProps} object, containing the link {@link APILink} and the string - course id
+ * @returns Promise of an {@link Course} object
+ */
+const getById = async (props: FetchSingleCourseProps): Promise<Course> => {
+  const { link, id } = props;
+
+  const responseData = await RequestService.performGetByIdRequest({
+    link: link,
+    id: id,
+  });
+
+  return CourseMapper.mapFromServerData(responseData);
+};
+
 const CourseRequest = {
   getList,
+  getById,
 };
 
 export default CourseRequest;
