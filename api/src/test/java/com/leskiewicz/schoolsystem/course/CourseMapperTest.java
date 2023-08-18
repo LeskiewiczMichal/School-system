@@ -58,6 +58,8 @@ public class CourseMapperTest {
             .faculty(faculty.getName())
             .teacherId(teacher.getId())
             .facultyId(faculty.getId())
+            .language(course.getLanguage())
+            .scope(course.getScope())
             .durationInHours(course.getDuration_in_hours())
             .build();
 

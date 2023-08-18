@@ -25,6 +25,7 @@ import com.leskiewicz.schoolsystem.generic.CommonTests;
 import com.leskiewicz.schoolsystem.testUtils.TestHelper;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserDtoAssembler;
+import com.leskiewicz.schoolsystem.utils.Language;
 import jakarta.persistence.EntityNotFoundException;
 import org.assertj.core.api.Assertions;
 import org.hamcrest.Matchers;
@@ -41,6 +42,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 public class CourseControllerTest {
@@ -121,6 +124,9 @@ public class CourseControllerTest {
             .facultyId(1L)
             .teacherId(1L)
             .durationInHours(10)
+            .description("description")
+            .language(Language.ENGLISH)
+            .scope(List.of(CourseScope.LECTURES, CourseScope.EXERCISES))
             .build();
 
     CommonTests.controllerCreateEntity(
@@ -238,7 +244,6 @@ public class CourseControllerTest {
 
     String response = result.getResponse().getContentAsString();
     Assertions.assertThat(response).isEqualTo(description);
-
   }
 
   //  @Test

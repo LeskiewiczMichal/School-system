@@ -3,6 +3,7 @@ package com.leskiewicz.schoolsystem.course.service;
 import com.leskiewicz.schoolsystem.authentication.Role;
 import com.leskiewicz.schoolsystem.course.Course;
 import com.leskiewicz.schoolsystem.course.CourseRepository;
+import com.leskiewicz.schoolsystem.course.CourseScope;
 import com.leskiewicz.schoolsystem.course.CourseServiceImpl;
 import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.course.dto.CreateCourseRequest;
@@ -13,6 +14,7 @@ import com.leskiewicz.schoolsystem.faculty.FacultyRepository;
 import com.leskiewicz.schoolsystem.testUtils.TestHelper;
 import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.UserRepository;
+import com.leskiewicz.schoolsystem.utils.Language;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,6 +26,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -57,6 +60,9 @@ public class CreateCourseTest {
             .durationInHours(10)
             .facultyId(1L)
             .teacherId(1L)
+            .scope(List.of(CourseScope.EXERCISES, CourseScope.LECTURES))
+            .language(Language.ENGLISH)
+            .description("Course description")
             .build();
   }
 

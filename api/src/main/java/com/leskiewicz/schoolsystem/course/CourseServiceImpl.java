@@ -94,6 +94,8 @@ public class CourseServiceImpl implements CourseService {
             .faculty(faculty)
             .teacher(teacher)
             .description(createCourseRequest.getDescription())
+            .language(createCourseRequest.getLanguage())
+            .scope(createCourseRequest.getScope())
             .build();
 
     // Check if the course doesn't already exist

@@ -5,6 +5,7 @@ import com.leskiewicz.schoolsystem.article.ArticleCategory;
 import com.leskiewicz.schoolsystem.article.dto.ArticleDto;
 import com.leskiewicz.schoolsystem.authentication.Role;
 import com.leskiewicz.schoolsystem.course.Course;
+import com.leskiewicz.schoolsystem.course.CourseScope;
 import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
@@ -108,10 +109,10 @@ public class TestHelper {
         .title(DegreeTitle.BACHELOR_OF_SCIENCE)
         .fieldOfStudy("Computer Science")
         .faculty(faculty)
-            .description("TestDescription")
-            .lengthOfStudy(3.0)
-            .tuitionFeePerYear(1000.00)
-            .language(List.of(Language.ENGLISH, Language.POLISH))
+        .description("TestDescription")
+        .lengthOfStudy(3.0)
+        .tuitionFeePerYear(1000.00)
+        .language(List.of(Language.ENGLISH, Language.POLISH))
         .build();
   }
 
@@ -133,6 +134,9 @@ public class TestHelper {
         .faculty(faculty)
         .teacher(teacher)
         .duration_in_hours(20)
+        .language(Language.ENGLISH)
+        .scope(List.of(CourseScope.EXERCISES, CourseScope.LECTURES))
+        .description("TestDescription")
         .build();
   }
 
@@ -145,6 +149,8 @@ public class TestHelper {
         .facultyId(1L)
         .teacherId(1L)
         .durationInHours(20)
+        .language(Language.ENGLISH)
+        .scope(List.of(CourseScope.EXERCISES, CourseScope.LECTURES))
         .build();
   }
 
@@ -157,6 +163,8 @@ public class TestHelper {
         .facultyId(course.getFaculty().getId())
         .teacherId(course.getTeacher().getId())
         .durationInHours(course.getDuration_in_hours())
+        .language(course.getLanguage())
+        .scope(course.getScope())
         .build();
   }
 
@@ -168,6 +176,9 @@ public class TestHelper {
             .faculty(faculty)
             .duration_in_hours(20)
             .teacher(teacher)
+            .language(Language.ENGLISH)
+            .scope(List.of(CourseScope.EXERCISES, CourseScope.LECTURES))
+            .description("TestDescription")
             .build(),
         Course.builder()
             .id(2L)
@@ -175,6 +186,9 @@ public class TestHelper {
             .faculty(faculty)
             .duration_in_hours(30)
             .teacher(teacher)
+            .language(Language.ENGLISH)
+            .scope(List.of(CourseScope.EXERCISES, CourseScope.LECTURES))
+            .description("TestDescription")
             .build());
   }
 
