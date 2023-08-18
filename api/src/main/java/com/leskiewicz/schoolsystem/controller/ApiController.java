@@ -107,7 +107,13 @@ public class ApiController {
     String uriTemplate = coursesLink.getHref() + PAGINATION_PARAMETERS;
     coursesLink = Link.of(uriTemplate).withRel("courses");
 
+    Link getByIdLink =
+            linkTo(methodOn(CourseController.class).getCourseById(null))
+                    .withRel("courses")
+                    .withTitle("Get by id");
+
     model.add(coursesLink);
+    model.add(getByIdLink);
   }
 
   private void addFilesLink(RepresentationModel<?> model) {
