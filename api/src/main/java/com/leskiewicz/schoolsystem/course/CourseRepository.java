@@ -39,7 +39,7 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
 
   @Query(
       value =
-          "SELECT c.* FROM course c JOIN degree_course dc ON d.id = dc.course_id WHERE dc.student_id = :id",
+          "SELECT c.* FROM course c JOIN degree_course dc ON c.id = dc.course_id WHERE dc.degree_id = :id",
       nativeQuery = true)
   Page<Course> findCoursesByDegreeId(@Param("id") Long degreeId, Pageable pageable);
 
