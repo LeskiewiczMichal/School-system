@@ -4,7 +4,10 @@ interface LinksState {
   login: APILink | null;
   register: APILink | null;
   users: APILink | null;
-  courses: APILink | null;
+  courses: {
+    getCourses: APILink | null;
+    getById: APILink | null;
+  };
   degrees: {
     getDegrees: APILink | null;
     getById: APILink | null;

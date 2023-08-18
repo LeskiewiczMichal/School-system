@@ -5,7 +5,10 @@ const initialState: LinksState = {
   login: null,
   register: null,
   users: null,
-  courses: null,
+  courses: {
+    getCourses: null,
+    getById: null,
+  },
   degrees: {
     getDegrees: null,
     getById: null,
