@@ -21,4 +21,7 @@ public class CreateCourseRequest {
 
   @NotNull(message = "TeacherId name required")
   private final Long teacherId;
+
+  @NotNull(message = "Description required")
+  private final String description;
 }

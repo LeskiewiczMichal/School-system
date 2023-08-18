@@ -206,7 +206,15 @@ public class CourseServiceImpl implements CourseService {
 
   @Override
   public String getCourseDescription(Long courseId) {
-    return null;
+    courseExistsCheck(courseId);
+
+    String description = courseRepository.findCourseDescriptionById(courseId);
+    if (description == null) {
+      throw new EntityNotFoundException(
+          "Description for course with ID " + courseId + " not found");
+    }
+
+    return description;
   }
 
   private void courseExistsCheck(Long courseId) {

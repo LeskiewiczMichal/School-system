@@ -247,4 +247,9 @@ public class CourseController {
           ErrorMessages.fileUploadFailed(file.getOriginalFilename()));
     }
   }
+
+  @GetMapping("/{id}/description")
+  public ResponseEntity<String> getCourseDescription(@PathVariable Long id) {
+    return ResponseEntity.ok(courseService.getCourseDescription(id));
+  }
 }
