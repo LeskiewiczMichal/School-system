@@ -30,6 +30,10 @@ const mapFromServerData = (data: any): Course => {
       href: data._links.files.href,
       templated: data._links.files.templated === true,
     },
+    description: {
+      href: data._links.description.href,
+      templated: data._links.description.templated === true,
+    },
   };
 };
 

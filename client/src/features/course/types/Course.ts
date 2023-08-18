@@ -18,4 +18,5 @@ export default interface Course {
   };
   students: APILink;
   files: APILink;
+  description: APILink;
 }
