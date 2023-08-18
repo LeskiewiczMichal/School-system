@@ -6,6 +6,7 @@ import DegreeSearchForm, {
 } from "./components/DegreeSearchForm";
 import DegreeCard from "./components/DegreeCard";
 import DegreeBasicInformation from "./components/DegreeBasicInformation";
+import DegreeCoursesDisplay from "./components/DegreeCoursesDisplay";
 
 export {
   DegreeTitle,
@@ -13,5 +14,6 @@ export {
   DegreeSearchForm,
   DegreeCard,
   DegreeBasicInformation,
+  DegreeCoursesDisplay,
 };
 export type { Degree, DegreeSearchFormProps };

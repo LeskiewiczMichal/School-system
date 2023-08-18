@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import {
   Degree as DegreeType,
   DegreeBasicInformation,
+  DegreeCoursesDisplay,
   DegreeRequest,
 } from "../../features/degree";
 import { useAppSelector } from "../../hooks";
@@ -92,6 +93,7 @@ export default function Degree() {
         ></div>
         <div className={"flex flex-col h-fit w-full flex-none gap-4 lg:w-1/3"}>
           <DegreeBasicInformation degree={degree} />
+          <DegreeCoursesDisplay degree={degree} />
         </div>
       </section>
       <section className={"w-full px-4 md:px-32 my-16"}>
