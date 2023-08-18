@@ -1,6 +1,7 @@
 import Course from "../types/Course";
 import { Link } from "react-router-dom";
 import DegreePageContentInterface from "../../../pages/degree/DegreePageContentInterface";
+import EnumMapper from "../../../utils/EnumMapper";
 
 export interface CourseInfoCardProps {
   course: Course;
@@ -20,16 +21,24 @@ export default function CourseInfoCard(props: CourseInfoCardProps) {
         // backgroundRepeat: "no-repeat",
       }}
     >
-      {/*<img*/}
-      {/*  src={require(`../assets/courseInfoCardImages/course-${course.id}.webp`)}*/}
-      {/*  className="w-full lg:w-1/2 lg:order-2"*/}
-      {/*  alt="Faculty greeting"*/}
-      {/*/>*/}
-      <div className="flex flex-col w-full h-full bg-white justify-center pl-8 pr-8  gap-4 pt-8">
-        <h2 className="text-5xl font-extrabold text-brandMain">
+      <div className="flex flex-col w-full max-w-3xl text-grayscaleDarkText h-full bg-white p-8">
+        <h2 className="text-4xl font-extrabold text-brandMain">
           {course.title}
         </h2>
-        <p>{course.durationInHours}</p>
+        <span>
+          <b>Duration:</b> {course.durationInHours} hours
+        </span>
+        {/*/!*<span><b>ECTS:</b> {course.ects}</span>*!/ // TODO: Add ECTS to the API*/}
+
+        <span>
+          <b>Language:</b> {EnumMapper.mapLanguageToString(course.language)}
+        </span>
+        <span>
+          <b>Scope:</b>{" "}
+          {course.scope
+            .map((scope) => EnumMapper.mapScopeToString(scope))
+            .join(", ")}
+        </span>
       </div>
     </section>
   );

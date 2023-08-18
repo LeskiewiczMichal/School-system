@@ -1,6 +1,7 @@
 import { DegreeTitle } from "../features/degree";
 import Language from "../type/Language";
 import Role from "../type/Role";
+import { CourseScope } from "../features/course";
 
 const mapDegreeTitleToString = (degreeTitle: DegreeTitle): string => {
   switch (degreeTitle) {
@@ -43,10 +44,26 @@ const mapRoleToString = (role: Role): string => {
   }
 };
 
+const mapScopeToString = (scope: CourseScope): string => {
+  switch (scope) {
+    case CourseScope.LECTURES:
+      return "Lectures";
+    case CourseScope.LABORATORY:
+      return "Laboratories";
+    case CourseScope.EXERCISES:
+      return "Exercise group";
+    case CourseScope.PROJECT:
+      return "Project";
+    default:
+      return "Unknown";
+  }
+};
+
 const EnumMapper = {
   mapDegreeTitleToString,
   mapLanguageToString,
   mapRoleToString,
+  mapScopeToString,
 };
 
 export default EnumMapper;

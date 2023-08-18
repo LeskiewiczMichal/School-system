@@ -4,5 +4,5 @@ import CourseRequest from "./services/CourseRequest";
 import CourseScope from "./types/CourseScope";
 import CourseInfoCard from "./components/CourseInfoCard";
 
-export { CourseMapper, CourseRequest, CourseInfoCard };
-export type { Course, CourseScope };
+export { CourseMapper, CourseRequest, CourseInfoCard, CourseScope };
+export type { Course };
