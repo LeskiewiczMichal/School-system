@@ -23,6 +23,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+
 @ExtendWith(MockitoExtension.class)
 public class CourseServiceGettersTest {
 
@@ -92,5 +95,21 @@ public class CourseServiceGettersTest {
         userMapper::convertToDto,
         courseRepository::existsById,
         courseService::getCourseStudents);
+  }
+
+  @Test
+  public void getCourseDescription_returnsCorrectDescription() {
+    // Prepare test data
+    String description = "description";
+
+    // Mocks
+    given(courseRepository.existsById(any(Long.class))).willReturn(true);
+    Mockito.when(courseRepository.findCourseDescriptionById(any(Long.class))).thenReturn(description);
+
+    // Execute service call
+    String result = courseService.getCourseDescription(1L);
+
+    // Assert result
+    assert result.equals(description);
   }
 }

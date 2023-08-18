@@ -93,6 +93,7 @@ public class CourseServiceImpl implements CourseService {
             .duration_in_hours(createCourseRequest.getDurationInHours())
             .faculty(faculty)
             .teacher(teacher)
+            .description(createCourseRequest.getDescription())
             .build();
 
     // Check if the course doesn't already exist
