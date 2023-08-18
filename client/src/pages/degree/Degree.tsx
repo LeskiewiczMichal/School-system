@@ -37,7 +37,7 @@ export default function Degree() {
       }
 
       // Call the API
-      const response = await DegreeRequest.getSingle({
+      const response = await DegreeRequest.getById({
         link: degreesLinks.getById,
         id: degreeId,
       });

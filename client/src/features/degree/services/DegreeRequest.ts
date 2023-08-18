@@ -107,7 +107,7 @@ export interface FetchSingleDegreeProps {
  * @param props {@link FetchSingleDegreeProps} object, containing the link {@link APILink} and the string - degree id
  * @returns Promise of an {@link Degree} object
  */
-const getSingle = async (props: FetchSingleDegreeProps): Promise<Degree> => {
+const getById = async (props: FetchSingleDegreeProps): Promise<Degree> => {
   const { link, id } = props;
 
   const responseData = await RequestService.performGetByIdRequest({
@@ -120,7 +120,7 @@ const getSingle = async (props: FetchSingleDegreeProps): Promise<Degree> => {
 
 const DegreeRequest = {
   getList,
-  getSingle,
+  getById,
 };
 
 export default DegreeRequest;
