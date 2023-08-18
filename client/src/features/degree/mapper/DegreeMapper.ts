@@ -1,4 +1,5 @@
 import Degree from "../types/Degree";
+import Mapper from "../../../type/Mapper";
 
 const mapFromServerData = (data: any): Degree => {
   return {
@@ -30,7 +31,7 @@ const mapArrayFromServerData = (data: any[]): Degree[] => {
   return data.map((degree) => mapFromServerData(degree));
 };
 
-const DegreeMapper = {
+const DegreeMapper: Mapper<Degree> = {
   mapFromServerData,
   mapArrayFromServerData,
 };
