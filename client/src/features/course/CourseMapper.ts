@@ -6,6 +6,8 @@ const mapFromServerData = (data: any): Course => {
     id: data.id,
     title: data.title,
     durationInHours: data.durationInHours,
+    language: data.language,
+    scope: data.scope,
     faculty: {
       name: data.faculty,
       link: {
