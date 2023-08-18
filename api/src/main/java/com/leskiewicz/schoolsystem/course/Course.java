@@ -3,6 +3,7 @@ package com.leskiewicz.schoolsystem.course;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.files.File;
 import com.leskiewicz.schoolsystem.user.User;
+import com.leskiewicz.schoolsystem.utils.Language;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
@@ -32,6 +33,18 @@ public class Course {
 
   @Column(name = "description")
   private String description;
+
+  @NotNull
+  @Column(name = "language")
+  @Enumerated(EnumType.STRING)
+  private Language language;
+
+  @ElementCollection(targetClass = CourseScope.class)
+  @CollectionTable(name = "course_scope", joinColumns = @JoinColumn(name = "course_id"))
+  @NotNull
+  @Enumerated(EnumType.STRING)
+  private List<CourseScope> scope;
+
 
   @NotNull
   @ManyToOne

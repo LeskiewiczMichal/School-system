@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS course_student;
 DROP TABLE IF EXISTS degree_course;
 DROP TABLE IF EXISTS course_file;
+DROP TABLE IF EXISTS course_scope;
 DROP TABLE IF EXISTS course;
 DROP TABLE IF EXISTS faculty_teacher;
 DROP TABLE IF EXISTS authorities;
@@ -81,9 +82,17 @@ CREATE TABLE course (
                         teacher BIGINT NOT NULL,
                         faculty BIGINT NOT NULL,
                         description LONGTEXT,
+                        language VARCHAR(45) NOT NULL,
                         PRIMARY KEY (id),
                         FOREIGN KEY (teacher) REFERENCES users(id),
                         FOREIGN KEY (faculty) REFERENCES faculty(id)
+);
+
+CREATE TABLE course_scope (
+                              course_id BIGINT,
+                              scope VARCHAR(45),
+                              PRIMARY KEY (course_id, scope),
+                              FOREIGN KEY (course_id) REFERENCES course (id)
 );
 
 CREATE TABLE course_student (

@@ -321,6 +321,68 @@ VALUES (19, 'Criminal Law', 50, 9, 112);
 INSERT INTO course (id, title, duration_in_hours, teacher, faculty)
 VALUES (20, 'Microeconomics', 60, 10, 113);
 
+-- Course scopes
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (1, 'LABORATORY');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (2, 'LECTURES');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (3, 'EXERCISES');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (4, 'PROJECT');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (5, 'LECTURES');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (6, 'EXERCISES');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (7, 'LABORATORY');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (8, 'PROJECT');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (9, 'LECTURES');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (10, 'EXERCISES');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (11, 'LABORATORY');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (12, 'PROJECT');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (13, 'LECTURES');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (14, 'EXERCISES');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (15, 'LABORATORY');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (16, 'PROJECT');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (17, 'LECTURES');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (18, 'EXERCISES');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (19, 'LABORATORY');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (20, 'PROJECT');
+
 -- Sing up students for courses
 
 INSERT INTO course_student (course_id, student_id)
