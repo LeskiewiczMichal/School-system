@@ -2,6 +2,8 @@ import { Sidebar } from "../features/sidebar";
 import { useAppSelector } from "../hooks";
 import EnumMapper from "../utils/EnumMapper";
 import { BasicInformation } from "../features/user";
+import ColoredBackgroundWithPhotoOnRight from "../common_components/Card/ColoredBackgroundWithPhotoOnRight";
+import CommunityPicture from "./assets/community.webp";
 
 export default function MyAccount() {
   const user = useAppSelector((state) => state.auth.data);
@@ -19,10 +21,15 @@ export default function MyAccount() {
     <div className={"flex h-full"}>
       <Sidebar />
       <main className={"pb-16 border-b border-grayscaleMediumDark w-full"}>
-        <section className={"px-4 lg:px-8 py-8 mb-4 w-full sm:w-fit"}>
-          <h1 className="page-title_h1 text-brandMainNearlyBlack">
-            Hello, {user.firstName}
-          </h1>
+        <section
+          className={"flex flex-col px-4 lg:px-8 py-8 mb-4 w-full lg:gap-4"}
+        >
+          <ColoredBackgroundWithPhotoOnRight
+            heading={`Hello, ${user.firstName}`}
+            text={"Thank you for beeing a part of our community"}
+            imageLink={CommunityPicture}
+            backgroundColor={"brandMain"}
+          />
           <BasicInformation user={user} />
         </section>
         <section

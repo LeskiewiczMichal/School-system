@@ -19,7 +19,7 @@ export default function BasicInformation(props: BasicInformationProps) {
         "bg-hoverGray flex flex-col h-fit py-4 px-4 w-full flex-none gap-4 "
       }
     >
-      <h5 className={"text-2xl text-brandMainNearlyBlack"}>
+      <h5 className={"text-2xl text-grayscaleDark font-bold"}>
         Basic information
       </h5>
       <div className={"flex items-center gap-4"}>

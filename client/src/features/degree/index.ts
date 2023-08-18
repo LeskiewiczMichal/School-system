@@ -5,6 +5,13 @@ import DegreeSearchForm, {
   DegreeSearchFormProps,
 } from "./components/DegreeSearchForm";
 import DegreeCard from "./components/DegreeCard";
+import DegreeBasicInformation from "./components/DegreeBasicInformation";
 
-export { DegreeTitle, DegreeRequest, DegreeSearchForm, DegreeCard };
+export {
+  DegreeTitle,
+  DegreeRequest,
+  DegreeSearchForm,
+  DegreeCard,
+  DegreeBasicInformation,
+};
 export type { Degree, DegreeSearchFormProps };
