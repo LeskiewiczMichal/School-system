@@ -76,7 +76,7 @@ const getList = async (
   if (responseData._embedded && responseData._embedded.courses) {
     // Convert the response data into degrees
     coursesArr = CourseMapper.mapArrayFromServerData(
-      responseData._embedded.degrees,
+      responseData._embedded.courses,
     );
   }
   const paginationInfo: PaginationInfo =
