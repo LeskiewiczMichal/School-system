@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
-import {useEffect, useState} from "react";
-import {Course as CourseType, CourseRequest} from "../../features/course";
-import {useAppSelector} from "../../hooks";
+import { useEffect, useState } from "react";
+import { Course as CourseType, CourseRequest } from "../../features/course";
+import { useAppSelector } from "../../hooks";
 
 export default function Course() {
   const { courseId } = useParams<{ courseId: string }>();
@@ -10,21 +10,26 @@ export default function Course() {
 
   useEffect(() => {
     const handleFetchCourse = async () => {
-        // Prepare the link
-        if (!courseLinks.getById || !courseId) {
-            return;
-        }
+      // Prepare the link
+      if (!courseLinks.getById || !courseId) {
+        return;
+      }
 
-        // Call the API
-        const response = await CourseRequest.({
-            link: courseLinks.getById,
-            id: courseId,
-        });
+      // Call the API
+      const response = await CourseRequest.getById({
+        link: courseLinks.getById,
+        id: courseId,
+      });
 
-        // Set the course
-        setCourse(response);
-    }
-  }, []);
+      // Set the course
+      setCourse(response);
+    };
+    handleFetchCourse();
+  }, [courseId, courseLinks]);
+
+  if (!course) {
+    return <span>Loading</span>;
+  }
 
   return (
     <div>
