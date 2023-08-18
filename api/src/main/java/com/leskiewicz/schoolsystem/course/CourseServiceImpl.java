@@ -204,6 +204,11 @@ public class CourseServiceImpl implements CourseService {
     return fileRepository.findFilesByCourseId(courseId, pageable);
   }
 
+  @Override
+  public String getCourseDescription(Long courseId) {
+    return null;
+  }
+
   private void courseExistsCheck(Long courseId) {
     if (!courseRepository.existsById(courseId)) {
       throw new EntityNotFoundException(ErrorMessages.objectWithIdNotFound("Course", courseId));

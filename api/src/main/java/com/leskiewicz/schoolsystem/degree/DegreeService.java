@@ -24,5 +24,4 @@ public interface DegreeService {
   Page<DegreeDto> search(String fieldOfStudy, Long facultyId, DegreeTitle title, Pageable pageable);
 
   void addImage(Long degreeId, MultipartFile image);
-
 }

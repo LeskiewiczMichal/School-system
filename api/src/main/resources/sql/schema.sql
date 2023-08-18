@@ -80,6 +80,7 @@ CREATE TABLE course (
                         duration_in_hours INT NOT NULL,
                         teacher BIGINT NOT NULL,
                         faculty BIGINT NOT NULL,
+                        description LONGTEXT,
                         PRIMARY KEY (id),
                         FOREIGN KEY (teacher) REFERENCES users(id),
                         FOREIGN KEY (faculty) REFERENCES faculty(id)

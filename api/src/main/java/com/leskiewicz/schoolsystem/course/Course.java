@@ -30,6 +30,9 @@ public class Course {
   @Column(name = "duration_in_hours")
   private int duration_in_hours;
 
+  @Column(name = "description")
+  private String description;
+
   @NotNull
   @ManyToOne
   @JoinColumn(name = "faculty", referencedColumnName = "id")

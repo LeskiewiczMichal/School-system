@@ -29,4 +29,6 @@ public interface CourseService {
   void storeFile(MultipartFile file, Long courseId) throws IOException;
 
   Page<File> getCourseFiles(Long courseId, Pageable pageable);
+
+  String getCourseDescription(Long courseId);
 }
