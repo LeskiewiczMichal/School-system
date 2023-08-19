@@ -257,6 +257,7 @@ public class CourseController {
 
   @GetMapping("/{id}/is-enrolled")
   public ResponseEntity<Boolean> isUserEnrolled(@PathVariable Long id) {
-    return ResponseEntity.ok(courseService.isUserEnrolled(id,  AuthenticationUtils.getAuthenticatedUser().getId()));
+    return ResponseEntity.ok(
+        courseService.isUserEnrolled(id, AuthenticationUtils.getAuthenticatedUser().getId()));
   }
 }
