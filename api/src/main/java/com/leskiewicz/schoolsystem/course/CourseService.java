@@ -32,4 +32,6 @@ public interface CourseService {
   Page<File> getCourseFiles(Long courseId, Pageable pageable);
 
   String getCourseDescription(Long courseId);
+
+  boolean isUserEnrolled(Long courseId, Long userId);
 }

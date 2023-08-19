@@ -220,6 +220,11 @@ public class CourseServiceImpl implements CourseService {
     return description;
   }
 
+  @Override
+  public boolean isUserEnrolled(Long courseId, Long userId) {
+    return false;
+  }
+
   private void courseExistsCheck(Long courseId) {
     if (!courseRepository.existsById(courseId)) {
       throw new EntityNotFoundException(ErrorMessages.objectWithIdNotFound("Course", courseId));

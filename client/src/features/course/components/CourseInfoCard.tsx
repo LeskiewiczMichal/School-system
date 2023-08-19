@@ -2,6 +2,7 @@ import Course from "../types/Course";
 import { Link } from "react-router-dom";
 import DegreePageContentInterface from "../../../pages/degree/DegreePageContentInterface";
 import EnumMapper from "../../../utils/EnumMapper";
+import { useAppSelector } from "../../../hooks";
 
 export interface CourseInfoCardProps {
   course: Course;
@@ -9,6 +10,7 @@ export interface CourseInfoCardProps {
 
 export default function CourseInfoCard(props: CourseInfoCardProps) {
   const { course } = props;
+  const user = useAppSelector((state) => state.auth.data);
 
   return (
     <section
@@ -45,7 +47,7 @@ export default function CourseInfoCard(props: CourseInfoCardProps) {
 
         <span>The course is organized by {course.faculty.name}</span>
 
-        <span>The course is led by {course.teacher.name}</span>
+        <span>Main leader of the course is {course.teacher.name}</span>
       </div>
     </section>
   );

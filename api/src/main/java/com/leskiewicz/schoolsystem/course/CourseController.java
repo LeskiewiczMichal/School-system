@@ -3,6 +3,8 @@ package com.leskiewicz.schoolsystem.course;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import com.leskiewicz.schoolsystem.authentication.SecurityService;
+import com.leskiewicz.schoolsystem.authentication.dto.CustomUserDetails;
+import com.leskiewicz.schoolsystem.authentication.utils.AuthenticationUtils;
 import com.leskiewicz.schoolsystem.controller.ApiController;
 import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.course.dto.CreateCourseRequest;
@@ -251,5 +253,10 @@ public class CourseController {
   @GetMapping("/{id}/description")
   public ResponseEntity<String> getCourseDescription(@PathVariable Long id) {
     return ResponseEntity.ok(courseService.getCourseDescription(id));
+  }
+
+  @GetMapping("/{id}/is-enrolled")
+  public ResponseEntity<Boolean> isUserEnrolled(@PathVariable Long id) {
+    return ResponseEntity.ok(courseService.isUserEnrolled(id,  AuthenticationUtils.getAuthenticatedUser().getId()));
   }
 }
