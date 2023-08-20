@@ -87,7 +87,7 @@ public class CourseServiceGettersTest {
   }
 
   @Test
-  public void searchReturnsPagedDegrees() {
+  public void searchReturnsPagedCourses() {
     // Set up test data
     List<Course> courseList =
             Arrays.asList(
