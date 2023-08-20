@@ -7,6 +7,7 @@ import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.course.utils.CourseMapper;
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
+import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.generic.CommonTests;
 import com.leskiewicz.schoolsystem.testUtils.TestHelper;
@@ -14,17 +15,25 @@ import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.UserRepository;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserMapper;
+import com.leskiewicz.schoolsystem.utils.Language;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class CourseServiceGettersTest {
@@ -75,6 +84,42 @@ public class CourseServiceGettersTest {
         courseRepository::findById,
         courseMapper::convertToDto,
         courseService::getById);
+  }
+
+  @Test
+  public void searchReturnsPagedDegrees() {
+    // Set up test data
+    List<Course> courseList =
+            Arrays.asList(
+                    TestHelper.createCourse(Mockito.mock(Faculty.class), Mockito.mock(User.class)),
+                    TestHelper.createCourse(Mockito.mock(Faculty.class), Mockito.mock(User.class)));
+    List<CourseDto> courseDtoList =
+            Arrays.asList(
+                    TestHelper.createCourseDto("Informatics", "John Doe"),
+                    TestHelper.createCourseDto("Biology", "John Doe"));
+    Page<Course> coursePage = new PageImpl<>(courseList);
+
+    // Mocks
+    given(
+            courseRepository.searchByFacultyIdAndTitleAndLanguage(any(String.class), any(Long.class), any(Language.class), any(Pageable.class))
+    ).willReturn(coursePage);
+    given(courseMapper.convertToDto(any(Course.class))).willReturn(courseDtoList.get(0), courseDtoList.get(1));
+
+    // Call method
+    Page<CourseDto> result = courseService.search("qwer", 1L, Language.ENGLISH, PageRequest.of(0, 2));
+
+    // Assertions
+    Assertions.assertEquals(2, result.getTotalElements());
+    Assertions.assertEquals(1, result.getTotalPages());
+    Assertions.assertEquals(2, result.getNumberOfElements());
+    Assertions.assertEquals(0, result.getNumber());
+    Assertions.assertEquals(2, result.getSize());
+    Assertions.assertEquals(courseDtoList.get(0), result.getContent().get(0));
+    Assertions.assertEquals(courseDtoList.get(1), result.getContent().get(1));
+
+    verify(courseRepository).searchByFacultyIdAndTitleAndLanguage("qwer", 1L, Language.ENGLISH, PageRequest.of(0, 2));
+    verify(courseMapper).convertToDto(courseList.get(0));
+    verify(courseMapper).convertToDto(courseList.get(1));
   }
 
   @Test
