@@ -258,6 +258,13 @@ public class CourseController {
     return ResponseEntity.ok(courseService.getCourseDescription(id));
   }
 
+  /**
+   * Check if currently logged in student is enrolled in course with provided ID.
+   *
+   * @param id the ID of the course to check.
+   * @return status 200 (OK) and in body a boolean indicating whether the student is enrolled in the
+   *     course.
+   */
   @GetMapping("/{id}/is-enrolled")
   public ResponseEntity<Boolean> isUserEnrolled(@PathVariable Long id) {
     CustomUserDetails user = authenticationUtils.getAuthenticatedUser();
