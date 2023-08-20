@@ -1,5 +1,6 @@
 package com.leskiewicz.schoolsystem.course;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import com.leskiewicz.schoolsystem.authentication.SecurityService;
@@ -21,11 +22,13 @@ import com.leskiewicz.schoolsystem.files.FileModelAssembler;
 import com.leskiewicz.schoolsystem.user.UserController;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserDtoAssembler;
+import com.leskiewicz.schoolsystem.utils.Language;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
@@ -38,6 +41,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 /**
  * REST controller for managing courses.
@@ -139,6 +144,27 @@ public class CourseController {
 
     return ResponseEntity.ok(
         HalModelBuilder.halModelOf(userPagedResourcesAssembler.toModel(students)).build());
+  }
+
+  @GetMapping("/search")
+  public ResponseEntity<RepresentationModel<CourseDto>> searchCourses(
+      @RequestParam(value = "title", required = false) String title,
+      @RequestParam(value = "faculty", required = false) Long facultyId,
+      @RequestParam(value = "language", required = false) Language language,
+      @ModelAttribute PageableRequest request) {
+    Page<CourseDto> courses =
+        courseService.search(title, facultyId, language, request.toPageable());
+    courses = courses.map(courseDtoAssembler::toModel);
+
+    Link selfLink =
+        linkTo(methodOn(this.getClass()).searchCourses(null, null, null, null)).withSelfRel();
+    Link degreesLink = linkTo(methodOn(this.getClass()).getCourses(null)).withRel("courses");
+    Link getByIdLink = linkTo(methodOn(this.getClass()).getCourseById(null)).withRel("course");
+
+    return ResponseEntity.ok(
+        HalModelBuilder.halModelOf(coursePagedResourcesAssembler.toModel(courses))
+            .links(List.of(selfLink, degreesLink, getByIdLink))
+            .build());
   }
 
   /**
