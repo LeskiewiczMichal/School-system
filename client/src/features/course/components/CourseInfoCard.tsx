@@ -41,16 +41,23 @@ export default function CourseInfoCard(props: CourseInfoCardProps) {
               .map((scope) => EnumMapper.mapScopeToString(scope))
               .join(", ")}
           </span>
-          {/*/!*<span><b>ECTS:</b> {course.ects}</span>*!/ // TODO: Add ECTS to the API*/}
+
+          <span>
+            <b>ECTS:</b> {course.ECTS} points
+          </span>
 
           <span>
             Teaching language{" "}
             <b>{EnumMapper.mapLanguageToString(course.language)}</b>
           </span>
 
-          <span>The course is organized by {course.faculty.name}</span>
+          <span>
+            The course is organized by <b>{course.faculty.name}</b>
+          </span>
 
-          <span>Main leader of the course is {course.teacher.name}</span>
+          <span>
+            Main leader of the course is <b>{course.teacher.name}</b>
+          </span>
         </div>
 
         {isUserEnrolled ? (
