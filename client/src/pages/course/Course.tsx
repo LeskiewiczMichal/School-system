@@ -8,12 +8,14 @@ import {
 import { useAppSelector } from "../../hooks";
 import axios from "axios";
 import JWTUtils from "../../utils/JWTUtils";
+import * as marked from "marked";
+import MyHeading from "../../common_components/MyHeading";
 
 export default function Course() {
   const { courseId } = useParams<{ courseId: string }>();
   const [course, setCourse] = useState<CourseType | null>(null);
   const courseLinks = useAppSelector((state) => state.links.courses);
-  const [description, setDescription] = useState<String | null>(null);
+  const [description, setDescription] = useState<string | null>(null);
   const [isUserEnrolled, setIsUserEnrolled] = useState<boolean>(false);
 
   useEffect(() => {
@@ -64,8 +66,16 @@ export default function Course() {
 
   return (
     <div>
-      <div className={"w-full flex justify-center"}>
+      <div className={"w-full flex flex-col items-center"}>
         <CourseInfoCard course={course} isUserEnrolled={isUserEnrolled} />
+        <div className={"px-6 lg:px-32 mt-10"}>
+          <MyHeading heading={"About course"} />
+          {description && (
+            <p
+              dangerouslySetInnerHTML={{ __html: marked.marked(description) }}
+            ></p>
+          )}
+        </div>
       </div>
     </div>
   );
