@@ -255,6 +255,7 @@ public class CourseController {
     return ResponseEntity.ok(courseService.getCourseDescription(id));
   }
 
+
   @GetMapping("/{id}/is-enrolled")
   public ResponseEntity<Boolean> isUserEnrolled(@PathVariable Long id) {
     return ResponseEntity.ok(
