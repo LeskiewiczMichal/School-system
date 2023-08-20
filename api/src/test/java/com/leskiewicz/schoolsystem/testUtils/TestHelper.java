@@ -137,6 +137,7 @@ public class TestHelper {
         .language(Language.ENGLISH)
         .scope(List.of(CourseScope.EXERCISES, CourseScope.LECTURES))
         .description("TestDescription")
+        .ECTS(5)
         .build();
   }
 
@@ -151,6 +152,7 @@ public class TestHelper {
         .durationInHours(20)
         .language(Language.ENGLISH)
         .scope(List.of(CourseScope.EXERCISES, CourseScope.LECTURES))
+        .ECTS(5)
         .build();
   }
 
@@ -165,6 +167,7 @@ public class TestHelper {
         .durationInHours(course.getDuration_in_hours())
         .language(course.getLanguage())
         .scope(course.getScope())
+        .ECTS(course.getECTS())
         .build();
   }
 
@@ -179,6 +182,7 @@ public class TestHelper {
             .language(Language.ENGLISH)
             .scope(List.of(CourseScope.EXERCISES, CourseScope.LECTURES))
             .description("TestDescription")
+            .ECTS(5)
             .build(),
         Course.builder()
             .id(2L)
@@ -189,24 +193,7 @@ public class TestHelper {
             .language(Language.ENGLISH)
             .scope(List.of(CourseScope.EXERCISES, CourseScope.LECTURES))
             .description("TestDescription")
-            .build());
-  }
-
-  public static List<CourseDto> createCoursesDtosList(Course course1, Course course2) {
-    return Arrays.asList(
-        CourseDto.builder()
-            .id(course1.getId())
-            .title(course1.getTitle())
-            .faculty(course1.getFaculty().getName())
-            .teacher(course1.getTeacher().getFirstName() + " " + course1.getTeacher().getLastName())
-            .durationInHours(course1.getDuration_in_hours())
-            .build(),
-        CourseDto.builder()
-            .id(course2.getId())
-            .title(course2.getTitle())
-            .faculty(course2.getFaculty().getName())
-            .teacher(course2.getTeacher().getFirstName() + " " + course2.getTeacher().getLastName())
-            .durationInHours(course2.getDuration_in_hours())
+            .ECTS(5)
             .build());
   }
 

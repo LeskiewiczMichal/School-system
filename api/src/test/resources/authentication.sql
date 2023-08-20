@@ -7,8 +7,8 @@ VALUES (1, 'BACHELOR_OF_SCIENCE', 'Computer Science', 1, 'This is test descripti
 INSERT INTO users (first_name, last_name, email, password, faculty, degree, role)
 VALUES ('John', 'Doe', 'johndoe@example.com', '12345', 1, 1, 'ROLE_STUDENT');
 
-INSERT INTO course (id, title, duration_in_hours, teacher, faculty, language)
-VALUES (1, 'Introduction to Programming', 40, 1, 1, 'ENGLISH');
+INSERT INTO course (id, title, duration_in_hours, teacher, faculty, language, ECTS)
+VALUES (1, 'Introduction to Programming', 40, 1, 1, 'ENGLISH', 5);
 
 INSERT INTO course_scope(course_id, scope)
 VALUES (1, 'LABORATORY');

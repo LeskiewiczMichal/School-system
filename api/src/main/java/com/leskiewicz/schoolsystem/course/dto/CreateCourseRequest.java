@@ -34,4 +34,7 @@ public class CreateCourseRequest {
 
   @NotNull(message = "Scope required")
   private final List<CourseScope> scope;
+
+  @NotNull(message = "ECTS required")
+  private final int ECTS;
 }

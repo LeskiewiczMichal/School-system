@@ -37,6 +37,7 @@ public class CourseMapperImpl implements CourseMapper {
             .teacherId(courseTeacher.getId())
             .language(course.getLanguage())
             .scope(course.getScope())
+            .ECTS(course.getECTS())
             .build();
 
     logger.debug("Converted Course entity with ID: {} to CourseDto", course.getId());

@@ -98,6 +98,7 @@ public class CourseServiceImpl implements CourseService {
             .description(createCourseRequest.getDescription())
             .language(createCourseRequest.getLanguage())
             .scope(createCourseRequest.getScope())
+            .ECTS(createCourseRequest.getECTS())
             .build();
 
     // Check if the course doesn't already exist
@@ -189,7 +190,8 @@ public class CourseServiceImpl implements CourseService {
     newFile.setFileName(file.getOriginalFilename());
     newFile.setFileType(file.getContentType());
     newFile.setUploadedBy(
-        authenticationUtils.getAuthenticatedUser()
+        authenticationUtils
+            .getAuthenticatedUser()
             .getId()); // Set the ID of the user who uploaded the file.
     newFile.setFileData(fileData);
 

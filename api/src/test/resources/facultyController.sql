@@ -261,65 +261,65 @@ VALUES ('Emily', 'Wilson', 'emilywilson@example.com', 'qwerty', 101, 102, 'ROLE_
 
 -- Courses
 
-INSERT INTO course (id, title, duration_in_hours, teacher, faculty, description, language)
-VALUES (1, 'Introduction to Programming', 40, 6, 101, 'This year, the University of Helsinki was again the most popular higher education institution in Finland, in terms of both the total number of applicants in the spring joint application procedure and the number of first-priority applications. With the number of applicants in the joint application procedure growing by 1.5% from last year, the attractiveness of the University of Helsinki has remained very strong.   In the joint application procedure, 4000 new students were admitted to the University of Helsinki. There were about 27,300 applicants to bachelor''s programmes, of whom 13,1% received a student place. A total of 3,200 people applied for Finnish- and Swedish-language master''s programmes, of whom 13,7% were admitted.   I am excited and proud to welcome you, our new students, to our University! Congratulations on your admission -- you have earned this achievement thanks to your hard work and determination. The stage in your lives you are now embarking on will open the door to countless opportunities and new challenges, says Rector **Sari Lindblom**   Also keep in mind that learning at university is about more than just completing courses. It is a journey to self-awareness and personal growth. Don''t hesitate to turn to your teachers and supervisors when you need support. We are here for yo   The University of Helsinki and its community have been building the future and transforming the world for more than 380 years. Their aim is to continue to provide students with the best tools for studies and life.   We encourage independent and critical thinking and competent citizenship in our students. We strive to support the development of our students and provide them with the capacity to act as agents of change in society. Our University is a multicultural and international community where students meet peers from different cultures and backgrounds. This diversity opens up new perspectives for them and promotes international solidarity. At the same time, it prepares them for the global labour market and offers them valuable networking opportunities, Rector Lindblom notes.   Law and medicine the most popular degree programme  ----------------------------------------------------', 'ENGLISH');
+INSERT INTO course (id, title, duration_in_hours, teacher, faculty, description, language, ECTS)
+VALUES (1, 'Introduction to Programming', 40, 6, 101, 'This year, the University of Helsinki was again the most popular higher education institution in Finland, in terms of both the total number of applicants in the spring joint application procedure and the number of first-priority applications. With the number of applicants in the joint application procedure growing by 1.5% from last year, the attractiveness of the University of Helsinki has remained very strong.   In the joint application procedure, 4000 new students were admitted to the University of Helsinki. There were about 27,300 applicants to bachelor''s programmes, of whom 13,1% received a student place. A total of 3,200 people applied for Finnish- and Swedish-language master''s programmes, of whom 13,7% were admitted.   I am excited and proud to welcome you, our new students, to our University! Congratulations on your admission -- you have earned this achievement thanks to your hard work and determination. The stage in your lives you are now embarking on will open the door to countless opportunities and new challenges, says Rector **Sari Lindblom**   Also keep in mind that learning at university is about more than just completing courses. It is a journey to self-awareness and personal growth. Don''t hesitate to turn to your teachers and supervisors when you need support. We are here for yo   The University of Helsinki and its community have been building the future and transforming the world for more than 380 years. Their aim is to continue to provide students with the best tools for studies and life.   We encourage independent and critical thinking and competent citizenship in our students. We strive to support the development of our students and provide them with the capacity to act as agents of change in society. Our University is a multicultural and international community where students meet peers from different cultures and backgrounds. This diversity opens up new perspectives for them and promotes international solidarity. At the same time, it prepares them for the global labour market and offers them valuable networking opportunities, Rector Lindblom notes.   Law and medicine the most popular degree programme  ----------------------------------------------------', 'ENGLISH', 5);
 
-INSERT INTO course (id, title, duration_in_hours, teacher, faculty, description, language)
-VALUES (2, 'Data Structures and Algorithms', 60, 7, 101 'This year, the University of Helsinki was again the most popular higher education institution in Finland, in terms of both the total number of applicants in the spring joint application procedure and the number of first-priority applications. With the number of applicants in the joint application procedure growing by 1.5% from last year, the attractiveness of the University of Helsinki has remained very strong.   In the joint application procedure, 4000 new students were admitted to the University of Helsinki. There were about 27,300 applicants to bachelor''s programmes, of whom 13,1% received a student place. A total of 3,200 people applied for Finnish- and Swedish-language master''s programmes, of whom 13,7% were admitted.   I am excited and proud to welcome you, our new students, to our University! Congratulations on your admission -- you have earned this achievement thanks to your hard work and determination. The stage in your lives you are now embarking on will open the door to countless opportunities and new challenges, says Rector **Sari Lindblom**   Also keep in mind that learning at university is about more than just completing courses. It is a journey to self-awareness and personal growth. Don''t hesitate to turn to your teachers and supervisors when you need support. We are here for yo   The University of Helsinki and its community have been building the future and transforming the world for more than 380 years. Their aim is to continue to provide students with the best tools for studies and life.   We encourage independent and critical thinking and competent citizenship in our students. We strive to support the development of our students and provide them with the capacity to act as agents of change in society. Our University is a multicultural and international community where students meet peers from different cultures and backgrounds. This diversity opens up new perspectives for them and promotes international solidarity. At the same time, it prepares them for the global labour market and offers them valuable networking opportunities, Rector Lindblom notes.   Law and medicine the most popular degree programme  ----------------------------------------------------', 'ENGLISH');
+INSERT INTO course (id, title, duration_in_hours, teacher, faculty, description, language, ECTS)
+VALUES (2, 'Data Structures and Algorithms', 60, 7, 101 'This year, the University of Helsinki was again the most popular higher education institution in Finland, in terms of both the total number of applicants in the spring joint application procedure and the number of first-priority applications. With the number of applicants in the joint application procedure growing by 1.5% from last year, the attractiveness of the University of Helsinki has remained very strong.   In the joint application procedure, 4000 new students were admitted to the University of Helsinki. There were about 27,300 applicants to bachelor''s programmes, of whom 13,1% received a student place. A total of 3,200 people applied for Finnish- and Swedish-language master''s programmes, of whom 13,7% were admitted.   I am excited and proud to welcome you, our new students, to our University! Congratulations on your admission -- you have earned this achievement thanks to your hard work and determination. The stage in your lives you are now embarking on will open the door to countless opportunities and new challenges, says Rector **Sari Lindblom**   Also keep in mind that learning at university is about more than just completing courses. It is a journey to self-awareness and personal growth. Don''t hesitate to turn to your teachers and supervisors when you need support. We are here for yo   The University of Helsinki and its community have been building the future and transforming the world for more than 380 years. Their aim is to continue to provide students with the best tools for studies and life.   We encourage independent and critical thinking and competent citizenship in our students. We strive to support the development of our students and provide them with the capacity to act as agents of change in society. Our University is a multicultural and international community where students meet peers from different cultures and backgrounds. This diversity opens up new perspectives for them and promotes international solidarity. At the same time, it prepares them for the global labour market and offers them valuable networking opportunities, Rector Lindblom notes.   Law and medicine the most popular degree programme  ----------------------------------------------------', 'ENGLISH', 4);
 
-INSERT INTO course (id, title, duration_in_hours, teacher, faculty, language)
-VALUES (3, 'Software Engineering Principles', 50, 8, 101, 'ENGLISH');
+INSERT INTO course (id, title, duration_in_hours, teacher, faculty, language, ECTS)
+VALUES (3, 'Software Engineering Principles', 50, 8, 101, 'ENGLISH', 6);
 
-INSERT INTO course (id, title, duration_in_hours, teacher, faculty, language)
-VALUES (4, 'Cell Biology', 45, 9, 102, 'ENGLISH');
+INSERT INTO course (id, title, duration_in_hours, teacher, faculty, language, ECTS)
+VALUES (4, 'Cell Biology', 45, 9, 102, 'ENGLISH', 3);
 
-INSERT INTO course (id, title, duration_in_hours, teacher, faculty, language)
-VALUES (5, 'Genetics', 50, 10, 102, 'ENGLISH');
+INSERT INTO course (id, title, duration_in_hours, teacher, faculty, language, ECTS)
+VALUES (5, 'Genetics', 50, 10, 102, 'ENGLISH', 4);
 
-INSERT INTO course (id, title, duration_in_hours, teacher, faculty, language))
-VALUES (6, 'Electromagnetics', 55, 6, 103, 'ENGLISH');
+INSERT INTO course (id, title, duration_in_hours, teacher, faculty, language, ECTS))
+VALUES (6, 'Electromagnetics', 55, 6, 103, 'ENGLISH', 5);
 
-INSERT INTO course (id, title, duration_in_hours, teacher, faculty, language))
-VALUES (7, 'Quantum Mechanics', 60, 7, 103, 'ENGLISH');
+INSERT INTO course (id, title, duration_in_hours, teacher, faculty, language, ECTS))
+VALUES (7, 'Quantum Mechanics', 60, 7, 103, 'ENGLISH', 5);
 
-INSERT INTO course (id, title, duration_in_hours, teacher, faculty, language))
-VALUES (8, 'Organic Chemistry', 45, 8, 104, 'ENGLISH');
+INSERT INTO course (id, title, duration_in_hours, teacher, faculty, language, ECTS))
+VALUES (8, 'Organic Chemistry', 45, 8, 104, 'ENGLISH', 2);
 
-INSERT INTO course (id, title, duration_in_hours, teacher, faculty, language))
-VALUES (9, 'Inorganic Chemistry', 40, 9, 104, 'ENGLISH');
+INSERT INTO course (id, title, duration_in_hours, teacher, faculty, language, ECTS))
+VALUES (9, 'Inorganic Chemistry', 40, 9, 104, 'ENGLISH', 5);
 
-INSERT INTO course (id, title, duration_in_hours, teacher, faculty, language))
-VALUES (10, 'Classical Mechanics', 55, 10, 105, 'ENGLISH');
+INSERT INTO course (id, title, duration_in_hours, teacher, faculty, language, ECTS))
+VALUES (10, 'Classical Mechanics', 55, 10, 105, 'ENGLISH', 1);
 
-INSERT INTO course (id, title, duration_in_hours, teacher, faculty, language))
-VALUES (11, 'Introduction to Electronics', 50, 6, 105, 'ENGLISH');
+INSERT INTO course (id, title, duration_in_hours, teacher, faculty, language, ECTS))
+VALUES (11, 'Introduction to Electronics', 50, 6, 105, 'ENGLISH', 5);
 
-INSERT INTO course (id, title, duration_in_hours, teacher, faculty, language))
-VALUES (12, 'Number Theory', 40, 7, 106, 'ENGLISH');
+INSERT INTO course (id, title, duration_in_hours, teacher, faculty, language, ECTS))
+VALUES (12, 'Number Theory', 40, 7, 106, 'ENGLISH', 5);
 
-INSERT INTO course (id, title, duration_in_hours, teacher, faculty, language))
-VALUES (13, 'Calculus', 60, 8, 106, 'ENGLISH');
+INSERT INTO course (id, title, duration_in_hours, teacher, faculty, language, ECTS))
+VALUES (13, 'Calculus', 60, 8, 106, 'ENGLISH', 3);
 
-INSERT INTO course (id, title, duration_in_hours, teacher, faculty, language))
-VALUES (14, 'Geography of World', 45, 9, 107, 'ENGLISH');
+INSERT INTO course (id, title, duration_in_hours, teacher, faculty, language, ECTS))
+VALUES (14, 'Geography of World', 45, 9, 107, 'ENGLISH', 5);
 
-INSERT INTO course (id, title, duration_in_hours, teacher, faculty, language))
-VALUES (15, 'Historical Events', 50, 10, 108, 'ENGLISH');
+INSERT INTO course (id, title, duration_in_hours, teacher, faculty, language, ECTS))
+VALUES (15, 'Historical Events', 50, 10, 108, 'ENGLISH', 4);
 
-INSERT INTO course (id, title, duration_in_hours, teacher, faculty, language))
-VALUES (16, 'Philosophy and Ethics', 55, 7, 109, 'ENGLISH');
+INSERT INTO course (id, title, duration_in_hours, teacher, faculty, language, ECTS))
+VALUES (16, 'Philosophy and Ethics', 55, 7, 109, 'ENGLISH', 5);
 
-INSERT INTO course (id, title, duration_in_hours, teacher, faculty, language))
-VALUES (17, 'Introduction to Psychology', 40, 8, 110, 'ENGLISH');
+INSERT INTO course (id, title, duration_in_hours, teacher, faculty, language, ECTS))
+VALUES (17, 'Introduction to Psychology', 40, 8, 110, 'ENGLISH', 5);
 
-INSERT INTO course (id, title, duration_in_hours, teacher, faculty, language))
-VALUES (18, 'Sociological Theories', 45, 6, 111, 'ENGLISH');
+INSERT INTO course (id, title, duration_in_hours, teacher, faculty, language, ECTS))
+VALUES (18, 'Sociological Theories', 45, 6, 111, 'ENGLISH', 6);
 
-INSERT INTO course (id, title, duration_in_hours, teacher, faculty, language))
-VALUES (19, 'Criminal Law', 50, 9, 112, 'ENGLISH');
+INSERT INTO course (id, title, duration_in_hours, teacher, faculty, language, ECTS))
+VALUES (19, 'Criminal Law', 50, 9, 112, 'ENGLISH', 5);
 
-INSERT INTO course (id, title, duration_in_hours, teacher, faculty, language))
-VALUES (20, 'Microeconomics', 60, 10, 113, 'ENGLISH');
+INSERT INTO course (id, title, duration_in_hours, teacher, faculty, language, ECTS))
+VALUES (20, 'Microeconomics', 60, 10, 113, 'ENGLISH', 5);
 
 -- Course scopes
 

@@ -61,6 +61,7 @@ public class CourseMapperTest {
             .language(course.getLanguage())
             .scope(course.getScope())
             .durationInHours(course.getDuration_in_hours())
+                .ECTS(course.getECTS())
             .build();
 
     CourseDto result = courseMapper.convertToDto(course);

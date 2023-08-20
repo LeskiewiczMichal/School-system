@@ -83,6 +83,7 @@ CREATE TABLE course (
                         faculty BIGINT NOT NULL,
                         description LONGTEXT,
                         language VARCHAR(45) NOT NULL,
+                        ECTS INT NOT NULL,
                         PRIMARY KEY (id),
                         FOREIGN KEY (teacher) REFERENCES users(id),
                         FOREIGN KEY (faculty) REFERENCES faculty(id)

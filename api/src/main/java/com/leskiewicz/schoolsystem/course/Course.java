@@ -45,6 +45,10 @@ public class Course {
   @Enumerated(EnumType.STRING)
   private List<CourseScope> scope;
 
+  @NotNull
+  @Column(name = "ECTS")
+  private int ECTS;
+
 
   @NotNull
   @ManyToOne

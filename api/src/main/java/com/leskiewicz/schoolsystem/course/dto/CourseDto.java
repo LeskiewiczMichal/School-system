@@ -26,6 +26,7 @@ public class CourseDto extends RepresentationModel<CourseDto> {
   @NonNull private final String teacher;
   @NonNull private final Language language;
   @NonNull private final List<CourseScope> scope;
+  @NonNull private final int ECTS;
 
   @JsonIgnore @NotNull private final Long facultyId;
   @JsonIgnore @NotNull private final Long teacherId;

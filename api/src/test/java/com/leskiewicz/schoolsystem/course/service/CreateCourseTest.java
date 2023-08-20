@@ -63,6 +63,7 @@ public class CreateCourseTest {
             .scope(List.of(CourseScope.EXERCISES, CourseScope.LECTURES))
             .language(Language.ENGLISH)
             .description("Course description")
+            .ECTS(5)
             .build();
   }
 
@@ -79,6 +80,10 @@ public class CreateCourseTest {
             .title("Course Title")
             .teacher(teacher)
             .faculty(faculty)
+            .ECTS(5)
+            .language(Language.ENGLISH)
+            .description("Course description")
+            .scope(List.of(CourseScope.EXERCISES, CourseScope.LECTURES))
             .build();
 
     // Mock the behaviour of repositories and mappers
