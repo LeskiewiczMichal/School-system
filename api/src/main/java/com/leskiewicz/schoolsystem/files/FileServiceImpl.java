@@ -30,6 +30,8 @@ public class FileServiceImpl implements FileService {
   private final EnvironmentService environmentService;
   private final ResourceLoader resourceLoader;
 
+  private final AuthenticationUtils authenticationUtils;
+
   private final Logger logger = LoggerFactory.getLogger(FileServiceImpl.class);
 
   public File getFileById(Long fileId) {
@@ -44,7 +46,7 @@ public class FileServiceImpl implements FileService {
     fileToSave.setFileName(file.getOriginalFilename());
     fileToSave.setFileType(file.getContentType());
     fileToSave.setUploadedBy(
-        AuthenticationUtils.getAuthenticatedUser()
+        authenticationUtils.getAuthenticatedUser()
             .getId()); // Set the ID of the user who uploaded the file.
     fileToSave.setFileData(file.getBytes());
     return fileRepository.save(fileToSave);

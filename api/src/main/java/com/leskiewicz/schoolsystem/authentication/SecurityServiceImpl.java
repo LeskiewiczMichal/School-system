@@ -19,10 +19,11 @@ import org.springframework.stereotype.Service;
 public class SecurityServiceImpl implements SecurityService {
 
   CourseRepository courseRepository;
+  AuthenticationUtils authenticationUtils;
 
   @Override
   public boolean isCourseTeacher(Long courseId) {
-    CustomUserDetails user = AuthenticationUtils.getAuthenticatedUser();
+    CustomUserDetails user = authenticationUtils.getAuthenticatedUser();
     Course course =
         courseRepository
             .findById(courseId)
@@ -36,7 +37,7 @@ public class SecurityServiceImpl implements SecurityService {
 
   @Override
   public boolean isSelf(Long id) {
-    CustomUserDetails user = AuthenticationUtils.getAuthenticatedUser();
+    CustomUserDetails user = authenticationUtils.getAuthenticatedUser();
     return user.getId().equals(id);
   }
 }

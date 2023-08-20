@@ -53,6 +53,8 @@ public class CreateArticleTest {
   // Mappers
   @Mock private ArticleMapper articleMapper;
 
+  @Mock private AuthenticationUtils authenticationUtils;
+
   private final ObjectMapper objectMapper = new ObjectMapper();
 
   @InjectMocks private ArticleServiceImpl articleService;
@@ -96,7 +98,7 @@ public class CreateArticleTest {
     given(fileService.uploadImage(any(MultipartFile.class))).willReturn("imagePath");
     lenient().when(articleMapper.convertToDto(any(Article.class))).thenReturn(testDto);
     given(articleRepository.save(any(Article.class))).willReturn(Mockito.mock(Article.class));
-    given(AuthenticationUtils.getAuthenticatedUser()).willReturn(new CustomUserDetails(user));
+    given(authenticationUtils.getAuthenticatedUser()).willReturn(new CustomUserDetails(user));
 
     // Call method
     ArticleDto newArticle = articleService.createArticle(request, file);
@@ -132,7 +134,7 @@ public class CreateArticleTest {
     // Mocks
     given(facultyRepository.findById(anyLong()))
         .willReturn(Optional.of(Mockito.mock(Faculty.class)));
-    given(AuthenticationUtils.getAuthenticatedUser()).willReturn(null);
+    given(authenticationUtils.getAuthenticatedUser()).willReturn(null);
 
     // Call method
     Assertions.assertThrows(
@@ -151,7 +153,7 @@ public class CreateArticleTest {
     // Mocks
     given(facultyRepository.findById(anyLong()))
         .willReturn(Optional.of(Mockito.mock(Faculty.class)));
-    given(AuthenticationUtils.getAuthenticatedUser()).willReturn(new CustomUserDetails(user));
+    given(authenticationUtils.getAuthenticatedUser()).willReturn(new CustomUserDetails(user));
     given(userRepository.findById(anyLong())).willReturn(Optional.empty());
 
     // Call method

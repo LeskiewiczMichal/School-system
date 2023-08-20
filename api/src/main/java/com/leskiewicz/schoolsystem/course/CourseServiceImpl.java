@@ -44,6 +44,8 @@ public class CourseServiceImpl implements CourseService {
   private final CourseMapper courseMapper;
   private final UserMapper userMapper;
 
+  private final AuthenticationUtils authenticationUtils;
+
   @Override
   public CourseDto getById(Long id) {
     return courseMapper.convertToDto(
@@ -187,7 +189,7 @@ public class CourseServiceImpl implements CourseService {
     newFile.setFileName(file.getOriginalFilename());
     newFile.setFileType(file.getContentType());
     newFile.setUploadedBy(
-        AuthenticationUtils.getAuthenticatedUser()
+        authenticationUtils.getAuthenticatedUser()
             .getId()); // Set the ID of the user who uploaded the file.
     newFile.setFileData(fileData);
 

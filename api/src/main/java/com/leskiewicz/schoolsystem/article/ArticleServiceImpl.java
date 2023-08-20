@@ -36,6 +36,8 @@ public class ArticleServiceImpl implements ArticleService {
   private final ArticleMapper articleMapper;
   private final ObjectMapper objectMapper = new ObjectMapper();
 
+  private final AuthenticationUtils authenticationUtils;
+
   @Override
   public ArticleDto getById(Long id) {
     return articleMapper.convertToDtoWithContent(
@@ -112,12 +114,12 @@ public class ArticleServiceImpl implements ArticleService {
     // Get article author from authorization context
     article.setAuthor(
         userRepository
-            .findById(AuthenticationUtils.getAuthenticatedUser().getId())
+            .findById(authenticationUtils.getAuthenticatedUser().getId())
             .orElseThrow(
                 () ->
                     new EntityNotFoundException(
                         ErrorMessages.objectWithIdNotFound(
-                            "User", AuthenticationUtils.getAuthenticatedUser().getId()))));
+                            "User", authenticationUtils.getAuthenticatedUser().getId()))));
 
     // Handle the image if available
     if (image != null) {

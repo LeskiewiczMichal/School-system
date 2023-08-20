@@ -62,6 +62,8 @@ public class CourseController {
   private final PagedResourcesAssembler<UserDto> userPagedResourcesAssembler;
   private final PagedResourcesAssembler<File> filePagedResourcesAssembler;
 
+  private final AuthenticationUtils authenticationUtils;
+
   /**
    * Get a course by its ID.
    *
@@ -259,6 +261,6 @@ public class CourseController {
   @GetMapping("/{id}/is-enrolled")
   public ResponseEntity<Boolean> isUserEnrolled(@PathVariable Long id) {
     return ResponseEntity.ok(
-        courseService.isUserEnrolled(id, AuthenticationUtils.getAuthenticatedUser().getId()));
+        courseService.isUserEnrolled(id, authenticationUtils.getAuthenticatedUser().getId()));
   }
 }

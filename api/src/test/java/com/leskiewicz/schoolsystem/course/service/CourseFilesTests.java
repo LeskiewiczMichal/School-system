@@ -40,6 +40,7 @@ public class CourseFilesTests {
 
   @Mock private CourseRepository courseRepository;
   @Mock private FileRepository fileRepository;
+  @Mock private AuthenticationUtils authenticationUtils;
 
   @InjectMocks private CourseServiceImpl courseService;
 
@@ -55,7 +56,7 @@ public class CourseFilesTests {
     // Mock authentication
     Mockito.mockStatic(AuthenticationUtils.class);
     User user = TestHelper.createUser(Mockito.mock(Faculty.class), Mockito.mock(Degree.class));
-    given(AuthenticationUtils.getAuthenticatedUser()).willReturn(new CustomUserDetails(user));
+    given(authenticationUtils.getAuthenticatedUser()).willReturn(new CustomUserDetails(user));
 
     // Prepare the Course entity
     Course course = TestHelper.createCourse(Mockito.mock(Faculty.class), Mockito.mock(User.class));

@@ -8,17 +8,20 @@ import static org.mockito.BDDMockito.willThrow;
 import static org.mockito.Mockito.doNothing;
 // import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.leskiewicz.schoolsystem.authentication.SecurityService;
 import com.leskiewicz.schoolsystem.authentication.SecurityServiceImpl;
+import com.leskiewicz.schoolsystem.authentication.dto.CustomUserDetails;
+import com.leskiewicz.schoolsystem.authentication.utils.AuthenticationUtils;
 import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.course.dto.CreateCourseRequest;
 import com.leskiewicz.schoolsystem.course.utils.CourseDtoAssembler;
+import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.error.DefaultExceptionHandler;
 import com.leskiewicz.schoolsystem.error.ErrorMessages;
+import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.files.File;
 import com.leskiewicz.schoolsystem.files.FileModelAssembler;
 import com.leskiewicz.schoolsystem.generic.CommonTests;
@@ -27,6 +30,7 @@ import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserDtoAssembler;
 import com.leskiewicz.schoolsystem.utils.Language;
 import jakarta.persistence.EntityNotFoundException;
+import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,8 +47,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-
 @ExtendWith(MockitoExtension.class)
 public class CourseControllerTest {
 
@@ -59,11 +61,14 @@ public class CourseControllerTest {
   private PagedResourcesAssembler<UserDto> userPagedResourcesAssembler;
   private PagedResourcesAssembler<File> filePagedResourcesAssembler;
 
+  private AuthenticationUtils authenticationUtils;
+
   private CourseService courseService;
 
   private CourseController courseController;
 
   private MockMvc mvc;
+
 
   @BeforeEach
   public void setup() {
@@ -75,6 +80,8 @@ public class CourseControllerTest {
     securityService = Mockito.mock(SecurityServiceImpl.class);
     fileModelAssembler = Mockito.mock(FileModelAssembler.class);
     filePagedResourcesAssembler = Mockito.mock(PagedResourcesAssembler.class);
+    authenticationUtils = Mockito.mock(AuthenticationUtils.class);
+
 
     courseController =
         new CourseController(
@@ -85,7 +92,8 @@ public class CourseControllerTest {
             fileModelAssembler,
             coursePagedResourcesAssembler,
             userPagedResourcesAssembler,
-            filePagedResourcesAssembler);
+            filePagedResourcesAssembler,
+                authenticationUtils);
 
     mvc =
         MockMvcBuilders.standaloneSetup(courseController)
@@ -244,6 +252,28 @@ public class CourseControllerTest {
 
     String response = result.getResponse().getContentAsString();
     Assertions.assertThat(response).isEqualTo(description);
+  }
+
+  @Test
+  public void isUserEnrolledTest() throws Exception {
+    // Prepare test data
+    boolean isEnrolled = true;
+
+    // Mocks
+    given(courseService.isUserEnrolled(any(Long.class), any(Long.class))).willReturn(isEnrolled);
+    given(authenticationUtils.getAuthenticatedUser())
+        .willReturn(
+            new CustomUserDetails(
+                TestHelper.createUser(Mockito.mock(Faculty.class), Mockito.mock(Degree.class))));
+
+    // Call endpoint and assert result
+    MvcResult result =
+        mvc.perform(get("/api/courses/1/is-enrolled").contentType("application/hal+json"))
+            .andExpect(status().isOk())
+            .andReturn();
+
+    String response = result.getResponse().getContentAsString();
+    Assertions.assertThat(response).isEqualTo("true");
   }
 
   //  @Test
