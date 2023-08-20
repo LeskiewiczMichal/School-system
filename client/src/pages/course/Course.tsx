@@ -7,12 +7,14 @@ import {
 } from "../../features/course";
 import { useAppSelector } from "../../hooks";
 import axios from "axios";
+import JWTUtils from "../../utils/JWTUtils";
 
 export default function Course() {
   const { courseId } = useParams<{ courseId: string }>();
   const [course, setCourse] = useState<CourseType | null>(null);
   const courseLinks = useAppSelector((state) => state.links.courses);
   const [description, setDescription] = useState<String | null>(null);
+  const [isUserEnrolled, setIsUserEnrolled] = useState<boolean>(false);
 
   useEffect(() => {
     const handleFetchCourse = async () => {
@@ -47,10 +49,13 @@ export default function Course() {
         return;
       }
 
-      const response = await axios.get(course.isEnrolled.href);
+      axios.defaults.headers.common.Authorization = JWTUtils.getToken();
+      const response = await axios.get(course.isUserEnrolled.href);
+      setIsUserEnrolled(response.data);
     };
 
     handleFetchCourseDescription();
+    handleCheckIfUserIsEnrolled();
   }, [course]);
 
   if (!course) {
@@ -60,7 +65,7 @@ export default function Course() {
   return (
     <div>
       <div className={"w-full flex justify-center"}>
-        <CourseInfoCard course={course} />
+        <CourseInfoCard course={course} isUserEnrolled={isUserEnrolled} />
       </div>
     </div>
   );

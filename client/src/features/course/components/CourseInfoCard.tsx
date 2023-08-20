@@ -6,10 +6,11 @@ import { useAppSelector } from "../../../hooks";
 
 export interface CourseInfoCardProps {
   course: Course;
+  isUserEnrolled: boolean;
 }
 
 export default function CourseInfoCard(props: CourseInfoCardProps) {
-  const { course } = props;
+  const { course, isUserEnrolled } = props;
   const user = useAppSelector((state) => state.auth.data);
 
   return (
