@@ -3,8 +3,11 @@ package com.leskiewicz.schoolsystem.course;
 import com.leskiewicz.schoolsystem.course.Course;
 import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.course.dto.CreateCourseRequest;
+import com.leskiewicz.schoolsystem.degree.DegreeTitle;
+import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
 import com.leskiewicz.schoolsystem.files.File;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
+import com.leskiewicz.schoolsystem.utils.Language;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,4 +37,6 @@ public interface CourseService {
   String getCourseDescription(Long courseId);
 
   boolean isUserEnrolled(Long courseId, Long userId);
+
+  Page<CourseDto> search(String title, Long facultyId, Language language, Pageable pageable);
 }

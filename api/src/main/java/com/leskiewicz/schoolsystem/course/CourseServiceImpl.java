@@ -19,6 +19,7 @@ import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.UserRepository;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserMapper;
+import com.leskiewicz.schoolsystem.utils.Language;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -227,6 +228,15 @@ public class CourseServiceImpl implements CourseService {
   @Override
   public boolean isUserEnrolled(Long courseId, Long userId) {
     return courseRepository.existsCourseStudentRelation(courseId, userId);
+  }
+
+  @Override
+  public Page<CourseDto> search(
+      String title, Long facultyId, Language language, Pageable pageable) {
+    Page<Course> courses =
+        courseRepository.searchByFacultyIdAndTitleAndLanguage(title, facultyId, language, pageable);
+
+    return courses.map(courseMapper::convertToDto);
   }
 
   private void courseExistsCheck(Long courseId) {
