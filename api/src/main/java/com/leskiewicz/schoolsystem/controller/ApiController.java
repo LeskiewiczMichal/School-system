@@ -108,12 +108,17 @@ public class ApiController {
     coursesLink = Link.of(uriTemplate).withRel("courses");
 
     Link getByIdLink =
-            linkTo(methodOn(CourseController.class).getCourseById(null))
-                    .withRel("courses")
-                    .withTitle("Get by id");
+        linkTo(methodOn(CourseController.class).getCourseById(null))
+            .withRel("courses")
+            .withTitle("Get by id");
+    Link searchLink =
+        linkTo(methodOn(CourseController.class).searchCourses(null, null, null, null))
+            .withRel("courses")
+            .withTitle("Search");
 
     model.add(coursesLink);
     model.add(getByIdLink);
+    model.add(searchLink);
   }
 
   private void addFilesLink(RepresentationModel<?> model) {
