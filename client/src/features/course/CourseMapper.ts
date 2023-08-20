@@ -8,6 +8,7 @@ const mapFromServerData = (data: any): Course => {
     durationInHours: data.durationInHours,
     language: data.language,
     scope: data.scope,
+    ECTS: data.ECTS,
     faculty: {
       name: data.faculty,
       link: {

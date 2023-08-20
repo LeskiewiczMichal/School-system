@@ -8,6 +8,7 @@ export default interface Course {
   durationInHours: number;
   language: Language;
   scope: CourseScope[];
+  ECTS: number;
   faculty: {
     name: string;
     link: APILink;
