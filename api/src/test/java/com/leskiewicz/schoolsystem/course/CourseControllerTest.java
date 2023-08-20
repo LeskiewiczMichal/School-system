@@ -69,7 +69,6 @@ public class CourseControllerTest {
 
   private MockMvc mvc;
 
-
   @BeforeEach
   public void setup() {
     courseDtoAssembler = Mockito.mock(CourseDtoAssembler.class);
@@ -82,7 +81,6 @@ public class CourseControllerTest {
     filePagedResourcesAssembler = Mockito.mock(PagedResourcesAssembler.class);
     authenticationUtils = Mockito.mock(AuthenticationUtils.class);
 
-
     courseController =
         new CourseController(
             courseService,
@@ -93,7 +91,7 @@ public class CourseControllerTest {
             coursePagedResourcesAssembler,
             userPagedResourcesAssembler,
             filePagedResourcesAssembler,
-                authenticationUtils);
+            authenticationUtils);
 
     mvc =
         MockMvcBuilders.standaloneSetup(courseController)
@@ -274,6 +272,21 @@ public class CourseControllerTest {
 
     String response = result.getResponse().getContentAsString();
     Assertions.assertThat(response).isEqualTo("true");
+  }
+
+  @Test
+  public void isUserEnrolled_returnsFalse_whenUserIsNotAuthenticated() throws Exception {
+    // Mocks
+    given(authenticationUtils.getAuthenticatedUser()).willReturn(null);
+
+    // Call endpoint and assert result
+    MvcResult result =
+        mvc.perform(get("/api/courses/1/is-enrolled").contentType("application/hal+json"))
+            .andExpect(status().isOk())
+            .andReturn();
+
+    String response = result.getResponse().getContentAsString();
+    Assertions.assertThat(response).isEqualTo("false");
   }
 
   //  @Test

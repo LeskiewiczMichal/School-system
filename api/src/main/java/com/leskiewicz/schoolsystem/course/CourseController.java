@@ -33,6 +33,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -257,10 +258,11 @@ public class CourseController {
     return ResponseEntity.ok(courseService.getCourseDescription(id));
   }
 
-
   @GetMapping("/{id}/is-enrolled")
   public ResponseEntity<Boolean> isUserEnrolled(@PathVariable Long id) {
-    return ResponseEntity.ok(
-        courseService.isUserEnrolled(id, authenticationUtils.getAuthenticatedUser().getId()));
+    CustomUserDetails user = authenticationUtils.getAuthenticatedUser();
+    if (user == null) return ResponseEntity.ok(false);
+
+    return ResponseEntity.ok(courseService.isUserEnrolled(id, user.getId()));
   }
 }

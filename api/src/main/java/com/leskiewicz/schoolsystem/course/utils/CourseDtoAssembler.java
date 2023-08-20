@@ -37,6 +37,8 @@ public class CourseDtoAssembler extends RepresentationModelAssemblerSupport<Cour
     Link descriptionLink =
         linkTo(methodOn(CourseController.class).getCourseDescription(course.getId()))
             .withRel("description");
+    Link isUserEnrolled = linkTo(methodOn(CourseController.class).isUserEnrolled(course.getId()))
+        .withRel("isUserEnrolled");
 
     course.add(selfLink);
     course.add(facultyLink);
@@ -44,6 +46,7 @@ public class CourseDtoAssembler extends RepresentationModelAssemblerSupport<Cour
     course.add(studentsLink);
     course.add(filesLink);
     course.add(descriptionLink);
+    course.add(isUserEnrolled);
 
     return course;
   }

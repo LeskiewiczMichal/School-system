@@ -42,6 +42,14 @@ export default function Course() {
       setDescription(resposne.data);
     };
 
+    const handleCheckIfUserIsEnrolled = async () => {
+      if (!course) {
+        return;
+      }
+
+      const response = await axios.get(course.isEnrolled.href);
+    };
+
     handleFetchCourseDescription();
   }, [course]);
 
