@@ -68,7 +68,7 @@ export default function Course() {
     <div>
       <div className={"w-full flex flex-col items-center"}>
         <CourseInfoCard course={course} isUserEnrolled={isUserEnrolled} />
-        <div className={"px-6 lg:px-32 mt-10"}>
+        <div className={"px-6 lg:px-32 my-10"}>
           <MyHeading heading={"About course"} />
           {description && (
             <p

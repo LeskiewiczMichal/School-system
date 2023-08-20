@@ -1,5 +1,8 @@
 package com.leskiewicz.schoolsystem.course;
 
+import com.leskiewicz.schoolsystem.degree.Degree;
+import com.leskiewicz.schoolsystem.degree.DegreeTitle;
+import com.leskiewicz.schoolsystem.utils.Language;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -58,4 +61,14 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
 
   @Query(value = "SELECT c.description FROM Course c WHERE c.id = :courseId")
   String findCourseDescriptionById(Long courseId);
+
+  @Query(
+          "SELECT c FROM Course c WHERE (:title is null or c.title LIKE CONCAT('%', :title, '%')) "
+                  + "AND (:facultyId is null or c.faculty.id = :facultyId) "
+                  + "AND (:language is null or c.language = :language) ")
+  Page<Course> searchByFacultyIdAndTitleAndLanguage(
+          @Param("title") String title,
+          @Param("facultyId") Long facultyId,
+          @Param("language") Language language,
+          Pageable pageable);
 }
