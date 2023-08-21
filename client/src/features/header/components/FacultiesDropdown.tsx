@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { ReactComponent as DropdownArrow } from "../../../assets/icons/dropdownArrow/dropdown-arrow.svg";
 import { ReactComponent as DropdownArrowBrandMain } from "../../../assets/icons/dropdownArrow/dropdown-arrow-brandMain.svg";
+import { ReactComponent as ArrowUpRight } from "../../../assets/icons/arrow/arrow-up-right-brandMain.svg";
 import RequestService from "../../../utils/RequestService";
 import APILink from "../../../type/APILink";
 import ResourceNameWithLink from "../../../type/ResourceNameWithLink";
@@ -119,16 +120,16 @@ export default function FacultiesDropdown(props: FacultiesDropdownProps) {
         {/* Faculties */}
         <Link
           to="/faculties"
-          className="mb-4 text-2xl text-brandMain hover:text-brandMainActive font-bold italic underline"
+          className="mb-0 lg:mb-4 text-2xl text-brandMain hover:text-brandMainActive font-bold italic underline"
         >
-          Faculties and units
+          Faculties and units <ArrowUpRight className={"inline w-8 h-8"} />
         </Link>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 w-full h-full place-content-center justify-center items-center text-xl text-brandMain">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 w-full h-full place-content-center justify-center items-center text-xl text-brandMain mb-4">
           {faculties.map((faculty) => (
             <div className="w-full flex justify-center" key={faculty.name}>
               <a
                 href={AppPaths.FACULTIES + "/" + faculty.id}
-                className="flex w-fit italic justify-center items-center text-xl text-brandMain hover:text-brandMainActive"
+                className="flex w-fit italic justify-center items-center text-xl text-brandMain hover:text-brandMainActive hover:underline"
               >
                 {faculty.name}
               </a>
