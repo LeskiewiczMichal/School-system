@@ -80,8 +80,9 @@ export default function Courses() {
   const formChangeHandler = (
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
-    if (event.target.name === "fieldOfStudy") {
-      setFieldOfStudy(event.target.value);
+    if (event.target.name === "language") {
+      setLanguage(event.target.value as Language);
+      setPage(0);
     }
     if (event.target.name === "faculty") {
       setFaculty(event.target.value);
