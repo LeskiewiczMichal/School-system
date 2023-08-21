@@ -8,6 +8,16 @@ const mapUserFromServer = (data: any): UserData => ({
   degree: data.degree,
   faculty: data.faculty,
   role: data.role,
+  courses: {
+    href: data._links.courses.href,
+    templated: data._links.courses.templated === true,
+  },
+  teacherDetails: data._links.teacherDetails
+    ? {
+        href: data._links.teacherDetails.href,
+        templated: data._links.teacherDetails.templated === true,
+      }
+    : null,
 });
 
 const UserMapper = {

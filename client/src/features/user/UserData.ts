@@ -1,4 +1,5 @@
 import Role from "../../type/Role";
+import APILink from "../../type/APILink";
 
 interface UserData {
   id: bigint;
@@ -8,6 +9,8 @@ interface UserData {
   degree: string | null;
   faculty: string;
   role: Role;
+  courses: APILink;
+  teacherDetails: APILink | null;
 }
 
 export default UserData;
