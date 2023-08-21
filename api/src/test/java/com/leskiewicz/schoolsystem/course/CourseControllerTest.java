@@ -5,8 +5,8 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willThrow;
 // import static
 // org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.mockito.Mockito.doNothing;
 // import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -19,6 +19,8 @@ import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.course.dto.CreateCourseRequest;
 import com.leskiewicz.schoolsystem.course.utils.CourseDtoAssembler;
 import com.leskiewicz.schoolsystem.degree.Degree;
+import com.leskiewicz.schoolsystem.degree.DegreeTitle;
+import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
 import com.leskiewicz.schoolsystem.error.DefaultExceptionHandler;
 import com.leskiewicz.schoolsystem.error.ErrorMessages;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
@@ -30,6 +32,8 @@ import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserDtoAssembler;
 import com.leskiewicz.schoolsystem.utils.Language;
 import jakarta.persistence.EntityNotFoundException;
+
+import java.util.Arrays;
 import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.hamcrest.Matchers;
@@ -38,7 +42,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
@@ -232,6 +240,45 @@ public class CourseControllerTest {
         .andExpect(jsonPath("$.message").value(ErrorMessages.objectWithIdNotFound("Course", 1L)))
         .andExpect(jsonPath("$.path").value("/api/courses/1/files"))
         .andReturn();
+  }
+
+  @Test
+  public void searchCourses() throws Exception {
+    // Prepare test data
+    List<CourseDto> courseDtos =
+        Arrays.asList(TestHelper.createCourseDto("Faculty", "Isaiah Thomas"));
+    Page<CourseDto> coursePage = new PageImpl<>(courseDtos);
+    PagedModel<CourseDto> coursePagedModel =
+        PagedModel.of(courseDtos, new PagedModel.PageMetadata(1, 1, 1, 1));
+
+    // Mocks
+    given(
+            courseService.search(
+                any(String.class), any(Long.class), any(Language.class), any(Pageable.class)))
+        .willReturn(coursePage);
+    given(courseDtoAssembler.toModel(any(CourseDto.class))).willReturn(courseDtos.get(0));
+    given(coursePagedResourcesAssembler.toModel(any(Page.class))).willReturn(coursePagedModel);
+
+    // Perform request
+    mvc.perform(
+            get("/api/courses/search")
+                .param("title", "TestCourseDto")
+                .param("faculty", "1")
+                .param("language", "ENGLISH")
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.page").exists())
+        .andExpect(jsonPath("$.links").isArray())
+        .andExpect(jsonPath("$.links[0].rel").value("self"))
+        .andExpect(jsonPath("$.links[1].rel").value("courses"))
+        .andExpect(jsonPath("$.links[2].rel").value("course"))
+        .andReturn();
+
+    // Verify function calls
+    verify(courseService, times(1))
+        .search(any(String.class), any(Long.class), any(Language.class), any(Pageable.class));
+    verify(courseDtoAssembler, times(1)).toModel(any(CourseDto.class));
+    verify(coursePagedResourcesAssembler, times(1)).toModel(any(Page.class));
   }
 
   @Test
