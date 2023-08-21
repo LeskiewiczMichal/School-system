@@ -14,7 +14,8 @@ import { Sidebar } from "../features/sidebar";
 import MyHeading from "../common_components/MyHeading";
 import { AppPaths } from "../App";
 import Language from "../type/Language";
-import { Course } from "../features/course";
+import { Course, CourseRequest } from "../features/course";
+import { FetchCoursesResponse } from "../features/course/services/CourseRequest";
 
 export default function Courses() {
   const mobileNavView = useAppSelector(
@@ -27,7 +28,7 @@ export default function Courses() {
   const [page, setPage] = useState<number>(0);
   const [faculty, setFaculty] = useState<string | undefined>(undefined);
   const [title, setTitle] = useState<DegreeTitle | undefined>(undefined);
-  const [lagnauge, setLanguage] = useState<Language | undefined>(undefined);
+  const [language, setLanguage] = useState<Language | undefined>(undefined);
 
   // Degree content
   const [courses, setCourses] = useState<Course[]>([]);
@@ -44,27 +45,27 @@ export default function Courses() {
       return;
     }
 
-    let apiLink = links.degrees.getDegrees;
-    if (faculty || fieldOfStudy !== "" || title) {
-      apiLink = links.degrees.search;
+    let apiLink = links.courses.search;
+    if (faculty || language || title) {
+      apiLink = links.courses.search;
     }
 
     // Call the api
-    const response: GetDegreesResponse = await DegreeRequest.getList({
+    const response: FetchCoursesResponse = await CourseRequest.getList({
       link: apiLink,
       pagination: { page: page },
       faculty: faculty,
-      fieldOfStudy: fieldOfStudy,
       title: title,
+      language: language,
     });
 
-    setDegrees(response.degrees);
+    setCourses(response.courses);
     setPaginationInfo(response.paginationInfo);
   };
 
   useEffect(() => {
-    handleFetchDegrees();
-  }, [links, page, faculty, title]);
+    handleFetchCourses();
+  }, [links, page, faculty, title, language]);
 
   const changePage = (direction: "next" | "previous") => {
     setPage((prevPage) => {

@@ -16,7 +16,7 @@ export type FetchCoursesProps = {
   link: APILink;
   faculty?: string;
   title?: string;
-  degreeId?: string;
+  language?: string;
   pagination?: OptionalPaginationParams;
 };
 
@@ -38,7 +38,7 @@ const getList = async (
   props: FetchCoursesProps,
 ): Promise<FetchCoursesResponse> => {
   // Prepare the link
-  const { link, faculty, title, degreeId, pagination } = props;
+  const { link, faculty, title, language, pagination } = props;
 
   // Prepare the search parameters
   let params = {};
@@ -54,10 +54,10 @@ const getList = async (
       title: title,
     };
   }
-  if (degreeId && degreeId !== "") {
+  if (language) {
     params = {
       ...params,
-      degree: degreeId,
+      language: language,
     };
   }
 
