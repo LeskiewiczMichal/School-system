@@ -16,6 +16,10 @@ const createFacultyNavigationLinks = (
       title: "Research",
       redirectUrl: `/faculties/${facultyId}/research`,
     },
+    {
+      title: "Academic staff",
+      redirectUrl: `/faculties/${facultyId}/academic-staff`,
+    },
   ];
 };
 
@@ -25,6 +29,7 @@ export enum PageType {
   DEGREE_PROGRAMMES,
   RESEARCH,
   ARTICLES,
+  ACADEMIC_STAFF,
 }
 
 const createFacultyNavigationLinksDesktop = (
@@ -56,6 +61,11 @@ const createFacultyNavigationLinksDesktop = (
       title: "Articles",
       redirectUrl: `/faculties/${facultyId}/articles`,
       active: activePage === PageType.ARTICLES,
+    },
+    {
+      title: "Academic staff",
+      redirectUrl: `/faculties/${facultyId}/academic-staff`,
+      active: activePage === PageType.ACADEMIC_STAFF,
     },
   ];
 };
