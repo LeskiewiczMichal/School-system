@@ -16,6 +16,7 @@ import ResourceNameWithLink from "../../type/ResourceNameWithLink";
 import MyHeading from "../../common_components/MyHeading";
 import { SidebarLinkProps } from "../../features/sidebar/components/SidebarLink";
 import { AppPaths } from "../../App";
+import LoadingSpinner from "../../common_components/LoadingSpinner";
 
 export default function DegreeProgrammes() {
   const mobileNavView = useAppSelector(
@@ -61,6 +62,7 @@ export default function DegreeProgrammes() {
 
     setDegrees(response.degrees);
     setPaginationInfo(response.paginationInfo);
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -118,23 +120,28 @@ export default function DegreeProgrammes() {
           Aquila University offers a variety of degree programs. Find the
           perfect fit for you and embark on your educational journey with us.
         </p>
+
         <DegreeSearchForm
           fieldOfStudyField={fieldOfStudy}
           formChangeHandler={formChangeHandler}
           handleFetchDegrees={handleFetchDegrees}
           setPage={setPage}
         />
+
         {/* Degree programmes */}
         <MyHeading
           heading={`Search results (${paginationInfo.totalElements})`}
         />
-        {degrees.length !== 0 ? (
+
+        {isLoading && <LoadingSpinner />}
+        {degrees.length !== 0 && !isLoading && (
           <section className={"flex flex-col gap-4 px-2 sm:px-6 lg:px-0"}>
             {degrees.map((degree) => (
               <DegreeCard key={degree.id.toString()} degree={degree} />
             ))}
           </section>
-        ) : (
+        )}
+        {degrees.length === 0 && !isLoading && (
           <span>No degrees matching your requirements were found.</span>
         )}
       </main>

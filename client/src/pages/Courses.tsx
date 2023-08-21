@@ -1,6 +1,5 @@
 import { useAppSelector } from "../hooks";
 import { useEffect, useState } from "react";
-import { DegreeTitle } from "../features/degree";
 import PaginationInfo from "../type/PaginationInfo";
 import { SidebarLinkProps } from "../features/sidebar/components/SidebarLink";
 import { Sidebar } from "../features/sidebar";
@@ -10,6 +9,8 @@ import Language from "../type/Language";
 import { Course, CourseRequest, CourseSearchForm } from "../features/course";
 import { FetchCoursesResponse } from "../features/course/services/CourseRequest";
 import LoadingSpinner from "../common_components/LoadingSpinner";
+import { Link } from "react-router-dom";
+import { ReactComponent as ArrowUpRightBrandMain } from "../assets/icons/arrow/arrow-up-right-brandMain.svg";
 
 export default function Courses() {
   const mobileNavView = useAppSelector(
@@ -47,7 +48,7 @@ export default function Courses() {
     // Call the api
     const response: FetchCoursesResponse = await CourseRequest.getList({
       link: apiLink,
-      pagination: { page: page },
+      pagination: { page: page, size: 20 },
       faculty: faculty,
       title: title,
       language: language,
@@ -124,18 +125,35 @@ export default function Courses() {
           setPage={setPage}
         />
 
-        {/* Degree programmes */}
         <MyHeading
           heading={`Search results (${paginationInfo.totalElements})`}
         />
 
+        {/* Courses display */}
         {isLoading && <LoadingSpinner />}
         {courses.length !== 0 && !isLoading && (
-          <section className={"flex flex-col gap-4 px-2 sm:px-6 lg:px-0"}>
-            {/*{degrees.map((degree) => (*/}
-            {/*    <DegreeCard key={degree.id.toString()} degree={degree} />*/}
-            {/*))}*/}
-          </section>
+          <ul
+            className={
+              "grid grid-cols-1 gap-x-12 gap-y-8 px-2 sm:px-6 lg:px-0 list-disc justify-center items-center ml-8 md:grid-cols-2"
+            }
+          >
+            {courses.map((course) => (
+              <li>
+                <Link
+                  to={`/courses/${course.id}`}
+                  key={course.id.toString()}
+                  className={
+                    "text-xl text-brandMain font-bold hover:text-brandMainActive hover:underline"
+                  }
+                >
+                  <div>
+                    {course.title} by the {course.faculty.name}{" "}
+                    <ArrowUpRightBrandMain className={"inline h-6 w-6"} />
+                  </div>
+                </Link>
+              </li>
+            ))}
+          </ul>
         )}
         {courses.length === 0 && !isLoading && (
           <span>No courses matching your requirements were found.</span>
