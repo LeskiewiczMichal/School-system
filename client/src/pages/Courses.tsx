@@ -1,20 +1,13 @@
 import { useAppSelector } from "../hooks";
 import { useEffect, useState } from "react";
-import {
-  Degree,
-  DegreeCard,
-  DegreeRequest,
-  DegreeSearchForm,
-  DegreeTitle,
-} from "../features/degree";
+import { DegreeTitle } from "../features/degree";
 import PaginationInfo from "../type/PaginationInfo";
-import { GetDegreesResponse } from "../features/degree/services/DegreeRequest";
 import { SidebarLinkProps } from "../features/sidebar/components/SidebarLink";
 import { Sidebar } from "../features/sidebar";
 import MyHeading from "../common_components/MyHeading";
 import { AppPaths } from "../App";
 import Language from "../type/Language";
-import { Course, CourseRequest } from "../features/course";
+import { Course, CourseRequest, CourseSearchForm } from "../features/course";
 import { FetchCoursesResponse } from "../features/course/services/CourseRequest";
 
 export default function Courses() {
@@ -26,9 +19,9 @@ export default function Courses() {
 
   // Searching
   const [page, setPage] = useState<number>(0);
-  const [faculty, setFaculty] = useState<string | undefined>(undefined);
-  const [title, setTitle] = useState<DegreeTitle | undefined>(undefined);
-  const [language, setLanguage] = useState<Language | undefined>(undefined);
+  const [faculty, setFaculty] = useState<string>("");
+  const [title, setTitle] = useState<string>("");
+  const [language, setLanguage] = useState<Language | string>("");
 
   // Degree content
   const [courses, setCourses] = useState<Course[]>([]);
@@ -45,8 +38,8 @@ export default function Courses() {
       return;
     }
 
-    let apiLink = links.courses.search;
-    if (faculty || language || title) {
+    let apiLink = links.courses.getCourses;
+    if (faculty !== "" || language !== "" || title !== "") {
       apiLink = links.courses.search;
     }
 
@@ -61,11 +54,12 @@ export default function Courses() {
 
     setCourses(response.courses);
     setPaginationInfo(response.paginationInfo);
+    setIsLoading(false);
   };
 
   useEffect(() => {
     handleFetchCourses();
-  }, [links, page, faculty, title, language]);
+  }, [links, page, faculty, language]);
 
   const changePage = (direction: "next" | "previous") => {
     setPage((prevPage) => {
@@ -89,7 +83,7 @@ export default function Courses() {
       setPage(0);
     }
     if (event.target.name === "title") {
-      setTitle(event.target.value as DegreeTitle);
+      setTitle(event.target.value);
       setPage(0);
     }
   };
@@ -116,24 +110,35 @@ export default function Courses() {
           Our Courses
         </h1>
         <p className={"text-grayscaleDarkText px-4 mb-6 lg:px-0"}>
-          Aquila University offers a variety of degree programs. Find the
-          perfect fit for you and embark on your educational journey with us.
+          Explore the rich tapestry of educational opportunities at Aquila
+          University, where a myriad of captivating courses await your
+          discovery. With our extensive selection, you're sure to find the
+          perfect fit that aligns with your interests and aspirations.
         </p>
-        {/*<DegreeSearchForm*/}
-        {/*    fieldOfStudyField={fieldOfStudy}*/}
-        {/*    formChangeHandler={formChangeHandler}*/}
-        {/*    handleFetchDegrees={handleFetchDegrees}*/}
-        {/*    setPage={setPage}*/}
-        {/*/>*/}
+
+        <CourseSearchForm
+          titleField={title}
+          formChangeHandler={formChangeHandler}
+          handleFetchCourses={handleFetchCourses}
+          setPage={setPage}
+        />
+
         {/* Degree programmes */}
         <MyHeading
           heading={`Search results (${paginationInfo.totalElements})`}
         />
-        <section className={"flex flex-col gap-4 px-2 sm:px-6 lg:px-0"}>
-          {/*{degrees.map((degree) => (*/}
-          {/*    <DegreeCard key={degree.id.toString()} degree={degree} />*/}
-          {/*))}*/}
-        </section>
+
+        {isLoading && <span>Loading...</span>}
+        {courses.length !== 0 && !isLoading && (
+          <section className={"flex flex-col gap-4 px-2 sm:px-6 lg:px-0"}>
+            {/*{degrees.map((degree) => (*/}
+            {/*    <DegreeCard key={degree.id.toString()} degree={degree} />*/}
+            {/*))}*/}
+          </section>
+        )}
+        {courses.length === 0 && !isLoading && (
+          <span>No courses matching your requirements were found.</span>
+        )}
       </main>
     </div>
   );

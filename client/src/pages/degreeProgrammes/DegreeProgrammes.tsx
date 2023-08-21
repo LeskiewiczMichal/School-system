@@ -27,8 +27,8 @@ export default function DegreeProgrammes() {
   // Searching
   const [page, setPage] = useState<number>(0);
   const [fieldOfStudy, setFieldOfStudy] = useState<string>("");
-  const [faculty, setFaculty] = useState<string | undefined>(undefined);
-  const [title, setTitle] = useState<DegreeTitle | undefined>(undefined);
+  const [faculty, setFaculty] = useState<string>("");
+  const [title, setTitle] = useState<DegreeTitle | string>("");
 
   // Degree content
   const [degrees, setDegrees] = useState<Degree[]>([]);
@@ -46,7 +46,7 @@ export default function DegreeProgrammes() {
     }
 
     let apiLink = links.degrees.getDegrees;
-    if (faculty || fieldOfStudy !== "" || title) {
+    if (faculty !== "" || fieldOfStudy !== "" || title !== "") {
       apiLink = links.degrees.search;
     }
 
@@ -128,11 +128,15 @@ export default function DegreeProgrammes() {
         <MyHeading
           heading={`Search results (${paginationInfo.totalElements})`}
         />
-        <section className={"flex flex-col gap-4 px-2 sm:px-6 lg:px-0"}>
-          {degrees.map((degree) => (
-            <DegreeCard key={degree.id.toString()} degree={degree} />
-          ))}
-        </section>
+        {degrees.length !== 0 ? (
+          <section className={"flex flex-col gap-4 px-2 sm:px-6 lg:px-0"}>
+            {degrees.map((degree) => (
+              <DegreeCard key={degree.id.toString()} degree={degree} />
+            ))}
+          </section>
+        ) : (
+          <span>No degrees matching your requirements were found.</span>
+        )}
       </main>
     </div>
   );

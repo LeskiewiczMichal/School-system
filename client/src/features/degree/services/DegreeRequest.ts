@@ -14,7 +14,7 @@ import mapPaginationInfoFromServer from "../../../utils/MapPaginationInfoFromSer
 export type FetchDegreesProps = {
   link: APILink;
   faculty?: string;
-  title?: DegreeTitle;
+  title?: string;
   fieldOfStudy?: string;
   pagination?: OptionalPaginationParams;
 };

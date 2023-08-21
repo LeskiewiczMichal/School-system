@@ -114,9 +114,9 @@ export default function DegreeSearchForm(props: DegreeSearchFormProps) {
             "w-full lg:w-1/5 p-2 mb-6  text-brandMain font-bold border border-grayscaleMediumDark focus:ring-bradMain focus:outline-none focus:border-brandMain"
           }
           onChange={formChangeHandler}
-          defaultValue={undefined}
+          defaultValue={""}
         >
-          <option value={undefined}>All faculties</option>
+          <option value={""}>All faculties</option>
           {faculties.map((faculty) => (
             <option key={faculty.id.toString()} value={faculty.id.toString()}>
               {faculty.name}
@@ -131,9 +131,9 @@ export default function DegreeSearchForm(props: DegreeSearchFormProps) {
             "w-full lg:w-1/5 p-2 mb-6  text-brandMain font-bold border border-grayscaleMediumDark focus:ring-bradMain focus:outline-none focus:border-brandMain"
           }
           onChange={formChangeHandler}
-          defaultValue={undefined}
+          defaultValue={""}
         >
-          <option value={undefined}>Degree level</option>
+          <option value={""}>Degree level</option>
           <option value={DegreeTitle.BACHELOR}>Bachelor</option>
           <option value={DegreeTitle.BACHELOR_OF_SCIENCE}>
             Bachelor of science

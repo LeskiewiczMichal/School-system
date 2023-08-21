@@ -69,8 +69,8 @@ export default function CourseSearchForm(props: CourseSearchFormProps) {
         <div className="relative w-full lg:w-2/3">
           <input
             type="search"
-            id="fieldOfStudy"
-            name="fieldOfStudy"
+            id="title"
+            name="title"
             className="block p-4 w-full font-bold text-sm text-black bg-grayscaleLight border-2 border-grayscaleMediumDark focus:outline-none focus:ring-none focus:border-brandMain"
             placeholder="Search for a field of study..."
             onChange={formChangeHandler}
@@ -113,9 +113,9 @@ export default function CourseSearchForm(props: CourseSearchFormProps) {
             "w-full lg:w-1/5 p-2 mb-6  text-brandMain font-bold border border-grayscaleMediumDark focus:ring-bradMain focus:outline-none focus:border-brandMain"
           }
           onChange={formChangeHandler}
-          defaultValue={undefined}
+          defaultValue={""}
         >
-          <option value={undefined}>All faculties</option>
+          <option value={""}>All faculties</option>
           {faculties.map((faculty) => (
             <option key={faculty.id.toString()} value={faculty.id.toString()}>
               {faculty.name}
@@ -130,9 +130,9 @@ export default function CourseSearchForm(props: CourseSearchFormProps) {
             "w-full lg:w-1/5 p-2 mb-6  text-brandMain font-bold border border-grayscaleMediumDark focus:ring-bradMain focus:outline-none focus:border-brandMain"
           }
           onChange={formChangeHandler}
-          defaultValue={undefined}
+          defaultValue={""}
         >
-          <option value={undefined}>Language</option>
+          <option value={""}>Language</option>
           <option value={Language.POLISH}>Polish</option>
           <option value={Language.ENGLISH}>English</option>
         </select>
