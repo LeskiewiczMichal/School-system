@@ -45,7 +45,7 @@ export default function Faculties() {
     };
 
     handleFetchFacultyNames();
-  }, []);
+  }, [facultiesLink]);
 
   return (
     <main className={"lg:p-24"}>

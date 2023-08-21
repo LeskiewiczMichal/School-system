@@ -121,6 +121,7 @@ export default function FacultiesDropdown(props: FacultiesDropdownProps) {
         <Link
           to="/faculties"
           className="mb-0 lg:mb-4 text-2xl text-brandMain hover:text-brandMainActive font-bold italic underline"
+          onClick={handleDropDown}
         >
           Faculties and units <ArrowUpRight className={"inline w-8 h-8"} />
         </Link>
@@ -130,6 +131,7 @@ export default function FacultiesDropdown(props: FacultiesDropdownProps) {
               <a
                 href={AppPaths.FACULTIES + "/" + faculty.id}
                 className="flex w-fit italic justify-center items-center text-xl text-brandMain hover:text-brandMainActive hover:underline"
+                onClick={handleDropDown}
               >
                 {faculty.name}
               </a>
