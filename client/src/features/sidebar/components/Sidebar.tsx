@@ -5,7 +5,9 @@ import SidebarLink, { SidebarLinkProps } from "./SidebarLink";
 import DarkenLayoutBelowIndexZ from "../../../common_components/DarkenLayoutBelowIndexZ";
 import { IntegrationSliceActions } from "../../../store";
 import SidebarButton, { SidebarButtonProps } from "./SidebarButton";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import FacultyNavLinksCreator from "../../faculty/FacultyNavLinksCreator";
+import MainNavLinksCreator from "../../header/utils/MainNavLinksCreator";
 
 export interface SidebarProps {
   links?: SidebarLinkProps[];
@@ -20,6 +22,18 @@ export default function Sidebar(props: SidebarProps) {
   const isAuthenticated: boolean = useAppSelector(
     (state) => state.auth.data !== null,
   );
+
+  const location = useLocation();
+  const isFacultiesPageSidebar = location.pathname.includes("/faculties/");
+  // Extract faculty id from the path
+  let facultyId: string = "";
+  if (isFacultiesPageSidebar) {
+    // Split the pathname by '/'
+    const pathParts = location.pathname.split("/");
+
+    // Get the content between the second '/' and third '/'
+    facultyId = pathParts[2];
+  }
 
   // Mobile view support for sidebar
   const [mobileNavView, setMobileNavView] = useState<boolean>(
@@ -95,6 +109,13 @@ export default function Sidebar(props: SidebarProps) {
     );
   }
 
+  let sidebarLinks: SidebarLinkProps[] =
+    MainNavLinksCreator.createMainNavLinks();
+  if (isFacultiesPageSidebar) {
+    sidebarLinks =
+      FacultyNavLinksCreator.createFacultyNavigationLinks(facultyId);
+  }
+
   return sidebarMenuActive ? (
     <>
       <DarkenLayoutBelowIndexZ />
@@ -120,13 +141,6 @@ export default function Sidebar(props: SidebarProps) {
           <ChevronLeft className={"h-6 w-6"} /> Back
         </button>
 
-        {/* Account */}
-        {isAuthenticated ? (
-          <SidebarLink title={"My account"} redirectUrl={"/my-account"} />
-        ) : (
-          <SidebarLink title={"Sign in"} redirectUrl={"/login"} />
-        )}
-
         {/* Buttons */}
         {buttons &&
           buttons.map((button) => (
@@ -148,6 +162,25 @@ export default function Sidebar(props: SidebarProps) {
               active={link.active}
             />
           ))}
+
+        {/* Navigation */}
+        <h4 className={"mt-4 text-brandMainLight font-bold text-lg"}>
+          Navigation:
+        </h4>
+        {/* Account */}
+        {isAuthenticated ? (
+          <SidebarLink title={"My account"} redirectUrl={"/my-account"} />
+        ) : (
+          <SidebarLink title={"Sign in"} redirectUrl={"/login"} />
+        )}
+        {sidebarLinks.map((link) => (
+          <SidebarLink
+            key={link.title}
+            title={link.title}
+            redirectUrl={link.redirectUrl}
+            active={link.active}
+          />
+        ))}
       </div>
     </>
   ) : null;

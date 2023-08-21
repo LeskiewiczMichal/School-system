@@ -24,8 +24,7 @@ export default function Header() {
 
   // Get the current path
   const location = useLocation();
-  const shouldContainSidebar = location.pathname.includes("/articles");
-  const isFacultyPage = location.pathname.includes("/faculties");
+  const isFacultyPage = location.pathname.includes("/faculties/");
 
   // Extract faculty id from the path
   let facultyId: string = "";

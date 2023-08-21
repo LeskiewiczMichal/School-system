@@ -11,7 +11,7 @@ const createMainNavLinks = (): SidebarLinkProps[] => {
       redirectUrl: `/research`,
     },
     {
-      title: "Degree Programmes",
+      title: "Degrees and Courses",
       redirectUrl: `/degree-programmes`,
     },
   ];

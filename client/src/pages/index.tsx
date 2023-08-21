@@ -12,6 +12,7 @@ import CookieManagement from "./aboutUs/CookieManagement";
 import MyAccount from "./MyAccount";
 import Course from "./course/Course";
 import Courses from "./Courses";
+import Faculties from "./Faculties";
 
 export {
   Home,
@@ -28,4 +29,5 @@ export {
   MyAccount,
   Course,
   Courses,
+  Faculties,
 };

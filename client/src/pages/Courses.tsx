@@ -158,6 +158,8 @@ export default function Courses() {
         {courses.length === 0 && !isLoading && (
           <span>No courses matching your requirements were found.</span>
         )}
+
+        {/* Pagination */}
       </main>
     </div>
   );
