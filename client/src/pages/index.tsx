@@ -13,6 +13,7 @@ import MyAccount from "./MyAccount";
 import Course from "./course/Course";
 import Courses from "./Courses";
 import Faculties from "./Faculties";
+import AcademicStaff from "./AcademicStaff";
 
 export {
   Home,
@@ -30,4 +31,5 @@ export {
   Course,
   Courses,
   Faculties,
+  AcademicStaff,
 };
