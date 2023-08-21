@@ -29,7 +29,7 @@ const login =
 
         // Get and map response data
         const { user, _links, token } = response.data;
-        const userData: UserData = UserMapper.mapUserFromServer(user);
+        const userData: UserData = UserMapper.mapFromServerData(user);
         const links = {
           self: {
             href: user._links.self.href,

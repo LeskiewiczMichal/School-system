@@ -6,7 +6,10 @@ interface UserData {
   email: string;
   firstName: string;
   lastName: string;
-  degree: string | null;
+  degree: {
+    name: string;
+    link: APILink;
+  } | null;
   faculty: string;
   role: Role;
   courses: APILink;

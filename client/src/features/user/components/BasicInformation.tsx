@@ -58,7 +58,7 @@ export default function BasicInformation(props: BasicInformationProps) {
         <DegreeDiploma className={"h-8 w-8"} />
         <div className={"flex flex-col text-grayscaleDark"}>
           <span>Degree</span>
-          <span className={"font-bold"}>{user.degree}</span>
+          <span className={"font-bold"}>{user.degree?.name}</span>
         </div>
       </div>
     </div>
