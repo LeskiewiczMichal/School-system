@@ -9,6 +9,7 @@ import { AppPaths } from "../App";
 import Language from "../type/Language";
 import { Course, CourseRequest, CourseSearchForm } from "../features/course";
 import { FetchCoursesResponse } from "../features/course/services/CourseRequest";
+import LoadingSpinner from "../common_components/LoadingSpinner";
 
 export default function Courses() {
   const mobileNavView = useAppSelector(
@@ -128,7 +129,7 @@ export default function Courses() {
           heading={`Search results (${paginationInfo.totalElements})`}
         />
 
-        {isLoading && <span>Loading...</span>}
+        {isLoading && <LoadingSpinner />}
         {courses.length !== 0 && !isLoading && (
           <section className={"flex flex-col gap-4 px-2 sm:px-6 lg:px-0"}>
             {/*{degrees.map((degree) => (*/}
