@@ -34,6 +34,10 @@ const fetchBasicLinks = (): AppThunk => async (dispatch) => {
             href: response.data._links.courses[1].href,
             templated: response.data._links.courses[1].templated === true,
           },
+          search: {
+            href: response.data._links.courses[2].href,
+            templated: response.data._links.courses[2].templated === true,
+          },
         },
         degrees: {
           getDegrees: {

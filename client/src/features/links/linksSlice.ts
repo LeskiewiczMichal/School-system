@@ -8,6 +8,7 @@ const initialState: LinksState = {
   courses: {
     getCourses: null,
     getById: null,
+    search: null,
   },
   degrees: {
     getDegrees: null,

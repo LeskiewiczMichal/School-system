@@ -19,8 +19,6 @@ import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.course.dto.CreateCourseRequest;
 import com.leskiewicz.schoolsystem.course.utils.CourseDtoAssembler;
 import com.leskiewicz.schoolsystem.degree.Degree;
-import com.leskiewicz.schoolsystem.degree.DegreeTitle;
-import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
 import com.leskiewicz.schoolsystem.error.DefaultExceptionHandler;
 import com.leskiewicz.schoolsystem.error.ErrorMessages;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
@@ -32,7 +30,6 @@ import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserDtoAssembler;
 import com.leskiewicz.schoolsystem.utils.Language;
 import jakarta.persistence.EntityNotFoundException;
-
 import java.util.Arrays;
 import java.util.List;
 import org.assertj.core.api.Assertions;
