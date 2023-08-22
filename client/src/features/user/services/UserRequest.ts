@@ -9,10 +9,14 @@ import PaginationInfo from "../../../type/PaginationInfo";
 import RequestService from "../../../utils/RequestService";
 import { UserMapper } from "../index";
 import mapPaginationInfoFromServer from "../../../utils/MapPaginationInfoFromServer";
+import Role from "../../../type/Role";
 
 export interface FetchUsersProps {
   link: APILink;
   pagination?: OptionalPaginationParams;
+  firstName?: string;
+  lastName?: string;
+  role?: Role;
 }
 
 export interface FetchUsersResponse {
@@ -24,13 +28,35 @@ export interface FetchUsersResponse {
  * Fetch users from the API
  *
  * @param props {@link FetchUsersProps} object,
- * containing the link {@link APILink} - link to all users
- *  and pagination {@link OptionalPaginationParams} (optional)
+ * containing the link {@link APILink} - link to all users or search link,
+ * and pagination {@link OptionalPaginationParams} (optional)
+ * and optional search parameters firstName, lastName and role {@link Role}
  * @returns Promise of an array of {@link UserData} objects
  */
 const getList = async (props: FetchUsersProps): Promise<FetchUsersResponse> => {
   // Prepare the link
-  const { link, pagination } = props;
+  const { link, pagination, firstName, lastName, role } = props;
+
+  // Prepare the search parameters
+  let params = {};
+  if (firstName) {
+    params = {
+      ...params,
+      firstName: firstName,
+    };
+  }
+  if (lastName) {
+    params = {
+      ...params,
+      lastName: lastName,
+    };
+  }
+  if (role) {
+    params = {
+      ...params,
+      role: role,
+    };
+  }
 
   // Prepare the pagination
   let paginationParams: PaginationParams = {
@@ -49,6 +75,7 @@ const getList = async (props: FetchUsersProps): Promise<FetchUsersResponse> => {
   const responseData = await RequestService.performGetRequest({
     link: link,
     pagination: paginationParams,
+    params: params,
   });
 
   let usersArr: UserData[] = [];
