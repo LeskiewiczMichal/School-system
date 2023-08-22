@@ -2,8 +2,10 @@ package com.leskiewicz.schoolsystem.user.service;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import com.leskiewicz.schoolsystem.authentication.Role;
 import com.leskiewicz.schoolsystem.course.Course;
 import com.leskiewicz.schoolsystem.course.CourseRepository;
 import com.leskiewicz.schoolsystem.course.dto.CourseDto;
@@ -19,6 +21,7 @@ import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetails;
 import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetailsRepository;
 import com.leskiewicz.schoolsystem.user.utils.UserMapper;
+import com.leskiewicz.schoolsystem.utils.Language;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.Arrays;
 import java.util.List;
@@ -33,6 +36,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -118,6 +122,41 @@ public class UserServiceGettersTest {
 
     Assertions.assertThrows(
         EntityNotFoundException.class, () -> userService.getUserCourses(1L, pageable));
+  }
+
+  @Test
+  public void searchReturnsPagedUsers() {
+    // Set up test data
+    List<User> usersList =
+        Arrays.asList(
+            TestHelper.createUser(faculty, degree), TestHelper.createUser(faculty, degree));
+    List<UserDto> userDtos =
+        Arrays.asList(
+            TestHelper.createUserDto("FacultyTest", "DegreeTest"),
+            TestHelper.createUserDto("TestFaculty", "TestDegree"));
+    Page<User> userPage = new PageImpl<>(usersList);
+
+    // Mocks
+    given(userRepository.searchUsersByLastNameAndFirstNameAndRole(any(String.class), any(String.class), any(Role.class), any(Pageable.class)))
+        .willReturn(userPage);
+    given(userMapper.convertToDto(any(User.class))).willReturn(userDtos.get(0), userDtos.get(1));
+
+    // Call method
+    Page<UserDto> result = userService.search("Test", "Test", Role.ROLE_TEACHER, PageRequest.of(0, 2));
+
+    // Assertions
+    Assertions.assertEquals(2, result.getTotalElements());
+    Assertions.assertEquals(1, result.getTotalPages());
+    Assertions.assertEquals(2, result.getNumberOfElements());
+    Assertions.assertEquals(0, result.getNumber());
+    Assertions.assertEquals(2, result.getSize());
+    Assertions.assertEquals(userDtos.get(0), result.getContent().get(0));
+    Assertions.assertEquals(userDtos.get(1), result.getContent().get(1));
+
+    verify(userRepository)
+        .searchUsersByLastNameAndFirstNameAndRole(
+            "Test", "Test", Role.ROLE_TEACHER, PageRequest.of(0, 2));
+    verify(userMapper, times(2)).convertToDto(any(User.class));
   }
 
   @Test
