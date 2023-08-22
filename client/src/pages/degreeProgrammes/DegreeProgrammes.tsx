@@ -17,6 +17,9 @@ import MyHeading from "../../common_components/MyHeading";
 import { SidebarLinkProps } from "../../features/sidebar/components/SidebarLink";
 import { AppPaths } from "../../App";
 import LoadingSpinner from "../../common_components/LoadingSpinner";
+import { ReactComponent as ChevronLeft } from "../../assets/icons/chevron/chevron-left.svg";
+import { ReactComponent as ChevronRight } from "../../assets/icons/chevron/chevron-right.svg";
+import PaginationButtons from "../../common_components/PaginationButtons";
 
 export default function DegreeProgrammes() {
   const mobileNavView = useAppSelector(
@@ -132,7 +135,6 @@ export default function DegreeProgrammes() {
         <MyHeading
           heading={`Search results (${paginationInfo.totalElements})`}
         />
-
         {isLoading && <LoadingSpinner />}
         {degrees.length !== 0 && !isLoading && (
           <section className={"flex flex-col gap-4 px-2 sm:px-6 lg:px-0"}>
@@ -144,6 +146,13 @@ export default function DegreeProgrammes() {
         {degrees.length === 0 && !isLoading && (
           <span>No degrees matching your requirements were found.</span>
         )}
+
+        {/* Pagination buttons */}
+        <PaginationButtons
+          paginationInfo={paginationInfo}
+          page={page}
+          changePage={changePage}
+        />
       </main>
     </div>
   );
