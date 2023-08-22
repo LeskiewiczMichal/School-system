@@ -40,9 +40,11 @@ export default function Articles() {
   });
 
   const changeCategory = (newCategory: ArticleCategory) => {
-    navigate(
-      `/articles?category=${newCategory}${faculty && "&faculty=" + faculty}`,
-    );
+    let link = `/articles?category=${newCategory}`;
+    if (faculty) {
+      link += `&faculty=${faculty}`;
+    }
+    navigate(link);
   };
 
   const sidebarButtons: SidebarButtonProps[] = [

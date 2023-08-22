@@ -33,14 +33,31 @@ export default function Research() {
     : require(`./json/research.json`);
 
   // Prepare sidebar links
-  let sidebarLinks: SidebarLinkProps[] = [];
+  let sidebarLinks: SidebarLinkProps[] = [
+    {
+      title: "Teaching",
+      redirectUrl: "/teaching",
+      active: false,
+    },
+    {
+      title: "Academic Staff",
+      redirectUrl: "/academic-staff",
+      active: false,
+    },
+    {
+      title: "Research",
+      redirectUrl: "/research",
+      active: true,
+    },
+  ];
   if (facultyId) {
-    sidebarLinks = mobileNavView
+    const additionalLinks = mobileNavView
       ? FacultyNavLinksCreator.createFacultyNavigationLinks(facultyId!)
       : FacultyNavLinksCreator.createFacultyNavigationLinksDesktop(
           facultyId!,
           PageType.RESEARCH,
         );
+    sidebarLinks = sidebarLinks.concat(additionalLinks);
   }
 
   useEffect(() => {
