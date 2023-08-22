@@ -146,6 +146,21 @@ public class CourseController {
         HalModelBuilder.halModelOf(userPagedResourcesAssembler.toModel(students)).build());
   }
 
+  /**
+   * Search courses by title, faculty and language.
+   *
+   * @param title (optional) title of the course to search for
+   *              (if not provided, all courses are searched)
+   * @param facultyId (optional) ID of the faculty to search for
+   *                  (if not provided, all faculties are searched)
+   *                  (if provided, but not found, returns status 404)
+   * @param language (optional) language of the course to search for
+   *                 (if not provided, all languages are searched)
+   * @param request the {@link PageableRequest} containing sorting, pagination, etc.
+   * @return status 200 (OK) and in body the paged list of {@link CourseDto} objects and page
+   *     metadata. If there are no courses, an empty page is returned (without _embedded.courses
+   *     field).
+   */
   @GetMapping("/search")
   public ResponseEntity<RepresentationModel<CourseDto>> searchCourses(
       @RequestParam(value = "title", required = false) String title,
