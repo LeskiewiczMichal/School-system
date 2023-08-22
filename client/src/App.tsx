@@ -19,7 +19,7 @@ export enum AppPaths {
   TEACHING = "/teaching",
   RESEARCH = "/research",
   DEGREE_PROGRAMMES = "/degree-programmes",
-  ACADEMIC_STAFF = "/faculties/:facultyId/academic-staff",
+  ACADEMIC_STAFF = "/academic-staff",
 }
 
 function App() {
