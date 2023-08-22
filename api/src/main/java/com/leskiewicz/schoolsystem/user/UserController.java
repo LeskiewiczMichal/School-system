@@ -1,5 +1,6 @@
 package com.leskiewicz.schoolsystem.user;
 
+import com.leskiewicz.schoolsystem.authentication.Role;
 import com.leskiewicz.schoolsystem.authentication.SecurityService;
 import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.course.utils.CourseDtoAssembler;
@@ -11,10 +12,12 @@ import com.leskiewicz.schoolsystem.user.teacherdetails.PatchTeacherDetailsReques
 import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetails;
 import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetailsModelAssembler;
 import com.leskiewicz.schoolsystem.user.utils.UserDtoAssembler;
+import com.leskiewicz.schoolsystem.utils.Language;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +25,11 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+
+import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 /**
  * REST controller for managing {@link User}.
@@ -60,6 +68,27 @@ public class UserController {
 
     return ResponseEntity.ok(
         HalModelBuilder.halModelOf(userPagedResourcesAssembler.toModel(users)).build());
+  }
+
+  @GetMapping("/search")
+  public ResponseEntity<RepresentationModel<UserDto>> searchUsers(
+      @RequestParam(value = "firstName", required = false) String firstName,
+      @RequestParam(value = "lastName", required = false) String lastName,
+      @RequestParam(value = "role", required = false) Role role,
+      @ModelAttribute PageableRequest request) {
+    Page<UserDto> users = userService.search(lastName, firstName, role, request.toPageable());
+    users = users.map(userDtoAssembler::toModel);
+
+    Link selfLink =
+        linkTo(methodOn(UserController.class).searchUsers(firstName, lastName, role, request))
+            .withSelfRel();
+    Link usersLink = linkTo(methodOn(UserController.class).getUsers(null)).withRel("users");
+    Link getByIdLink = linkTo(methodOn(UserController.class).getUserById(null)).withRel("user");
+
+    return ResponseEntity.ok(
+        HalModelBuilder.halModelOf(userPagedResourcesAssembler.toModel(users))
+            .links(List.of(selfLink, usersLink, getByIdLink))
+            .build());
   }
 
   /**
