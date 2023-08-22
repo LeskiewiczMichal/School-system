@@ -8,6 +8,9 @@ import CommunityPicture from "./assets/community.webp";
 export default function MyAccount() {
   const user = useAppSelector((state) => state.auth.data);
   const userLinks = useAppSelector((state) => state.auth._links);
+  const mobileNavBar = useAppSelector(
+    (state) => state.integration.mobileNavView,
+  );
 
   if (!user) {
     return (
@@ -19,16 +22,16 @@ export default function MyAccount() {
 
   return (
     <div className={"flex h-full"}>
-      <Sidebar />
+      {mobileNavBar && <Sidebar />}
       <main className={"pb-16 border-b border-grayscaleMediumDark w-full"}>
         <section
-          className={"flex flex-col px-4 lg:px-8 py-8 mb-4 w-full lg:gap-4"}
+          className={"flex flex-col px-4 lg:px-32 py-8 mb-4 w-full lg:gap-4"}
         >
           <ColoredBackgroundWithPhotoOnRight
             heading={`Hello, ${user.firstName}`}
             text={"Thank you for being a part of our community"}
             imageLink={CommunityPicture}
-            backgroundColor={"brandMain"}
+            backgroundColor={"black"}
           />
           <BasicInformation user={user} />
         </section>

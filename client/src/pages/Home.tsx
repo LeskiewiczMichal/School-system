@@ -13,6 +13,7 @@ import GlassBuilding from "../features/main-page/assets/glass-building.webp";
 import { AppPaths } from "../App";
 import { Sidebar } from "../features/sidebar";
 import MainNavLinksCreator from "../features/header/utils/MainNavLinksCreator";
+import LoadingSpinner from "../common_components/LoadingSpinner";
 
 export default function Home() {
   const links = useAppSelector((state) => state.links);
@@ -46,7 +47,11 @@ export default function Home() {
   }, [links]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className={"h-screen w-full justify-center items-center"}>
+        <LoadingSpinner />
+      </div>
+    );
   }
 
   const sidebarLinks = MainNavLinksCreator.createMainNavLinks();
