@@ -12,6 +12,9 @@ import LoadingSpinner from "../common_components/LoadingSpinner";
 import { Sidebar } from "../features/sidebar";
 import Role from "../type/Role";
 import axios from "axios";
+import MyHeading from "../common_components/MyHeading";
+import MyHeadingWithLine from "../common_components/MyHeadingWithLine";
+import * as marked from "marked";
 
 export default function User() {
   const links = useAppSelector((state) => state.links);
@@ -63,28 +66,36 @@ export default function User() {
   return (
     <div className={"flex h-full"}>
       <Sidebar />
-      <main className={"pb-16 border-b border-grayscaleMediumDark w-full"}>
+      <main className={"pb-16 w-full"}>
+        {/* Basic info */}
         <section
           className={
             "flex flex-col px-4 lg:px-8 py-8 mb-4 w-full justify-center items-center lg:gap-4"
           }
         >
-          {/*<ColoredBackgroundWithPhotoOnRight*/}
-          {/*  heading={`Hello, ${user.firstName}`}*/}
-          {/*  text={"Thank you for being a part of our community"}*/}
-          {/*  imageLink={CommunityPicture}*/}
-          {/*  backgroundColor={"brandMain"}*/}
-          {/*/>*/}
           <BasicInformation
             user={user}
             teacherDetails={teacherDetails ? teacherDetails : undefined}
           />
         </section>
-        <section
-          className={
-            "px-4 lg:px-8 lg:pr-28 py-8 mb-4 w-full border-t border-grayscaleMedium"
-          }
-        ></section>
+
+        {/* Biography */}
+        {teacherDetails && (
+          <section className={"py-8 mb-4 w-full "}>
+            <div className={"pl-4 lg:p-8"}>
+              <MyHeadingWithLine heading={"Biography"} />
+            </div>
+
+            <div className={"px-5 lg:px-12 lg:pr-28 "}>
+              <p
+                className={"text-grayscaleDarkText"}
+                dangerouslySetInnerHTML={{
+                  __html: marked.marked(teacherDetails.bio),
+                }}
+              ></p>
+            </div>
+          </section>
+        )}
       </main>
     </div>
   );
