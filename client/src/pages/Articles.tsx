@@ -15,6 +15,7 @@ import { ReactComponent as ChevronRight } from "../assets/icons/chevron/chevron-
 import PaginationInfo from "../type/PaginationInfo";
 import { AppPaths } from "../App";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import PaginationButtons from "../common_components/PaginationButtons";
 
 export default function Articles() {
   const navigate = useNavigate();
@@ -161,37 +162,13 @@ export default function Articles() {
               );
             })}
           </div>
+
           {/* Pagination buttons */}
-          <div>
-            {/*// TODO: Show the page number*/}
-            {/*<span className={"flex w-full items-center justify-end pt-6"}>*/}
-            {/*  Page {page + 1} of {paginationInfo.totalPages}*/}
-            {/*</span>*/}
-            <div className={"flex w-full items-center justify-end pt-6 gap-8"}>
-              {page > 0 && (
-                <button
-                  type={"button"}
-                  onClick={() => changePage("previous")}
-                  className={
-                    "flex items-center font-bold w-32 justify-center border-brandMainNearlyBlack text-brandMainNearlyBlack pr-2 py-2"
-                  }
-                >
-                  <ChevronLeft className={"h-8 w-8"} /> Previous
-                </button>
-              )}
-              {paginationInfo.totalPages > page + 1 && (
-                <button
-                  type={"button"}
-                  onClick={() => changePage("next")}
-                  className={
-                    "flex items-center font-bold w-32 justify-center border-brandMainNearlyBlack text-brandMainNearlyBlack pl-2 py-2"
-                  }
-                >
-                  Next <ChevronRight className={"h-8 w-8"} />
-                </button>
-              )}
-            </div>
-          </div>
+          <PaginationButtons
+            paginationInfo={paginationInfo}
+            page={page}
+            changePage={changePage}
+          />
         </section>
       </main>
     </div>

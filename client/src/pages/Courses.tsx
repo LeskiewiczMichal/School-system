@@ -11,6 +11,7 @@ import { FetchCoursesResponse } from "../features/course/services/CourseRequest"
 import LoadingSpinner from "../common_components/LoadingSpinner";
 import { Link } from "react-router-dom";
 import { ReactComponent as ArrowUpRightBrandMain } from "../assets/icons/arrow/arrow-up-right-brandMain.svg";
+import PaginationButtons from "../common_components/PaginationButtons";
 
 export default function Courses() {
   const mobileNavView = useAppSelector(
@@ -159,7 +160,12 @@ export default function Courses() {
           <span>No courses matching your requirements were found.</span>
         )}
 
-        {/* Pagination */}
+        {/* Pagination buttons */}
+        <PaginationButtons
+          paginationInfo={paginationInfo}
+          page={page}
+          changePage={changePage}
+        />
       </main>
     </div>
   );
