@@ -15,6 +15,7 @@ import axios from "axios";
 import MyHeading from "../common_components/MyHeading";
 import MyHeadingWithLine from "../common_components/MyHeadingWithLine";
 import * as marked from "marked";
+import { SidebarLinkProps } from "../features/sidebar/components/SidebarLink";
 
 export default function User() {
   const links = useAppSelector((state) => state.links);
@@ -23,6 +24,17 @@ export default function User() {
   const [teacherDetails, setTeacherDetails] = useState<TeacherDetails | null>(
     null,
   );
+
+  const sidebarLinks: SidebarLinkProps[] = [
+    {
+      title: "Academic Staff",
+      redirectUrl: "/academic-staff",
+    },
+    {
+      title: "All Users",
+      redirectUrl: "/users",
+    },
+  ];
 
   useEffect(() => {
     const handleFetchUser = async () => {
@@ -65,7 +77,7 @@ export default function User() {
 
   return (
     <div className={"flex h-full"}>
-      <Sidebar />
+      <Sidebar links={sidebarLinks} />
       <main className={"pb-16 w-full"}>
         {/* Basic info */}
         <section
@@ -81,20 +93,37 @@ export default function User() {
 
         {/* Biography */}
         {teacherDetails && (
-          <section className={"py-8 mb-4 w-full "}>
-            <div className={"pl-4 lg:p-8"}>
-              <MyHeadingWithLine heading={"Biography"} />
-            </div>
+          <>
+            <section className={"py-8 mb-4 w-full "}>
+              <div className={"pl-4 lg:p-8"}>
+                <MyHeadingWithLine heading={"Biography"} />
+              </div>
 
-            <div className={"px-5 lg:px-12 lg:pr-28 "}>
-              <p
-                className={"text-grayscaleDarkText"}
-                dangerouslySetInnerHTML={{
-                  __html: marked.marked(teacherDetails.bio),
-                }}
-              ></p>
-            </div>
-          </section>
+              <div className={"px-5 lg:px-12 lg:pr-28 "}>
+                <p
+                  className={"text-grayscaleDarkText"}
+                  dangerouslySetInnerHTML={{
+                    __html: marked.marked(teacherDetails.bio),
+                  }}
+                ></p>
+              </div>
+            </section>
+
+            <section className={"py-8 mb-4 w-full "}>
+              <div className={"pl-4 lg:p-8"}>
+                <MyHeadingWithLine heading={"Tutorship"} />
+              </div>
+
+              <div className={"px-5 lg:px-12 lg:pr-28 "}>
+                <p
+                  className={"text-grayscaleDarkText"}
+                  dangerouslySetInnerHTML={{
+                    __html: marked.marked(teacherDetails.tutorship),
+                  }}
+                ></p>
+              </div>
+            </section>
+          </>
         )}
       </main>
     </div>

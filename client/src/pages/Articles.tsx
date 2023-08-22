@@ -14,12 +14,13 @@ import { ReactComponent as ChevronLeft } from "../assets/icons/chevron/chevron-l
 import { ReactComponent as ChevronRight } from "../assets/icons/chevron/chevron-right.svg";
 import PaginationInfo from "../type/PaginationInfo";
 import { AppPaths } from "../App";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 export default function Articles() {
   const navigate = useNavigate();
   const links = useAppSelector((state) => state.links);
   const location = useLocation();
+  const facultyId = useParams().facultyId;
 
   // Query parameters
   const queryParams = new URLSearchParams(location.search);
@@ -41,6 +42,9 @@ export default function Articles() {
 
   const changeCategory = (newCategory: ArticleCategory) => {
     let link = `/articles?category=${newCategory}`;
+    if (facultyId) {
+      link = `/faculties/${facultyId}/articles?category=${newCategory}`;
+    }
     if (faculty) {
       link += `&faculty=${faculty}`;
     }

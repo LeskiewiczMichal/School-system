@@ -29,14 +29,6 @@ export default function TeachingAndStudying() {
   // Get the page content
   const teachingAndStudyingPageContent: TeachingAndStudyingPageContentInterface = require(`./json/teachingAndStudying-${facultyId}.json`);
 
-  // Prepare sidebar links
-  const sidebarLinks: SidebarLinkProps[] = mobileNavView
-    ? FacultyNavLinksCreator.createFacultyNavigationLinks(facultyId!)
-    : FacultyNavLinksCreator.createFacultyNavigationLinksDesktop(
-        facultyId!,
-        PageType.TEACHING_AND_STUDYING,
-      );
-
   useEffect(() => {
     const handleFetchArticles = async () => {
       // Prepare the link
@@ -75,8 +67,6 @@ export default function TeachingAndStudying() {
 
   return (
     <div className={"flex h-full"}>
-      {/* Sidebar */}
-      <Sidebar links={sidebarLinks} />
       <main className={"h-full w-full flex flex-col lg:px-8 py-8"}>
         <section className={"w-full flex flex-col mb-24"}>
           {/* Title and text */}

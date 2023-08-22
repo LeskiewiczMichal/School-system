@@ -32,7 +32,7 @@ export default function Faculty() {
           {/* News button */}
           <LinkButtonBorderOnly
             text={"All news"}
-            link={AppPaths.ARTICLES}
+            link={`/faculties/${facultyId}/articles?faculty=${facultyId}`}
             color={"brandMain"}
             width={"w-2/3 lg:w-1/4"}
           />

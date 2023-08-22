@@ -6,7 +6,7 @@ const createFacultyNavigationLinks = (
   return [
     {
       title: "News",
-      redirectUrl: `/articles?faculty=${facultyId}`,
+      redirectUrl: `/faculties/${facultyId}/articles?faculty=${facultyId}`,
     },
     {
       title: "Teaching and Studying",
@@ -15,10 +15,6 @@ const createFacultyNavigationLinks = (
     {
       title: "Research",
       redirectUrl: `/faculties/${facultyId}/research`,
-    },
-    {
-      title: "Academic staff",
-      redirectUrl: `/faculties/${facultyId}/academic-staff`,
     },
   ];
 };
@@ -54,13 +50,8 @@ const createFacultyNavigationLinksDesktop = (
     },
     {
       title: "Articles",
-      redirectUrl: `/faculties/${facultyId}/articles`,
+      redirectUrl: `/faculties/${facultyId}/articles?faculty=${facultyId}`,
       active: activePage === PageType.ARTICLES,
-    },
-    {
-      title: "Academic staff",
-      redirectUrl: `/faculties/${facultyId}/academic-staff`,
-      active: activePage === PageType.ACADEMIC_STAFF,
     },
   ];
 };

@@ -64,6 +64,10 @@ function App() {
           {/* Articles */}
           <Route path="/articles" element={<Pages.Articles />} />
           <Route path="/articles/:id" element={<Pages.Article />} />
+          <Route
+            path={"/faculties/:facultyId/articles"}
+            element={<Pages.Articles />}
+          />
           {/* Faculty */}
           <Route path="/faculties" element={<Pages.Faculties />} />
           <Route path="/faculties/:facultyId" element={<Pages.Faculty />} />

@@ -33,32 +33,15 @@ export default function Research() {
     : require(`./json/research.json`);
 
   // Prepare sidebar links
-  let sidebarLinks: SidebarLinkProps[] = [
-    {
-      title: "Teaching",
-      redirectUrl: "/teaching",
-      active: false,
-    },
-    {
-      title: "Academic Staff",
-      redirectUrl: "/academic-staff",
-      active: false,
-    },
-    {
-      title: "Research",
-      redirectUrl: "/research",
-      active: true,
-    },
-  ];
-  if (facultyId) {
-    const additionalLinks = mobileNavView
-      ? FacultyNavLinksCreator.createFacultyNavigationLinks(facultyId!)
-      : FacultyNavLinksCreator.createFacultyNavigationLinksDesktop(
-          facultyId!,
-          PageType.RESEARCH,
-        );
-    sidebarLinks = sidebarLinks.concat(additionalLinks);
-  }
+  // let sidebarLinks: SidebarLinkProps[] = [];
+  // if (facultyId) {
+  //   sidebarLinks = mobileNavView
+  //     ? FacultyNavLinksCreator.createFacultyNavigationLinks(facultyId!)
+  //     : FacultyNavLinksCreator.createFacultyNavigationLinksDesktop(
+  //         facultyId!,
+  //         PageType.RESEARCH,
+  //       );
+  // }
 
   useEffect(() => {
     const handleFetchArticles = async () => {
@@ -82,10 +65,28 @@ export default function Research() {
     handleFetchArticles();
   }, [links, facultyId]);
 
+  const sidebarLinks: SidebarLinkProps[] = [
+    {
+      title: "Teaching",
+      redirectUrl: "/teaching",
+      active: false,
+    },
+    {
+      title: "Academic Staff",
+      redirectUrl: "/academic-staff",
+      active: false,
+    },
+    {
+      title: "Research",
+      redirectUrl: "/research",
+      active: true,
+    },
+  ];
+
   return (
     <div className={"flex h-full"}>
       {/* Sidebar */}
-      <Sidebar links={sidebarLinks} />
+      {!facultyId && <Sidebar links={sidebarLinks} />}
       <main className={"h-full w-full flex flex-col py-8"}>
         {/* Title and text */}
         <section className={"lg:px-8"}>

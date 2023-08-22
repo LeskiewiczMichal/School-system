@@ -140,13 +140,6 @@ export default function Header() {
               </div>
             )}
 
-            {/* Login */}
-            {/*<Link*/}
-            {/*  to="/login"*/}
-            {/*  className="inline-block min-w-fit text-md font-bold text-primary align-baseline hover:text-primaryLighter"*/}
-            {/*>*/}
-            {/*  Sign In*/}
-            {/*</Link>*/}
             {/* Hamburger menu to open sidebar */}
             {mobileNavView && (
               <div className={"flex gap-4 ml-auto"}>
@@ -162,7 +155,7 @@ export default function Header() {
             )}
           </div>
         </section>
-        {mobileNavView && <Sidebar links={facultyHeaderLinks} />}
+        {mobileNavView && <Sidebar />}
       </header>
     );
   }
