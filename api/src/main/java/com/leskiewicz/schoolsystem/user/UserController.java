@@ -70,6 +70,20 @@ public class UserController {
         HalModelBuilder.halModelOf(userPagedResourcesAssembler.toModel(users)).build());
   }
 
+  /**
+   * Search users by first name, last name and role.
+   *
+   * @param firstName (optional) first name of the user to search for
+   *              (if not provided, all users first names are searched)
+   * @param lastName (optional) last name of the user to search for
+   *                  (if not provided, all users last names are searched)
+   * @param role {@link Role} (optional) role of the user to search for
+   *                 (if not provided, all roles are searched)
+   * @param request the {@link PageableRequest} containing sorting, pagination, etc.
+   * @return status 200 (OK) and in body the paged list of {@link UserDto} objects and page
+   *     metadata. If there are no users, an empty page is returned (without _embedded.users
+   *     field).
+   */
   @GetMapping("/search")
   public ResponseEntity<RepresentationModel<UserDto>> searchUsers(
       @RequestParam(value = "firstName", required = false) String firstName,
