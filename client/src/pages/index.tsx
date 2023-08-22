@@ -14,6 +14,7 @@ import Course from "./course/Course";
 import Courses from "./Courses";
 import Faculties from "./Faculties";
 import AcademicStaff from "./AcademicStaff";
+import Teaching from "./Teaching";
 
 export {
   Home,
@@ -32,4 +33,5 @@ export {
   Courses,
   Faculties,
   AcademicStaff,
+  Teaching,
 };

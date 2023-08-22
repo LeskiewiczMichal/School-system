@@ -48,11 +48,6 @@ const createFacultyNavigationLinksDesktop = (
       active: activePage === PageType.TEACHING_AND_STUDYING,
     },
     {
-      title: "Our degrees",
-      redirectUrl: `/faculties/${facultyId}/degree-programmes`,
-      active: activePage === PageType.DEGREE_PROGRAMMES,
-    },
-    {
       title: "Science and research",
       redirectUrl: `/faculties/${facultyId}/research`,
       active: activePage === PageType.RESEARCH,

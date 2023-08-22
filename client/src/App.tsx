@@ -16,6 +16,8 @@ export enum AppPaths {
   IMAGES = "/images",
   CONTACT = "/about-us/contact",
   COURSES = "/courses",
+  TEACHING = "/teaching",
+  RESEARCH = "/research",
   DEGREE_PROGRAMMES = "/degree-programmes",
   ACADEMIC_STAFF = "/faculties/:facultyId/academic-staff",
 }
@@ -56,8 +58,9 @@ function App() {
         <Routes>
           <Route path="/" element={<Pages.Home />} />
           <Route path="/login" element={<Pages.Login />} />
-          <Route path="/research" element={<Pages.Research />} />
-          <Route path="/my-account" element={<Pages.MyAccount />} />
+          {/* Research and teaching */}
+          <Route path={AppPaths.TEACHING} element={<Pages.Teaching />} />
+          <Route path={AppPaths.RESEARCH} element={<Pages.Research />} />
           {/* Articles */}
           <Route path="/articles" element={<Pages.Articles />} />
           <Route path="/articles/:id" element={<Pages.Article />} />
@@ -88,6 +91,7 @@ function App() {
             element={<Pages.Course />}
           />
           {/* Users */}
+          <Route path="/my-account" element={<Pages.MyAccount />} />
           <Route
             path={AppPaths.ACADEMIC_STAFF}
             element={<Pages.AcademicStaff />}

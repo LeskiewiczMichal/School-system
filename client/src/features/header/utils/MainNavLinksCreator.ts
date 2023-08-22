@@ -7,8 +7,8 @@ const createMainNavLinks = (): SidebarLinkProps[] => {
       redirectUrl: `/articles`,
     },
     {
-      title: "Research",
-      redirectUrl: `/research`,
+      title: "Teaching and Research",
+      redirectUrl: `/teaching`,
     },
     {
       title: "Degrees and Courses",

@@ -130,7 +130,7 @@ export default function Articles() {
           <ColoredBackgroundWithPhotoOnRight
             heading={"Aquila's news"}
             text={"Checkout out latest news from our University"}
-            buttonLink={"/"}
+            buttonLink={"/faculties"}
             buttonText={"See what is new in our faculties"}
             imageLink={GroupOfStundetsPhoto}
           />
