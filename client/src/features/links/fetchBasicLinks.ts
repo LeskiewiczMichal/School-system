@@ -22,8 +22,18 @@ const fetchBasicLinks = (): AppThunk => async (dispatch) => {
           templated: response.data._links.register.templated === true,
         },
         users: {
-          href: response.data._links.users.href,
-          templated: response.data._links.users.templated === true,
+          getUsers: {
+            href: response.data._links.users[0].href,
+            templated: response.data._links.users[0].templated === true,
+          },
+          getById: {
+            href: response.data._links.users[1].href,
+            templated: response.data._links.users[1].templated === true,
+          },
+          search: {
+            href: response.data._links.users[2].href,
+            templated: response.data._links.users[2].templated === true,
+          },
         },
         courses: {
           getCourses: {

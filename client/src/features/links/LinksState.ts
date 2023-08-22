@@ -3,7 +3,11 @@ import APILink from "../../type/APILink";
 interface LinksState {
   login: APILink | null;
   register: APILink | null;
-  users: APILink | null;
+  users: {
+    getUsers: APILink | null;
+    getById: APILink | null;
+    search: APILink | null;
+  };
   courses: {
     getCourses: APILink | null;
     getById: APILink | null;

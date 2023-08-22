@@ -24,7 +24,9 @@ export default function AcademicStaff() {
     },
   ];
 
-  useEffect();
+  useEffect(() => {
+    const handleFetchUsers = async () => {};
+  }, []);
 
   return (
     <div className={"flex h-full"}>

@@ -4,7 +4,11 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 const initialState: LinksState = {
   login: null,
   register: null,
-  users: null,
+  users: {
+    getUsers: null,
+    getById: null,
+    search: null,
+  },
   courses: {
     getCourses: null,
     getById: null,
