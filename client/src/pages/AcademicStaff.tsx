@@ -1,11 +1,27 @@
 import { Sidebar } from "../features/sidebar";
-import TextAndButtonWithPhotoOnRight from "../common_components/Card/TextAndButtonWithPhotoOnRight";
-import TeachingAcademicStaff from "./assets/teaching-academic-staff.webp";
 import { SidebarLinkProps } from "../features/sidebar/components/SidebarLink";
+import { useEffect, useState } from "react";
+import { useAppSelector } from "../hooks";
+import UserRequest, {
+  FetchUsersResponse,
+} from "../features/user/services/UserRequest";
+import Role from "../type/Role";
+import { UserData } from "../features/user";
+import PaginationInfo from "../type/PaginationInfo";
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
+import LinkButtonBorderOnly from "../common_components/button/LinkButtonBorderOnly";
 
 export default function AcademicStaff() {
+  const links = useAppSelector((state) => state.links);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [users, setUsers] = useState<UserData[]>([]);
+  const [paginationInfo, setPaginationInfo] = useState<PaginationInfo>({
+    page: 0,
+    size: 0,
+    totalElements: 0,
+    totalPages: 0,
+  });
+
   const sidebarLinks: SidebarLinkProps[] = [
     {
       title: "Teaching",
@@ -25,8 +41,28 @@ export default function AcademicStaff() {
   ];
 
   useEffect(() => {
-    const handleFetchUsers = async () => {};
-  }, []);
+    const handleFetchTeachers = async () => {
+      // Prepare the link
+      if (!links.users.search) {
+        return;
+      }
+
+      let apiLink = links.users.search;
+
+      // Call the api
+      const response: FetchUsersResponse = await UserRequest.getList({
+        link: apiLink,
+        pagination: { size: 150 },
+        role: Role.TEACHER,
+      });
+
+      setUsers(response.users);
+      setPaginationInfo(response.paginationInfo);
+      setIsLoading(false);
+    };
+
+    handleFetchTeachers();
+  }, [links]);
 
   return (
     <div className={"flex h-full"}>
@@ -49,26 +85,50 @@ export default function AcademicStaff() {
             Start exploring now!
           </p>
         </section>
+        <section
+          className={
+            "px-6 lg:px-20 border-t-2 border-b-2 border-brandMain py-10 w-full self-center mt-10"
+          }
+        >
+          <h4 className={"my-header text-brandMain mb-6"}>OUR TEACHERS:</h4>
+
+          <ul
+            className={
+              "flex flex-col gap-8 w-full px-2 sm:px-6 lg:px-0 justify-center  md:grid md:grid-cols-2"
+            }
+          >
+            {users.map((teacher) => (
+              <li key={teacher.id.toString()}>
+                <LinkButtonBorderOnly
+                  text={`${teacher.lastName} ${teacher.firstName} - ${teacher.faculty}`}
+                  link={`/users/${teacher.id}`}
+                  color={"brandMain"}
+                  width={"w-full"}
+                />
+              </li>
+            ))}
+          </ul>
+        </section>
         {/*<ul*/}
-        {/*    className={*/}
-        {/*      "grid grid-cols-1 gap-x-12 gap-y-8 px-2 sm:px-6 lg:px-0 list-disc justify-center items-center ml-8 md:grid-cols-2"*/}
-        {/*    }*/}
+        {/*  className={*/}
+        {/*    "grid grid-cols-1 gap-x-12 gap-y-8 px-2 sm:px-6 lg:px-0 list-disc justify-center items-center ml-8 md:grid-cols-2"*/}
+        {/*  }*/}
         {/*>*/}
-        {/*  {courses.map((course) => (*/}
-        {/*      <li>*/}
-        {/*        <Link*/}
-        {/*            to={`/courses/${course.id}`}*/}
-        {/*            key={course.id.toString()}*/}
-        {/*            className={*/}
-        {/*              "text-xl text-brandMain font-bold hover:text-brandMainActive hover:underline"*/}
-        {/*            }*/}
-        {/*        >*/}
-        {/*          <div>*/}
-        {/*            {course.title} by the {course.faculty.name}{" "}*/}
-        {/*            <ArrowUpRightBrandMain className={"inline h-6 w-6"} />*/}
-        {/*          </div>*/}
-        {/*        </Link>*/}
-        {/*      </li>*/}
+        {/*  {users.map((teacher) => (*/}
+        {/*    <li>*/}
+        {/*      <Link*/}
+        {/*        to={`/users/${teacher.id}`}*/}
+        {/*        key={teacher.id.toString()}*/}
+        {/*        className={*/}
+        {/*          "text-xl text-brandMain font-bold hover:text-brandMainActive hover:underline"*/}
+        {/*        }*/}
+        {/*      >*/}
+        {/*        <div>*/}
+        {/*          {teacher.lastName} {teacher.firstName} - {teacher.faculty}{" "}*/}
+        {/*          /!*<ArrowUpRightBrandMain className={"inline h-6 w-6"} />*!/*/}
+        {/*        </div>*/}
+        {/*      </Link>*/}
+        {/*    </li>*/}
         {/*  ))}*/}
         {/*</ul>*/}
       </main>
