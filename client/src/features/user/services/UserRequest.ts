@@ -70,6 +70,12 @@ export interface FetchSingleUserProps {
   id: string;
 }
 
+/**
+ * Fetch a single user by id from the API
+ *
+ * @param props {@link FetchSingleUserProps} object, containing the link {@link APILink} and the string - user id
+ * @returns Promise of an {@link User} object
+ */
 const getById = async (props: FetchSingleUserProps): Promise<UserData> => {
   const { link, id } = props;
 
