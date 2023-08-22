@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.leskiewicz.schoolsystem.authentication.Role;
 import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.course.utils.CourseDtoAssembler;
 import com.leskiewicz.schoolsystem.degree.Degree;
@@ -36,11 +37,17 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import java.util.Arrays;
+import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 public class UserControllerTest {
@@ -111,6 +118,46 @@ public class UserControllerTest {
         userService::getUsers,
         userDtoAssembler::toModel,
         userController::getUsers);
+  }
+
+  @Test
+  public void searchUsers() throws Exception {
+    // Prepare test data
+    List<UserDto> userDtos =
+        Arrays.asList(
+            TestHelper.createUserDto("Test", "Law"), TestHelper.createUserDto("Test", "Law"));
+    Page<UserDto> userPage = new PageImpl<>(userDtos);
+    PagedModel<UserDto> userPagedModel =
+        PagedModel.of(userDtos, new PagedModel.PageMetadata(1, 1, 1, 1));
+
+    // Mocks
+    given(
+            userService.search(
+                any(String.class), any(String.class), any(Role.class), any(Pageable.class)))
+        .willReturn(userPage);
+    given(userDtoAssembler.toModel(any(UserDto.class))).willReturn(userDtos.get(0));
+    given(userPagedResourcesAssembler.toModel(any(Page.class))).willReturn(userPagedModel);
+
+    // Perform request
+    mvc.perform(
+            get("/api/users/search")
+                .param("firstName", "Test")
+                .param("lastName", "Test")
+                .param("role", "ROLE_TEACHER")
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.page").exists())
+        .andExpect(jsonPath("$.links").isArray())
+        .andExpect(jsonPath("$.links[0].rel").value("self"))
+        .andExpect(jsonPath("$.links[1].rel").value("users"))
+        .andExpect(jsonPath("$.links[2].rel").value("user"))
+        .andReturn();
+
+    // Verify mocks
+    verify(userService, times(1))
+        .search(any(String.class), any(String.class), any(Role.class), any(Pageable.class));
+    verify(userDtoAssembler, times(2)).toModel(any(UserDto.class));
+    verify(userPagedResourcesAssembler, times(1)).toModel(any(Page.class));
   }
 
   @Test
