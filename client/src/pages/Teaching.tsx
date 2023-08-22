@@ -42,6 +42,18 @@ export default function Teaching() {
               your future.
             </p>
 
+            <div className={"my-6"}>
+              <TextAndButtonWithPhotoOnRight
+                heading={"LEARN MORE ABOUT OUR TEACHING STAFF"}
+                text={
+                  "Explore the stories behind the mentors who will guide you on your educational journey. Unveil the possibilities of personalized learning and groundbreaking insights. Your future begins with the knowledge they impart. Delve into the world of Aquila's teachers today!"
+                }
+                buttonLink={"/academic-staff"}
+                buttonText={"Meet Our Teachers"}
+                imageLink={TeachingAcademicStaff}
+              />
+            </div>
+
             <h5 className={"mt-6 mb-4 text-xl font-bold italic"}>
               What Sets Our Teaching Apart?
             </h5>
@@ -142,17 +154,6 @@ export default function Teaching() {
             </div>
           </div>
         </section>
-        <div className={"lg:pl-8"}>
-          <TextAndButtonWithPhotoOnRight
-            heading={"LEARN MORE ABOUT OUR TEACHING STAFF"}
-            text={
-              "Explore the stories behind the mentors who will guide you on your educational journey. Unveil the possibilities of personalized learning and groundbreaking insights. Your future begins with the knowledge they impart. Delve into the world of Aquila's teachers today!"
-            }
-            buttonLink={"/academic-staff"}
-            buttonText={"Meet Our Teachers"}
-            imageLink={TeachingAcademicStaff}
-          />
-        </div>
       </main>
     </div>
   );
