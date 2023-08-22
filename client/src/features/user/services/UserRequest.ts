@@ -64,3 +64,26 @@ const getList = async (props: FetchUsersProps): Promise<FetchUsersResponse> => {
     paginationInfo: paginationInfo,
   };
 };
+
+export interface FetchSingleUserProps {
+  link: APILink;
+  id: string;
+}
+
+const getById = async (props: FetchSingleUserProps): Promise<UserData> => {
+  const { link, id } = props;
+
+  const responseData = await RequestService.performGetByIdRequest({
+    link: link,
+    id: id,
+  });
+
+  return UserMapper.mapFromServerData(responseData);
+};
+
+const UserRequest = {
+  getList,
+  getById,
+};
+
+export default UserRequest;
