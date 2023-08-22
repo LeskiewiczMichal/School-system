@@ -12,6 +12,8 @@ Photos:
     Faculties list page photo:
     Esteban Arango: https://www.pexels.com/pl-pl/zdjecie/znane-miejsce-chmury-budynek-architektura-9846886/
 
+    Teaching page academic staff photo:
+    Kampus Production: https://www.pexels.com/pl-pl/zdjecie/studenci-wieloetniczni-wspolnie-prowadza-badania-w-bibliotece-5940844/
 
 Icons:
     Arrow down: https://www.svgrepo.com/svg/509905/dropdown-arrow

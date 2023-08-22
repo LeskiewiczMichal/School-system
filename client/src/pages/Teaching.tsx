@@ -1,8 +1,7 @@
 import { Sidebar } from "../features/sidebar";
-import marked from "marked";
-import Card from "../common_components/Card/Card";
-import FullWidthColoredBackground from "../common_components/Card/FullWidthColoredBackground";
 import { SidebarLinkProps } from "../features/sidebar/components/SidebarLink";
+import TextAndButtonWithPhotoOnRight from "../common_components/Card/TextAndButtonWithPhotoOnRight";
+import TeachingAcademicStaff from "./assets/teaching-academic-staff.webp";
 
 export default function Teaching() {
   const sidebarLinks: SidebarLinkProps[] = [
@@ -29,7 +28,7 @@ export default function Teaching() {
       <Sidebar links={sidebarLinks} />
       <main className={"h-full w-full flex flex-col py-8"}>
         {/* Title and text */}
-        <section className={"px-4 lg:px-8"}>
+        <section className={"px-4 lg:px-8 mb-6"}>
           <h1 className="page-title_h1 text-brandMainNearlyBlack">
             Welcome to the Aquila University Teaching Experience!
           </h1>
@@ -143,14 +142,17 @@ export default function Teaching() {
             </div>
           </div>
         </section>
-        {/*<FullWidthColoredBackground*/}
-        {/*  color={"brandMain"}*/}
-        {/*  textColor={"white"}*/}
-        {/*  heading={researchPageContent.coloredBgCardHeading}*/}
-        {/*  text={researchPageContent.coloredBgCardText}*/}
-        {/*  buttonText={researchPageContent.coloredBgCardButtonText}*/}
-        {/*  buttonLink={researchPageContent.coloredBgCardButtonLink}*/}
-        {/*/>*/}
+        <div className={"lg:pl-8"}>
+          <TextAndButtonWithPhotoOnRight
+            heading={"LEARN MORE ABOUT OUR TEACHING STAFF"}
+            text={
+              "Explore the stories behind the mentors who will guide you on your educational journey. Unveil the possibilities of personalized learning and groundbreaking insights. Your future begins with the knowledge they impart. Delve into the world of Aquila's teachers today!"
+            }
+            buttonLink={"/academic-staff"}
+            buttonText={"Meet Our Teachers"}
+            imageLink={TeachingAcademicStaff}
+          />
+        </div>
       </main>
     </div>
   );
