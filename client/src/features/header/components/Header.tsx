@@ -112,6 +112,7 @@ export default function Header() {
               <div className={"flex items-center h-full gap-4"}>
                 {facultyHeaderLinks.map((link) => (
                   <Link
+                    key={link.title}
                     to={link.redirectUrl!}
                     className={
                       "inline-block min-w-fit text-md font-bold text-brandMain align-baseline hover:text-brandMainActive"
@@ -187,6 +188,7 @@ export default function Header() {
           <>
             {mainNavLinks.map((link) => (
               <Link
+                key={link.title}
                 to={link.redirectUrl!}
                 className={
                   "inline-block min-w-fit text-md font-bold text-white align-baseline hover:underline"
