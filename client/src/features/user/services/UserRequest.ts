@@ -20,6 +20,14 @@ export interface FetchUsersResponse {
   paginationInfo: PaginationInfo;
 }
 
+/**
+ * Fetch users from the API
+ *
+ * @param props {@link FetchUsersProps} object,
+ * containing the link {@link APILink} - link to all users
+ *  and pagination {@link OptionalPaginationParams} (optional)
+ * @returns Promise of an array of {@link UserData} objects
+ */
 const getList = async (props: FetchUsersProps): Promise<FetchUsersResponse> => {
   // Prepare the link
   const { link, pagination } = props;
