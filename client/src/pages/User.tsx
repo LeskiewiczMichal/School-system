@@ -2,17 +2,26 @@ import { useAppSelector } from "../hooks";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import UserRequest from "../features/user/services/UserRequest";
-import { BasicInformation, UserData } from "../features/user";
+import {
+  BasicInformation,
+  TeacherDetails,
+  TeacherDetailsMapper,
+  UserData,
+} from "../features/user";
 import LoadingSpinner from "../common_components/LoadingSpinner";
 import { Sidebar } from "../features/sidebar";
 import ColoredBackgroundWithPhotoOnRight from "../common_components/Card/ColoredBackgroundWithPhotoOnRight";
 import CommunityPicture from "./assets/community.webp";
 import Role from "../type/Role";
+import axios from "axios";
 
 export default function User() {
   const links = useAppSelector((state) => state.links);
   const { userId } = useParams<{ userId: string }>();
   const [user, setUser] = useState<UserData | null>(null);
+  const [teacherDetails, setTeacherDetails] = useState<TeacherDetails | null>(
+    null,
+  );
 
   useEffect(() => {
     const handleFetchUser = async () => {
@@ -31,7 +40,18 @@ export default function User() {
       setUser(response);
 
       if (response.role === Role.TEACHER) {
-        // TODO: fetch teacher details
+        if (!response.teacherDetails) {
+          return;
+        }
+
+        const teacherDetailsResponse = await axios.get(
+          response.teacherDetails.href,
+        );
+
+        const teacherDetails: TeacherDetails =
+          TeacherDetailsMapper.mapFromServerData(teacherDetailsResponse.data);
+
+        setTeacherDetails(teacherDetails);
       }
     };
 

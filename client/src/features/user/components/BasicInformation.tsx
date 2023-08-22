@@ -5,13 +5,15 @@ import { ReactComponent as Email } from "../assets/email.svg";
 import { ReactComponent as IdentificationCard } from "../assets/identification-card.svg";
 import { ReactComponent as SchoolCampus } from "../assets/school-campus.svg";
 import { ReactComponent as User } from "../assets/user.svg";
+import TeacherDetails from "../types/TeacherDetails";
 
 export interface BasicInformationProps {
   user: UserData;
+  teacherDetails?: TeacherDetails;
 }
 
 export default function BasicInformation(props: BasicInformationProps) {
-  const { user } = props;
+  const { user, teacherDetails } = props;
 
   return (
     <div
@@ -60,6 +62,18 @@ export default function BasicInformation(props: BasicInformationProps) {
           <div className={"flex flex-col text-grayscaleDark"}>
             <span>Degree</span>
             <span className={"font-bold"}>{user.degree?.name}</span>
+          </div>
+        </div>
+      )}
+
+      {teacherDetails && (
+        <div className={"flex items-center gap-4"}>
+          <SchoolCampus className={"h-8 w-8"} />
+          <div className={"flex flex-col text-grayscaleDark"}>
+            <span>Academic title</span>
+            <span className={"font-bold"}>
+              {EnumMapper.mapDegreeTitleToString(teacherDetails.title)}
+            </span>
           </div>
         </div>
       )}
