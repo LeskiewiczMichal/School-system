@@ -10,8 +10,6 @@ import {
 } from "../features/user";
 import LoadingSpinner from "../common_components/LoadingSpinner";
 import { Sidebar } from "../features/sidebar";
-import ColoredBackgroundWithPhotoOnRight from "../common_components/Card/ColoredBackgroundWithPhotoOnRight";
-import CommunityPicture from "./assets/community.webp";
 import Role from "../type/Role";
 import axios from "axios";
 

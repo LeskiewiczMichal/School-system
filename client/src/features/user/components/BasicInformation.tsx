@@ -5,6 +5,7 @@ import { ReactComponent as Email } from "../assets/email.svg";
 import { ReactComponent as IdentificationCard } from "../assets/identification-card.svg";
 import { ReactComponent as SchoolCampus } from "../assets/school-campus.svg";
 import { ReactComponent as User } from "../assets/user.svg";
+import { ReactComponent as FieldOfTeacher } from "../assets/fieldOfTeacher.svg";
 import TeacherDetails from "../types/TeacherDetails";
 
 export interface BasicInformationProps {
@@ -73,7 +74,7 @@ export default function BasicInformation(props: BasicInformationProps) {
       {teacherDetails && (
         <>
           <div className={"flex items-center gap-4"}>
-            <SchoolCampus className={"h-8 w-8"} />
+            <DegreeDiploma className={"h-8 w-8"} />
             <div className={"flex flex-col text-white"}>
               <span>Academic title</span>
               <span className={"font-bold"}>
@@ -83,7 +84,7 @@ export default function BasicInformation(props: BasicInformationProps) {
           </div>
 
           <div className={"flex items-center gap-4"}>
-            <SchoolCampus className={"h-8 w-8"} />
+            <FieldOfTeacher className={"h-8 w-8"} />
             <div className={"flex flex-col text-white"}>
               <span>Field</span>
               <span className={"font-bold"}>{teacherDetails.degreeField}</span>

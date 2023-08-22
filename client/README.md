@@ -15,6 +15,7 @@ Photos:
     Teaching page academic staff photo:
     Kampus Production: https://www.pexels.com/pl-pl/zdjecie/studenci-wieloetniczni-wspolnie-prowadza-badania-w-bibliotece-5940844/
 
+
 Icons:
     Arrow down: https://www.svgrepo.com/svg/509905/dropdown-arrow
     Arrow right: https://www.svgrepo.com/svg/533610/arrow-right
@@ -29,3 +30,4 @@ Icons:
     Identification card: https://www.svgrepo.com/svg/365490/identification-card-thin?edit=true
     School campus/faculty: https://www.svgrepo.com/svg/19186/school-campus
     Degree diploma: https://www.svgrepo.com/svg/260014/degree-diploma?edit=true
+    Field of teacher degree: https://www.svgrepo.com/svg/492595/science?edit=true
