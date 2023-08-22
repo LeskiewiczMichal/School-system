@@ -68,7 +68,7 @@ export default function User() {
       <main className={"pb-16 border-b border-grayscaleMediumDark w-full"}>
         <section
           className={
-            "flex flex-col px-4 lg:px-8 py-8 mb-4 w-full lg:w-1/2 lg:gap-4"
+            "flex flex-col px-4 lg:px-8 py-8 mb-4 w-full justify-center items-center lg:gap-4"
           }
         >
           {/*<ColoredBackgroundWithPhotoOnRight*/}
