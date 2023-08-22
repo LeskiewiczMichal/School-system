@@ -263,8 +263,10 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public Page<UserDto> search(Role role, Pageable pageable) {
-    Page<User> users =
+  public Page<UserDto> search(String lastName, String firstName, Role role, Pageable pageable) {
+    Page<User> users = userRepository.searchUsersByLastNameAndFirstNameAndRole(lastName, firstName, role, pageable);
+
+    return users.map(userMapper::convertToDto);
   }
 
   private void userExistsCheck(Long id) {

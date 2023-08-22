@@ -34,5 +34,5 @@ public interface UserService {
 
   TeacherDetails updateTeacherDetails(PatchTeacherDetailsRequest request, Long userId);
 
-  Page<UserDto> search(Role role, Pageable pageable);
+  Page<UserDto> search(String lastName, String firstName, Role role, Pageable pageable);
 }
