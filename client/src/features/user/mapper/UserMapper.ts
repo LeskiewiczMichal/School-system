@@ -1,4 +1,4 @@
-import UserData from "../UserData";
+import UserData from "../types/UserData";
 import Mapper from "../../../type/Mapper";
 
 const mapFromServerData = (data: any): UserData => ({

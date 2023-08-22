@@ -4,7 +4,7 @@ import {
   PaginationParams,
   SortDirection,
 } from "../../../type/PaginationParams";
-import UserData from "../UserData";
+import UserData from "../types/UserData";
 import PaginationInfo from "../../../type/PaginationInfo";
 import RequestService from "../../../utils/RequestService";
 import { UserMapper } from "../index";

@@ -1,5 +1,5 @@
-import Role from "../../type/Role";
-import APILink from "../../type/APILink";
+import Role from "../../../type/Role";
+import APILink from "../../../type/APILink";
 
 interface UserData {
   id: bigint;

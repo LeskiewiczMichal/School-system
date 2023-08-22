@@ -91,6 +91,7 @@ function App() {
             element={<Pages.Course />}
           />
           {/* Users */}
+          <Route path="/users/:userId" element={<Pages.User />} />
           <Route path="/my-account" element={<Pages.MyAccount />} />
           <Route
             path={AppPaths.ACADEMIC_STAFF}

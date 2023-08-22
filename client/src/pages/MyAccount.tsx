@@ -26,7 +26,7 @@ export default function MyAccount() {
         >
           <ColoredBackgroundWithPhotoOnRight
             heading={`Hello, ${user.firstName}`}
-            text={"Thank you for beeing a part of our community"}
+            text={"Thank you for being a part of our community"}
             imageLink={CommunityPicture}
             backgroundColor={"brandMain"}
           />

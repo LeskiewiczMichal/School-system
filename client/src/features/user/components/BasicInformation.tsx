@@ -1,4 +1,4 @@
-import UserData from "../UserData";
+import UserData from "../types/UserData";
 import EnumMapper from "../../../utils/EnumMapper";
 import { ReactComponent as DegreeDiploma } from "../assets/degree-diploma.svg";
 import { ReactComponent as Email } from "../assets/email.svg";
@@ -54,13 +54,15 @@ export default function BasicInformation(props: BasicInformationProps) {
           <span className={"font-bold"}>{user.faculty}</span>
         </div>
       </div>
-      <div className={"flex items-center gap-4"}>
-        <DegreeDiploma className={"h-8 w-8"} />
-        <div className={"flex flex-col text-grayscaleDark"}>
-          <span>Degree</span>
-          <span className={"font-bold"}>{user.degree?.name}</span>
+      {user.degree && (
+        <div className={"flex items-center gap-4"}>
+          <DegreeDiploma className={"h-8 w-8"} />
+          <div className={"flex flex-col text-grayscaleDark"}>
+            <span>Degree</span>
+            <span className={"font-bold"}>{user.degree?.name}</span>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

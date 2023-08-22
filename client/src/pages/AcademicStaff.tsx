@@ -109,28 +109,6 @@ export default function AcademicStaff() {
             ))}
           </ul>
         </section>
-        {/*<ul*/}
-        {/*  className={*/}
-        {/*    "grid grid-cols-1 gap-x-12 gap-y-8 px-2 sm:px-6 lg:px-0 list-disc justify-center items-center ml-8 md:grid-cols-2"*/}
-        {/*  }*/}
-        {/*>*/}
-        {/*  {users.map((teacher) => (*/}
-        {/*    <li>*/}
-        {/*      <Link*/}
-        {/*        to={`/users/${teacher.id}`}*/}
-        {/*        key={teacher.id.toString()}*/}
-        {/*        className={*/}
-        {/*          "text-xl text-brandMain font-bold hover:text-brandMainActive hover:underline"*/}
-        {/*        }*/}
-        {/*      >*/}
-        {/*        <div>*/}
-        {/*          {teacher.lastName} {teacher.firstName} - {teacher.faculty}{" "}*/}
-        {/*          /!*<ArrowUpRightBrandMain className={"inline h-6 w-6"} />*!/*/}
-        {/*        </div>*/}
-        {/*      </Link>*/}
-        {/*    </li>*/}
-        {/*  ))}*/}
-        {/*</ul>*/}
       </main>
     </div>
   );
