@@ -77,7 +77,10 @@ export default function User() {
           {/*  imageLink={CommunityPicture}*/}
           {/*  backgroundColor={"brandMain"}*/}
           {/*/>*/}
-          <BasicInformation user={user} />
+          <BasicInformation
+            user={user}
+            teacherDetails={teacherDetails ? teacherDetails : undefined}
+          />
         </section>
         <section
           className={

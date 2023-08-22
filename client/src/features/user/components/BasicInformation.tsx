@@ -67,15 +67,24 @@ export default function BasicInformation(props: BasicInformationProps) {
       )}
 
       {teacherDetails && (
-        <div className={"flex items-center gap-4"}>
-          <SchoolCampus className={"h-8 w-8"} />
-          <div className={"flex flex-col text-grayscaleDark"}>
-            <span>Academic title</span>
-            <span className={"font-bold"}>
-              {EnumMapper.mapDegreeTitleToString(teacherDetails.title)}
-            </span>
+        <>
+          <div className={"flex items-center gap-4"}>
+            <SchoolCampus className={"h-8 w-8"} />
+            <div className={"flex flex-col text-grayscaleDark"}>
+              <span>Academic title</span>
+              <span className={"font-bold"}>
+                {EnumMapper.mapDegreeTitleToString(teacherDetails.title)}
+              </span>
+            </div>
           </div>
-        </div>
+          <div className={"flex items-center gap-4"}>
+            <SchoolCampus className={"h-8 w-8"} />
+            <div className={"flex flex-col text-grayscaleDark"}>
+              <span>Field</span>
+              <span className={"font-bold"}>{teacherDetails.degreeField}</span>
+            </div>
+          </div>
+        </>
       )}
     </div>
   );
