@@ -1,0 +1,58 @@
+import APILink from "../../../type/APILink";
+import {
+  OptionalPaginationParams,
+  PaginationParams,
+  SortDirection,
+} from "../../../type/PaginationParams";
+import UserData from "../UserData";
+import PaginationInfo from "../../../type/PaginationInfo";
+import RequestService from "../../../utils/RequestService";
+import { UserMapper } from "../index";
+import mapPaginationInfoFromServer from "../../../utils/MapPaginationInfoFromServer";
+
+export interface FetchUsersProps {
+  link: APILink;
+  pagination?: OptionalPaginationParams;
+}
+
+export interface FetchUsersResponse {
+  users: UserData[];
+  paginationInfo: PaginationInfo;
+}
+
+const getList = async (props: FetchUsersProps): Promise<FetchUsersResponse> => {
+  // Prepare the link
+  const { link, pagination } = props;
+
+  // Prepare the pagination
+  let paginationParams: PaginationParams = {
+    page: 0,
+    size: 10,
+    sort: ["lastName", SortDirection.ASC],
+  };
+  if (pagination) {
+    paginationParams = {
+      page: pagination.page ? pagination.page : paginationParams.page,
+      size: pagination.size ? pagination.size : paginationParams.size,
+      sort: pagination.sort ? pagination.sort : paginationParams.sort,
+    };
+  }
+
+  const responseData = await RequestService.performGetRequest({
+    link: link,
+    pagination: paginationParams,
+  });
+
+  let usersArr: UserData[] = [];
+  if (responseData._embedded && responseData._embedded.users) {
+    // Convert the response data into users
+    usersArr = UserMapper.mapArrayFromServerData(responseData._embedded.users);
+  }
+  const paginationInfo: PaginationInfo =
+    mapPaginationInfoFromServer(responseData);
+
+  return {
+    users: usersArr,
+    paginationInfo: paginationInfo,
+  };
+};
