@@ -68,7 +68,19 @@ public class ApiController {
     Link usersLink = linkTo(UserController.class).withRel("users");
     String uriTemplate = usersLink.getHref() + PAGINATION_PARAMETERS;
     usersLink = Link.of(uriTemplate).withRel("users");
+
+    Link getByIdLink =
+        linkTo(methodOn(UserController.class).getUserById(null))
+            .withRel("users")
+            .withTitle("Get by id");
+    Link searchLink =
+        linkTo(methodOn(UserController.class).searchUsers(null, null, null, null))
+            .withRel("users")
+            .withTitle("Search");
+
     model.add(usersLink);
+    model.add(getByIdLink);
+    model.add(searchLink);
   }
 
   private void addFacultiesLinks(RepresentationModel<?> model) {
