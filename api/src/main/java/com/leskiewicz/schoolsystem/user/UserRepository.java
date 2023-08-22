@@ -30,4 +30,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
           "SELECT u.* FROM users u JOIN course_student cs ON u.id = cs.student_id WHERE cs.course_id = :courseId",
       nativeQuery = true)
   Page<User> findUsersByCourseId(Long courseId, Pageable pageable);
+
+  @Query(
+          "SELECT u FROM User u WHERE (:lastName is null or u.lastName LIKE CONCAT('%', :lastName, '%') OR u.firstName LIKE CONCAT('%', :lastName, '%')) " +
+                  "AND (:firstName is null or u.firstName LIKE CONCAT('%', :firstName, '%') OR u.lastName LIKE CONCAT('%', :firstName, '%')) " +
+                  "AND (:role is null or u.role = :role) ")
+  Page<User> searchUsersByLastNameAndFirstNameAndRole(String lastName, String firstName, Role role, Pageable pageable);
 }

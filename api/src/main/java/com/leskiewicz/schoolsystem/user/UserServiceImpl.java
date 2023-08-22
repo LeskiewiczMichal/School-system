@@ -262,6 +262,11 @@ public class UserServiceImpl implements UserService {
     return teacherDetails;
   }
 
+  @Override
+  public Page<UserDto> search(Role role, Pageable pageable) {
+    Page<User> users =
+  }
+
   private void userExistsCheck(Long id) {
     if (!userRepository.existsById(id)) {
       throw new EntityNotFoundException(ErrorMessages.objectWithIdNotFound("User", id));

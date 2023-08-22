@@ -1,5 +1,6 @@
 package com.leskiewicz.schoolsystem.user;
 
+import com.leskiewicz.schoolsystem.authentication.Role;
 import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
@@ -7,6 +8,7 @@ import com.leskiewicz.schoolsystem.user.teacherdetails.PatchTeacherDetailsReques
 import com.leskiewicz.schoolsystem.user.dto.PatchUserRequest;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetails;
+import com.leskiewicz.schoolsystem.utils.Language;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -31,4 +33,6 @@ public interface UserService {
   TeacherDetails getTeacherDetails(Long userId);
 
   TeacherDetails updateTeacherDetails(PatchTeacherDetailsRequest request, Long userId);
+
+  Page<UserDto> search(Role role, Pageable pageable);
 }

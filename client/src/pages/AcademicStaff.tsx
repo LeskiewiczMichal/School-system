@@ -3,6 +3,7 @@ import TextAndButtonWithPhotoOnRight from "../common_components/Card/TextAndButt
 import TeachingAcademicStaff from "./assets/teaching-academic-staff.webp";
 import { SidebarLinkProps } from "../features/sidebar/components/SidebarLink";
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
 
 export default function AcademicStaff() {
   const sidebarLinks: SidebarLinkProps[] = [
@@ -22,6 +23,8 @@ export default function AcademicStaff() {
       active: false,
     },
   ];
+
+  useEffect();
 
   return (
     <div className={"flex h-full"}>
