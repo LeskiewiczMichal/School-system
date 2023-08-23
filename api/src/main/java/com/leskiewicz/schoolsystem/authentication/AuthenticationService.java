@@ -12,4 +12,6 @@ public interface AuthenticationService {
   AuthenticationResponse authenticate(AuthenticationRequest request);
 
   AuthenticationResponse registerTeacherAccount(RegisterTeacherRequest request);
+
+  AuthenticationResponse authenticateWithToken(String token);
 }

@@ -80,6 +80,15 @@ public class AuthenticationController {
     return ResponseEntity.ok(response);
   }
 
+  @PostMapping("/authenticate/token")
+  public ResponseEntity<AuthenticationResponse> authenticateWithToken(@RequestBody String token) {
+    AuthenticationResponse response = authenticationService.authenticateWithToken(token);
+    response.setUser(userDtoAssembler.toModel(response.getUser()));
+    authenticationAddLinks(null, response);
+
+    return ResponseEntity.ok(response);
+  }
+
   /**
    * Creates a new teacher account based on the given request.
    *

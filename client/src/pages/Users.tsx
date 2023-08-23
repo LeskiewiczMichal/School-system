@@ -11,9 +11,11 @@ import PaginationInfo from "../type/PaginationInfo";
 import UserRequest, {
   FetchUsersResponse,
 } from "../features/user/services/UserRequest";
+import LinkButtonBorderOnly from "../common_components/button/LinkButtonBorderOnly";
+import { AppPaths } from "../App";
 
 export default function Users() {
-  const user = useAppSelector((state) => state.auth.data);
+  const auth = useAppSelector((state) => state.auth.data);
   const links = useAppSelector((state) => state.links);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -84,6 +86,25 @@ export default function Users() {
   useEffect(() => {
     handleFetchUsers();
   }, [links, page]);
+
+  if (!auth) {
+    return (
+      <div
+        className={
+          "h-screen w-screen flex flex-col justify-center items-center"
+        }
+      >
+        <h1 className={"page-title_h1"}>
+          You have to be authenticated to see this page
+        </h1>
+        <LinkButtonBorderOnly
+          text={"Go to login"}
+          link={AppPaths.LOGIN}
+          color={"brandMain"}
+        />
+      </div>
+    );
+  }
 
   const formChangeHandler = (
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
