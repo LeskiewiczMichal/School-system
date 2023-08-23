@@ -45,6 +45,11 @@ public class UserMapperImpl implements UserMapper {
       userDto.degreeId(null);
     }
 
+    // Optional profile picture
+    if (user.getProfilePictureName() != null) {
+      userDto.profilePictureName(user.getProfilePictureName());
+    }
+
     // If user is teacher, he will have teacher details associated
     if (user.getRole() == Role.ROLE_TEACHER) {
       userDto.teacherDetailsId(user.getTeacherDetails().getId());

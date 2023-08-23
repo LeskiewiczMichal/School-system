@@ -4,7 +4,9 @@ import com.leskiewicz.schoolsystem.authentication.Role;
 import com.leskiewicz.schoolsystem.authentication.SecurityService;
 import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.course.utils.CourseDtoAssembler;
+import com.leskiewicz.schoolsystem.dto.request.MessageModel;
 import com.leskiewicz.schoolsystem.dto.request.PageableRequest;
+import com.leskiewicz.schoolsystem.error.APIResponses;
 import com.leskiewicz.schoolsystem.error.customexception.EntityAlreadyExistsException;
 import com.leskiewicz.schoolsystem.user.dto.PatchUserRequest;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
@@ -20,11 +22,13 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -203,5 +207,25 @@ public class UserController {
     updatedTeacherDetails = teacherDetailsModelAssembler.toModel(updatedTeacherDetails);
 
     return ResponseEntity.ok(updatedTeacherDetails);
+  }
+
+  /**
+   * Update profile picture of user with provided ID.
+   *
+   * @param id the ID of the user to update profile picture for.
+   * @param file the image file to upload.
+   * @return status 200 (OK) and in body the message about successful upload.
+   */
+  @PostMapping("/{id}/image")
+  public ResponseEntity<MessageModel> updateImage(
+          @PathVariable Long id, @RequestParam("file") MultipartFile file) {
+    userService.addImage(id, file);
+
+    // Create response
+    MessageModel message =
+            new MessageModel(APIResponses.fileUploaded(file.getOriginalFilename()));
+    message.add(linkTo(methodOn(this.getClass()).getUserById(id)).withRel("user"));
+
+    return ResponseEntity.status(HttpStatus.OK).body(message);
   }
 }

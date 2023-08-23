@@ -23,6 +23,9 @@ public class UserDto extends RepresentationModel<UserDto> {
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private final Role role;
 
+  @JsonInclude(JsonInclude.Include.NON_NULL)
+  private final String profilePictureName;
+
   // Needed to add link in UserDtoAssembler
   @JsonIgnore @NotNull private final Long facultyId;
 
