@@ -43,8 +43,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
 import java.util.List;
@@ -288,5 +290,28 @@ public class UserControllerTest {
         EntityNotFoundException.class,
         () -> userController.patchTeacherDetails(request, 1L),
         ErrorMessages.teacherDetailsNotFound(1L));
+  }
+
+  @Test
+  public void changeProfilePicture() throws Exception {
+    // Mock service method to do nothing
+    doNothing().when(userService).addImage(any(Long.class), any(MultipartFile.class));
+
+    // Create file for testing
+    MockMultipartFile file =
+            new MockMultipartFile(
+                    "file", "test.txt", MediaType.TEXT_PLAIN_VALUE, "Hello, World!".getBytes());
+
+    // Perform request
+    mvc.perform(
+                    multipart("/api/users/1/profile-picture")
+                            .file(file)
+                            .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+                            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.message").value("File with name: test.txt uploaded successfully"))
+            .andExpect(jsonPath("$.links[*].rel", Matchers.hasItems("user")))
+            .andExpect(jsonPath("$.links[*].href", Matchers.hasSize(1)))
+            .andReturn();
   }
 }
