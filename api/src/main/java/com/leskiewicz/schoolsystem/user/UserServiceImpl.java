@@ -12,6 +12,7 @@ import com.leskiewicz.schoolsystem.error.customexception.MissingFieldException;
 import com.leskiewicz.schoolsystem.error.customexception.UserAlreadyExistsException;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.FacultyService;
+import com.leskiewicz.schoolsystem.files.FileService;
 import com.leskiewicz.schoolsystem.user.teacherdetails.PatchTeacherDetailsRequest;
 import com.leskiewicz.schoolsystem.user.dto.PatchUserRequest;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
@@ -27,12 +28,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
   private final FacultyService facultyService;
+  private final FileService fileService;
   private final PasswordEncoder passwordEncoder;
 
   // Repositories
@@ -267,6 +270,27 @@ public class UserServiceImpl implements UserService {
     Page<User> users = userRepository.searchUsersByLastNameAndFirstNameAndRole(lastName, firstName, role, pageable);
 
     return users.map(userMapper::convertToDto);
+  }
+
+  @Override
+  public void addImage(Long userId, MultipartFile image) {
+    User user =
+            userRepository
+                    .findById(userId)
+                    .orElseThrow(
+                            () ->
+                                    new EntityNotFoundException(
+                                            ErrorMessages.objectWithIdNotFound("User", userId)));
+
+    // Handle the image if available
+    if (image != null) {
+      String filename = fileService.uploadImage(image);
+      user.setProfilePictureName(filename);
+    } else {
+      throw new IllegalArgumentException("Image cannot be null");
+    }
+
+    userRepository.save(user);
   }
 
   private void userExistsCheck(Long id) {

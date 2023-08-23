@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.authentication.Role;
+import com.leskiewicz.schoolsystem.files.File;
 import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetails;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.AssertTrue;
@@ -57,6 +58,9 @@ public class User {
   @Column(name = "role")
   @Enumerated(EnumType.STRING)
   private Role role;
+
+  @Column(name = "profile_picture_name")
+  private String profilePictureName;
 
   @AssertTrue(message = "Degree must not be null for students")
   public boolean isDegreeValid() {

@@ -3,14 +3,17 @@ package com.leskiewicz.schoolsystem.user;
 import com.leskiewicz.schoolsystem.authentication.Role;
 import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.degree.Degree;
+import com.leskiewicz.schoolsystem.error.ErrorMessages;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.user.teacherdetails.PatchTeacherDetailsRequest;
 import com.leskiewicz.schoolsystem.user.dto.PatchUserRequest;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetails;
 import com.leskiewicz.schoolsystem.utils.Language;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface UserService {
 
@@ -35,4 +38,6 @@ public interface UserService {
   TeacherDetails updateTeacherDetails(PatchTeacherDetailsRequest request, Long userId);
 
   Page<UserDto> search(String lastName, String firstName, Role role, Pageable pageable);
+
+  void addImage(Long userId, MultipartFile image);
 }
