@@ -217,6 +217,7 @@ public class UserController {
    * @return status 200 (OK) and in body the message about successful upload.
    */
   @PostMapping("/{id}/image")
+  @PreAuthorize("@securityServiceImpl.isSelf(#id)")
   public ResponseEntity<MessageModel> updateImage(
           @PathVariable Long id, @RequestParam("file") MultipartFile file) {
     userService.addImage(id, file);
