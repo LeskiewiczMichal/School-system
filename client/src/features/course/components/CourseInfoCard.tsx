@@ -4,6 +4,7 @@ import DegreePageContentInterface from "../../../pages/degree/DegreePageContentI
 import EnumMapper from "../../../utils/EnumMapper";
 import { useAppSelector } from "../../../hooks";
 import LinkButtonPrimary from "../../../common_components/button/LinkButtonPrimary";
+import { AppPaths } from "../../../App";
 
 export interface CourseInfoCardProps {
   course: Course;
@@ -60,7 +61,16 @@ export default function CourseInfoCard(props: CourseInfoCardProps) {
           </span>
         </div>
 
-        {isUserEnrolled ? (
+        {!user && (
+          <LinkButtonPrimary
+            link={AppPaths.LOGIN}
+            text={
+              "You need to be logged in to enroll in the course. Click here to log in"
+            }
+            fullWidthOnSmallerScreen
+          />
+        )}
+        {isUserEnrolled && user && (
           <LinkButtonPrimary
             link={`/courses/${course.id}/main-page`}
             text={
@@ -69,7 +79,8 @@ export default function CourseInfoCard(props: CourseInfoCardProps) {
             }
             fullWidthOnSmallerScreen
           />
-        ) : (
+        )}
+        {!isUserEnrolled && user && (
           <LinkButtonPrimary
             link={`/courses/${course.id}/enroll`}
             text={"Enroll in the course"}
