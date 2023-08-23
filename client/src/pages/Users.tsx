@@ -6,7 +6,7 @@ import MyHeading from "../common_components/MyHeading";
 import LoadingSpinner from "../common_components/LoadingSpinner";
 import PaginationButtons from "../common_components/PaginationButtons";
 import { useEffect, useState } from "react";
-import { UserData, UserSearchForm } from "../features/user";
+import { UserData, UserListCard, UserSearchForm } from "../features/user";
 import PaginationInfo from "../type/PaginationInfo";
 import UserRequest, {
   FetchUsersResponse,
@@ -71,7 +71,7 @@ export default function Users() {
     // Call the api
     const response: FetchUsersResponse = await UserRequest.getList({
       link: apiLink,
-      pagination: { page: page },
+      pagination: { page: page, size: 12 },
       firstName: firstName,
       lastName: lastName,
     });
@@ -119,10 +119,13 @@ export default function Users() {
         />
         {isLoading && <LoadingSpinner />}
         {users.length !== 0 && !isLoading && (
-          <section className={"flex flex-col gap-4 px-2 sm:px-6 lg:px-0"}>
+          <section
+            className={
+              "grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 px-4 lg:px-0"
+            }
+          >
             {users.map((user) => (
-              // <DegreeCard key={degree.id.toString()} degree={degree} />
-              <span>{user.lastName}</span>
+              <UserListCard user={user} />
             ))}
           </section>
         )}
