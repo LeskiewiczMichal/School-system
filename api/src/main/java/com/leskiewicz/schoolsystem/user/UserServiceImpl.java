@@ -267,7 +267,9 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public Page<UserDto> search(String lastName, String firstName, Role role, Pageable pageable) {
-    Page<User> users = userRepository.searchUsersByLastNameAndFirstNameAndRole(lastName, firstName, role, pageable);
+    Page<User> users =
+        userRepository.searchUsersByLastNameAndFirstNameAndRole(
+            lastName, firstName, role, pageable);
 
     return users.map(userMapper::convertToDto);
   }
@@ -275,12 +277,12 @@ public class UserServiceImpl implements UserService {
   @Override
   public void addImage(Long userId, MultipartFile image) {
     User user =
-            userRepository
-                    .findById(userId)
-                    .orElseThrow(
-                            () ->
-                                    new EntityNotFoundException(
-                                            ErrorMessages.objectWithIdNotFound("User", userId)));
+        userRepository
+            .findById(userId)
+            .orElseThrow(
+                () ->
+                    new EntityNotFoundException(
+                        ErrorMessages.objectWithIdNotFound("User", userId)));
 
     // Handle the image if available
     if (image != null) {
@@ -291,6 +293,7 @@ public class UserServiceImpl implements UserService {
     }
 
     userRepository.save(user);
+    logger.info("Updated profile picture of user with ID: {}", userId);
   }
 
   private void userExistsCheck(Long id) {

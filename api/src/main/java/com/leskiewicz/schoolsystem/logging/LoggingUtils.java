@@ -62,7 +62,8 @@ public class LoggingUtils {
         user.getFaculty(),
         user.getDegree(),
         null,
-        user.getRole());
+        user.getRole(),
+        null);
   }
 
   private static UserDto maskUserDto(UserDto userDto) {
