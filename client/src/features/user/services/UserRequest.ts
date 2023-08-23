@@ -39,13 +39,13 @@ const getList = async (props: FetchUsersProps): Promise<FetchUsersResponse> => {
 
   // Prepare the search parameters
   let params = {};
-  if (firstName) {
+  if (firstName && firstName !== "") {
     params = {
       ...params,
       firstName: firstName,
     };
   }
-  if (lastName) {
+  if (lastName && lastName !== "") {
     params = {
       ...params,
       lastName: lastName,
