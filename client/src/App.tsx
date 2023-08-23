@@ -20,6 +20,7 @@ export enum AppPaths {
   RESEARCH = "/research",
   DEGREE_PROGRAMMES = "/degree-programmes",
   ACADEMIC_STAFF = "/academic-staff",
+  USERS = "/users",
 }
 
 function App() {
@@ -58,9 +59,11 @@ function App() {
         <Routes>
           <Route path="/" element={<Pages.Home />} />
           <Route path="/login" element={<Pages.Login />} />
+
           {/* Research and teaching */}
           <Route path={AppPaths.TEACHING} element={<Pages.Teaching />} />
           <Route path={AppPaths.RESEARCH} element={<Pages.Research />} />
+
           {/* Articles */}
           <Route path="/articles" element={<Pages.Articles />} />
           <Route path="/articles/:id" element={<Pages.Article />} />
@@ -68,6 +71,7 @@ function App() {
             path={"/faculties/:facultyId/articles"}
             element={<Pages.Articles />}
           />
+
           {/* Faculty */}
           <Route path="/faculties" element={<Pages.Faculties />} />
           <Route path="/faculties/:facultyId" element={<Pages.Faculty />} />
@@ -79,6 +83,7 @@ function App() {
             path="/faculties/:facultyId/research"
             element={<Pages.Research />}
           />
+
           {/* Degree */}
           <Route
             path="/degree-programmes/:degreeId"
@@ -88,19 +93,23 @@ function App() {
             path="/degree-programmes"
             element={<Pages.DegreeProgrammes />}
           />
+
           {/* Course */}
           <Route path={`${AppPaths.COURSES}`} element={<Pages.Courses />} />
           <Route
             path={`${AppPaths.COURSES}/:courseId`}
             element={<Pages.Course />}
           />
+
           {/* Users */}
+          <Route path={AppPaths.USERS} element={<Pages.Users />} />
           <Route path="/users/:userId" element={<Pages.User />} />
           <Route path="/my-account" element={<Pages.MyAccount />} />
           <Route
             path={AppPaths.ACADEMIC_STAFF}
             element={<Pages.AcademicStaff />}
           />
+
           {/* About us */}
           <Route
             path="/about-us/about-website"
