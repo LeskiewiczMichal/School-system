@@ -102,6 +102,7 @@ public class UserMapperTest {
             .degree(null)
             .teacherDetails(teacherDetails)
             .role(Role.ROLE_TEACHER)
+            .profilePictureName("test.jpg")
             .build();
     given(faculty.getName()).willReturn("FacultyName");
     given(faculty.getId()).willReturn(1L);
@@ -116,6 +117,7 @@ public class UserMapperTest {
             .faculty(faculty.getName())
             .facultyId(1L)
             .teacherDetailsId(1L)
+            .profilePictureName(user.getProfilePictureName())
             .build();
 
     // Call function
