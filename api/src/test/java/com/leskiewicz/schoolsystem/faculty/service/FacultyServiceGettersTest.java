@@ -230,7 +230,8 @@ public class FacultyServiceGettersTest {
                 faculty,
                 degree,
                 null,
-                Role.ROLE_STUDENT),
+                Role.ROLE_STUDENT,
+                null),
             new User(
                 2L,
                 "Jane",
@@ -240,7 +241,8 @@ public class FacultyServiceGettersTest {
                 faculty,
                 degree,
                 null,
-                Role.ROLE_STUDENT));
+                Role.ROLE_STUDENT,
+                null));
     Page<User> usersPage = new PageImpl<>(userList);
 
     given(
@@ -257,6 +259,7 @@ public class FacultyServiceGettersTest {
             "john.doe@example.com",
             "Some Faculty",
             Role.ROLE_STUDENT,
+            null,
             1L,
             "Some Degree",
             2L,
@@ -269,6 +272,7 @@ public class FacultyServiceGettersTest {
             "jane.smith@example.com",
             "Another Faculty",
             Role.ROLE_STUDENT,
+            null,
             2L,
             "Another Degree",
             2L,

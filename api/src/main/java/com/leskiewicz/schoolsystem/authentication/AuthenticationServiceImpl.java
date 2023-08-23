@@ -54,7 +54,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             faculty,
             degree,
             null,
-            Role.ROLE_STUDENT);
+            Role.ROLE_STUDENT,
+            null);
 
     // Save new user and generate jwt token
     userService.addUser(user);
@@ -97,7 +98,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             faculty,
             null,
             null,
-            Role.ROLE_TEACHER);
+            Role.ROLE_TEACHER,
+            null);
 
     TeacherDetails teacherDetails =
         TeacherDetails.builder()

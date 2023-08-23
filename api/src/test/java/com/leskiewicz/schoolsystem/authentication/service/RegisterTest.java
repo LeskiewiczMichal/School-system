@@ -89,7 +89,8 @@ public class RegisterTest {
             faculty,
             degree,
             null,
-            Role.ROLE_STUDENT);
+            Role.ROLE_STUDENT,
+            null);
   }
 
   @Test
