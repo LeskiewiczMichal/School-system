@@ -70,8 +70,14 @@ public class UserController {
     Page<UserDto> users = userService.getUsers(request.toPageable());
     users = users.map(userDtoAssembler::toModel);
 
+    Link selfLink = linkTo(methodOn(UserController.class).getUsers(request)).withSelfRel();
+    Link profilePictureLink = linkTo(methodOn(UserController.class).updateImage(null, null))
+        .withRel("profilePicture").withTitle("Change");
+
     return ResponseEntity.ok(
-        HalModelBuilder.halModelOf(userPagedResourcesAssembler.toModel(users)).build());
+        HalModelBuilder.halModelOf(userPagedResourcesAssembler.toModel(users))
+                .links(List.of(selfLink, profilePictureLink))
+                .build());
   }
 
   /**
