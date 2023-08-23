@@ -179,6 +179,7 @@ export default function Header() {
         <FacultiesDropdown />
         {!mobileNavView && (
           <>
+            {/* Mapped needed links */}
             {mainNavLinks.map((link) => (
               <Link
                 key={link.title}
@@ -190,6 +191,19 @@ export default function Header() {
                 {link.title}
               </Link>
             ))}
+
+            {/* Only for authenticated user */}
+            {isAuthenticated && (
+              <>
+                <Link
+                  to="/users"
+                  className="inline-block min-w-fit text-md font-bold text-white align-baseline hover:underline"
+                >
+                  Users
+                </Link>
+              </>
+            )}
+
             {/* Login */}
             {isAuthenticated ? (
               <Link

@@ -169,7 +169,10 @@ export default function Sidebar(props: SidebarProps) {
         </h4>
         {/* Account */}
         {isAuthenticated ? (
-          <SidebarLink title={"My account"} redirectUrl={"/my-account"} />
+          <>
+            <SidebarLink title={"My account"} redirectUrl={"/my-account"} />
+            <SidebarLink title={"Users"} redirectUrl={"/users"} />
+          </>
         ) : (
           <SidebarLink title={"Sign in"} redirectUrl={"/login"} />
         )}

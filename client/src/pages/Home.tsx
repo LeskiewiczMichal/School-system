@@ -54,8 +54,6 @@ export default function Home() {
     );
   }
 
-  const sidebarLinks = MainNavLinksCreator.createMainNavLinks();
-
   return (
     <main className="">
       <Greeting />
@@ -92,7 +90,7 @@ export default function Home() {
           <ArticlesDisplay />
         </div>
       </section>
-      {mobileNavView && <Sidebar links={sidebarLinks} />}
+      {mobileNavView && <Sidebar />}
     </main>
   );
 }
