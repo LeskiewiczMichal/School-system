@@ -1,5 +1,6 @@
 import Role from "../../../type/Role";
 import APILink from "../../../type/APILink";
+import NullableString from "../../../type/NullableString";
 
 interface UserData {
   id: bigint;
@@ -14,6 +15,7 @@ interface UserData {
   role: Role;
   courses: APILink;
   teacherDetails: APILink | null;
+  profilePictureName: NullableString;
 }
 
 export default UserData;

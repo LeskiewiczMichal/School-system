@@ -23,16 +23,20 @@ export default function MyAccount() {
   return (
     <div className={"flex h-full"}>
       {mobileNavBar && <Sidebar />}
-      <main className={"pb-16 border-b border-grayscaleMediumDark w-full"}>
+      <main
+        className={
+          "pb-16 border-b sm:px-16 lg:px-0 border-grayscaleMediumDark w-full"
+        }
+      >
         <section
           className={"flex flex-col px-4 lg:px-32 py-8 mb-4 w-full lg:gap-4"}
         >
-          <ColoredBackgroundWithPhotoOnRight
-            heading={`Hello, ${user.firstName}`}
-            text={"Thank you for being a part of our community"}
-            imageLink={CommunityPicture}
-            backgroundColor={"black"}
-          />
+          {/*<ColoredBackgroundWithPhotoOnRight*/}
+          {/*  heading={`Hello, ${user.firstName}`}*/}
+          {/*  text={"Thank you for being a part of our community"}*/}
+          {/*  imageLink={CommunityPicture}*/}
+          {/*  backgroundColor={"black"}*/}
+          {/*/>*/}
           <BasicInformation user={user} />
         </section>
         <section

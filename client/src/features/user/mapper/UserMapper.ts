@@ -27,6 +27,7 @@ const mapFromServerData = (data: any): UserData => ({
         templated: data._links.teacherDetails.templated === true,
       }
     : null,
+  profilePictureName: data.profilePictureName,
 });
 
 const mapArrayFromServerData = (data: any[]): UserData[] => {
