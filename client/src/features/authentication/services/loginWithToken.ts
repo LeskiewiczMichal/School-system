@@ -1,31 +1,37 @@
-import axios from "axios";
 import { AppThunk } from "../../../store";
+import JWTUtils from "../../../utils/JWTUtils";
+import axios from "axios";
 import { UserData, UserMapper } from "../../user";
-import JWTToken from "../types/JWTToken";
 import Role from "../../../type/Role";
 import { setAuthUser } from "../reducer/authSlice";
+import JWTToken from "../types/JWTToken";
+import { Simulate } from "react-dom/test-utils";
+import error = Simulate.error;
 
-type LoginProps = {
-  email: string;
-  password: string;
-};
-
-const login =
-  (props: LoginProps): AppThunk =>
+const loginWithToken =
+  (): AppThunk =>
   async (dispatch, getState): Promise<void> => {
     return new Promise<void>(async (resolve, reject) => {
       try {
-        // Get needed data
-        const link = getState().links.authentication.login;
-        if (!link) {
-          reject(new Error("Login link is not set"));
+        // Retrieve token from localstorage
+        const jwtToken = JWTUtils.getToken();
+        // const link = getState().links.authentication.authenticateWithToken;
+
+        if (!jwtToken) {
+          console.log(jwtToken);
+          resolve();
           return;
         }
+        // if (!link) {
+        //   reject(new Error("Login link is not set"));
+        //   return;
+        // }
 
-        const { email, password } = props;
+        // Set authorization header
+        axios.defaults.headers.common.Authorization = jwtToken;
 
         // Send request
-        const response = await axios.post(link.href, { email, password });
+        const response = await axios.post("/api/auth/authenticate/token");
 
         // Get and map response data
         const { user, _links, token } = response.data;
@@ -53,6 +59,7 @@ const login =
         };
 
         dispatch(setAuthUser({ data: userData, _links: links }));
+
         // Set token in localstorage
         localStorage.setItem(JWTToken.localStorageName, `Bearer ${token}`);
         resolve();
@@ -63,4 +70,4 @@ const login =
     });
   };
 
-export default login;
+export default loginWithToken;

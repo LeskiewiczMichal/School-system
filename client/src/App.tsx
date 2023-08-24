@@ -7,6 +7,7 @@ import { fetchBasicLinks } from "./features/links";
 import { Footer } from "./features/footer";
 import { WINDOW_WIDTH_CUSTOM_BREAKPOINT } from "./utils/Constants";
 import { IntegrationSliceActions } from "./store";
+import { loginWithToken } from "./features/authentication";
 
 export enum AppPaths {
   HOME = "/",
@@ -25,9 +26,9 @@ export enum AppPaths {
 
 function App() {
   const dispatch = useAppDispatch();
-  // const isAuthenticated: boolean = useAppSelector(
-  //   (state) => state.auth.data !== null,
-  // );
+  const isAuthenticated: boolean = useAppSelector(
+    (state) => state.auth.data !== null,
+  );
 
   // Fetch links from API
   useEffect(() => {
@@ -36,6 +37,15 @@ function App() {
     };
 
     handleFetchLinks();
+  }, [dispatch]);
+
+  // Auto login
+  useEffect(() => {
+    const handleAutoLogin = async () => {
+      await dispatch(loginWithToken());
+    };
+
+    handleAutoLogin();
   }, [dispatch]);
 
   // Switch navigation view on resize

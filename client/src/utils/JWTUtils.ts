@@ -1,5 +1,7 @@
+import JWTToken from "../features/authentication/types/JWTToken";
+
 const getToken = () => {
-  return localStorage.getItem("token");
+  return localStorage.getItem(JWTToken.localStorageName);
 };
 
 const JWTUtils = {
