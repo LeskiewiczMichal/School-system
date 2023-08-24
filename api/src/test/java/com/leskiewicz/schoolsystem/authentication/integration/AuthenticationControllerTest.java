@@ -331,4 +331,5 @@ public class AuthenticationControllerTest {
         .andReturn();
   }
   // endregion
+
 }

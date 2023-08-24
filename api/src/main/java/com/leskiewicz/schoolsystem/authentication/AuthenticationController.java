@@ -125,8 +125,13 @@ public class AuthenticationController {
     Link authenticateLink =
         WebMvcLinkBuilder.linkTo(methodOn(AuthenticationController.class).authenticate(null))
             .withRel("authenticate");
+    Link authenticateWithTokenLink =
+            WebMvcLinkBuilder.linkTo(methodOn(AuthenticationController.class).authenticateWithToken(null))
+                    .withRel("authenticateWithToken");
+
     response.add(selfLink);
     response.add(authenticateLink);
+    response.add(authenticateWithTokenLink);
   }
 
   private void authenticationAddLinks(

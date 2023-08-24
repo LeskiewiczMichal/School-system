@@ -62,6 +62,9 @@ public class ApiController {
         linkTo(methodOn(AuthenticationController.class).authenticate(null))
             .withRel("authenticate"));
     model.add(linkTo(methodOn(AuthenticationController.class).register(null)).withRel("register"));
+    model.add(
+        linkTo(methodOn(AuthenticationController.class).authenticateWithToken(null))
+            .withRel("authenticateWithToken"));
   }
 
   private void addUsersLinks(RepresentationModel<?> model) {
