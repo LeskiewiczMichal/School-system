@@ -64,8 +64,8 @@ const loginWithToken =
         localStorage.setItem(JWTToken.localStorageName, `Bearer ${token}`);
         resolve();
       } catch (error: any) {
-        console.error(error);
-        reject(new Error(error.response.data.message));
+        localStorage.removeItem(JWTToken.localStorageName);
+        resolve();
       }
     });
   };

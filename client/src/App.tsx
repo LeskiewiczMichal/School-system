@@ -42,7 +42,11 @@ function App() {
   // Auto login
   useEffect(() => {
     const handleAutoLogin = async () => {
-      await dispatch(loginWithToken());
+      try {
+        await dispatch(loginWithToken());
+      } catch (error: any) {
+        console.log(error);
+      }
     };
 
     handleAutoLogin();

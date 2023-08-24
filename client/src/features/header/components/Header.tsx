@@ -1,16 +1,14 @@
-import { ReactComponent as Logo } from "../../../assets/logo/logo.svg";
 import { ReactComponent as LogoWhite } from "../../../assets/logo/logo-white.svg";
 import { ReactComponent as MenuIcon } from "../assets/menu.svg";
 import { ReactComponent as MenuIconWhite } from "../assets/menu-white.svg";
 import { ReactComponent as ArrowRightWhite } from "../../../assets/icons/arrow/arrow-right-white.svg";
 import FacultiesDropdown from "./FacultiesDropdown";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { IntegrationSliceActions } from "../../../store";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { Faculty } from "../../faculty";
 import { Sidebar } from "../../sidebar";
-import { SidebarLinkProps } from "../../sidebar/components/SidebarLink";
 import facultyNamesMap from "../../../type/FacultyNamesMap";
 import FacultyNavLinksCreator from "../../faculty/FacultyNavLinksCreator";
 import { WINDOW_WIDTH_CUSTOM_BREAKPOINT } from "../../../utils/Constants";
@@ -210,14 +208,14 @@ export default function Header() {
                 to="/my-account"
                 className="inline-block min-w-fit text-md font-bold text-white align-baseline hover:underline"
               >
-                My account
+                <ArrowRightWhite className={"w-8 h-8"} />
               </Link>
             ) : (
               <Link
                 to="/login"
                 className="inline-block min-w-fit text-md font-bold text-white align-baseline hover:underline"
               >
-                Sign In
+                <ArrowRightWhite className={"w-8 h-8"} />
               </Link>
             )}
           </>
