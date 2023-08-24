@@ -13,13 +13,20 @@ const fetchBasicLinks = (): AppThunk => async (dispatch) => {
 
       // Get and map response data
       const links: LinksState = {
-        login: {
-          href: response.data._links.authenticate.href,
-          templated: response.data._links.authenticate.templated === true,
-        },
-        register: {
-          href: response.data._links.register.href,
-          templated: response.data._links.register.templated === true,
+        authentication: {
+          login: {
+            href: response.data._links.authenticate.href,
+            templated: response.data._links.authenticate.templated === true,
+          },
+          register: {
+            href: response.data._links.register.href,
+            templated: response.data._links.register.templated === true,
+          },
+          authenticateWithToken: {
+            href: response.data._links.authenticateWithToken.href,
+            templated:
+              response.data._links.authenticateWithToken.templated === true,
+          },
         },
         users: {
           getUsers: {

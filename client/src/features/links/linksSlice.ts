@@ -2,8 +2,11 @@ import LinksState from "./LinksState";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState: LinksState = {
-  login: null,
-  register: null,
+  authentication: {
+    login: null,
+    register: null,
+    authenticateWithToken: null,
+  },
   users: {
     getUsers: null,
     getById: null,
@@ -36,8 +39,7 @@ const linksSlice = createSlice({
   initialState,
   reducers: {
     setLinks: (state, action: PayloadAction<LinksState>) => {
-      state.login = action.payload.login;
-      state.register = action.payload.register;
+      state.authentication = action.payload.authentication;
       state.users = action.payload.users;
       state.courses = action.payload.courses;
       state.degrees = action.payload.degrees;
