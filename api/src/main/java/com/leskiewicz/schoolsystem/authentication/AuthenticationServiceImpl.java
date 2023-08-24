@@ -21,6 +21,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -114,6 +115,20 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     // Save new user, teacher details and generate jwt token
     userService.addUser(user);
     teacherDetailsRepository.save(teacherDetails);
+    var jwtToken = jwtUtils.generateToken(user);
+
+    // Convert user to dto and create response
+    UserDto userDto = userMapper.convertToDto(user);
+    return new AuthenticationResponse(jwtToken, userDto);
+  }
+
+  @Override
+  public AuthenticationResponse authenticateWithToken(UserDetails userDetails) {
+    if (userDetails == null) {
+      throw new EntityNotFoundException("User not found");
+    }
+
+    User user = userService.getByEmail(userDetails.getUsername());
     var jwtToken = jwtUtils.generateToken(user);
 
     // Convert user to dto and create response

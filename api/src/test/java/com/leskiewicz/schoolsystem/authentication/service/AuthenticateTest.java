@@ -4,6 +4,7 @@ import com.leskiewicz.schoolsystem.authentication.AuthenticationServiceImpl;
 import com.leskiewicz.schoolsystem.authentication.Role;
 import com.leskiewicz.schoolsystem.authentication.dto.AuthenticationRequest;
 import com.leskiewicz.schoolsystem.authentication.dto.AuthenticationResponse;
+import com.leskiewicz.schoolsystem.authentication.dto.CustomUserDetails;
 import com.leskiewicz.schoolsystem.authentication.dto.RegisterRequest;
 import com.leskiewicz.schoolsystem.authentication.utils.JwtUtils;
 import com.leskiewicz.schoolsystem.authentication.utils.JwtUtilsImpl;
@@ -28,6 +29,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -113,5 +115,30 @@ public class AuthenticateTest {
 
     Assertions.assertThrows(BadCredentialsException.class, () ->
             authenticationService.authenticate(request));
+  }
+
+  @Test
+  public void authenticateWithTokenHappyPath() {
+    UserDetails userDetails = new CustomUserDetails(TestHelper.createUser(faculty, degree));
+
+    given(userService.getByEmail(newUser.getEmail())).willReturn(newUser);
+    given(jwtUtils.generateToken(any(User.class))).willReturn("jwtToken");
+
+    UserDto mockUserDto = UserDto.builder()
+            .id(8L)
+            .firstName(newUser.getFirstName())
+            .lastName(newUser.getLastName())
+            .faculty(newUser.getFaculty().getName())
+            .degree(newUser.getDegree().getFieldOfStudy())
+            .email(newUser.getEmail())
+            .facultyId(10L)
+            .build();
+
+    given(userMapper.convertToDto(any(User.class))).willReturn(mockUserDto);
+
+    AuthenticationResponse response = authenticationService.authenticateWithToken(userDetails);
+
+    Assertions.assertEquals("jwtToken", response.getToken());
+    Assertions.assertEquals(mockUserDto, response.getUser());
   }
 }

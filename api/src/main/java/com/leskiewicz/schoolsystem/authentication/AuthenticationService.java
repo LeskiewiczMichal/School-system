@@ -4,6 +4,7 @@ import com.leskiewicz.schoolsystem.authentication.dto.AuthenticationRequest;
 import com.leskiewicz.schoolsystem.authentication.dto.AuthenticationResponse;
 import com.leskiewicz.schoolsystem.authentication.dto.RegisterRequest;
 import com.leskiewicz.schoolsystem.authentication.dto.RegisterTeacherRequest;
+import org.springframework.security.core.userdetails.UserDetails;
 
 public interface AuthenticationService {
 
@@ -13,5 +14,5 @@ public interface AuthenticationService {
 
   AuthenticationResponse registerTeacherAccount(RegisterTeacherRequest request);
 
-  AuthenticationResponse authenticateWithToken(String token);
+  AuthenticationResponse authenticateWithToken(UserDetails userDetails);
 }

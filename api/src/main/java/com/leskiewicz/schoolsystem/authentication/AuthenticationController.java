@@ -2,10 +2,7 @@ package com.leskiewicz.schoolsystem.authentication;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-import com.leskiewicz.schoolsystem.authentication.dto.AuthenticationRequest;
-import com.leskiewicz.schoolsystem.authentication.dto.AuthenticationResponse;
-import com.leskiewicz.schoolsystem.authentication.dto.RegisterRequest;
-import com.leskiewicz.schoolsystem.authentication.dto.RegisterTeacherRequest;
+import com.leskiewicz.schoolsystem.authentication.dto.*;
 import com.leskiewicz.schoolsystem.error.customexception.EntityAlreadyExistsException;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserDtoAssembler;
@@ -15,6 +12,8 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -81,8 +80,10 @@ public class AuthenticationController {
   }
 
   @PostMapping("/authenticate/token")
-  public ResponseEntity<AuthenticationResponse> authenticateWithToken(@RequestBody String token) {
-    AuthenticationResponse response = authenticationService.authenticateWithToken(token);
+  public ResponseEntity<AuthenticationResponse> authenticateWithToken(
+          @AuthenticationPrincipal UserDetails userDetails
+  ) {
+    AuthenticationResponse response = authenticationService.authenticateWithToken(userDetails);
     response.setUser(userDtoAssembler.toModel(response.getUser()));
     authenticationAddLinks(null, response);
 
