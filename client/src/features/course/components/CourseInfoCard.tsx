@@ -32,9 +32,11 @@ export default function CourseInfoCard(props: CourseInfoCardProps) {
       return;
     }
 
+    const apiLink = link.href.replace("{userId}", userId.toString());
+
     try {
       await axios.post(
-        "http://localhost:8080/api/courses/1/students/22",
+        apiLink,
         {},
         {
           headers: {
@@ -119,7 +121,7 @@ export default function CourseInfoCard(props: CourseInfoCardProps) {
             onClick={() =>
               addStudentToCourse({
                 userId: user.id,
-                link: course.students,
+                link: course.students.add,
               })
             }
             className={`flex items-center justify-between gap-3 bg-brandMain text-center text-white font-bold text-md py-3 px-4 hover:bg-primaryDarkened w-full lg:w-3/5`}

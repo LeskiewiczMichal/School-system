@@ -24,8 +24,14 @@ const mapFromServerData = (data: any): Course => {
       },
     },
     students: {
-      href: data._links.students.href,
-      templated: data._links.students.templated === true,
+      getStudents: {
+        href: data._links.students[0].href,
+        templated: data._links.students[0].templated === true,
+      },
+      add: {
+        href: data._links.students[1].href,
+        templated: data._links.students[1].templated === true,
+      },
     },
     files: {
       href: data._links.files.href,

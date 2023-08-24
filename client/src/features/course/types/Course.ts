@@ -17,7 +17,10 @@ export default interface Course {
     name: string;
     link: APILink;
   };
-  students: APILink;
+  students: {
+    getStudents: APILink;
+    add: APILink;
+  };
   files: APILink;
   description: APILink;
   isUserEnrolled: APILink;
