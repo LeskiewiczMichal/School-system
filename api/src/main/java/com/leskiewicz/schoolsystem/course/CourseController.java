@@ -197,10 +197,10 @@ public class CourseController {
    * @throws AccessDeniedException if the user is not authorized to add a student to the course,
    *     returns status 403.
    */
-  @PostMapping("/{id}/students")
-  @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER') || @securityService.isStudent(#userId)")
+  @PostMapping("/{id}/students/{userId}")
+  @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER') || @securityService.isSelf(#userId)")
   public ResponseEntity<MessageModel> addStudentToCourse(
-      @PathVariable Long id, @RequestBody Long userId) {
+      @PathVariable Long id, @PathVariable Long userId) {
     courseService.addStudentToCourse(userId, id);
 
     MessageModel message = new MessageModel("Student added to course successfully");

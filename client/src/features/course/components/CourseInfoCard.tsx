@@ -1,10 +1,13 @@
 import Course from "../types/Course";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import DegreePageContentInterface from "../../../pages/degree/DegreePageContentInterface";
 import EnumMapper from "../../../utils/EnumMapper";
 import { useAppSelector } from "../../../hooks";
 import LinkButtonPrimary from "../../../common_components/button/LinkButtonPrimary";
 import { AppPaths } from "../../../App";
+import APILink from "../../../type/APILink";
+import axios from "axios";
+import JWTUtils from "../../../utils/JWTUtils";
 
 export interface CourseInfoCardProps {
   course: Course;
@@ -12,8 +15,39 @@ export interface CourseInfoCardProps {
 }
 
 export default function CourseInfoCard(props: CourseInfoCardProps) {
+  const navigate = useNavigate();
   const { course, isUserEnrolled } = props;
   const user = useAppSelector((state) => state.auth.data);
+
+  interface AddStudentToCourseArgs {
+    userId: bigint;
+    link: APILink;
+  }
+
+  const addStudentToCourse = async (args: AddStudentToCourseArgs) => {
+    const { userId, link } = args;
+
+    const token = JWTUtils.getToken();
+    if (!token) {
+      return;
+    }
+
+    try {
+      await axios.post(
+        "http://localhost:8080/api/courses/1/students/22",
+        {},
+        {
+          headers: {
+            Authorization: token,
+          },
+        },
+      );
+    } catch (e) {
+      console.log(e);
+    }
+
+    navigate(`/courses/${course.id}/main-page`);
+  };
 
   return (
     <section
@@ -81,11 +115,18 @@ export default function CourseInfoCard(props: CourseInfoCardProps) {
           />
         )}
         {!isUserEnrolled && user && (
-          <LinkButtonPrimary
-            link={`/courses/${course.id}/enroll`}
-            text={"Enroll in the course"}
-            fullWidthOnSmallerScreen
-          />
+          <button
+            onClick={() =>
+              addStudentToCourse({
+                userId: user.id,
+                link: course.students,
+              })
+            }
+            className={`flex items-center justify-between gap-3 bg-brandMain text-center text-white font-bold text-md py-3 px-4 hover:bg-primaryDarkened w-full lg:w-3/5`}
+          >
+            Enroll in the course
+            {/*<ArrowRight className="w-6 h-6" />*/}
+          </button>
         )}
       </div>
     </section>

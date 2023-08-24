@@ -30,7 +30,10 @@ public class CourseDtoAssembler extends RepresentationModelAssemblerSupport<Cour
             .withRel("teacher");
     Link studentsLink =
         linkTo(methodOn(CourseController.class).getCourseStudents(course.getId(), null))
-            .withRel("students");
+            .withRel("students").withName("get");
+    Link addOrRemoveStudentLink =
+        linkTo(methodOn(CourseController.class).addStudentToCourse(course.getId(), null))
+            .withRel("students").withName("add").withType("POST");
     Link filesLink =
         linkTo(methodOn(CourseController.class).getCourseFiles(course.getId(), null))
             .withRel("files");
@@ -44,9 +47,11 @@ public class CourseDtoAssembler extends RepresentationModelAssemblerSupport<Cour
     course.add(facultyLink);
     course.add(teacherLink);
     course.add(studentsLink);
+    course.add(addOrRemoveStudentLink);
     course.add(filesLink);
     course.add(descriptionLink);
     course.add(isUserEnrolled);
+
 
     return course;
   }
