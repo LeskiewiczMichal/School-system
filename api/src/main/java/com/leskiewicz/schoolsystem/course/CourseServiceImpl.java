@@ -227,7 +227,7 @@ public class CourseServiceImpl implements CourseService {
 
   @Override
   public boolean isUserEnrolled(Long courseId, Long userId) {
-    return courseRepository.existsCourseStudentRelation(courseId, userId);
+    return courseRepository.existsCourseStudentRelation(courseId, userId) > 0;
   }
 
   @Override

@@ -28,7 +28,7 @@ public class CourseServiceTests {
 
     @Test
     public void isUserEnrolledTest() {
-        given(courseRepository.existsCourseStudentRelation(1L, 1L)).willReturn(true);
+        given(courseRepository.existsCourseStudentRelation(1L, 1L)).willReturn(1L);
 
         boolean res = courseService.isUserEnrolled(1L, 1L);
         Assertions.assertEquals(true, res);

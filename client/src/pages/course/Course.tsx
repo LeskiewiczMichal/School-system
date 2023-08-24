@@ -47,12 +47,17 @@ export default function Course() {
     };
 
     const handleCheckIfUserIsEnrolled = async () => {
-      if (!course) {
+      const jwtToken = JWTUtils.getToken();
+
+      if (!course || !jwtToken) {
         return;
       }
 
-      axios.defaults.headers.common.Authorization = JWTUtils.getToken();
-      const response = await axios.get(course.isUserEnrolled.href);
+      const response = await axios.get(course.isUserEnrolled.href, {
+        headers: {
+          Authorization: jwtToken,
+        },
+      });
       setIsUserEnrolled(response.data);
     };
 

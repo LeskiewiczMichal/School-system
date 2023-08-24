@@ -29,9 +29,9 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
       @Param("facultyId") Long facultyId);
 
   @Query(
-          value = "SELECT COUNT(c) > 0 FROM CourseStudent cs WHERE cs.course_id = :courseId AND cs.student_id = :userId", nativeQuery = true
+          value = "SELECT COUNT(*) > 0 FROM course_student cs WHERE cs.course_id = :courseId AND cs.student_id = :userId", nativeQuery = true
   )
-  boolean existsCourseStudentRelation(@Param("courseId") Long courseId, @Param("userId") Long userId);
+  Long existsCourseStudentRelation(@Param("courseId") Long courseId, @Param("userId") Long userId);
 
   @Query(
       value =
