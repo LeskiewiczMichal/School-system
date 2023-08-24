@@ -2,6 +2,8 @@ import { ReactComponent as LogoWhite } from "../../../assets/logo/logo-white.svg
 import { ReactComponent as MenuIcon } from "../assets/menu.svg";
 import { ReactComponent as MenuIconWhite } from "../assets/menu-white.svg";
 import { ReactComponent as ArrowRightWhite } from "../../../assets/icons/arrow/arrow-right-white.svg";
+import { ReactComponent as UserWhite } from "../../../assets/icons/user/user-white.svg";
+import { ReactComponent as UserBrandMain } from "../../../assets/icons/user/user-brandMain.svg";
 import FacultiesDropdown from "./FacultiesDropdown";
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -119,22 +121,15 @@ export default function Header() {
                     {link.title}
                   </Link>
                 ))}
+
                 <FacultiesDropdown facultyHeader brandMain />
-                {isAuthenticated ? (
-                  <Link
-                    to="/my-account"
-                    className="inline-block min-w-fit text-md font-bold text-brandMain align-baseline hover:text-brandMainActive"
-                  >
-                    My account
-                  </Link>
-                ) : (
-                  <Link
-                    to="/login"
-                    className="inline-block min-w-fit text-md font-bold text-brandMain align-baseline hover:text-brandMainActive"
-                  >
-                    Sign In
-                  </Link>
-                )}
+
+                <Link
+                  to={isAuthenticated ? "/my-account" : "/login"}
+                  className="inline-block min-w-fit text-md font-bold text-brandMain align-baseline hover:text-brandMainActive"
+                >
+                  <UserBrandMain className={"h-8 w-8"} />
+                </Link>
               </div>
             )}
 
@@ -167,6 +162,7 @@ export default function Header() {
         <Link to="/" className="h-28 w-28">
           <LogoWhite className="h-full w-full" />
         </Link>
+
         <h1 className="text-xl md:text-2xl w-full font-bold text-white italic">
           Aquila University
         </h1>
@@ -203,21 +199,12 @@ export default function Header() {
             )}
 
             {/* Login */}
-            {isAuthenticated ? (
-              <Link
-                to="/my-account"
-                className="inline-block min-w-fit text-md font-bold text-white align-baseline hover:underline"
-              >
-                <ArrowRightWhite className={"w-8 h-8"} />
-              </Link>
-            ) : (
-              <Link
-                to="/login"
-                className="inline-block min-w-fit text-md font-bold text-white align-baseline hover:underline"
-              >
-                <ArrowRightWhite className={"w-8 h-8"} />
-              </Link>
-            )}
+            <Link
+              to={isAuthenticated ? "/my-account" : "/login"}
+              className="inline-block min-w-fit text-md font-bold text-white align-baseline hover:underline"
+            >
+              <UserWhite className={"w-8 h-8"} />
+            </Link>
           </>
         )}
 
