@@ -198,7 +198,7 @@ public class CourseController {
    *     returns status 403.
    */
   @PostMapping("/{id}/students")
-  @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
+  @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER') || @securityService.isStudent(#userId)")
   public ResponseEntity<MessageModel> addStudentToCourse(
       @PathVariable Long id, @RequestBody Long userId) {
     courseService.addStudentToCourse(userId, id);
