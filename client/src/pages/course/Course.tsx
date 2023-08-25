@@ -10,6 +10,7 @@ import axios from "axios";
 import JWTUtils from "../../utils/JWTUtils";
 import * as marked from "marked";
 import MyHeading from "../../common_components/MyHeading";
+import LoadingSpinnerPage from "../LoadingSpinnerPage";
 
 export default function Course() {
   const { courseId } = useParams<{ courseId: string }>();
@@ -66,7 +67,7 @@ export default function Course() {
   }, [course]);
 
   if (!course) {
-    return <span>Loading</span>;
+    return <LoadingSpinnerPage />;
   }
 
   return (

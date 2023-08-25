@@ -4,6 +4,7 @@ import CourseRequest from "./services/CourseRequest";
 import CourseScope from "./types/CourseScope";
 import CourseInfoCard from "./components/CourseInfoCard";
 import CourseSearchForm from "./components/CourseSearchForm";
+import checkIfUserIsEnrolled from "./services/checkIfUserIsEnrolled";
 
 export {
   CourseMapper,
@@ -11,5 +12,6 @@ export {
   CourseInfoCard,
   CourseScope,
   CourseSearchForm,
+  checkIfUserIsEnrolled,
 };
 export type { Course };
