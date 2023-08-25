@@ -127,7 +127,6 @@ export default function CourseInfoCard(props: CourseInfoCardProps) {
             className={`flex items-center justify-between gap-3 bg-brandMain text-center text-white font-bold text-md py-3 px-4 hover:bg-primaryDarkened w-full lg:w-3/5`}
           >
             Enroll in the course
-            {/*<ArrowRight className="w-6 h-6" />*/}
           </button>
         )}
       </div>

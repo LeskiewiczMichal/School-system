@@ -13,6 +13,7 @@ import UserRequest, {
 } from "../features/user/services/UserRequest";
 import LinkButtonBorderOnly from "../common_components/button/LinkButtonBorderOnly";
 import { AppPaths } from "../App";
+import HaveToBeLoggedInInfo from "../common_components/HaveToBeLoggedInInfo";
 
 export default function Users() {
   const auth = useAppSelector((state) => state.auth.data);
@@ -89,20 +90,13 @@ export default function Users() {
 
   if (!auth) {
     return (
-      <div
-        className={
-          "h-screen w-screen flex flex-col justify-center items-center"
-        }
-      >
-        <h1 className={"page-title_h1"}>
-          You have to be authenticated to see this page
-        </h1>
-        <LinkButtonBorderOnly
-          text={"Go to login"}
-          link={AppPaths.LOGIN}
-          color={"brandMain"}
-        />
-      </div>
+      <HaveToBeLoggedInInfo
+        button={{
+          text: "Go to login",
+          link: AppPaths.LOGIN,
+          color: "brandMain",
+        }}
+      />
     );
   }
 
