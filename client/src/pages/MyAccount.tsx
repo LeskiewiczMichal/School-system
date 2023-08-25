@@ -85,6 +85,7 @@ export default function MyAccount() {
                 }
                 onClick={() => {
                   dispatch(setAuthUser({ data: null, _links: null }));
+                  JWTUtils.removeToken();
                   navigate(AppPaths.LOGIN);
                 }}
               >
