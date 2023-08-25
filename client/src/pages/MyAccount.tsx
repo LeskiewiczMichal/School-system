@@ -80,9 +80,11 @@ export default function MyAccount() {
       >
         {/* Basic user info */}
         <section
-          className={"flex justify-center px-4 lg:px-16 py-8 mb-16 w-full"}
+          className={
+            "flex flex-col justify-center px-4 lg:px-16 py-8 mb-16 w-full lg:flex-row"
+          }
         >
-          <nav className={"w-1/3"}>
+          <nav className={"w-full mb-16 lg:mb-0 lg:w-1/3"}>
             <ul>
               <li
                 className={
