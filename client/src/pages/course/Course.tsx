@@ -73,10 +73,39 @@ export default function Course() {
     <div>
       <div className={"w-full flex flex-col items-center"}>
         <CourseInfoCard course={course} isUserEnrolled={isUserEnrolled} />
+
+        <div className={"px-6 lg:px-32 my-10 border-t border-brandMain"}>
+          <h4 className="my-header mb-4 mt-12 text-brandMainNearlyBlack">
+            Enrollment
+          </h4>
+
+          <p className={"text-grayscaleDarkText flex flex-col gap-3 sm:mr-8"}>
+            <span>
+              <b>This is a collaborative program:</b> University Aquila welcomes
+              participation from both its degree students and Open University
+              students in a shared teaching experience. However, please note
+              that only a limited number of Open University students can be
+              accommodated in this course.
+            </span>
+
+            <span>
+              Students interested in joining the course can easily enroll by
+              clicking on the "Enrollment" button located at the top of the
+              course webpage during the designated enrollment period. The
+              enrollment process includes online payment of the applicable study
+              fees. Keep in mind that once enrolled, the commitment is binding.
+            </span>
+          </p>
+        </div>
+
         <div className={"px-6 lg:px-32 my-10"}>
-          <MyHeading heading={"About course"} />
+          <h4 className="my-header mb-4 text-brandMainNearlyBlack">
+            About course
+          </h4>
+
           {description && (
             <p
+              className={"text-grayscaleDarkText flex flex-col gap-3 sm:mr-8"}
               dangerouslySetInnerHTML={{ __html: marked.marked(description) }}
             ></p>
           )}

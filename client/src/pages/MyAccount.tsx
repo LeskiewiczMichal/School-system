@@ -1,9 +1,6 @@
 import { Sidebar } from "../features/sidebar";
 import { useAppDispatch, useAppSelector } from "../hooks";
-import EnumMapper from "../utils/EnumMapper";
 import { BasicInformation } from "../features/user";
-import ColoredBackgroundWithPhotoOnRight from "../common_components/Card/ColoredBackgroundWithPhotoOnRight";
-import CommunityPicture from "./assets/community.webp";
 import LinkButtonBorderOnly from "../common_components/button/LinkButtonBorderOnly";
 import { useEffect, useState } from "react";
 import { FetchCoursesResponse } from "../features/course/services/CourseRequest";
@@ -16,7 +13,6 @@ import { setAuthUser } from "../features/authentication/reducer/authSlice";
 import { useNavigate } from "react-router-dom";
 import JWTUtils from "../utils/JWTUtils";
 import { ReactComponent as ArrowRight } from "../assets/icons/arrow/arrow-right-primary.svg";
-import LinkButtonPrimary from "../common_components/button/LinkButtonPrimary";
 
 export default function MyAccount() {
   const dispatch = useAppDispatch();
@@ -113,9 +109,7 @@ export default function MyAccount() {
           }
         >
           <div className={"flex flex-col justify-center items-center w-full"}>
-            <h4 className={"my-header text-brandMain mt-10 mb-6"}>
-              Your courses:
-            </h4>
+            <h4 className={"my-header mt-10 mb-6"}>Your courses:</h4>
 
             {/* Courses list */}
             <ul
@@ -127,7 +121,7 @@ export default function MyAccount() {
                 <li key={course.id.toString()}>
                   <LinkButtonBorderOnly
                     text={course.title}
-                    link={`/courses/${course.id}`}
+                    link={`/courses/${course.id}/main-page`}
                     color={"black"}
                     width={"w-full"}
                   />
