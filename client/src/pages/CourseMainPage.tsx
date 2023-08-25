@@ -68,6 +68,10 @@ export default function CourseMainPage() {
       setDescription(resposne.data);
     };
 
+    const handleFetchCourseFiles = async (fetchFilesLink: APILink) => {
+      const response = await axios.get(fetchFilesLink.href);
+    };
+
     handleCheckIfUserIsEnrolled();
     handleFetchCourseDescription(course.description);
   }, [course]);
@@ -172,6 +176,7 @@ export default function CourseMainPage() {
             </div>
           </div>
 
+          {/* Course description */}
           {description && (
             <div
               className={
@@ -188,6 +193,9 @@ export default function CourseMainPage() {
             </div>
           )}
         </section>
+
+        {/* Course files */}
+        <section></section>
       </main>
     </div>
   );
