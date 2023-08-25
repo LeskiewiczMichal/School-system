@@ -105,7 +105,7 @@ export default function CourseMainPage() {
         {/* Header */}
         <h1
           className={
-            "page-title_h1 w-full px-4 sm:px-0 flex justify-center text-brandMain items-center py-10 self-center"
+            "page-title_h1 w-full px-4 sm:px-0 flex justify-center text-brandMain items-center mt-8 self-center"
           }
         >
           {course.title}
@@ -114,7 +114,7 @@ export default function CourseMainPage() {
         <section className={"w-full flex flex-col lg:flex-row"}>
           <div
             className={
-              "px-8 py-8 border-t-2 border-r-2 mb-8 border-brandMain text-brandMain grid grid-cols-2 flex-grow-0 gap-3 lg:flex lg:flex-col lg:w-1/4 lg:mb-0"
+              "px-8 py-8 border-2 mb-8 border-brandMain text-brandMain grid grid-cols-2 flex-grow-0 gap-3 lg:flex lg:flex-col lg:w-1/4 lg:mb-0 lg:border-l-0"
             }
           >
             {/* Teacher */}
@@ -175,7 +175,7 @@ export default function CourseMainPage() {
           {description && (
             <div
               className={
-                "flex flex-col lg:px-16 lg:w-full border-t-2 py-6 border-brandMain"
+                "flex flex-col lg:px-16 justify-center lg:w-full py-6 border-brandMain lg:border-t-2 lg:border-b-2"
               }
             >
               <h4 className={"text-brandMain font-bold text-2xl mb-2"}>
