@@ -10,6 +10,8 @@ import { FetchCoursesResponse } from "../features/course/services/CourseRequest"
 import { Course, CourseRequest } from "../features/course";
 import HaveToBeLoggedInInfo from "../common_components/HaveToBeLoggedInInfo";
 import { AppPaths } from "../App";
+import PaginationButtons from "../common_components/PaginationButtons";
+import changePage from "../utils/changePage";
 
 export default function MyAccount() {
   const user = useAppSelector((state) => state.auth.data);
@@ -71,18 +73,22 @@ export default function MyAccount() {
       >
         {/* Basic user info */}
         <section
-          className={"flex flex-col px-4 lg:px-32 py-8 mb-8 w-full lg:gap-4"}
+          className={"flex flex-col px-4 lg:px-32 py-8 mb-16 w-full lg:gap-4"}
         >
           <BasicInformation user={user} />
         </section>
 
         {/* Courses  */}
-        <section className={"px-6 lg:px-16 border-2 border-brandMain"}>
-          <h4 className={"my-header text-brandMain mt-10 mb-6"}>
-            FACULTIES LIST:
-          </h4>
+        <section
+          className={
+            "px-6 w-full border-2 border-brandMain flex flex-col lg:flex-row lg:px-16"
+          }
+        >
+          <div className={"flex flex-col justify-center items-center w-full"}>
+            <h4 className={"my-header text-brandMain mt-10 mb-6"}>
+              Your courses:
+            </h4>
 
-          <div className={"flex flex-col lg:flex-row"}>
             <ul
               className={
                 "flex flex-col gap-8 w-full lg:w-1/2 justify-center mb-6"
@@ -99,6 +105,15 @@ export default function MyAccount() {
                 </li>
               ))}
             </ul>
+
+            {/* Pagination */}
+            <PaginationButtons
+              paginationInfo={coursePaginationInfo}
+              page={coursePage}
+              changePage={(direction: "next" | "previous") =>
+                changePage(direction, setCoursePage)
+              }
+            />
           </div>
         </section>
       </main>
