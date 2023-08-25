@@ -14,6 +14,9 @@ import PaginationButtons from "../common_components/PaginationButtons";
 import changePage from "../utils/changePage";
 import { setAuthUser } from "../features/authentication/reducer/authSlice";
 import { useNavigate } from "react-router-dom";
+import JWTUtils from "../utils/JWTUtils";
+import { ReactComponent as ArrowRight } from "../assets/icons/arrow/arrow-right-primary.svg";
+import LinkButtonPrimary from "../common_components/button/LinkButtonPrimary";
 
 export default function MyAccount() {
   const dispatch = useAppDispatch();
@@ -76,12 +79,14 @@ export default function MyAccount() {
         }
       >
         {/* Basic user info */}
-        <section className={"flex px-4 lg:px-16 py-8 mb-16 w-full"}>
-          <nav>
+        <section
+          className={"flex justify-center px-4 lg:px-16 py-8 mb-16 w-full"}
+        >
+          <nav className={"w-1/3"}>
             <ul>
               <li
                 className={
-                  "w-full flex items-center justify-between border-4 gap-3 px-4 py-2 border-brandMain text-brandMain hover:border-brandMainActive hover:text-brandMainActive hover:cursor-pointer"
+                  "w-full font-bold flex items-center justify-between border-4 gap-3 px-4 py-2 border-brandMain text-brandMain hover:border-brandMainActive hover:text-brandMainActive hover:cursor-pointer"
                 }
                 onClick={() => {
                   dispatch(setAuthUser({ data: null, _links: null }));
@@ -89,7 +94,7 @@ export default function MyAccount() {
                   navigate(AppPaths.LOGIN);
                 }}
               >
-                Log out
+                Log out <ArrowRight className="w-6 h-6" />
               </li>
             </ul>
           </nav>
@@ -110,7 +115,7 @@ export default function MyAccount() {
 
             <ul
               className={
-                "flex flex-col gap-8 w-full lg:w-1/2 justify-center mb-6"
+                "flex flex-col gap-8 w-full px-2 sm:px-6 lg:px-32 justify-center  md:grid md:grid-cols-2 mb-6"
               }
             >
               {courses.map((course) => (
@@ -118,12 +123,28 @@ export default function MyAccount() {
                   <LinkButtonBorderOnly
                     text={course.title}
                     link={`/courses/${course.id}`}
-                    color={"brandMain"}
+                    color={"black"}
                     width={"w-full"}
                   />
                 </li>
               ))}
             </ul>
+
+            {/*<ul*/}
+            {/*  className={*/}
+            {/*    "flex flex-col gap-8 w-full lg:w-3/4 justify-center mb-6"*/}
+            {/*  }*/}
+            {/*>*/}
+            {/*  {courses.map((course) => (*/}
+            {/*    <li key={course.id.toString()}>*/}
+            {/*      <LinkButtonPrimary*/}
+            {/*        text={course.title}*/}
+            {/*        link={`/courses/${course.id}`}*/}
+            {/*        fullWidthOnSmallerScreen*/}
+            {/*      />*/}
+            {/*    </li>*/}
+            {/*  ))}*/}
+            {/*</ul>*/}
 
             {/* Pagination */}
             <PaginationButtons

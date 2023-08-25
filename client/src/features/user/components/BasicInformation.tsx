@@ -23,7 +23,7 @@ export default function BasicInformation(props: BasicInformationProps) {
       //   "bg-brandMain flex flex-col h-fit py-4 px-4 w-full flex-none gap-4 lg:w-2/3"
       // }
       className={`
-        w-full flex flex-col items-center justify-center lg:flex-row h-full`}
+         w-full flex flex-col items-center justify-center lg:flex-row h-full`}
     >
       <img
         src={
