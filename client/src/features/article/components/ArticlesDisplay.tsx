@@ -1,13 +1,9 @@
 import Card from "../../../common_components/Card/Card";
-import NullableString from "../../../type/NullableString";
 import ArticleCategory from "../Types/ArticleCategory";
 import { useEffect, useState } from "react";
-import RequestService from "../../../utils/RequestService";
 import Article from "../Types/Article";
 import { useAppSelector } from "../../../hooks";
-import { SortDirection } from "../../../type/PaginationParams";
 import APILink from "../../../type/APILink";
-import ArticleMapper from "../mapper/ArticleMapper";
 import ArticleRequest, {
   GetArticlesResponse,
 } from "../services/ArticleRequest";
