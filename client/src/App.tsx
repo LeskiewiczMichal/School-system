@@ -114,6 +114,10 @@ function App() {
             path={`${AppPaths.COURSES}/:courseId`}
             element={<Pages.Course />}
           />
+          <Route
+            path={`${AppPaths.COURSES}/:courseId/main-page`}
+            element={<Pages.CourseMainPage />}
+          />
 
           {/* Users */}
           <Route path={AppPaths.USERS} element={<Pages.Users />} />

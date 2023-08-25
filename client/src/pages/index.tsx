@@ -17,6 +17,7 @@ import AcademicStaff from "./AcademicStaff";
 import Teaching from "./Teaching";
 import User from "./User";
 import Users from "./Users";
+import CourseMainPage from "./CourseMainPage";
 
 export {
   Home,
@@ -38,4 +39,5 @@ export {
   Teaching,
   User,
   Users,
+  CourseMainPage,
 };
