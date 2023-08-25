@@ -84,8 +84,10 @@ export default function MyAccount() {
             "flex flex-col justify-center px-4 lg:px-16 py-8 mb-16 w-full lg:flex-row"
           }
         >
+          {/* Navigation */}
           <nav className={"w-full mb-16 lg:mb-0 lg:w-1/3"}>
             <ul>
+              {/* Logout */}
               <li
                 className={
                   "w-full font-bold flex items-center justify-between border-4 gap-3 px-4 py-2 border-brandMain text-brandMain hover:border-brandMainActive hover:text-brandMainActive hover:cursor-pointer"
@@ -115,6 +117,7 @@ export default function MyAccount() {
               Your courses:
             </h4>
 
+            {/* Courses list */}
             <ul
               className={
                 "flex flex-col gap-8 w-full px-2 sm:px-6 lg:px-32 justify-center  md:grid md:grid-cols-2 mb-6"
@@ -131,22 +134,6 @@ export default function MyAccount() {
                 </li>
               ))}
             </ul>
-
-            {/*<ul*/}
-            {/*  className={*/}
-            {/*    "flex flex-col gap-8 w-full lg:w-3/4 justify-center mb-6"*/}
-            {/*  }*/}
-            {/*>*/}
-            {/*  {courses.map((course) => (*/}
-            {/*    <li key={course.id.toString()}>*/}
-            {/*      <LinkButtonPrimary*/}
-            {/*        text={course.title}*/}
-            {/*        link={`/courses/${course.id}`}*/}
-            {/*        fullWidthOnSmallerScreen*/}
-            {/*      />*/}
-            {/*    </li>*/}
-            {/*  ))}*/}
-            {/*</ul>*/}
 
             {/* Pagination */}
             <PaginationButtons
