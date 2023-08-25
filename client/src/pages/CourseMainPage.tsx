@@ -14,7 +14,7 @@ import APILink from "../type/APILink";
 import * as marked from "marked";
 import axios from "axios";
 import EnumMapper from "../utils/EnumMapper";
-import { ReactComponent as ArrowRight } from "../assets/icons/arrow/arrow-right-white.svg";
+import { ReactComponent as ArrowRight } from "../assets/icons/arrow/arrow-up-right-brandMain.svg";
 
 export default function CourseMainPage() {
   const { courseId } = useParams<{ courseId: string }>();
@@ -114,15 +114,15 @@ export default function CourseMainPage() {
         <section className={"w-full flex flex-col lg:flex-row"}>
           <div
             className={
-              "px-8 py-8 border-2 mb-8 border-brandMain text-brandMain grid grid-cols-2 flex-grow-0 gap-3 h-fit lg:flex lg:flex-col lg:w-1/4 lg:mb-0"
+              "px-8 py-8 border-t-2 border-r-2 mb-8 border-brandMain text-brandMain grid grid-cols-2 flex-grow-0 gap-3 lg:flex lg:flex-col lg:w-1/4 lg:mb-0"
             }
           >
             {/* Teacher */}
             <div className={"flex flex-col"}>
               <span>Teacher:</span>
               <Link
-                to={`/users/`}
-                className={"font-bold flex gap-3 items-center hover:underline"}
+                to={`/users/${course.teacher.link.href.split("/").pop()}`}
+                className={"font-bold flex gap-2 items-center hover:underline"}
               >
                 {course.teacher.name} <ArrowRight className={"w-6 h-6"} />
               </Link>
@@ -132,8 +132,8 @@ export default function CourseMainPage() {
             <div className={"flex flex-col"}>
               <span>Teacher:</span>
               <Link
-                to={`/faculties/`}
-                className={"font-bold flex gap-3 items-center hover:underline"}
+                to={`/faculties/${course.faculty.link.href.split("/").pop()}`}
+                className={"font-bold flex gap-2 items-center hover:underline"}
               >
                 {course.faculty.name} <ArrowRight className={"w-6 h-6"} />
               </Link>
@@ -173,10 +173,19 @@ export default function CourseMainPage() {
           </div>
 
           {description && (
-            <p
-              className={"text-grayscaleDarkText pl-8 lg:w-2/3"}
-              dangerouslySetInnerHTML={{ __html: marked.marked(description) }}
-            ></p>
+            <div
+              className={
+                "flex flex-col lg:px-16 lg:w-full border-t-2 py-6 border-brandMain"
+              }
+            >
+              <h4 className={"text-brandMain font-bold text-2xl mb-2"}>
+                Course description:
+              </h4>
+              <p
+                className={"text-grayscaleDarkText"}
+                dangerouslySetInnerHTML={{ __html: marked.marked(description) }}
+              ></p>
+            </div>
           )}
         </section>
       </main>
