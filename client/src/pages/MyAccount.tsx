@@ -1,5 +1,5 @@
 import { Sidebar } from "../features/sidebar";
-import { useAppSelector } from "../hooks";
+import { useAppDispatch, useAppSelector } from "../hooks";
 import EnumMapper from "../utils/EnumMapper";
 import { BasicInformation } from "../features/user";
 import ColoredBackgroundWithPhotoOnRight from "../common_components/Card/ColoredBackgroundWithPhotoOnRight";
@@ -12,8 +12,12 @@ import HaveToBeLoggedInInfo from "../common_components/HaveToBeLoggedInInfo";
 import { AppPaths } from "../App";
 import PaginationButtons from "../common_components/PaginationButtons";
 import changePage from "../utils/changePage";
+import { setAuthUser } from "../features/authentication/reducer/authSlice";
+import { useNavigate } from "react-router-dom";
 
 export default function MyAccount() {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const user = useAppSelector((state) => state.auth.data);
   const links = useAppSelector((state) => state.links);
   const mobileNavBar = useAppSelector(
@@ -72,9 +76,23 @@ export default function MyAccount() {
         }
       >
         {/* Basic user info */}
-        <section
-          className={"flex flex-col px-4 lg:px-32 py-8 mb-16 w-full lg:gap-4"}
-        >
+        <section className={"flex px-4 lg:px-16 py-8 mb-16 w-full"}>
+          <nav>
+            <ul>
+              <li
+                className={
+                  "w-full flex items-center justify-between border-4 gap-3 px-4 py-2 border-brandMain text-brandMain hover:border-brandMainActive hover:text-brandMainActive hover:cursor-pointer"
+                }
+                onClick={() => {
+                  dispatch(setAuthUser({ data: null, _links: null }));
+                  navigate(AppPaths.LOGIN);
+                }}
+              >
+                Log out
+              </li>
+            </ul>
+          </nav>
+
           <BasicInformation user={user} />
         </section>
 
