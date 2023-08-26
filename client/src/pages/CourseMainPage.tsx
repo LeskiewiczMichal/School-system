@@ -19,6 +19,8 @@ import { File, FileRequest } from "../features/files";
 import PaginationInfo from "../type/PaginationInfo";
 import { FetchFilesResponse } from "../features/files/services/FileRequest";
 import MyHeading from "../common_components/MyHeading";
+import { UserData, UserListCard } from "../features/user";
+import UserRequest from "../features/user/services/UserRequest";
 
 export default function CourseMainPage() {
   const { courseId } = useParams<{ courseId: string }>();
@@ -27,9 +29,21 @@ export default function CourseMainPage() {
   );
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
+  // Current user
   const user = useAppSelector((state) => state.auth.data);
   const links = useAppSelector((state) => state.links);
   const [isUserEnrolled, setIsUserEnrolled] = useState<boolean>(false);
+
+  // Students
+  const [students, setStudents] = useState<UserData[]>([]);
+  const [studentsPage, setStudentsPage] = useState<number>(0);
+  const [studentsPaginationInfo, setStudentsPaginationInfo] =
+    useState<PaginationInfo>({
+      size: 0,
+      totalElements: 0,
+      totalPages: 0,
+      page: 0,
+    });
 
   // Course
   const [course, setCourse] = useState<CourseType | null>(null);
@@ -96,9 +110,22 @@ export default function CourseMainPage() {
       setFilesPaginationInfo(response.paginationInfo);
     };
 
+    const handleFetchStudents = async (fetchStudentsLink: APILink) => {
+      const response = await UserRequest.getList({
+        link: fetchStudentsLink,
+        pagination: {
+          size: 9,
+          page: studentsPage,
+        },
+      });
+      setStudents(response.users);
+      setStudentsPaginationInfo(response.paginationInfo);
+    };
+
     handleCheckIfUserIsEnrolled();
     handleFetchCourseDescription(course.description);
     handleFetchCourseFiles(course.files);
+    handleFetchStudents(course.students.getStudents);
   }, [course]);
 
   if (isLoading || !course) {
@@ -205,7 +232,7 @@ export default function CourseMainPage() {
           {description && (
             <div
               className={
-                "flex flex-col lg:px-16 justify-center lg:w-full py-6 border-brandMain lg:border-t-2 lg:border-b-2"
+                "flex flex-col lg:px-16 justify-center lg:w-full py-6 border-brandMain lg:border-t-2 border-b-2"
               }
             >
               <h4 className={"text-brandMain font-bold text-2xl mb-2"}>
@@ -220,7 +247,7 @@ export default function CourseMainPage() {
         </section>
 
         {/* Course files */}
-        <section className={"lg:p-8 text-brandMain"}>
+        <section className={"py-8 lg:px-8 text-brandMain"}>
           <h4 className="my-header mb-8 ml-4 lg:ml-0 text-brandMain">
             Course files
           </h4>
@@ -229,13 +256,34 @@ export default function CourseMainPage() {
             {files.map((file) => (
               <span
                 key={file.id.toString()}
-                className={"hover:underline"}
+                className={"hover:underline hover:cursor-pointer"}
                 onClick={() => FileRequest.downloadFile(file.linkToFile, file)}
               >
                 {file.fileName}
               </span>
             ))}
           </div>
+        </section>
+
+        {/* Course students */}
+        <section
+          className={"py-8 lg:px-8 border-t-2 border-brandMain text-brandMain"}
+        >
+          <h4 className="my-header mb-8 ml-4 lg:ml-0 text-brandMain">
+            Course students
+          </h4>
+
+          {students.length !== 0 && !isLoading && (
+            <div
+              className={
+                "grid grid-cols-2 md:grid-cols-4 xl:grid-cols-6 gap-4 px-4 lg:px-0"
+              }
+            >
+              {students.map((student) => (
+                <UserListCard user={student} />
+              ))}
+            </div>
+          )}
         </section>
       </main>
     </div>
