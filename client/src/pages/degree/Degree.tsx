@@ -97,10 +97,9 @@ export default function Degree() {
         </div>
       </section>
       <section className={"w-full px-4 md:px-32 my-16"}>
-        // TODO: CHANGE ARTICLE CATEGORY TO EVENTS
         <ArticlesDisplay
           heading={"Studying at the Aquila University"}
-          category={ArticleCategory.NEWS}
+          category={ArticleCategory.EVENTS}
         />
       </section>
       <div className={"w-full px-4 md:px-32 my-16"}>
