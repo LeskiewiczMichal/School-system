@@ -1,5 +1,61 @@
 import APILink from "../../../type/APILink";
 import axios from "axios";
+import {
+  OptionalPaginationParams,
+  PaginationParams,
+  SortDirection,
+} from "../../../type/PaginationParams";
+import PaginationInfo from "../../../type/PaginationInfo";
+import RequestService from "../../../utils/RequestService";
+import { FileMapper } from "../index";
+import mapPaginationInfoFromServer from "../../../utils/MapPaginationInfoFromServer";
+import File from "../types/File";
+
+export interface FetchFilesProps {
+  link: APILink;
+  pagination?: OptionalPaginationParams;
+}
+
+export interface FetchFilesResponse {
+  files: File[];
+  paginationInfo: PaginationInfo;
+}
+
+const getList = async (props: FetchFilesProps): Promise<FetchFilesResponse> => {
+  const { link, pagination } = props;
+
+  // Prepare the pagination
+  let paginationParams: PaginationParams = {
+    page: 0,
+    size: 10,
+    sort: ["fileName", SortDirection.ASC],
+  };
+  if (pagination) {
+    paginationParams = {
+      page: pagination.page ? pagination.page : paginationParams.page,
+      size: pagination.size ? pagination.size : paginationParams.size,
+      sort: pagination.sort ? pagination.sort : paginationParams.sort,
+    };
+  }
+
+  // Call the API
+  const response = await RequestService.performGetRequest({
+    link: link,
+    params: paginationParams,
+  });
+
+  let files: File[] = [];
+  if (response._embedded && response._embedded.files) {
+    // Convert the response data into files
+    files = FileMapper.mapArrayFromServerData(response._embedded.files);
+  }
+  const paginationInfo: PaginationInfo = mapPaginationInfoFromServer(response);
+
+  return {
+    files: files,
+    paginationInfo: paginationInfo,
+  };
+};
 
 const downloadFile = async (fileLink: APILink) => {
   try {
@@ -27,6 +83,7 @@ const downloadFile = async (fileLink: APILink) => {
 };
 
 const FileRequest = {
+  getList,
   downloadFile,
 };
 
