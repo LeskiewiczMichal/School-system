@@ -21,6 +21,14 @@ export interface FetchFilesResponse {
   paginationInfo: PaginationInfo;
 }
 
+/**
+ * Fetch files from the API
+ *
+ * @param props {@link FetchFilesProps} object,
+ * containing the link {@link APILink} - either a search link or a link to all files,
+ * and pagination {@link OptionalPaginationParams} (optional)
+ * @returns Promise of an array of {@link File} objects
+ */
 const getList = async (props: FetchFilesProps): Promise<FetchFilesResponse> => {
   const { link, pagination } = props;
 
