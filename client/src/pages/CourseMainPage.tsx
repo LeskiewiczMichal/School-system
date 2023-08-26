@@ -15,6 +15,9 @@ import * as marked from "marked";
 import axios from "axios";
 import EnumMapper from "../utils/EnumMapper";
 import { ReactComponent as ArrowRight } from "../assets/icons/arrow/arrow-up-right-brandMain.svg";
+import { File, FileRequest } from "../features/files";
+import PaginationInfo from "../type/PaginationInfo";
+import { FetchFilesResponse } from "../features/files/services/FileRequest";
 
 export default function CourseMainPage() {
   const { courseId } = useParams<{ courseId: string }>();
@@ -30,6 +33,17 @@ export default function CourseMainPage() {
   // Course
   const [course, setCourse] = useState<CourseType | null>(null);
   const [description, setDescription] = useState<string | null>(null);
+
+  // Files
+  const [files, setFiles] = useState<File[]>([]);
+  const [filesPage, setFilesPage] = useState<number>(0);
+  const [filesPaginationInfo, setFilesPaginationInfo] =
+    useState<PaginationInfo>({
+      size: 0,
+      totalElements: 0,
+      totalPages: 0,
+      page: 0,
+    });
 
   useEffect(() => {
     const handleFetchCourse = async () => {
@@ -69,11 +83,21 @@ export default function CourseMainPage() {
     };
 
     const handleFetchCourseFiles = async (fetchFilesLink: APILink) => {
-      const response = await axios.get(fetchFilesLink.href);
+      const response: FetchFilesResponse = await FileRequest.getList({
+        link: fetchFilesLink,
+        pagination: {
+          size: 15,
+          page: filesPage,
+        },
+      });
+
+      setFiles(response.files);
+      setFilesPaginationInfo(response.paginationInfo);
     };
 
     handleCheckIfUserIsEnrolled();
     handleFetchCourseDescription(course.description);
+    handleFetchCourseFiles(course.files);
   }, [course]);
 
   if (isLoading || !course) {

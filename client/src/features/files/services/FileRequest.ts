@@ -36,7 +36,7 @@ const getList = async (props: FetchFilesProps): Promise<FetchFilesResponse> => {
   let paginationParams: PaginationParams = {
     page: 0,
     size: 10,
-    sort: ["fileName", SortDirection.ASC],
+    sort: ["file_name", SortDirection.ASC],
   };
   if (pagination) {
     paginationParams = {
