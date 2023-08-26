@@ -21,6 +21,8 @@ import { FetchFilesResponse } from "../features/files/services/FileRequest";
 import MyHeading from "../common_components/MyHeading";
 import { UserData, UserListCard } from "../features/user";
 import UserRequest from "../features/user/services/UserRequest";
+import PaginationButtons from "../common_components/PaginationButtons";
+import changePage from "../utils/changePage";
 
 export default function CourseMainPage() {
   const { courseId } = useParams<{ courseId: string }>();
@@ -114,7 +116,7 @@ export default function CourseMainPage() {
       const response = await UserRequest.getList({
         link: fetchStudentsLink,
         pagination: {
-          size: 9,
+          size: 12,
           page: studentsPage,
         },
       });
@@ -263,6 +265,13 @@ export default function CourseMainPage() {
               </span>
             ))}
           </div>
+          <PaginationButtons
+            paginationInfo={filesPaginationInfo}
+            page={filesPage}
+            changePage={(direction: "next" | "previous") =>
+              changePage(direction, setFilesPage)
+            }
+          />
         </section>
 
         {/* Course students */}
@@ -284,6 +293,13 @@ export default function CourseMainPage() {
               ))}
             </div>
           )}
+          <PaginationButtons
+            paginationInfo={studentsPaginationInfo}
+            page={studentsPage}
+            changePage={(direction: "next" | "previous") =>
+              changePage(direction, setStudentsPage)
+            }
+          />
         </section>
       </main>
     </div>
