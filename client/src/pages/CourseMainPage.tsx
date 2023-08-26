@@ -18,6 +18,7 @@ import { ReactComponent as ArrowRight } from "../assets/icons/arrow/arrow-up-rig
 import { File, FileRequest } from "../features/files";
 import PaginationInfo from "../type/PaginationInfo";
 import { FetchFilesResponse } from "../features/files/services/FileRequest";
+import MyHeading from "../common_components/MyHeading";
 
 export default function CourseMainPage() {
   const { courseId } = useParams<{ courseId: string }>();
@@ -127,7 +128,7 @@ export default function CourseMainPage() {
       {mobileNavBar && <Sidebar />}
       <main
         className={
-          "pb-16 border-b sm:px-16 lg:px-0 border-grayscaleMediumDark w-full"
+          "pb-16 border-b px-4 sm:px-16 lg:px-0 border-grayscaleMediumDark w-full"
         }
       >
         {/* Header */}
@@ -219,7 +220,23 @@ export default function CourseMainPage() {
         </section>
 
         {/* Course files */}
-        <section></section>
+        <section className={"lg:p-8 text-brandMain"}>
+          <h4 className="my-header mb-8 ml-4 lg:ml-0 text-brandMain">
+            Course files
+          </h4>
+
+          <div className={"flex flex-col lg:grid lg:grid-cols-2"}>
+            {files.map((file) => (
+              <span
+                key={file.id.toString()}
+                className={"hover:underline"}
+                onClick={() => FileRequest.downloadFile(file.linkToFile, file)}
+              >
+                {file.fileName}
+              </span>
+            ))}
+          </div>
+        </section>
       </main>
     </div>
   );

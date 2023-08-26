@@ -53,9 +53,9 @@ const getList = async (props: FetchFilesProps): Promise<FetchFilesResponse> => {
   });
 
   let files: File[] = [];
-  if (response._embedded && response._embedded.files) {
+  if (response._embedded && response._embedded.fileList) {
     // Convert the response data into files
-    files = FileMapper.mapArrayFromServerData(response._embedded.files);
+    files = FileMapper.mapArrayFromServerData(response._embedded.fileList);
   }
   const paginationInfo: PaginationInfo = mapPaginationInfoFromServer(response);
 
@@ -65,7 +65,7 @@ const getList = async (props: FetchFilesProps): Promise<FetchFilesResponse> => {
   };
 };
 
-const downloadFile = async (fileLink: APILink) => {
+const downloadFile = async (fileLink: APILink, file: File) => {
   try {
     const response = await axios.get(fileLink.href, {
       responseType: "blob",
@@ -76,10 +76,7 @@ const downloadFile = async (fileLink: APILink) => {
 
     const link = document.createElement("a");
     link.href = url;
-    link.setAttribute(
-      "download",
-      response.headers["content-disposition"].split("=")[1],
-    );
+    link.setAttribute("download", file.fileName); // Set your desired file name
     document.body.appendChild(link);
     link.click();
 
