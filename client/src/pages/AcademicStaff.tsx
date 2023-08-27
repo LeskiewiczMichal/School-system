@@ -8,7 +8,6 @@ import UserRequest, {
 import Role from "../type/Role";
 import { UserData } from "../features/user";
 import PaginationInfo from "../type/PaginationInfo";
-import { Link } from "react-router-dom";
 import LinkButtonBorderOnly from "../common_components/button/LinkButtonBorderOnly";
 
 export default function AcademicStaff() {

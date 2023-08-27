@@ -1,7 +1,5 @@
 import Greetings from "../../common_components/Card/Greetings";
-import { ArticleCategory, ArticlesDisplay } from "../../features/article";
 import LinkButtonBorderOnly from "../../common_components/button/LinkButtonBorderOnly";
-import { AppPaths } from "../../App";
 import { useParams } from "react-router-dom";
 import FacultyPageContentInterface from "./FacultyPageContentInterface";
 import BigCardWithOptionalHeader from "../../common_components/Card/BigCardWithOptionalHeader";

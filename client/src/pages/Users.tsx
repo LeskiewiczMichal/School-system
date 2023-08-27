@@ -1,7 +1,6 @@
 import { useAppSelector } from "../hooks";
 import { Sidebar } from "../features/sidebar";
 import { SidebarLinkProps } from "../features/sidebar/components/SidebarLink";
-import { DegreeCard, DegreeSearchForm } from "../features/degree";
 import MyHeading from "../common_components/MyHeading";
 import LoadingSpinner from "../common_components/LoadingSpinner";
 import PaginationButtons from "../common_components/PaginationButtons";
@@ -11,7 +10,6 @@ import PaginationInfo from "../type/PaginationInfo";
 import UserRequest, {
   FetchUsersResponse,
 } from "../features/user/services/UserRequest";
-import LinkButtonBorderOnly from "../common_components/button/LinkButtonBorderOnly";
 import { AppPaths } from "../App";
 import HaveToBeLoggedInInfo from "../common_components/HaveToBeLoggedInInfo";
 

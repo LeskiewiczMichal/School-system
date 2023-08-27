@@ -12,7 +12,6 @@ import TextAndButtonWithPhotoOnRight from "../common_components/Card/TextAndButt
 import GlassBuilding from "../features/main-page/assets/glass-building.webp";
 import { AppPaths } from "../App";
 import { Sidebar } from "../features/sidebar";
-import MainNavLinksCreator from "../features/header/utils/MainNavLinksCreator";
 import LoadingSpinner from "../common_components/LoadingSpinner";
 
 export default function Home() {

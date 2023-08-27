@@ -18,7 +18,6 @@ import { ReactComponent as ArrowRight } from "../assets/icons/arrow/arrow-up-rig
 import { File, FileRequest } from "../features/files";
 import PaginationInfo from "../type/PaginationInfo";
 import { FetchFilesResponse } from "../features/files/services/FileRequest";
-import MyHeading from "../common_components/MyHeading";
 import { UserData, UserListCard } from "../features/user";
 import UserRequest from "../features/user/services/UserRequest";
 import PaginationButtons from "../common_components/PaginationButtons";

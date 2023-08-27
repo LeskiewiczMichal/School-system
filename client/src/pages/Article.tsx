@@ -3,11 +3,11 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAppSelector } from "../hooks";
 import {
+  Article as ArticleType,
   ArticleRequest,
   ArticlesDisplay,
   ArticlesSidebar,
 } from "../features/article";
-import { Article as ArticleType } from "../features/article";
 import * as marked from "marked";
 import { SidebarLinkProps } from "../features/sidebar/components/SidebarLink";
 import { AppPaths } from "../App";

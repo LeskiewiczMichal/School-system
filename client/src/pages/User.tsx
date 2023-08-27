@@ -12,7 +12,6 @@ import LoadingSpinner from "../common_components/LoadingSpinner";
 import { Sidebar } from "../features/sidebar";
 import Role from "../type/Role";
 import axios from "axios";
-import MyHeading from "../common_components/MyHeading";
 import MyHeadingWithLine from "../common_components/MyHeadingWithLine";
 import * as marked from "marked";
 import { SidebarLinkProps } from "../features/sidebar/components/SidebarLink";

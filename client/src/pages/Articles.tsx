@@ -10,8 +10,6 @@ import ColoredBackgroundWithPhotoOnRight from "../common_components/Card/Colored
 import GroupOfStundetsPhoto from "../features/article/assets/group.webp";
 import Card from "../common_components/Card/Card";
 import MyHeading from "../common_components/MyHeading";
-import { ReactComponent as ChevronLeft } from "../assets/icons/chevron/chevron-left.svg";
-import { ReactComponent as ChevronRight } from "../assets/icons/chevron/chevron-right.svg";
 import PaginationInfo from "../type/PaginationInfo";
 import { AppPaths } from "../App";
 import { useLocation, useNavigate, useParams } from "react-router-dom";

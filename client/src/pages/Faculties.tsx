@@ -1,12 +1,10 @@
 import ColoredBackgroundWithPhotoOnRight from "../common_components/Card/ColoredBackgroundWithPhotoOnRight";
 import FacultiesPagePhoto from "./assets/faculties-page.webp";
-import { ReactComponent as ArrowUpRight } from "../assets/icons/arrow/arrow-up-right-brandMain.svg";
 import { useEffect, useState } from "react";
 import RequestService from "../utils/RequestService";
 import { SortDirection } from "../type/PaginationParams";
 import ResourceNameWithLink from "../type/ResourceNameWithLink";
 import { useAppSelector } from "../hooks";
-import { Link } from "react-router-dom";
 import LinkButtonBorderOnly from "../common_components/button/LinkButtonBorderOnly";
 
 export default function Faculties() {
