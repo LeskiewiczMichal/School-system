@@ -167,7 +167,7 @@ public class ApiController {
 
   private void addMailsLink(RepresentationModel<?> model) {
     Link sendContactEmail =
-        linkTo(methodOn(MailController.class).sendSimpleMessage(null, null))
+        linkTo(methodOn(MailController.class).sendSimpleMessage(null))
             .withRel("sendContactEmail");
 
     model.add(sendContactEmail);
