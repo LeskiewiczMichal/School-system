@@ -17,3 +17,6 @@ services:
 #      - "8080:8080"
 #    depends_on:
 #      - db
+#    environment:
+#      SMTP_USERNAME: ${SMTP_USERNAME}
+#      SMTP_PASSWORD: ${SMTP_PASSWORD}

@@ -28,8 +28,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username:
-    password:
+    username: ${SMTP_USERNAME}
+    password: ${SMTP_PASSWORD}
     properties:
       mail:
         smtp:
@@ -42,4 +42,4 @@ spring:
 # Custom variables
 upload:
   path:
-    images: "/Users/michalleskiewicz/Programowanie/repos/School-system/api/src/main/resources/static/images/"
+    images: ${IMAGES_PATH}
