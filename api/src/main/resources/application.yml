@@ -36,8 +36,3 @@ spring:
           auth: true
           starttls:
             enable: true
-
-# Custom variables
-upload:
-  path:
-    images: ${IMAGES_PATH}

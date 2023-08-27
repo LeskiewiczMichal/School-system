@@ -10,6 +10,7 @@ import com.leskiewicz.schoolsystem.authentication.SecurityService;
 import com.leskiewicz.schoolsystem.authentication.dto.CustomUserDetails;
 import com.leskiewicz.schoolsystem.course.CourseController;
 import com.leskiewicz.schoolsystem.degree.DegreeController;
+import com.leskiewicz.schoolsystem.email.MailController;
 import com.leskiewicz.schoolsystem.faculty.FacultyController;
 import com.leskiewicz.schoolsystem.files.FileController;
 import com.leskiewicz.schoolsystem.user.UserController;
@@ -53,6 +54,7 @@ public class ApiController {
     this.addCoursesLink(model);
     this.addFilesLink(model);
     this.addArticlesLink(model);
+    this.addMailsLink(model);
 
     return ResponseEntity.ok(model);
   }
@@ -161,5 +163,13 @@ public class ApiController {
     model.add(articlesLink);
     model.add(getByIdLink);
     model.add(searchLink);
+  }
+
+  private void addMailsLink(RepresentationModel<?> model) {
+    Link sendContactEmail =
+        linkTo(methodOn(MailController.class).sendSimpleMessage(null, null))
+            .withRel("sendContactEmail");
+
+    model.add(sendContactEmail);
   }
 }

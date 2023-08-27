@@ -9,14 +9,19 @@ services:
     volumes:
       - $PWD/mysql:/var/lib/mysql
 
-#  api:
-#    container_name: school-system-api
-#    build:
-#      context: ./api
-#    ports:
-#      - "8080:8080"
-#    depends_on:
-#      - db
-#    environment:
-#      SMTP_USERNAME: ${SMTP_USERNAME}
-#      SMTP_PASSWORD: ${SMTP_PASSWORD}
+  api:
+    container_name: school-system-api
+    build:
+      context: ./api
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      SMTP_USERNAME: ${SMTP_USERNAME}
+      SMTP_PASSWORD: ${SMTP_PASSWORD}
+      IMAGES_PATH: ${IMAGES_PATH}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      DATABASE_URL: ${DATABASE_URL}
+      DATABASE_USERNAME: ${DATABASE_USERNAME}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
