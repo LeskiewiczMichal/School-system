@@ -110,7 +110,7 @@ export default function Research() {
                   imageUrl={article.imgPath}
                   imageAlt="Article Preview"
                   articleId={article.id.toString()}
-                  redirectUrl={`/article/${article.id}`}
+                  redirectUrl={`/faculties/${facultyId}/articles`}
                   key={article.id.toString()}
                 />
               );
