@@ -3,8 +3,25 @@ import FooterLinksCreator, {
   ActiveFooterPage,
 } from "../../features/footer/utils/FooterLinksCreator";
 import { ReactComponent as SendButtonSVG } from "../../assets/icons/arrow/arrow-up-right-brandMain.svg";
+import { useState } from "react";
 
 export default function ContactPage() {
+  const [subject, setSubject] = useState<string>("");
+  const [message, setMessage] = useState<string>("");
+
+  const handleSend = () => {};
+
+  const handleChangeForm = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    if (e.target.name === "subject") {
+      setSubject(e.target.value);
+    }
+    if (e.target.name === "message") {
+      setMessage(e.target.value);
+    }
+  };
+
   const links = FooterLinksCreator.createFooterNavigationLinks(
     ActiveFooterPage.CONTACT,
   );
@@ -44,11 +61,11 @@ export default function ContactPage() {
               <input
                 type="text"
                 id="subject"
-                name="subjet"
+                name="subject"
                 className="block p-4 w-full font-bold text-sm text-black bg-grayscaleLight border-2 border-grayscaleMediumDark focus:outline-none focus:ring-none focus:border-brandMain"
                 placeholder="What is it about?"
-                // onChange={formChangeHandler}
-                // value={titleField}
+                onChange={handleChangeForm}
+                value={subject}
                 required
               />
             </div>
@@ -68,8 +85,8 @@ export default function ContactPage() {
                 rows={8}
                 className="block p-4 w-full text-sm text-black bg-grayscaleLight border-2 border-grayscaleMediumDark focus:outline-none focus:ring-none focus:border-brandMain"
                 placeholder="What do you want to tell us?"
-                // onChange={formChangeHandler}
-                // value={titleField}
+                onChange={handleChangeForm}
+                value={message}
                 required
               />
             </div>
