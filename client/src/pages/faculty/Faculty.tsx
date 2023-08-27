@@ -45,6 +45,9 @@ export default function Faculty() {
             faculty={"101"}
           />
           {/*  TODO: ADD TWO BIG CARDS WITH INFO  */}
+          TODO: ADD TWO BIG CARDS WITH INFO TODO: ADD TWO BIG CARDS WITH INFO
+          TODO: ADD TWO BIG CARDS WITH INFO TODO: ADD TWO BIG CARDS WITH INFO
+          TODO: ADD TWO BIG CARDS WITH INFO
         </div>
       </section>
     </main>

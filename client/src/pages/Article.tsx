@@ -9,11 +9,23 @@ import {
 } from "../features/article";
 import { Article as ArticleType } from "../features/article";
 import * as marked from "marked";
+import { SidebarLinkProps } from "../features/sidebar/components/SidebarLink";
+import { AppPaths } from "../App";
 
 export default function Article() {
   const { id } = useParams<{ id: string }>();
+  const { facultyId } = useParams<{ facultyId: string }>();
   const articlesLinks = useAppSelector((state) => state.links.articles);
   const [article, setArticle] = useState<ArticleType | null>(null);
+
+  const sidebarLinks: SidebarLinkProps[] = [
+    {
+      title: "All Articles",
+      redirectUrl: facultyId
+        ? `/faculties/${facultyId}/articles?faculty=${facultyId}`
+        : "/articles",
+    },
+  ];
 
   useEffect(() => {
     const handleFetchArticle = async () => {
@@ -33,7 +45,7 @@ export default function Article() {
     };
 
     handleFetchArticle();
-  }, [articlesLinks]);
+  }, [articlesLinks, id, facultyId]);
 
   if (!article) {
     return <span>Loading</span>;
@@ -41,7 +53,7 @@ export default function Article() {
 
   return (
     <div className={"flex h-full"}>
-      <Sidebar />
+      <Sidebar links={sidebarLinks} backButtonLink={AppPaths.ARTICLES} />
       <main className={"pb-16 border-b border-grayscaleMediumDark"}>
         {/* Heading */}
         <section className={"px-4 lg:px-8 lg:pr-28 py-8 mb-4"}>

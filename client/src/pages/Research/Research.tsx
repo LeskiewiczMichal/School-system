@@ -18,6 +18,7 @@ import {
 import Card from "../../common_components/Card/Card";
 import FullWidthColoredBackground from "../../common_components/Card/FullWidthColoredBackground";
 import * as marked from "marked";
+import { AppPaths } from "../../App";
 
 export default function Research() {
   const links = useAppSelector((state) => state.links);
@@ -110,7 +111,11 @@ export default function Research() {
                   imageUrl={article.imgPath}
                   imageAlt="Article Preview"
                   articleId={article.id.toString()}
-                  redirectUrl={`/faculties/${facultyId}/articles`}
+                  redirectUrl={
+                    facultyId
+                      ? `/faculties/${facultyId}/articles`
+                      : AppPaths.ARTICLES
+                  }
                   key={article.id.toString()}
                 />
               );

@@ -105,7 +105,11 @@ export default function TeachingAndStudying() {
                     imageUrl={article.imgPath}
                     imageAlt={"Article preview photo"}
                     articleId={article.id.toString()}
-                    redirectUrl={AppPaths.ARTICLES}
+                    redirectUrl={
+                      facultyId
+                        ? `/faculties/${facultyId}/articles}`
+                        : AppPaths.ARTICLES
+                    }
                   />
                 );
               })}

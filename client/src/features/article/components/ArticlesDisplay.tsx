@@ -7,6 +7,7 @@ import APILink from "../../../type/APILink";
 import ArticleRequest, {
   GetArticlesResponse,
 } from "../services/ArticleRequest";
+import { AppPaths } from "../../../App";
 
 interface ArticlesDisplayProps {
   heading?: string;
@@ -61,7 +62,9 @@ export default function ArticlesDisplay(props: ArticlesDisplayProps) {
               imageUrl={article.imgPath}
               imageAlt="Article Preview"
               articleId={article.id.toString()}
-              redirectUrl="/article"
+              redirectUrl={
+                faculty ? `/faculties/${faculty}/articles` : AppPaths.ARTICLES
+              }
               key={article.id.toString()}
             />
           );
