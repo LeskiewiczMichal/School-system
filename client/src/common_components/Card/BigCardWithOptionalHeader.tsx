@@ -4,13 +4,14 @@ import { Article } from "../../features/article";
 interface BigCardWithOptionalHeaderProps {
   title?: string;
   text?: string;
+  facultyId?: string;
   article: Article;
 }
 
 export default function BigCardWithOptionalHeader(
   props: BigCardWithOptionalHeaderProps,
 ) {
-  const { title, text, article } = props;
+  const { title, text, article, facultyId } = props;
 
   return (
     <section className="col-span-3">
@@ -22,7 +23,9 @@ export default function BigCardWithOptionalHeader(
       <Card
         imageUrl={article.imgPath}
         imageAlt="Article Preview"
-        redirectUrl={`http://localhost:8080/articles/${article.id}`}
+        redirectUrl={
+          facultyId ? `/faculties/${facultyId}/articles` : `/articles`
+        }
         articleId={article.id.toString()}
         title={article.title}
         text={article.preview}

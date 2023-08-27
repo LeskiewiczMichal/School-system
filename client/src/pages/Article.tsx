@@ -60,15 +60,18 @@ export default function Article() {
           <h1 className="page-title_h1 text-brandMainNearlyBlack">
             {article.title}
           </h1>
+
           {/* Preview */}
           <p className={"text-grayscaleDarkText"}>{article.preview}</p>
         </section>
+
         <div className={"flex flex-col xl:flex-row "}>
           {/* Sidebar on the right */}
           <ArticlesSidebar
             category={article.category}
             faculty={article.faculty?.name}
           />
+
           {/* Article content */}
           <section
             className={"grow px-0 lg:px-8 text-grayscaleDarkText xl:order-1"}
@@ -84,6 +87,7 @@ export default function Article() {
             ></div>
           </section>
         </div>
+
         {/* Related articles */}
         <section
           className={

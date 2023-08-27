@@ -52,8 +52,8 @@ export default function ArticlesDisplay(props: ArticlesDisplayProps) {
       {heading ? (
         <h4 className="my-header text-brandMainNearlyBlack">{heading}</h4>
       ) : null}
-      {text && <p className={"text-grayscaleDarkText mb-6"}>{text}</p>}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mt-8  gap-4">
+      {text && <p className={"text-grayscaleDarkText mb-2"}>{text}</p>}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mt-6  gap-4">
         {articles.map((article) => {
           return (
             <Card
