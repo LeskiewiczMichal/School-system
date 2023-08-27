@@ -16,8 +16,8 @@ export default function FullWidthColoredBackground(
 
   return (
     <div className={`bg-${color} text-${textColor} py-8 px-10`}>
-      <h2 className="text-4xl font-bold mb-4">{heading}</h2>
-      <p className={"mb-4"}>{text}</p>
+      {heading && <h2 className="text-4xl font-bold mb-4">{heading}</h2>}
+      {text && <p className={"mb-4"}>{text}</p>}
       <LinkButtonBorderOnly
         text={buttonText}
         link={buttonLink}
