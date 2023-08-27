@@ -137,6 +137,7 @@ function App() {
             path="/about-us/cookie-management"
             element={<Pages.CookieManagement />}
           />
+          <Route path={"/about-us/contact"} element={<Pages.ContactPage />} />
         </Routes>
         <Footer />
       </>
