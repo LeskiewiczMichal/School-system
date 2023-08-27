@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+  jpa:
+    properties:
+      hibernate:
+        format:
+          sql: true
+
+# Custom properties
+jwt:
+  secret:
+    key: ${JWT_SECRET_KEY}

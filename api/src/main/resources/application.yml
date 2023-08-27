@@ -37,8 +37,6 @@ spring:
           starttls:
             enable: true
 
-
-
 # Custom variables
 upload:
   path:
