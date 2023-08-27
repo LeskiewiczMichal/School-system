@@ -1,6 +1,7 @@
 spring:
   profiles:
     active: dev
+
   #  Database type
   datasource:
     platform: mysql
@@ -12,6 +13,7 @@ spring:
     database: MYSQL
     hibernate:
       dialect: org.hibernate.dialect.MySQL8Dialect
+
 #   Base path for api
   data:
     rest:
@@ -22,11 +24,20 @@ spring:
     multipart:
       max-file-size: 15MB
 
+  # Spring mail
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username:
+    password:
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
-## Base path for api settings
-#server:
-#  servlet:
-#    context-path: /api
+
 
 # Custom variables
 upload:
