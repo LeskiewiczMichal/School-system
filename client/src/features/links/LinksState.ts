@@ -31,6 +31,9 @@ interface LinksState {
     getById: APILink | null;
     search: APILink | null;
   };
+  mail: {
+    sendContactEmail: APILink | null;
+  };
 }
 
 export default LinksState;

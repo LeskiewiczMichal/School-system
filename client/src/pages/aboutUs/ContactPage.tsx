@@ -4,16 +4,42 @@ import FooterLinksCreator, {
 } from "../../features/footer/utils/FooterLinksCreator";
 import { ReactComponent as SendButtonSVG } from "../../assets/icons/arrow/arrow-up-right-brandMain.svg";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { AppPaths } from "../../App";
+import { useAppSelector } from "../../hooks";
+import axios from "axios";
 
 export default function ContactPage() {
+  const navigate = useNavigate();
+  const sendMessageLink = useAppSelector(
+    (state) => state.links.mail.sendContactEmail,
+  );
   const [subject, setSubject] = useState<string>("");
   const [message, setMessage] = useState<string>("");
 
-  const handleSend = () => {};
+  const handleSend = async () => {
+    if (!sendMessageLink) {
+      return;
+    }
+
+    if (subject.trim() === "" || message.trim() === "") {
+      alert("Please fill all the fields");
+      return;
+    }
+
+    await axios.post(sendMessageLink.href, {
+      subject: subject,
+      message: message,
+    });
+
+    navigate(AppPaths.HOME);
+  };
 
   const handleChangeForm = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
+    e.preventDefault();
+
     if (e.target.name === "subject") {
       setSubject(e.target.value);
     }
@@ -98,6 +124,7 @@ export default function ContactPage() {
                 "flex items-center text-xl font-bold text-brandMain hover:underline hover:text-brandMainActive"
               }
               type={"button"}
+              onClick={handleSend}
             >
               Send <SendButtonSVG className={"w-8 h-8"} />
             </button>

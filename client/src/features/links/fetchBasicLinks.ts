@@ -98,6 +98,12 @@ const fetchBasicLinks = (): AppThunk => async (dispatch) => {
             templated: response.data._links.articles[2].templated === true,
           },
         },
+        mail: {
+          sendContactEmail: {
+            href: response.data._links.sendContactEmail.href,
+            templated: response.data._links.sendContactEmail.templated === true,
+          },
+        },
       };
 
       // Set links in store

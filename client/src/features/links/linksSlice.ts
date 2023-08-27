@@ -32,6 +32,9 @@ const initialState: LinksState = {
     getById: null,
     search: null,
   },
+  mail: {
+    sendContactEmail: null,
+  },
 };
 
 const linksSlice = createSlice({
@@ -46,6 +49,7 @@ const linksSlice = createSlice({
       state.faculties = action.payload.faculties;
       state.files = action.payload.files;
       state.articles = action.payload.articles;
+      state.mail = action.payload.mail;
     },
   },
 });

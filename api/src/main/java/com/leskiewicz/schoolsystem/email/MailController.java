@@ -1,5 +1,6 @@
 package com.leskiewicz.schoolsystem.email;
 
+import com.leskiewicz.schoolsystem.email.dto.SendSimpleMessageRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,9 +16,9 @@ public class MailController {
   private final MailService mailService;
 
   @PostMapping("/contact")
-  public ResponseEntity<String> sendSimpleMessage(
-      @RequestBody String subject, @RequestBody String message) {
-    mailService.sendSimpleMessage("leskiewicz02robocze@gmail.com", subject, message);
+  public ResponseEntity<String> sendSimpleMessage(@RequestBody SendSimpleMessageRequest request) {
+    mailService.sendSimpleMessage(
+        "leskiewicz02robocze@gmail.com", request.getSubject(), request.getMessage());
     return ResponseEntity.ok("Email sent successfully");
   }
 }
