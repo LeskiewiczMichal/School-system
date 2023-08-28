@@ -1514,3 +1514,543 @@ The Electric Machines and Drives course introduces students to the principles of
 
 **Note:** The course syllabus and schedule are subject to change. Any modifications will be communicated by the instructor.
 ', 'ENGLISH', 4);
+
+
+
+-- //////////////////////////////////////// Course scopes ////////////////////////////////////////
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (1, 'LABORATORY');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (2, 'LECTURES');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (3, 'LECTURES');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (3, 'EXERCISES');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (4, 'LECTURES');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (4, 'PROJECT');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (5, 'LECTURES');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (6, 'LECTURES');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (6, 'EXERCISES');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (7, 'LABORATORY');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (8, 'PROJECT');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (9, 'LECTURES');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (9, 'LABORATORY');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (10, 'EXERCISES');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (11, 'PROJECT');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (11, 'LABORATORY');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (12, 'PROJECT');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (13, 'LECTURES');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (14, 'PROJECT');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (14, 'EXERCISES');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (15, 'LABORATORY');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (16, 'PROJECT');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (16, 'LABORATORY');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (17, 'PROJECT');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (17, 'LECTURES');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (18, 'EXERCISES');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (19, 'PROJECT');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (19, 'LABORATORY');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (20, 'PROJECT');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (21, 'PROJECT');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (21, 'EXERCISES');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (22, 'LABORATORY');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (23, 'PROJECT');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (24, 'LECTURES');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (24, 'PROJECT');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (25, 'EXERCISES');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (26, 'LABORATORY');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (27, 'LECTURES');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (27, 'PROJECT');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (28, 'LECTURES');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (28, 'EXERCISES');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (29, 'PROJECT');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (29, 'EXERCISES');
+
+INSERT INTO course_scope (course_id, scope)
+VALUES (30, 'LABORATORY');
+
+
+
+-- Sing up students for courses
+INSERT INTO course_student (course_id, student_id) VALUES (20, 42);
+INSERT INTO course_student (course_id, student_id) VALUES (21, 63);
+INSERT INTO course_student (course_id, student_id) VALUES (3, 97);
+INSERT INTO course_student (course_id, student_id) VALUES (21, 74);
+INSERT INTO course_student (course_id, student_id) VALUES (3, 136);
+INSERT INTO course_student (course_id, student_id) VALUES (26, 125);
+INSERT INTO course_student (course_id, student_id) VALUES (1, 62);
+INSERT INTO course_student (course_id, student_id) VALUES (12, 101);
+INSERT INTO course_student (course_id, student_id) VALUES (15, 116);
+INSERT INTO course_student (course_id, student_id) VALUES (4, 106);
+INSERT INTO course_student (course_id, student_id) VALUES (15, 74);
+INSERT INTO course_student (course_id, student_id) VALUES (28, 94);
+INSERT INTO course_student (course_id, student_id) VALUES (5, 99);
+INSERT INTO course_student (course_id, student_id) VALUES (22, 106);
+INSERT INTO course_student (course_id, student_id) VALUES (22, 42);
+INSERT INTO course_student (course_id, student_id) VALUES (7, 131);
+INSERT INTO course_student (course_id, student_id) VALUES (3, 84);
+INSERT INTO course_student (course_id, student_id) VALUES (30, 100);
+INSERT INTO course_student (course_id, student_id) VALUES (4, 95);
+INSERT INTO course_student (course_id, student_id) VALUES (22, 134);
+INSERT INTO course_student (course_id, student_id) VALUES (26, 62);
+INSERT INTO course_student (course_id, student_id) VALUES (30, 56);
+INSERT INTO course_student (course_id, student_id) VALUES (27, 95);
+INSERT INTO course_student (course_id, student_id) VALUES (23, 95);
+INSERT INTO course_student (course_id, student_id) VALUES (21, 110);
+INSERT INTO course_student (course_id, student_id) VALUES (5, 123);
+INSERT INTO course_student (course_id, student_id) VALUES (29, 135);
+INSERT INTO course_student (course_id, student_id) VALUES (10, 59);
+INSERT INTO course_student (course_id, student_id) VALUES (8, 98);
+INSERT INTO course_student (course_id, student_id) VALUES (22, 56);
+INSERT INTO course_student (course_id, student_id) VALUES (27, 54);
+INSERT INTO course_student (course_id, student_id) VALUES (14, 83);
+INSERT INTO course_student (course_id, student_id) VALUES (26, 110);
+INSERT INTO course_student (course_id, student_id) VALUES (28, 57);
+INSERT INTO course_student (course_id, student_id) VALUES (7, 72);
+INSERT INTO course_student (course_id, student_id) VALUES (10, 134);
+INSERT INTO course_student (course_id, student_id) VALUES (29, 37);
+INSERT INTO course_student (course_id, student_id) VALUES (14, 39);
+INSERT INTO course_student (course_id, student_id) VALUES (25, 59);
+INSERT INTO course_student (course_id, student_id) VALUES (22, 88);
+INSERT INTO course_student (course_id, student_id) VALUES (3, 99);
+INSERT INTO course_student (course_id, student_id) VALUES (13, 117);
+INSERT INTO course_student (course_id, student_id) VALUES (27, 109);
+INSERT INTO course_student (course_id, student_id) VALUES (22, 77);
+INSERT INTO course_student (course_id, student_id) VALUES (7, 124);
+INSERT INTO course_student (course_id, student_id) VALUES (15, 73);
+INSERT INTO course_student (course_id, student_id) VALUES (8, 130);
+INSERT INTO course_student (course_id, student_id) VALUES (6, 45);
+INSERT INTO course_student (course_id, student_id) VALUES (24, 46);
+INSERT INTO course_student (course_id, student_id) VALUES (20, 37);
+INSERT INTO course_student (course_id, student_id) VALUES (5, 61);
+INSERT INTO course_student (course_id, student_id) VALUES (26, 59);
+INSERT INTO course_student (course_id, student_id) VALUES (26, 105);
+INSERT INTO course_student (course_id, student_id) VALUES (5, 110);
+INSERT INTO course_student (course_id, student_id) VALUES (17, 131);
+INSERT INTO course_student (course_id, student_id) VALUES (16, 114);
+INSERT INTO course_student (course_id, student_id) VALUES (21, 56);
+INSERT INTO course_student (course_id, student_id) VALUES (20, 61);
+INSERT INTO course_student (course_id, student_id) VALUES (1, 46);
+INSERT INTO course_student (course_id, student_id) VALUES (10, 112);
+INSERT INTO course_student (course_id, student_id) VALUES (16, 122);
+INSERT INTO course_student (course_id, student_id) VALUES (21, 138);
+INSERT INTO course_student (course_id, student_id) VALUES (7, 117);
+INSERT INTO course_student (course_id, student_id) VALUES (24, 72);
+INSERT INTO course_student (course_id, student_id) VALUES (18, 39);
+INSERT INTO course_student (course_id, student_id) VALUES (29, 82);
+INSERT INTO course_student (course_id, student_id) VALUES (23, 132);
+INSERT INTO course_student (course_id, student_id) VALUES (10, 97);
+INSERT INTO course_student (course_id, student_id) VALUES (17, 54);
+INSERT INTO course_student (course_id, student_id) VALUES (17, 90);
+INSERT INTO course_student (course_id, student_id) VALUES (2, 128);
+INSERT INTO course_student (course_id, student_id) VALUES (10, 108);
+INSERT INTO course_student (course_id, student_id) VALUES (8, 124);
+INSERT INTO course_student (course_id, student_id) VALUES (12, 115);
+INSERT INTO course_student (course_id, student_id) VALUES (1, 55);
+INSERT INTO course_student (course_id, student_id) VALUES (6, 92);
+INSERT INTO course_student (course_id, student_id) VALUES (13, 101);
+INSERT INTO course_student (course_id, student_id) VALUES (21, 130);
+INSERT INTO course_student (course_id, student_id) VALUES (24, 97);
+INSERT INTO course_student (course_id, student_id) VALUES (9, 52);
+INSERT INTO course_student (course_id, student_id) VALUES (19, 115);
+INSERT INTO course_student (course_id, student_id) VALUES (27, 110);
+INSERT INTO course_student (course_id, student_id) VALUES (21, 42);
+INSERT INTO course_student (course_id, student_id) VALUES (22, 127);
+INSERT INTO course_student (course_id, student_id) VALUES (21, 46);
+INSERT INTO course_student (course_id, student_id) VALUES (4, 93);
+INSERT INTO course_student (course_id, student_id) VALUES (29, 72);
+INSERT INTO course_student (course_id, student_id) VALUES (11, 107);
+INSERT INTO course_student (course_id, student_id) VALUES (11, 52);
+INSERT INTO course_student (course_id, student_id) VALUES (30, 120);
+INSERT INTO course_student (course_id, student_id) VALUES (26, 49);
+INSERT INTO course_student (course_id, student_id) VALUES (19, 47);
+INSERT INTO course_student (course_id, student_id) VALUES (30, 123);
+INSERT INTO course_student (course_id, student_id) VALUES (1, 137);
+INSERT INTO course_student (course_id, student_id) VALUES (21, 123);
+INSERT INTO course_student (course_id, student_id) VALUES (6, 110);
+INSERT INTO course_student (course_id, student_id) VALUES (18, 35);
+INSERT INTO course_student (course_id, student_id) VALUES (28, 122);
+INSERT INTO course_student (course_id, student_id) VALUES (8, 127);
+INSERT INTO course_student (course_id, student_id) VALUES (17, 80);
+INSERT INTO course_student (course_id, student_id) VALUES (3, 50);
+INSERT INTO course_student (course_id, student_id) VALUES (1, 42);
+INSERT INTO course_student (course_id, student_id) VALUES (21, 67);
+INSERT INTO course_student (course_id, student_id) VALUES (28, 74);
+INSERT INTO course_student (course_id, student_id) VALUES (6, 127);
+INSERT INTO course_student (course_id, student_id) VALUES (29, 91);
+INSERT INTO course_student (course_id, student_id) VALUES (5, 139);
+INSERT INTO course_student (course_id, student_id) VALUES (21, 102);
+INSERT INTO course_student (course_id, student_id) VALUES (6, 81);
+INSERT INTO course_student (course_id, student_id) VALUES (28, 64);
+INSERT INTO course_student (course_id, student_id) VALUES (20, 49);
+INSERT INTO course_student (course_id, student_id) VALUES (11, 104);
+INSERT INTO course_student (course_id, student_id) VALUES (23, 116);
+INSERT INTO course_student (course_id, student_id) VALUES (1, 43);
+INSERT INTO course_student (course_id, student_id) VALUES (27, 43);
+INSERT INTO course_student (course_id, student_id) VALUES (6, 116);
+INSERT INTO course_student (course_id, student_id) VALUES (3, 47);
+INSERT INTO course_student (course_id, student_id) VALUES (1, 54);
+INSERT INTO course_student (course_id, student_id) VALUES (13, 64);
+INSERT INTO course_student (course_id, student_id) VALUES (14, 115);
+INSERT INTO course_student (course_id, student_id) VALUES (22, 135);
+INSERT INTO course_student (course_id, student_id) VALUES (14, 126);
+INSERT INTO course_student (course_id, student_id) VALUES (20, 133);
+INSERT INTO course_student (course_id, student_id) VALUES (17, 87);
+INSERT INTO course_student (course_id, student_id) VALUES (29, 81);
+INSERT INTO course_student (course_id, student_id) VALUES (18, 133);
+INSERT INTO course_student (course_id, student_id) VALUES (4, 90);
+INSERT INTO course_student (course_id, student_id) VALUES (7, 67);
+INSERT INTO course_student (course_id, student_id) VALUES (6, 74);
+INSERT INTO course_student (course_id, student_id) VALUES (19, 72);
+INSERT INTO course_student (course_id, student_id) VALUES (10, 106);
+INSERT INTO course_student (course_id, student_id) VALUES (23, 52);
+INSERT INTO course_student (course_id, student_id) VALUES (24, 107);
+INSERT INTO course_student (course_id, student_id) VALUES (13, 39);
+INSERT INTO course_student (course_id, student_id) VALUES (28, 119);
+INSERT INTO course_student (course_id, student_id) VALUES (2, 85);
+INSERT INTO course_student (course_id, student_id) VALUES (14, 108);
+INSERT INTO course_student (course_id, student_id) VALUES (14, 50);
+INSERT INTO course_student (course_id, student_id) VALUES (16, 65);
+INSERT INTO course_student (course_id, student_id) VALUES (19, 66);
+INSERT INTO course_student (course_id, student_id) VALUES (19, 71);
+INSERT INTO course_student (course_id, student_id) VALUES (3, 36);
+INSERT INTO course_student (course_id, student_id) VALUES (19, 125);
+INSERT INTO course_student (course_id, student_id) VALUES (6, 80);
+INSERT INTO course_student (course_id, student_id) VALUES (1, 80);
+INSERT INTO course_student (course_id, student_id) VALUES (24, 84);
+INSERT INTO course_student (course_id, student_id) VALUES (26, 39);
+INSERT INTO course_student (course_id, student_id) VALUES (17, 73);
+INSERT INTO course_student (course_id, student_id) VALUES (13, 43);
+INSERT INTO course_student (course_id, student_id) VALUES (16, 79);
+INSERT INTO course_student (course_id, student_id) VALUES (11, 88);
+INSERT INTO course_student (course_id, student_id) VALUES (4, 84);
+INSERT INTO course_student (course_id, student_id) VALUES (13, 70);
+INSERT INTO course_student (course_id, student_id) VALUES (28, 91);
+INSERT INTO course_student (course_id, student_id) VALUES (3, 55);
+INSERT INTO course_student (course_id, student_id) VALUES (26, 50);
+INSERT INTO course_student (course_id, student_id) VALUES (15, 59);
+INSERT INTO course_student (course_id, student_id) VALUES (23, 118);
+INSERT INTO course_student (course_id, student_id) VALUES (22, 49);
+INSERT INTO course_student (course_id, student_id) VALUES (26, 115);
+INSERT INTO course_student (course_id, student_id) VALUES (1, 101);
+INSERT INTO course_student (course_id, student_id) VALUES (30, 81);
+INSERT INTO course_student (course_id, student_id) VALUES (14, 74);
+INSERT INTO course_student (course_id, student_id) VALUES (4, 45);
+INSERT INTO course_student (course_id, student_id) VALUES (20, 119);
+INSERT INTO course_student (course_id, student_id) VALUES (15, 67);
+INSERT INTO course_student (course_id, student_id) VALUES (13, 35);
+INSERT INTO course_student (course_id, student_id) VALUES (26, 133);
+INSERT INTO course_student (course_id, student_id) VALUES (2, 62);
+INSERT INTO course_student (course_id, student_id) VALUES (17, 80);
+INSERT INTO course_student (course_id, student_id) VALUES (13, 85);
+INSERT INTO course_student (course_id, student_id) VALUES (30, 128);
+INSERT INTO course_student (course_id, student_id) VALUES (10, 109);
+INSERT INTO course_student (course_id, student_id) VALUES (13, 110);
+INSERT INTO course_student (course_id, student_id) VALUES (10, 125);
+INSERT INTO course_student (course_id, student_id) VALUES (11, 121);
+INSERT INTO course_student (course_id, student_id) VALUES (4, 60);
+INSERT INTO course_student (course_id, student_id) VALUES (13, 117);
+INSERT INTO course_student (course_id, student_id) VALUES (1, 86);
+INSERT INTO course_student (course_id, student_id) VALUES (3, 46);
+INSERT INTO course_student (course_id, student_id) VALUES (7, 67);
+INSERT INTO course_student (course_id, student_id) VALUES (5, 82);
+INSERT INTO course_student (course_id, student_id) VALUES (15, 121);
+INSERT INTO course_student (course_id, student_id) VALUES (20, 115);
+INSERT INTO course_student (course_id, student_id) VALUES (26, 38);
+INSERT INTO course_student (course_id, student_id) VALUES (7, 120);
+INSERT INTO course_student (course_id, student_id) VALUES (26, 56);
+INSERT INTO course_student (course_id, student_id) VALUES (23, 59);
+INSERT INTO course_student (course_id, student_id) VALUES (13, 71);
+INSERT INTO course_student (course_id, student_id) VALUES (14, 90);
+INSERT INTO course_student (course_id, student_id) VALUES (12, 67);
+INSERT INTO course_student (course_id, student_id) VALUES (22, 93);
+INSERT INTO course_student (course_id, student_id) VALUES (10, 114);
+INSERT INTO course_student (course_id, student_id) VALUES (3, 72);
+INSERT INTO course_student (course_id, student_id) VALUES (15, 38);
+INSERT INTO course_student (course_id, student_id) VALUES (17, 42);
+INSERT INTO course_student (course_id, student_id) VALUES (22, 94);
+INSERT INTO course_student (course_id, student_id) VALUES (22, 56);
+INSERT INTO course_student (course_id, student_id) VALUES (14, 95);
+INSERT INTO course_student (course_id, student_id) VALUES (17, 116);
+INSERT INTO course_student (course_id, student_id) VALUES (23, 128);
+INSERT INTO course_student (course_id, student_id) VALUES (17, 107);
+INSERT INTO course_student (course_id, student_id) VALUES (25, 40);
+INSERT INTO course_student (course_id, student_id) VALUES (25, 42);
+INSERT INTO course_student (course_id, student_id) VALUES (21, 92);
+INSERT INTO course_student (course_id, student_id) VALUES (10, 90);
+INSERT INTO course_student (course_id, student_id) VALUES (5, 98);
+INSERT INTO course_student (course_id, student_id) VALUES (18, 104);
+INSERT INTO course_student (course_id, student_id) VALUES (26, 132);
+INSERT INTO course_student (course_id, student_id) VALUES (9, 37);
+INSERT INTO course_student (course_id, student_id) VALUES (12, 92);
+INSERT INTO course_student (course_id, student_id) VALUES (28, 39);
+INSERT INTO course_student (course_id, student_id) VALUES (3, 45);
+INSERT INTO course_student (course_id, student_id) VALUES (4, 45);
+INSERT INTO course_student (course_id, student_id) VALUES (30, 132);
+INSERT INTO course_student (course_id, student_id) VALUES (15, 106);
+INSERT INTO course_student (course_id, student_id) VALUES (28, 136);
+INSERT INTO course_student (course_id, student_id) VALUES (3, 102);
+INSERT INTO course_student (course_id, student_id) VALUES (19, 111);
+INSERT INTO course_student (course_id, student_id) VALUES (5, 41);
+INSERT INTO course_student (course_id, student_id) VALUES (5, 109);
+INSERT INTO course_student (course_id, student_id) VALUES (1, 104);
+INSERT INTO course_student (course_id, student_id) VALUES (5, 115);
+INSERT INTO course_student (course_id, student_id) VALUES (30, 107);
+INSERT INTO course_student (course_id, student_id) VALUES (15, 78);
+INSERT INTO course_student (course_id, student_id) VALUES (25, 51);
+INSERT INTO course_student (course_id, student_id) VALUES (30, 67);
+INSERT INTO course_student (course_id, student_id) VALUES (26, 96);
+INSERT INTO course_student (course_id, student_id) VALUES (20, 117);
+INSERT INTO course_student (course_id, student_id) VALUES (3, 80);
+INSERT INTO course_student (course_id, student_id) VALUES (9, 102);
+INSERT INTO course_student (course_id, student_id) VALUES (6, 109);
+INSERT INTO course_student (course_id, student_id) VALUES (18, 128);
+INSERT INTO course_student (course_id, student_id) VALUES (9, 53);
+INSERT INTO course_student (course_id, student_id) VALUES (1, 111);
+INSERT INTO course_student (course_id, student_id) VALUES (15, 84);
+INSERT INTO course_student (course_id, student_id) VALUES (5, 64);
+INSERT INTO course_student (course_id, student_id) VALUES (7, 41);
+INSERT INTO course_student (course_id, student_id) VALUES (16, 99);
+INSERT INTO course_student (course_id, student_id) VALUES (2, 138);
+INSERT INTO course_student (course_id, student_id) VALUES (19, 121);
+INSERT INTO course_student (course_id, student_id) VALUES (16, 108);
+INSERT INTO course_student (course_id, student_id) VALUES (15, 69);
+INSERT INTO course_student (course_id, student_id) VALUES (7, 110);
+INSERT INTO course_student (course_id, student_id) VALUES (12, 56);
+INSERT INTO course_student (course_id, student_id) VALUES (3, 120);
+INSERT INTO course_student (course_id, student_id) VALUES (9, 46);
+INSERT INTO course_student (course_id, student_id) VALUES (29, 73);
+INSERT INTO course_student (course_id, student_id) VALUES (10, 40);
+INSERT INTO course_student (course_id, student_id) VALUES (23, 106);
+INSERT INTO course_student (course_id, student_id) VALUES (28, 80);
+INSERT INTO course_student (course_id, student_id) VALUES (5, 46);
+INSERT INTO course_student (course_id, student_id) VALUES (3, 49);
+INSERT INTO course_student (course_id, student_id) VALUES (20, 48);
+INSERT INTO course_student (course_id, student_id) VALUES (21, 47);
+INSERT INTO course_student (course_id, student_id) VALUES (23, 104);
+INSERT INTO course_student (course_id, student_id) VALUES (6, 125);
+INSERT INTO course_student (course_id, student_id) VALUES (10, 36);
+INSERT INTO course_student (course_id, student_id) VALUES (22, 112);
+INSERT INTO course_student (course_id, student_id) VALUES (18, 110);
+INSERT INTO course_student (course_id, student_id) VALUES (14, 46);
+INSERT INTO course_student (course_id, student_id) VALUES (24, 80);
+INSERT INTO course_student (course_id, student_id) VALUES (18, 39);
+INSERT INTO course_student (course_id, student_id) VALUES (5, 110);
+INSERT INTO course_student (course_id, student_id) VALUES (22, 101);
+INSERT INTO course_student (course_id, student_id) VALUES (10, 55);
+INSERT INTO course_student (course_id, student_id) VALUES (2, 51);
+INSERT INTO course_student (course_id, student_id) VALUES (8, 72);
+INSERT INTO course_student (course_id, student_id) VALUES (4, 127);
+INSERT INTO course_student (course_id, student_id) VALUES (19, 137);
+INSERT INTO course_student (course_id, student_id) VALUES (23, 49);
+INSERT INTO course_student (course_id, student_id) VALUES (26, 77);
+INSERT INTO course_student (course_id, student_id) VALUES (4, 69);
+INSERT INTO course_student (course_id, student_id) VALUES (28, 56);
+INSERT INTO course_student (course_id, student_id) VALUES (6, 62);
+INSERT INTO course_student (course_id, student_id) VALUES (11, 77);
+INSERT INTO course_student (course_id, student_id) VALUES (15, 98);
+INSERT INTO course_student (course_id, student_id) VALUES (4, 78);
+INSERT INTO course_student (course_id, student_id) VALUES (26, 69);
+INSERT INTO course_student (course_id, student_id) VALUES (7, 112);
+INSERT INTO course_student (course_id, student_id) VALUES (3, 40);
+INSERT INTO course_student (course_id, student_id) VALUES (12, 86);
+INSERT INTO course_student (course_id, student_id) VALUES (10, 37);
+INSERT INTO course_student (course_id, student_id) VALUES (19, 136);
+INSERT INTO course_student (course_id, student_id) VALUES (3, 69);
+INSERT INTO course_student (course_id, student_id) VALUES (29, 35);
+INSERT INTO course_student (course_id, student_id) VALUES (9, 37);
+INSERT INTO course_student (course_id, student_id) VALUES (11, 98);
+INSERT INTO course_student (course_id, student_id) VALUES (4, 50);
+INSERT INTO course_student (course_id, student_id) VALUES (27, 81);
+INSERT INTO course_student (course_id, student_id) VALUES (4, 80);
+INSERT INTO course_student (course_id, student_id) VALUES (2, 138);
+INSERT INTO course_student (course_id, student_id) VALUES (25, 113);
+INSERT INTO course_student (course_id, student_id) VALUES (3, 114);
+INSERT INTO course_student (course_id, student_id) VALUES (18, 120);
+INSERT INTO course_student (course_id, student_id) VALUES (12, 83);
+INSERT INTO course_student (course_id, student_id) VALUES (3, 131);
+INSERT INTO course_student (course_id, student_id) VALUES (2, 97);
+INSERT INTO course_student (course_id, student_id) VALUES (23, 110);
+INSERT INTO course_student (course_id, student_id) VALUES (23, 97);
+INSERT INTO course_student (course_id, student_id) VALUES (3, 125);
+INSERT INTO course_student (course_id, student_id) VALUES (23, 73);
+INSERT INTO course_student (course_id, student_id) VALUES (27, 54);
+INSERT INTO course_student (course_id, student_id) VALUES (22, 94);
+INSERT INTO course_student (course_id, student_id) VALUES (8, 134);
+INSERT INTO course_student (course_id, student_id) VALUES (16, 75);
+INSERT INTO course_student (course_id, student_id) VALUES (25, 46);
+INSERT INTO course_student (course_id, student_id) VALUES (28, 73);
+INSERT INTO course_student (course_id, student_id) VALUES (22, 62);
+INSERT INTO course_student (course_id, student_id) VALUES (10, 113);
+INSERT INTO course_student (course_id, student_id) VALUES (10, 70);
+INSERT INTO course_student (course_id, student_id) VALUES (2, 68);
+INSERT INTO course_student (course_id, student_id) VALUES (7, 39);
+INSERT INTO course_student (course_id, student_id) VALUES (21, 60);
+INSERT INTO course_student (course_id, student_id) VALUES (14, 136);
+INSERT INTO course_student (course_id, student_id) VALUES (2, 38);
+INSERT INTO course_student (course_id, student_id) VALUES (17, 90);
+INSERT INTO course_student (course_id, student_id) VALUES (21, 102);
+INSERT INTO course_student (course_id, student_id) VALUES (22, 73);
+INSERT INTO course_student (course_id, student_id) VALUES (22, 45);
+INSERT INTO course_student (course_id, student_id) VALUES (26, 85);
+INSERT INTO course_student (course_id, student_id) VALUES (16, 110);
+INSERT INTO course_student (course_id, student_id) VALUES (9, 74);
+INSERT INTO course_student (course_id, student_id) VALUES (23, 108);
+INSERT INTO course_student (course_id, student_id) VALUES (4, 42);
+INSERT INTO course_student (course_id, student_id) VALUES (8, 124);
+INSERT INTO course_student (course_id, student_id) VALUES (1, 71);
+INSERT INTO course_student (course_id, student_id) VALUES (20, 78);
+INSERT INTO course_student (course_id, student_id) VALUES (22, 138);
+INSERT INTO course_student (course_id, student_id) VALUES (19, 85);
+INSERT INTO course_student (course_id, student_id) VALUES (7, 137);
+INSERT INTO course_student (course_id, student_id) VALUES (30, 95);
+INSERT INTO course_student (course_id, student_id) VALUES (27, 41);
+INSERT INTO course_student (course_id, student_id) VALUES (24, 57);
+INSERT INTO course_student (course_id, student_id) VALUES (26, 137);
+INSERT INTO course_student (course_id, student_id) VALUES (7, 120);
+INSERT INTO course_student (course_id, student_id) VALUES (2, 130);
+INSERT INTO course_student (course_id, student_id) VALUES (6, 120);
+INSERT INTO course_student (course_id, student_id) VALUES (29, 115);
+INSERT INTO course_student (course_id, student_id) VALUES (19, 102);
+INSERT INTO course_student (course_id, student_id) VALUES (25, 92);
+INSERT INTO course_student (course_id, student_id) VALUES (2, 123);
+INSERT INTO course_student (course_id, student_id) VALUES (30, 125);
+INSERT INTO course_student (course_id, student_id) VALUES (14, 127);
+INSERT INTO course_student (course_id, student_id) VALUES (12, 131);
+INSERT INTO course_student (course_id, student_id) VALUES (24, 53);
+INSERT INTO course_student (course_id, student_id) VALUES (30, 62);
+INSERT INTO course_student (course_id, student_id) VALUES (6, 78);
+INSERT INTO course_student (course_id, student_id) VALUES (30, 119);
+INSERT INTO course_student (course_id, student_id) VALUES (22, 55);
+INSERT INTO course_student (course_id, student_id) VALUES (9, 116);
+INSERT INTO course_student (course_id, student_id) VALUES (1, 57);
+INSERT INTO course_student (course_id, student_id) VALUES (15, 109);
+INSERT INTO course_student (course_id, student_id) VALUES (17, 47);
+INSERT INTO course_student (course_id, student_id) VALUES (15, 50);
+INSERT INTO course_student (course_id, student_id) VALUES (10, 136);
+INSERT INTO course_student (course_id, student_id) VALUES (30, 90);
+INSERT INTO course_student (course_id, student_id) VALUES (20, 38);
+INSERT INTO course_student (course_id, student_id) VALUES (25, 82);
+INSERT INTO course_student (course_id, student_id) VALUES (1, 86);
+INSERT INTO course_student (course_id, student_id) VALUES (13, 56);
+INSERT INTO course_student (course_id, student_id) VALUES (17, 56);
+INSERT INTO course_student (course_id, student_id) VALUES (18, 42);
+INSERT INTO course_student (course_id, student_id) VALUES (25, 70);
+INSERT INTO course_student (course_id, student_id) VALUES (8, 37);
+INSERT INTO course_student (course_id, student_id) VALUES (22, 82);
+INSERT INTO course_student (course_id, student_id) VALUES (7, 58);
+INSERT INTO course_student (course_id, student_id) VALUES (30, 128);
+INSERT INTO course_student (course_id, student_id) VALUES (18, 135);
+INSERT INTO course_student (course_id, student_id) VALUES (13, 74);
+INSERT INTO course_student (course_id, student_id) VALUES (3, 92);
+INSERT INTO course_student (course_id, student_id) VALUES (30, 36);
+INSERT INTO course_student (course_id, student_id) VALUES (29, 117);
+INSERT INTO course_student (course_id, student_id) VALUES (29, 48);
+INSERT INTO course_student (course_id, student_id) VALUES (26, 80);
+INSERT INTO course_student (course_id, student_id) VALUES (2, 123);
+INSERT INTO course_student (course_id, student_id) VALUES (27, 54);
+INSERT INTO course_student (course_id, student_id) VALUES (28, 93);
+INSERT INTO course_student (course_id, student_id) VALUES (12, 106);
+INSERT INTO course_student (course_id, student_id) VALUES (24, 137);
+INSERT INTO course_student (course_id, student_id) VALUES (16, 99);
+INSERT INTO course_student (course_id, student_id) VALUES (12, 104);
+INSERT INTO course_student (course_id, student_id) VALUES (6, 131);
+INSERT INTO course_student (course_id, student_id) VALUES (5, 44);
+INSERT INTO course_student (course_id, student_id) VALUES (4, 137);
+INSERT INTO course_student (course_id, student_id) VALUES (6, 42);
+INSERT INTO course_student (course_id, student_id) VALUES (20, 115);
+INSERT INTO course_student (course_id, student_id) VALUES (13, 72);
+INSERT INTO course_student (course_id, student_id) VALUES (25, 38);
+INSERT INTO course_student (course_id, student_id) VALUES (29, 37);
+INSERT INTO course_student (course_id, student_id) VALUES (9, 72);
+INSERT INTO course_student (course_id, student_id) VALUES (18, 72);
+INSERT INTO course_student (course_id, student_id) VALUES (9, 121);
+INSERT INTO course_student (course_id, student_id) VALUES (7, 91);
+INSERT INTO course_student (course_id, student_id) VALUES (3, 35);
+INSERT INTO course_student (course_id, student_id) VALUES (14, 49);
+INSERT INTO course_student (course_id, student_id) VALUES (22, 37);
+INSERT INTO course_student (course_id, student_id) VALUES (14, 127);
+INSERT INTO course_student (course_id, student_id) VALUES (7, 139);
+INSERT INTO course_student (course_id, student_id) VALUES (30, 65);
