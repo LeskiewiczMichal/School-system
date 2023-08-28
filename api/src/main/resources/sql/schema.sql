@@ -61,8 +61,8 @@ CREATE TABLE teacher_details (
                                  teacher_id BIGINT NOT NULL,
                                  degree_field VARCHAR(100) NOT NULL,
                                  title VARCHAR(100) NOT NULL,
-                                 bio VARCHAR(1200) DEFAULT '' NOT NULL,
-                                 tutorship VARCHAR(800) DEFAULT '' NOT NULL,
+                                 bio VARCHAR(2500) DEFAULT '' NOT NULL,
+                                 tutorship VARCHAR(2500) DEFAULT '' NOT NULL,
                                  PRIMARY KEY (id),
                                  FOREIGN KEY (teacher_id) REFERENCES users (id)
 );
