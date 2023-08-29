@@ -118,13 +118,15 @@ export default function Faculty() {
             </div>
           </section>
 
-          {/* Big card articles */}
-          {articles.length >= 7 && (
-            <BigCardWithOptionalHeader
-              article={articles[6]}
-              facultyId={facultyId}
-            />
-          )}
+          <div className={"mb-6"}>
+            {/* Big card articles */}
+            {articles.length >= 7 && (
+              <BigCardWithOptionalHeader
+                article={articles[6]}
+                facultyId={facultyId}
+              />
+            )}
+          </div>
           {articles.length >= 8 && (
             <BigCardWithOptionalHeader
               article={articles[7]}

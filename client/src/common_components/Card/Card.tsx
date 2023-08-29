@@ -36,7 +36,7 @@ export default function Card(props: CardProps) {
       {imageUrl && (
         <img
           className={`w-full rounded-t-lg h-96 md:rounded-none md:rounded-l ${
-            wide ? "w-1/2" : ""
+            wide ? "lg:w-1/2" : ""
           }`}
           src={imageUrl}
           alt={imageAlt}
