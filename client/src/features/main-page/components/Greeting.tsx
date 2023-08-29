@@ -1,11 +1,11 @@
-import GlassBuilding from "../assets/glass-building.webp";
+import UniversityBuilding from "../assets/university-building.webp";
 import { Link } from "react-router-dom";
 
 export default function Greeting() {
   return (
     <section className="flex flex-col lg:flex-row lg:pt-14 pb-14 border-b border-brandMainLight">
       <img
-        src={GlassBuilding}
+        src={UniversityBuilding}
         className="w-full lg:w-1/2"
         alt="School building"
       />

@@ -12,7 +12,6 @@ import TextAndButtonWithPhotoOnRight from "../common_components/Card/TextAndButt
 import GlassBuilding from "../features/main-page/assets/glass-building.webp";
 import { AppPaths } from "../App";
 import { Sidebar } from "../features/sidebar";
-import LoadingSpinner from "../common_components/LoadingSpinner";
 import LoadingSpinnerPage from "./LoadingSpinnerPage";
 
 export default function Home() {
@@ -34,7 +33,7 @@ export default function Home() {
       // Call the api
       const response: GetArticlesResponse = await ArticleRequest.getArticles({
         link: links.articles.search,
-        category: ArticleCategory.NEWS,
+        category: ArticleCategory.SCIENCE,
         pagination: { size: 1 },
       });
 
@@ -83,7 +82,7 @@ export default function Home() {
             buttonText={"Learn More"}
             imageLink={GlassBuilding}
           />
-          <ArticlesDisplay />
+          <ArticlesDisplay category={ArticleCategory.EVENTS} />
         </div>
       </section>
       {mobileNavView && <Sidebar />}
