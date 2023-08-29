@@ -33,17 +33,6 @@ export default function Research() {
     ? require(`./json/research-${facultyId}.json`)
     : require(`./json/research.json`);
 
-  // Prepare sidebar links
-  // let sidebarLinks: SidebarLinkProps[] = [];
-  // if (facultyId) {
-  //   sidebarLinks = mobileNavView
-  //     ? FacultyNavLinksCreator.createFacultyNavigationLinks(facultyId!)
-  //     : FacultyNavLinksCreator.createFacultyNavigationLinksDesktop(
-  //         facultyId!,
-  //         PageType.RESEARCH,
-  //       );
-  // }
-
   useEffect(() => {
     const handleFetchArticles = async () => {
       // Prepare the link
@@ -90,14 +79,12 @@ export default function Research() {
       {!facultyId && <Sidebar links={sidebarLinks} />}
       <main className={"h-full w-full flex flex-col py-8"}>
         {/* Title and text */}
-        <section className={"lg:px-8"}>
+        <section className={`${facultyId ? "lg:px-20" : "lg:px-8"}`}>
           <h1 className="page-title_h1 px-2 lg:px-0 text-brandMainNearlyBlack">
             {researchPageContent.title}
           </h1>
           <p
-            className={
-              "markdown-paragraph text-grayscaleDarkText px-2 lg:px-0 mb-6"
-            }
+            className={"markdown-paragraph text-grayscaleDarkText px-2 lg:px-0"}
             dangerouslySetInnerHTML={{
               __html: marked.marked(researchPageContent.textUnderTitle),
             }}
