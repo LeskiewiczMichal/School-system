@@ -41,7 +41,7 @@ export default function TeachingAndStudying() {
         link: links.articles.search,
         category: ArticleCategory.EVENTS,
         faculty: facultyId,
-        pagination: { size: 4 },
+        pagination: { size: 3 },
       });
 
       // Set the articles
@@ -67,7 +67,11 @@ export default function TeachingAndStudying() {
 
   return (
     <div className={"flex h-full"}>
-      <main className={"h-full w-full flex flex-col lg:px-8 py-8"}>
+      <main
+        className={`h-full w-full flex flex-col py-8 ${
+          facultyId ? "lg:px-20" : "lg:px-8"
+        }`}
+      >
         <section className={"w-full flex flex-col mb-24"}>
           {/* Title and text */}
           <h1 className="page-title_h1 text-brandMainNearlyBlack">
@@ -80,7 +84,7 @@ export default function TeachingAndStudying() {
           <ColoredBackgroundWithPhotoOnRight
             heading={teachingAndStudyingPageContent.cardHeading}
             text={teachingAndStudyingPageContent.cardText}
-            buttonLink={teachingAndStudyingPageContent.cardButtonLink}
+            buttonLink={"/degree-programmes"}
             buttonText={teachingAndStudyingPageContent.cardButtonText}
             imageLink={require(`../assets/${teachingAndStudyingPageContent.cardImage}`)}
             backgroundColor={teachingAndStudyingPageContent.cardBackgroundColor}
@@ -95,8 +99,8 @@ export default function TeachingAndStudying() {
             <div
               className={"grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4"}
             >
-              <BigCardWithOptionalHeader article={articles[3]} />
-              {articles.slice(1).map((article) => {
+              {/*<BigCardWithOptionalHeader article={articles[0]} />*/}
+              {articles.map((article) => {
                 return (
                   <Card
                     key={article.id.toString()}
@@ -107,7 +111,7 @@ export default function TeachingAndStudying() {
                     articleId={article.id.toString()}
                     redirectUrl={
                       facultyId
-                        ? `/faculties/${facultyId}/articles}`
+                        ? `/faculties/${facultyId}/articles`
                         : AppPaths.ARTICLES
                     }
                   />

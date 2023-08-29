@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import Degree from "../types/Degree";
 import DegreeCardPlaceholder from "../assets/degreeCardPlaceholder.jpg";
 import EnumMapper from "../../../utils/EnumMapper";
+import { AppPaths } from "../../../App";
 
 export interface DegreeCardProps {
   degree: Degree;
@@ -26,7 +27,11 @@ export default function DegreeCard(props: DegreeCardProps) {
     >
       <img
         className={`rounded-t-lg h-72 w-full sm:h-auto sm:w-1/4 md:rounded-none md:rounded-l `}
-        src={degree.imageName || DegreeCardPlaceholder}
+        src={
+          degree.imageName
+            ? `${AppPaths.IMAGES}/${degree.imageName}`
+            : DegreeCardPlaceholder
+        }
         alt={"Degree image"}
       />
 
