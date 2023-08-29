@@ -50,6 +50,7 @@ export default function Faculty() {
         heading={facultyPageContent.greetingsHeading}
         text={facultyPageContent.greetingsText}
         buttonText={facultyPageContent.greetingsButtonText}
+        buttonLink={facultyPageContent.greetingsButtonLink}
       />
       <section className="flex flex-col px-4 md:px-32 my-16">
         {/*  News */}
@@ -94,12 +95,8 @@ export default function Faculty() {
           {/* Articles */}
           <section className="flex flex-col">
             <h4 className="my-header text-brandMainNearlyBlack">
-              {facultyPageContent.newsDisplayHeading}
+              {facultyPageContent.informationHeading}
             </h4>
-
-            <p className={"text-grayscaleDarkText mb-2"}>
-              {facultyPageContent.newsDisplayText}
-            </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mt-6 mb-8  gap-4">
               {articles.slice(3, 6).map((article) => {

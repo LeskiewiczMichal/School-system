@@ -6,10 +6,11 @@ export interface GreetingsProps {
   heading: string;
   text: string;
   buttonText?: string;
+  buttonLink?: string;
 }
 
 export default function Greetings(props: GreetingsProps) {
-  const { imageLink, heading, text, buttonText } = props;
+  const { imageLink, heading, text, buttonText, buttonLink } = props;
 
   return (
     <section className="flex flex-col lg:flex-row lg:pt-14 pb-14 border-b border-brandMainLight">
@@ -23,7 +24,7 @@ export default function Greetings(props: GreetingsProps) {
         <p>{text}</p>
         {buttonText && (
           <Link
-            to="/degrees"
+            to={buttonLink ? buttonLink : "/degrees"}
             className="flex items-center justify-between bg-brandMain w-3/5 text-center text-white font-bold text-md py-2 px-4 hover:bg-brandMainActive"
           >
             {buttonText} <ArrowRight className={"h-6 w-6"} />
