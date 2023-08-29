@@ -5,14 +5,12 @@ import {
   DegreeBasicInformation,
   DegreeCoursesDisplay,
   DegreeRequest,
+  DegreeTitle,
 } from "../../features/degree";
 import { useAppSelector } from "../../hooks";
 import { useParams } from "react-router-dom";
 import { AppPaths } from "../../App";
-import DegreePageContentInterface from "./DegreePageContentInterface";
 import * as marked from "marked";
-import EnumMapper from "../../utils/EnumMapper";
-import Language from "../../type/Language";
 import {
   Article,
   ArticleCategory,
@@ -27,7 +25,7 @@ export default function Degree() {
   const articlesLinks = useAppSelector((state) => state.links.articles);
   const [articles, setArticles] = useState<Article[]>([]);
 
-  const degreePageContent: DegreePageContentInterface = require(`./json/degree-${degreeId}.json`);
+  // const degreePageContent: DegreePageContentInterface = require(`./json/degree-${degreeId}.json`);
 
   useEffect(() => {
     const handleFetchDegree = async () => {
@@ -79,8 +77,14 @@ export default function Degree() {
       {/* Top greeting */}
       <Greetings
         imageLink={`${AppPaths.IMAGES}/${degree.imageName}`}
-        heading={degreePageContent.greetingsHeading}
-        text={degreePageContent.greetingsText}
+        heading={`${
+          degree.title === DegreeTitle.BACHELOR_OF_SCIENCE
+            ? "BACHELOR"
+            : degree.title
+        }'S DEGREE IN ${degree.fieldOfStudy.toUpperCase()}`}
+        text={
+          "Enroll at Aquila University and acquire the expertise to shape the digital societies of tomorrow."
+        }
       />
       <section
         className={"flex flex-col px-4 md:px-32 my-16 gap-8 lg:flex-row"}
@@ -106,9 +110,9 @@ export default function Degree() {
         <FullWidthColoredBackground
           color={"black"}
           textColor={"white"}
-          heading={"ADMISSION ASSISTANCE"}
+          heading={"ENROLLMENT PROCESS"}
           text={
-            "Feel free to reach out to our Admission Assistance team at the University of Helsinki if you have any inquiries regarding the admissions procedure. We're here to provide you with the guidance and assistance you need."
+            "If you have any questions about the enrollment process, don't hesitate to get in touch with our team at Aquila University. We're here to offer you the necessary guidance and support to address any queries you may have."
           }
           buttonText={"Contact us"}
           buttonLink={AppPaths.CONTACT}
