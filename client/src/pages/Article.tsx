@@ -80,7 +80,7 @@ export default function Article() {
               <img src={article.imgPath} alt="Article" className={"mb-16"} />
             )}
             <div
-              className={"px-4 lg:px-0"}
+              className={"px-4 lg:px-0 markdown-paragraph"}
               dangerouslySetInnerHTML={{
                 __html: marked.marked(article.content!),
               }}
@@ -89,16 +89,16 @@ export default function Article() {
         </div>
 
         {/* Related articles */}
-        <section
-          className={
-            "px-4 lg:px-8 mt-16 pt-12 border-t border-grayscaleMediumDark"
-          }
-        >
-          <ArticlesDisplay
-            heading={"Related articles"}
-            category={article.category}
-          />
-        </section>
+        {/*<section*/}
+        {/*  className={*/}
+        {/*    "px-4 lg:px-8 mt-16 pt-12 border-t border-grayscaleMediumDark"*/}
+        {/*  }*/}
+        {/*>*/}
+        {/*  <ArticlesDisplay*/}
+        {/*    heading={"Related articles"}*/}
+        {/*    category={article.category}*/}
+        {/*  />*/}
+        {/*</section>*/}
       </main>
     </div>
   );

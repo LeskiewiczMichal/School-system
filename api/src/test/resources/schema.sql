@@ -51,6 +51,7 @@ CREATE TABLE users (
                        faculty BIGINT,
                        degree BIGINT,
                        role VARCHAR(100) NOT NULL,
+                       profile_picture_name VARCHAR(100),
                        PRIMARY KEY (id),
                        FOREIGN KEY (faculty) REFERENCES faculty(id),
                        FOREIGN KEY (degree) REFERENCES degree(id)
