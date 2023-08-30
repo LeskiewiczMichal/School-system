@@ -15,6 +15,7 @@ import axios from "axios";
 import MyHeadingWithLine from "../common_components/MyHeadingWithLine";
 import * as marked from "marked";
 import { SidebarLinkProps } from "../features/sidebar/components/SidebarLink";
+import LoadingSpinnerPage from "./LoadingSpinnerPage";
 
 export default function User() {
   const links = useAppSelector((state) => state.links);
@@ -71,7 +72,7 @@ export default function User() {
   }, [links]);
 
   if (!user) {
-    return <LoadingSpinner />;
+    return <LoadingSpinnerPage />;
   }
 
   return (
