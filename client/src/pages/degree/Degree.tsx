@@ -17,6 +17,7 @@ import {
   ArticlesDisplay,
 } from "../../features/article";
 import FullWidthColoredBackground from "../../common_components/Card/FullWidthColoredBackground";
+import LoadingSpinnerPage from "../LoadingSpinnerPage";
 
 export default function Degree() {
   const { degreeId } = useParams<{ degreeId: string }>();
@@ -69,7 +70,7 @@ export default function Degree() {
   // }, [articlesLinks]);
 
   if (!degree) {
-    return <span>Loading</span>;
+    return <LoadingSpinnerPage />;
   }
 
   return (

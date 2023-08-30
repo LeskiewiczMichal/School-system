@@ -1,11 +1,11 @@
 {
-  "title": "TEACHING AT THE FACULTY",
-  "textUnderTitle": "Teaching at our faculty is always based on the latest research. We also develop new methods of learning and means to support students in absorbing new concepts in the best way possible. On this webpage you will find more details about our teaching methods and development of instruction.",
-  "cardHeading": "Become Aquila's student",
-  "cardText": "Join one of our degree programmes and become a part of our community.",
-  "cardButtonText": "Check out our degree programmes",
-  "cardButtonLink": "/faculties/101/degree-programmes",
-  "cardImage": "faculty-of-informatics-image.webp",
+  "title": "EDUCATION AT THE FACULTY",
+  "textUnderTitle": "Education at the Faculty of Informatics and Computing is deeply rooted in cutting-edge research. We are dedicated to developing innovative teaching methodologies and tools that empower students to grasp complex concepts effectively. Explore this page to learn more about our teaching approaches and instructional enhancements.\",\n\"cardHeading\": \"Become a Part of Aquila's Community",
+  "cardHeading": "Become a Part of Aquila's Community",
+  "cardText": "Enroll in one of our prestigious degree programs and become an integral member of our vibrant community.",
+  "cardButtonText": "Discover Our Degree Programs",
+  "cardButtonLink": "/degree-programmes",
+  "cardImage": "teaching-at-faculty-1-img.webp",
   "cardBackgroundColor": "brandMain",
-  "articlesHeading": "Latest articles about our community events"
+  "articlesHeading": "Stay Informed with the Latest Updates"
 }
