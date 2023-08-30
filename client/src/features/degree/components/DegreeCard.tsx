@@ -3,6 +3,7 @@ import Degree from "../types/Degree";
 import DegreeCardPlaceholder from "../assets/degreeCardPlaceholder.jpg";
 import EnumMapper from "../../../utils/EnumMapper";
 import { AppPaths } from "../../../App";
+import * as marked from "marked";
 
 export interface DegreeCardProps {
   degree: Degree;
@@ -42,9 +43,12 @@ export default function DegreeCard(props: DegreeCardProps) {
           <h5 className="mb-2 text-xl  font-bold tracking-tight text-brandMain">
             {degree.fieldOfStudy} | {degreeLevel}'s programme
           </h5>
-          <p className="mb-3 font-normal text-grayscaleDarkText ">
-            {truncatedText}
-          </p>
+          <p
+            className="mb-3 font-normal text-grayscaleDarkText headers-font-bold"
+            dangerouslySetInnerHTML={{
+              __html: marked.marked(truncatedText),
+            }}
+          ></p>
         </div>
       </div>
     </Link>
