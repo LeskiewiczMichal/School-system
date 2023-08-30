@@ -75,7 +75,7 @@ export default function Course() {
       <div className={"w-full flex flex-col items-center"}>
         <CourseInfoCard course={course} isUserEnrolled={isUserEnrolled} />
 
-        <div className={"px-6 lg:px-32 my-10 border-t border-brandMain"}>
+        <div className={"px-6 lg:px-32  border-t border-brandMain"}>
           <h4 className="my-header mb-4 mt-12 text-brandMainNearlyBlack">
             Enrollment
           </h4>
@@ -99,14 +99,10 @@ export default function Course() {
           </p>
         </div>
 
-        <div className={"px-6 lg:px-32 my-10"}>
-          <h4 className="my-header mb-4 text-brandMainNearlyBlack">
-            About course
-          </h4>
-
+        <div className={"px-6 lg:px-32 mb-10"}>
           {description && (
             <p
-              className={"text-grayscaleDarkText flex flex-col gap-3 sm:mr-8"}
+              className={"text-grayscaleDarkText markdown-paragraph "}
               dangerouslySetInnerHTML={{ __html: marked.marked(description) }}
             ></p>
           )}
