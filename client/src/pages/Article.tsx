@@ -90,16 +90,16 @@ export default function Article() {
         </div>
 
         {/* Related articles */}
-        {/*<section*/}
-        {/*  className={*/}
-        {/*    "px-4 lg:px-8 mt-16 pt-12 border-t border-grayscaleMediumDark"*/}
-        {/*  }*/}
-        {/*>*/}
-        {/*  <ArticlesDisplay*/}
-        {/*    heading={"Related articles"}*/}
-        {/*    category={article.category}*/}
-        {/*  />*/}
-        {/*</section>*/}
+        <section
+          className={
+            "px-4 lg:px-8 mt-16 pt-12 border-t border-grayscaleMediumDark"
+          }
+        >
+          <ArticlesDisplay
+            heading={"Related articles"}
+            category={article.category}
+          />
+        </section>
       </main>
     </div>
   );
