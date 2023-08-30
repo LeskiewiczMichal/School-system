@@ -58,8 +58,6 @@ export default function CourseInfoCard(props: CourseInfoCardProps) {
         backgroundImage: `url(${require(`../assets/courseInfoCardImages/course-${course.id}.webp`)})`,
         backgroundPosition: "center",
         backgroundSize: "cover",
-        // backgroundSize: "contain",
-        // backgroundRepeat: "no-repeat",
       }}
     >
       <div className="flex flex-col w-full max-w-3xl justify-between text-grayscaleDarkText h-full bg-white p-8">
