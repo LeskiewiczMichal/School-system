@@ -228,7 +228,7 @@ public class CourseController {
    *     status 403.
    */
   @DeleteMapping("/{id}")
-  @PreAuthorize("hasRole('ADMIN') or @securityService.isCourseTeacher(#id)")
+  @PreAuthorize("hasRole('ADMIN') or @securityServiceImpl.isCourseTeacher(#id)")
   public ResponseEntity<MessageModel> deleteCourseById(@PathVariable Long id) {
     courseService.deleteCourse(id);
 
@@ -272,7 +272,7 @@ public class CourseController {
    * @throws MethodArgumentTypeMismatchException if the ID is not a number, returns status 400.
    */
   @PostMapping("/{id}/files")
-  @PreAuthorize("hasRole('ADMIN') or @securityService.isCourseTeacher(#id)")
+  @PreAuthorize("hasRole('ADMIN') or @securityServiceImpl.isCourseTeacher(#id)")
   public ResponseEntity<MessageModel> uploadFiles(
       @PathVariable Long id, @RequestParam("file") MultipartFile file) {
     try {
