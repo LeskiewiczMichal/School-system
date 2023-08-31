@@ -34,6 +34,24 @@ export default function LoginForm() {
     }
   };
 
+  const handleLoginToTestAccount = async (
+    e: React.MouseEvent<HTMLButtonElement>,
+  ) => {
+    e.preventDefault();
+
+    try {
+      const loginRequest = {
+        email: "test.account@example.com",
+        password: "12345",
+      };
+      await dispatch(login(loginRequest));
+
+      return navigate("/");
+    } catch (e: any) {
+      setError(e.message);
+    }
+  };
+
   return (
     <form className="self-center w-96 lg:w-1/3 border p-8 pt-0 bg-grayscaleSlightlyGray rounded">
       <Logo
@@ -101,6 +119,7 @@ export default function LoginForm() {
         <button
           className="w-full px-4 py-2 font-bold text-white bg-brandMain rounded hover:bg-brandMainActive focus:outline-none focus:shadow-outline"
           type="button"
+          onClick={handleLoginToTestAccount}
         >
           Try out on pre-made account
         </button>
