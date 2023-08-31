@@ -253,7 +253,7 @@ export default function CourseMainPage() {
             Course files
           </h4>
 
-          <div className={"flex flex-col lg:grid lg:grid-cols-2"}>
+          <div className={"flex flex-col "}>
             {files.map((file) => (
               <span
                 key={file.id.toString()}
