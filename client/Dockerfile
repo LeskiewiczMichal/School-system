@@ -1,15 +1,18 @@
 FROM node:lts-alpine3.18
 LABEL authors="Michał Leśkiewicz"
 
-ENV NODE_ENV development
-
 WORKDIR ./
 
+# Install dependencies
 COPY package*.json .
 RUN npm i
 
+# Copy source code
 COPY . .
+
+# Build app
+RUN npm run build
 
 EXPOSE 3000
 
-ENTRYPOINT ["npm", "start"]
+ENTRYPOINT ["npx", "serve", "-s", "build"]

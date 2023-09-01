@@ -25,3 +25,11 @@ services:
       DATABASE_URL: ${DATABASE_URL}
       DATABASE_USERNAME: ${DATABASE_USERNAME}
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+
+  frontend:
+    container_name: school-system-client
+    build:
+      context: ./client
+    ports:
+      - "3000:3000"
+   
