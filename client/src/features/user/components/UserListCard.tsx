@@ -2,6 +2,7 @@ import UserData from "../types/UserData";
 import DegreeCardPlaceholder from "../../degree/assets/degreeCardPlaceholder.jpg";
 import { Link } from "react-router-dom";
 import { AppPaths } from "../../../App";
+import images_path from "../../../utils/images_path";
 
 export interface UserListCardProps {
   user: UserData;
@@ -21,7 +22,7 @@ export default function UserListCard(props: UserListCardProps) {
         className={`rounded-t-lg h-72 w-full sm:h-auto md:rounded-none md:rounded-l `}
         src={
           user.profilePictureName
-            ? `${AppPaths.IMAGES}/${user.profilePictureName}`
+            ? `${images_path}/${user.profilePictureName}`
             : require("../assets/blank-profile-picture.webp")
         }
         alt={"Profile picture"}

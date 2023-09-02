@@ -14,7 +14,6 @@ export enum AppPaths {
   LOGIN = "/login",
   ARTICLES = "/articles",
   FACULTIES = "/faculties",
-  IMAGES = "/images",
   CONTACT = "/about-us/contact",
   COURSES = "/courses",
   TEACHING = "/teaching",

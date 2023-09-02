@@ -8,6 +8,7 @@ import { ReactComponent as User } from "../assets/user.svg";
 import { ReactComponent as FieldOfTeacher } from "../assets/fieldOfTeacher.svg";
 import TeacherDetails from "../types/TeacherDetails";
 import { AppPaths } from "../../../App";
+import images_path from "../../../utils/images_path";
 
 export interface BasicInformationProps {
   user: UserData;
@@ -28,7 +29,7 @@ export default function BasicInformation(props: BasicInformationProps) {
       <img
         src={
           user.profilePictureName
-            ? `${AppPaths.IMAGES}/${user.profilePictureName}`
+            ? `${images_path}/${user.profilePictureName}`
             : require("../assets/blank-profile-picture.webp")
         }
         className=" lg:w-96 flex-none h-96 lg:py-2 lg:order-2"

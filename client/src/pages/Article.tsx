@@ -78,7 +78,11 @@ export default function Article() {
             className={"grow px-0 lg:px-8 text-grayscaleDarkText xl:order-1"}
           >
             {article.imgPath && (
-              <img src={article.imgPath} alt="Article" className={"mb-16"} />
+              <img
+                src={`http://localhost:8080${article.imgPath}`}
+                alt="Article"
+                className={"mb-16"}
+              />
             )}
             <div
               className={"px-4 lg:px-0 markdown-paragraph"}

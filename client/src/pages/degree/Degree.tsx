@@ -18,6 +18,7 @@ import {
 } from "../../features/article";
 import FullWidthColoredBackground from "../../common_components/Card/FullWidthColoredBackground";
 import LoadingSpinnerPage from "../LoadingSpinnerPage";
+import images_path from "../../utils/images_path";
 
 export default function Degree() {
   const { degreeId } = useParams<{ degreeId: string }>();
@@ -77,7 +78,7 @@ export default function Degree() {
     <div>
       {/* Top greeting */}
       <Greetings
-        imageLink={`${AppPaths.IMAGES}/${degree.imageName}`}
+        imageLink={`${images_path}/${degree.imageName}`}
         heading={`${
           degree.title === DegreeTitle.BACHELOR_OF_SCIENCE
             ? "BACHELOR"

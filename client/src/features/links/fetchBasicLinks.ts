@@ -7,7 +7,7 @@ const fetchBasicLinks = (): AppThunk => async (dispatch) => {
   return new Promise<void>(async (resolve, reject) => {
     try {
       // Get needed data
-      const link = `${process.env.REACT_APP_SERVER_URL}/api`;
+      const link = `http://localhost:8080/api`;
       // Send request
       const response = await axios.get(link);
 

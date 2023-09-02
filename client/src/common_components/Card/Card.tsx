@@ -38,7 +38,7 @@ export default function Card(props: CardProps) {
           className={`w-full rounded-t-lg h-72 flex-none md:rounded-none md:rounded-l ${
             wide ? "lg:w-1/2 sm:h-96" : ""
           }`}
-          src={imageUrl}
+          src={`http://localhost:8080${imageUrl}`}
           alt={imageAlt}
         />
       )}
