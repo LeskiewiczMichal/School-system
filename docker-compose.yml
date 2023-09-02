@@ -35,4 +35,6 @@ services:
       - "3000:3000"
     environment:
      -  REACT_APP_API_URL=http://192.168.0.18:8080
+    depends_on:
+      - api
    
