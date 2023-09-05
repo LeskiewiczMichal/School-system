@@ -4,19 +4,23 @@ services:
     container_name: mysql-db
     environment:
       MYSQL_ROOT_PASSWORD: Testowy1
-    ports:
-      - "3306:3306"
+    networks:
+      - network
+#    ports:
+#      - "3306:3306"
     volumes:
       - $PWD/mysql:/var/lib/mysql
 
   api:
-    container_name: school-system-api
     build:
       context: ./api
+    container_name: api
     ports:
       - "8080:8080"
     depends_on:
       - db
+    networks:
+      - network
     environment:
       SMTP_USERNAME: ${SMTP_USERNAME}
       SMTP_PASSWORD: ${SMTP_PASSWORD}
@@ -34,7 +38,13 @@ services:
     ports:
       - "3000:3000"
     environment:
-     -  REACT_APP_API_URL=http://192.168.0.18:8080
+      -  REACT_APP_API_URL=http://192.168.0.18:8080
     depends_on:
       - api
+    networks:
+      - network
    
+networks:
+  network:
+    driver: bridge
+    name: network

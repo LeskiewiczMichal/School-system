@@ -19,7 +19,7 @@ export default function Greetings(props: GreetingsProps) {
         className="w-full lg:w-1/2 lg:order-2"
         alt="Faculty greeting"
       />
-      <div className="flex flex-col justify-center pl-8 pr-8 lg:pr-16 lg:pl-16 gap-4 pt-8 lg:order-1">
+      <div className="flex flex-col justify-center px-4 pr-8 lg:pr-16 lg:pl-16 gap-4 pt-8 lg:order-1">
         <h2 className="text-5xl font-extrabold text-brandMain">{heading}</h2>
         <p>{text}</p>
         {buttonText && (

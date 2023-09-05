@@ -101,9 +101,9 @@ export default function Header() {
         </section>
 
         {/* Bottom */}
-        <section className="max-h-24 flex flex-auto justify-between items-center py-6 pr-8 bg-white border-b-2 border-primary lg:px-6">
+        <section className="h-28 flex flex-auto justify-between items-center py-6 pr-8 bg-white border-b-2 border-primary lg:px-6">
           {/* Navigation */}
-          <div className="flex text-brandMain font-bold items-center w-full gap-12">
+          <div className="flex text-brandMain font-bold items-center w-full gap-4 h-full">
             <Link to={`/faculties/${facultyId}`} className={"pl-6 text-2xl"}>
               {facultyNamesMap.get(facultyId!)}
             </Link>

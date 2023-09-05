@@ -12,6 +12,7 @@ import * as marked from "marked";
 import { SidebarLinkProps } from "../features/sidebar/components/SidebarLink";
 import { AppPaths } from "../App";
 import LoadingSpinnerPage from "./LoadingSpinnerPage";
+import { API_URL } from "../utils/Constants";
 
 export default function Article() {
   const { id } = useParams<{ id: string }>();
@@ -79,7 +80,7 @@ export default function Article() {
           >
             {article.imgPath && (
               <img
-                src={`http://localhost:8080${article.imgPath}`}
+                src={`${API_URL}${article.imgPath}`}
                 alt="Article"
                 className={"mb-16"}
               />

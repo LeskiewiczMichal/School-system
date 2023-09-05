@@ -36,3 +36,9 @@ spring:
           auth: true
           starttls:
             enable: true
+
+  mvc:
+    media-types:
+      js: application/javascript
+      css: text/css
+

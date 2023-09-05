@@ -19,6 +19,7 @@ import {
 import FullWidthColoredBackground from "../../common_components/Card/FullWidthColoredBackground";
 import LoadingSpinnerPage from "../LoadingSpinnerPage";
 import images_path from "../../utils/images_path";
+import { Sidebar } from "../../features/sidebar";
 
 export default function Degree() {
   const { degreeId } = useParams<{ degreeId: string }>();
@@ -26,8 +27,9 @@ export default function Degree() {
   const degreesLinks = useAppSelector((state) => state.links.degrees);
   const articlesLinks = useAppSelector((state) => state.links.articles);
   const [articles, setArticles] = useState<Article[]>([]);
-
-  // const degreePageContent: DegreePageContentInterface = require(`./json/degree-${degreeId}.json`);
+  const mobileNavBar = useAppSelector(
+    (state) => state.integration.mobileNavView,
+  );
 
   useEffect(() => {
     const handleFetchDegree = async () => {
@@ -49,33 +51,14 @@ export default function Degree() {
     handleFetchDegree();
   }, [degreesLinks, degreeId]);
 
-  // useEffect(() => {
-  //   const handleFetchArticles = async () => {
-  //     // Prepare the link
-  //     if (!articlesLinks.search) {
-  //       return;
-  //     }
-  //
-  //     // Call the api
-  //     const response: GetArticlesResponse = await ArticleRequest.getArticles({
-  //       link: articlesLinks.search,
-  //       category: ArticleCategory.EVENTS,
-  //       pagination: { size: 3 },
-  //     });
-  //
-  //     // Set the articles
-  //     setArticles(response.articles);
-  //   };
-  //
-  //   handleFetchArticles();
-  // }, [articlesLinks]);
-
   if (!degree) {
     return <LoadingSpinnerPage />;
   }
 
   return (
     <div>
+      {/* Mobile navbar */}
+      {mobileNavBar && <Sidebar />}
       {/* Top greeting */}
       <Greetings
         imageLink={`${images_path}/${degree.imageName}`}

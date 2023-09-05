@@ -51,6 +51,10 @@
             }
         }
 
+        .faculty-dropdown-top {
+            top: 10rem;
+        }
+
         .markdown-paragraph {
             & h1,
             & h2,
@@ -60,7 +64,7 @@
                 line-height: 54px;
                 letter-spacing: -1.15px;
                 font-weight: 700;
-                margin-bottom: 0.3rem;
+                margin-bottom: 0.5rem;
                 margin-top: 1.2rem;
             }
 

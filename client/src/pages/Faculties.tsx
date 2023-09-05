@@ -6,8 +6,12 @@ import { SortDirection } from "../type/PaginationParams";
 import ResourceNameWithLink from "../type/ResourceNameWithLink";
 import { useAppSelector } from "../hooks";
 import LinkButtonBorderOnly from "../common_components/button/LinkButtonBorderOnly";
+import { Sidebar } from "../features/sidebar";
 
 export default function Faculties() {
+  const mobileNavBar = useAppSelector(
+    (state) => state.integration.mobileNavView,
+  );
   const facultiesLink = useAppSelector(
     (state) => state.links.faculties.getFaculties,
   );
@@ -47,6 +51,7 @@ export default function Faculties() {
 
   return (
     <main className={"lg:p-24"}>
+      {mobileNavBar && <Sidebar />}
       <div className={""}>
         <ColoredBackgroundWithPhotoOnRight
           heading={"Explore Our Diverse Faculties at Aquila University"}

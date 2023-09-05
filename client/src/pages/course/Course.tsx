@@ -11,6 +11,7 @@ import JWTUtils from "../../utils/JWTUtils";
 import * as marked from "marked";
 import MyHeading from "../../common_components/MyHeading";
 import LoadingSpinnerPage from "../LoadingSpinnerPage";
+import { Sidebar } from "../../features/sidebar";
 
 export default function Course() {
   const { courseId } = useParams<{ courseId: string }>();
@@ -18,6 +19,9 @@ export default function Course() {
   const courseLinks = useAppSelector((state) => state.links.courses);
   const [description, setDescription] = useState<string | null>(null);
   const [isUserEnrolled, setIsUserEnrolled] = useState<boolean>(false);
+  const mobileNavBar = useAppSelector(
+    (state) => state.integration.mobileNavView,
+  );
 
   useEffect(() => {
     const handleFetchCourse = async () => {
@@ -72,6 +76,7 @@ export default function Course() {
 
   return (
     <div>
+      {mobileNavBar && <Sidebar />}
       <div className={"w-full flex flex-col items-center"}>
         <CourseInfoCard course={course} isUserEnrolled={isUserEnrolled} />
 

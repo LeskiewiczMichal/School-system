@@ -1,7 +1,8 @@
 ### Credits
 Photos:
+
     School logo:
-    <a href="https://www.vecteezy.com/free-vector/school-logo">School Logo Vectors by Vecteezy</a>
+    https://www.vecteezy.com/free-vector/school-logo
 
     Login background photo:
     Pixabay: https://www.pexels.com/pl-pl/zdjecie/stalowa-brama-budynku-z-brazowej-cegly-159490/
@@ -16,9 +17,10 @@ Photos:
     Kampus Production: https://www.pexels.com/pl-pl/zdjecie/studenci-wieloetniczni-wspolnie-prowadza-badania-w-bibliotece-5940844/
 
     Blank profile picture:
-    https://pixabay.com/users/wanderercreative-855399/?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=973460">Stephanie Edwards</a> from <a href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=973460
+    https://pixabay.com/users/wanderercreative-855399/?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=973460
 
 Icons:
+
     Arrow down: https://www.svgrepo.com/svg/509905/dropdown-arrow
     Arrow right: https://www.svgrepo.com/svg/533610/arrow-right
     Arrow upper-right: https://www.svgrepo.com/svg/533642/arrow-up-right

@@ -53,7 +53,7 @@ export default function CourseInfoCard(props: CourseInfoCardProps) {
 
   return (
     <section
-      className="flex px-6 py-8 lg:mt-10 mb-10 w-full sm:w-10/12 h-[32rem] "
+      className="flex px-6 py-8 lg:mt-10 mb-10 w-full sm:w-10/12 min-h-fit"
       style={{
         backgroundImage: `url(${require(`../assets/courseInfoCardImages/course-${course.id}.webp`)})`,
         backgroundPosition: "center",
@@ -61,7 +61,7 @@ export default function CourseInfoCard(props: CourseInfoCardProps) {
       }}
     >
       <div className="flex flex-col w-full max-w-3xl justify-between text-grayscaleDarkText h-full bg-white p-8">
-        <div className={"flex flex-col gap-2 mb-4 lg:mb-0"}>
+        <div className={"flex flex-col gap-2 mb-4 lg:mb-4"}>
           <h2 className="text-4xl font-extrabold text-brandMain mb-6">
             {course.title}
           </h2>

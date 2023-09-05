@@ -2,12 +2,13 @@ import { AppThunk } from "../../store";
 import axios from "axios";
 import LinksState from "./LinksState";
 import { setLinks } from "./linksSlice";
+import { API_URL } from "../../utils/Constants";
 
 const fetchBasicLinks = (): AppThunk => async (dispatch) => {
   return new Promise<void>(async (resolve, reject) => {
     try {
       // Get needed data
-      const link = `http://localhost:8080/api`;
+      const link = `${API_URL}/api`;
       // Send request
       const response = await axios.get(link);
 

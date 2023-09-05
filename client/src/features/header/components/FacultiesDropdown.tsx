@@ -104,17 +104,11 @@ export default function FacultiesDropdown(props: FacultiesDropdownProps) {
         )}{" "}
       </button>
 
-      {profileMenuOpen && (
-        <div
-          className={`fixed z-40 top-32 left-0 right-0 bottom-0 bg-gray-600 opacity-40`}
-        />
-      )}
-
       {/* Dropdown */}
       <nav
         aria-labelledby="profileButton"
-        className={`z-50 flex flex-col items-center bg-white border-b rounded-b-lg w-screen left-0 ${
-          facultyHeader ? "top-32" : "top-24"
+        className={`z-50 flex flex-col items-center bg-white border-b-8 shadow-2xl border-brandMain rounded-b-lg w-screen left-0 ${
+          facultyHeader ? "faculty-dropdown-top" : "top-24"
         }  px-16 py-16  ${profileMenuOpen ? "absolute" : "hidden"}`}
       >
         {/* Faculties */}
@@ -125,7 +119,7 @@ export default function FacultiesDropdown(props: FacultiesDropdownProps) {
         >
           Faculties and units <ArrowUpRight className={"inline w-8 h-8"} />
         </Link>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 w-full h-full place-content-center justify-center items-center text-xl text-brandMain mb-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 w-full place-content-center justify-center items-center text-xl text-brandMain mb-4">
           {faculties.map((faculty) => (
             <div className="w-full flex justify-center" key={faculty.name}>
               <a
@@ -138,17 +132,6 @@ export default function FacultiesDropdown(props: FacultiesDropdownProps) {
             </div>
           ))}
         </div>
-        {/*<ul*/}
-        {/*  className="text-sm text-primary"*/}
-        {/*  aria-labelledby="dropdownUserAvatarButton"*/}
-        {/*>*/}
-        {/*  /!* Profile link button *!/*/}
-        {/*  <li>*/}
-        {/*    {faculties.map((faculty) => (*/}
-        {/*      <a href={faculty.link}>{faculty.name}</a>*/}
-        {/*    ))}*/}
-        {/*  </li>*/}
-        {/*</ul>*/}
       </nav>
     </div>
   );
