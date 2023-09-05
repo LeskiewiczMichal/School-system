@@ -1,7 +1,7 @@
 # Aquila University School System
 
 See live demo at
-http://leskiewicz-michal.pl
+http://www.leskiewicz-michal.pl/
 
 ## Overview
 
