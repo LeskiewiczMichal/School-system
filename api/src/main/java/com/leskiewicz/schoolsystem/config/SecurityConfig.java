@@ -35,7 +35,7 @@ public class SecurityConfig {
       @Override
 public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
     CorsConfiguration corsConfiguration = new CorsConfiguration();
-    corsConfiguration.setAllowedOrigins(List.of("https://school-system-client.onrender.com:10000", "https://school-system-client.onrender.com", "http://ec2-51-20-18-216.eu-north-1.compute.amazonaws.com", "http://ec2-51-20-18-216.eu-north-1.compute.amazonaws.com:80", "http://www.leskiewicz-michal.pl"));
+    corsConfiguration.setAllowedOrigins(List.of("https://school-system-client.onrender.com:10000", "https://school-system-client.onrender.com", "http://ec2-51-20-18-216.eu-north-1.compute.amazonaws.com", "http://ec2-51-20-18-216.eu-north-1.compute.amazonaws.com:80", "http://www.leskiewicz-michal.pl", "http://leskiewicz-michal.pl"));
 //          corsConfiguration.setAllowedOrigins(List.of("*"));
     corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE"));
     corsConfiguration.setAllowedHeaders(Collections.singletonList("*"));
