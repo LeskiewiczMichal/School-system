@@ -69,7 +69,7 @@ public class UserServiceTest {
     List<User> usersList = List.of(anUser().build());
     List<UserDto> userDtosList = List.of(userDtoFrom(anUser().build()));
     when(userRepository.findAll(any(Pageable.class))).thenReturn(new PageImpl<>(usersList));
-    when(userMapper.convertToDto(any(User.class))).thenReturn(userDtosList.get(0));
+    when(userMapper.mapPageToDto(any(Page.class))).thenReturn(new PageImpl<>(userDtosList));
 
     Page<UserDto> result = userService.getUsers(PageRequest.of(0, 1));
 
@@ -85,7 +85,7 @@ public class UserServiceTest {
         .thenReturn(Optional.ofNullable(anUser().build()));
     when(courseRepository.findCoursesByUserId(any(Long.class), any(Pageable.class)))
         .thenReturn(new PageImpl<>(coursesList));
-    when(courseMapper.convertToDto(any(Course.class))).thenReturn(courseDto);
+    when(courseMapper.mapPageToDto(any(Page.class))).thenReturn(new PageImpl<>(List.of(courseDto)));
 
     Page<CourseDto> result = userService.getUserCourses(1L, PageRequest.of(0, 1));
 
@@ -98,7 +98,7 @@ public class UserServiceTest {
     CourseDto courseDto = courseDtoFrom(aCourse().build());
     when(userRepository.findById(any(Long.class)))
         .thenReturn(Optional.ofNullable(anUser().role(Role.ROLE_TEACHER).build()));
-    when(courseMapper.convertToDto(any(Course.class))).thenReturn(courseDto);
+    when(courseMapper.mapPageToDto(any(Page.class))).thenReturn(new PageImpl<>(List.of(courseDto)));
     when(courseRepository.findCoursesByTeacherId(any(Long.class), any(Pageable.class)))
         .thenReturn(new PageImpl<>(coursesList));
 
@@ -131,7 +131,7 @@ public class UserServiceTest {
     when(userRepository.searchUsersByLastNameAndFirstNameAndRole(
             LAST_NAME, FIRST_NAME, ROLE, PageRequest.of(0, 2)))
         .thenReturn(new PageImpl<>(usersList));
-    when(userMapper.convertToDto(any(User.class))).thenReturn(userDtos.get(0), userDtos.get(1));
+    when(userMapper.mapPageToDto(any(Page.class))).thenReturn(new PageImpl<>(userDtos));
 
     Page<UserDto> result = userService.search(LAST_NAME, FIRST_NAME, ROLE, PageRequest.of(0, 2));
 

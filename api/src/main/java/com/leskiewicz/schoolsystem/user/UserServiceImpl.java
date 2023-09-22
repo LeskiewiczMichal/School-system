@@ -211,7 +211,7 @@ public class UserServiceImpl implements UserService {
             "User with ID: " + user.getId() + " is not a student or teacher");
     }
 
-    return mapCoursesToDtos(courses);
+    return courseMapper.mapPageToDto(courses);
   }
 
   @Override
@@ -298,9 +298,5 @@ public class UserServiceImpl implements UserService {
         .findById(userId)
         .orElseThrow(
             () -> new EntityNotFoundException(ErrorMessages.objectWithIdNotFound("User", userId)));
-  }
-
-  private Page<CourseDto> mapCoursesToDtos(Page<Course> courses) {
-    return courses.map(courseMapper::convertToDto);
   }
 }
