@@ -65,7 +65,7 @@ public class UserServiceImpl implements UserService {
   @Override
   public Page<UserDto> getUsers(Pageable pageable) {
     Page<User> users = userRepository.findAll(pageable);
-    return users.map(userMapper::convertToDto);
+    return userMapper.mapPageToDto(users);
   }
 
   @Override
@@ -262,7 +262,7 @@ public class UserServiceImpl implements UserService {
         userRepository.searchUsersByLastNameAndFirstNameAndRole(
             lastName, firstName, role, pageable);
 
-    return users.map(userMapper::convertToDto);
+    return userMapper.mapPageToDto(users);
   }
 
   @Override
@@ -302,9 +302,5 @@ public class UserServiceImpl implements UserService {
 
   private Page<CourseDto> mapCoursesToDtos(Page<Course> courses) {
     return courses.map(courseMapper::convertToDto);
-  }
-
-  private Page<UserDto> mapUsersToDtos(Page<User> users) {
-    return users.map(userMapper::convertToDto);
   }
 }

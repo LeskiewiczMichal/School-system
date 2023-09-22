@@ -7,6 +7,7 @@ import com.leskiewicz.schoolsystem.error.ErrorMessages;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.user.User;
 import org.slf4j.Logger;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -42,5 +43,10 @@ public class CourseMapperImpl implements CourseMapper {
 
     logger.debug("Converted Course entity with ID: {} to CourseDto", course.getId());
     return courseDto;
+  }
+
+  @Override
+  public Page<CourseDto> mapPageToDto(Page<Course> courses) {
+    return courses.map(this::convertToDto);
   }
 }
