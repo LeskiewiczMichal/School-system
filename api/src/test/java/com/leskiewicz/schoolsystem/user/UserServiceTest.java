@@ -1,35 +1,32 @@
 package com.leskiewicz.schoolsystem.user;
 
-import static com.leskiewicz.schoolsystem.builders.UserBuilder.anUser;
-import static com.leskiewicz.schoolsystem.builders.UserBuilder.userDtoFrom;
 import static com.leskiewicz.schoolsystem.builders.CourseBuilder.aCourse;
 import static com.leskiewicz.schoolsystem.builders.CourseBuilder.courseDtoFrom;
 import static com.leskiewicz.schoolsystem.builders.TeacherDetailsBuilder.aTeacherDetails;
+import static com.leskiewicz.schoolsystem.builders.UserBuilder.anUser;
+import static com.leskiewicz.schoolsystem.builders.UserBuilder.userDtoFrom;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 import com.leskiewicz.schoolsystem.authentication.Role;
-import com.leskiewicz.schoolsystem.builders.UserBuilder;
 import com.leskiewicz.schoolsystem.course.Course;
 import com.leskiewicz.schoolsystem.course.CourseRepository;
 import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.course.utils.CourseMapper;
-import com.leskiewicz.schoolsystem.degree.Degree;
-import com.leskiewicz.schoolsystem.faculty.Faculty;
-import com.leskiewicz.schoolsystem.testUtils.TestHelper;
+import com.leskiewicz.schoolsystem.generic.CommonTests;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetails;
 import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetailsRepository;
 import com.leskiewicz.schoolsystem.user.utils.UserMapper;
 import jakarta.persistence.EntityNotFoundException;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
@@ -37,10 +34,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -69,6 +62,8 @@ public class UserServiceTest {
               .build());
   List<UserDto> userDtosList =
       List.of(userDtoFrom(usersList.get(0)), userDtoFrom(usersList.get(1)));
+  User user = anUser().build();
+  UserDto userDto = userDtoFrom(user);
 
   @Test
   public void getUsersReturnsPagedUserDtos() {
@@ -176,5 +171,39 @@ public class UserServiceTest {
   public void getTeacherDetailsThrowsEntityNotFound() {
     given(userRepository.existsById(any(Long.class))).willReturn(false);
     Assertions.assertThrows(EntityNotFoundException.class, () -> userService.getTeacherDetails(1L));
+  }
+
+  @Test
+  public void getByIdReturnsUserDto() {
+    UserDto dto = userDtoFrom(user);
+    when(userRepository.findById(any(Long.class))).thenReturn(Optional.of(user));
+    when(userMapper.convertToDto(any(User.class))).thenReturn(dto);
+
+    UserDto result = userService.getById(1L);
+
+    Assertions.assertEquals(dto, result);
+  }
+
+  @Test
+  public void getByIdThrowsEntityNotFoundWhenUserWithGivenIdDoesntExist() {
+    given(userRepository.findById(any(Long.class))).willReturn(Optional.empty());
+    Assertions.assertThrows(EntityNotFoundException.class, () -> userService.getById(1L));
+  }
+
+  @Test
+  public void getByEmailHappyPath() {
+    given(userRepository.findByEmail(any(String.class))).willReturn(Optional.of(user));
+
+    User result = userService.getByEmail("email@example.com");
+
+    Assertions.assertEquals(user, result);
+  }
+
+  @Test
+  public void getByEmailThrowsEntityNotFound() {
+    given(userRepository.findByEmail(any(String.class))).willReturn(Optional.empty());
+
+    Assertions.assertThrows(
+            EntityNotFoundException.class, () -> userService.getByEmail("email@example/com"));
   }
 }
