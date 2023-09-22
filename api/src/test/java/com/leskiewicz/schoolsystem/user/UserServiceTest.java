@@ -2,9 +2,12 @@ package com.leskiewicz.schoolsystem.user;
 
 import static com.leskiewicz.schoolsystem.builders.UserBuilder.anUser;
 import static com.leskiewicz.schoolsystem.builders.UserBuilder.userDtoFrom;
+import static com.leskiewicz.schoolsystem.builders.CourseBuilder.aCourse;
+import static com.leskiewicz.schoolsystem.builders.CourseBuilder.courseDtoFrom;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import com.leskiewicz.schoolsystem.authentication.Role;
 import com.leskiewicz.schoolsystem.builders.UserBuilder;
 import com.leskiewicz.schoolsystem.course.Course;
 import com.leskiewicz.schoolsystem.course.CourseRepository;
@@ -32,6 +35,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -70,17 +74,38 @@ public class UserServiceTest {
     Assertions.assertEquals(userDtosList.get(0), result.getContent().get(0));
   }
 
-//  @Test
-//  public void getUserCoursesReturnsPagedCourses() {
-//    List<Course> coursesList = List.of(TestHelper.createCourse(faculty));
-//    List<CourseDto> courseDtosList = List.of(TestHelper.createCourseDto(faculty));
-//    when(courseRepository.findCoursesByUserId(any(User.class), any(Pageable.class)))
-//        .thenReturn(new PageImpl<>(coursesList));
-//    when(courseMapper.convertToDto(any(Course.class))).thenReturn(courseDtosList.get(0));
-//
-//    Page<CourseDto> result = userService.getUserCourses(TestHelper.createUser(faculty, degree), PageRequest.of(0, 1));
-//
-//    Assertions.assertEquals(1, result.getTotalElements());
-//    Assertions.assertEquals(courseDtosList.get(0), result.getContent().get(0));
-//  }
+  @Test
+  public void getUserCoursesReturnsPagedCoursesWhenUserIsStudent() {
+    List<Course> coursesList = List.of(aCourse().build());
+    CourseDto courseDto = courseDtoFrom(aCourse().build());
+    when(userRepository.findById(any(Long.class)))
+        .thenReturn(Optional.ofNullable(anUser().build()));
+    when(courseRepository.findCoursesByUserId(any(Long.class), any(Pageable.class)))
+        .thenReturn(new PageImpl<>(coursesList));
+    when(courseMapper.convertToDto(any(Course.class))).thenReturn(courseDto);
+
+    Page<CourseDto> result = userService.getUserCourses(1L, PageRequest.of(0, 1));
+
+    assertCourseList(courseDto, result);
+  }
+
+  @Test
+  public void getUserCoursesReturnsPagedCoursesWhenUserIsTeacher() {
+    List<Course> coursesList = List.of(aCourse().build());
+    CourseDto courseDto = courseDtoFrom(aCourse().build());
+    when(userRepository.findById(any(Long.class)))
+        .thenReturn(Optional.ofNullable(anUser().role(Role.ROLE_TEACHER).build()));
+    when(courseMapper.convertToDto(any(Course.class))).thenReturn(courseDto);
+    when(courseRepository.findCoursesByTeacherId(any(Long.class), any(Pageable.class)))
+        .thenReturn(new PageImpl<>(coursesList));
+
+    Page<CourseDto> result = userService.getUserCourses(1L, PageRequest.of(0, 1));
+
+    assertCourseList(courseDto, result);
+  }
+
+  private void assertCourseList(CourseDto courseDto, Page<CourseDto> result) {
+    Assertions.assertEquals(1, result.getTotalElements());
+    Assertions.assertEquals(courseDto, result.getContent().get(0));
+  }
 }

@@ -3,6 +3,9 @@ package com.leskiewicz.schoolsystem.builders;
 import com.leskiewicz.schoolsystem.authentication.Role;
 import com.leskiewicz.schoolsystem.course.Course;
 import com.leskiewicz.schoolsystem.course.CourseScope;
+import com.leskiewicz.schoolsystem.course.dto.CourseDto;
+import com.leskiewicz.schoolsystem.course.utils.CourseMapper;
+import com.leskiewicz.schoolsystem.course.utils.CourseMapperImpl;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.files.File;
 import com.leskiewicz.schoolsystem.user.User;
@@ -21,7 +24,7 @@ public class CourseBuilder {
   private String description = "Example of course description";
 
   private Language language = Language.ENGLISH;
-  private List<CourseScope> scope;
+  private List<CourseScope> scope = List.of(CourseScope.LECTURES);
   private int ECTS = 5;
   private Faculty faculty = new FacultyBuilder().build();
   private User teacher =
@@ -34,6 +37,11 @@ public class CourseBuilder {
 
   public static CourseBuilder aCourse() {
     return new CourseBuilder();
+  }
+
+  public static CourseDto courseDtoFrom(Course course) {
+    CourseMapper courseMapper = new CourseMapperImpl();
+    return courseMapper.convertToDto(course);
   }
 
   public CourseBuilder id(Long id) {

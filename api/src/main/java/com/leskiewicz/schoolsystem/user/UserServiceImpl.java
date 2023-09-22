@@ -50,11 +50,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public UserDto getById(Long id) {
-    return userMapper.convertToDto(
-        userRepository
-            .findById(id)
-            .orElseThrow(
-                () -> new EntityNotFoundException(ErrorMessages.objectWithIdNotFound("User", id))));
+    return userMapper.convertToDto(retrieveUserFromRepository(id));
   }
 
   @Override
@@ -87,13 +83,7 @@ public class UserServiceImpl implements UserService {
   @Override
   public UserDto updateUser(PatchUserRequest request, Long userId) {
     // Find user
-    User user =
-        userRepository
-            .findById(userId)
-            .orElseThrow(
-                () ->
-                    new EntityNotFoundException(
-                        ErrorMessages.objectWithIdNotFound("User", userId)));
+    User user = retrieveUserFromRepository(userId);
 
     // Update degree
     if (request.getDegreeField() != null || request.getDegreeTitle() != null) {
@@ -202,25 +192,26 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public Page<CourseDto> getUserCourses(Long userId, Pageable pageable) {
-    // Retrieve user
-    User user =
-        userRepository
-            .findById(userId)
-            .orElseThrow(
-                () ->
-                    new EntityNotFoundException(
-                        ErrorMessages.objectWithIdNotFound("User", userId)));
+    User user = retrieveUserFromRepository(userId);
+    return retrieveUserCourses(user, pageable);
+  }
 
+  private Page<CourseDto> retrieveUserCourses(User user, Pageable pageable) {
     Page<Course> courses;
-    if (user.getRole() == Role.ROLE_STUDENT) {
-      courses = courseRepository.findCoursesByUserId(userId, pageable);
-    } else if (user.getRole() == Role.ROLE_TEACHER) {
-      courses = courseRepository.findCoursesByTeacherId(userId, pageable);
-    } else {
-      throw new EntityNotFoundException("User with ID: " + userId + " is not a student or teacher");
+
+    switch (user.getRole()) {
+      case ROLE_STUDENT:
+        courses = courseRepository.findCoursesByUserId(user.getId(), pageable);
+        break;
+      case ROLE_TEACHER:
+        courses = courseRepository.findCoursesByTeacherId(user.getId(), pageable);
+        break;
+      default:
+        throw new EntityNotFoundException(
+            "User with ID: " + user.getId() + " is not a student or teacher");
     }
 
-    return courses.map(courseMapper::convertToDto);
+    return mapCoursesToDtos(courses);
   }
 
   @Override
@@ -300,5 +291,16 @@ public class UserServiceImpl implements UserService {
     if (!userRepository.existsById(id)) {
       throw new EntityNotFoundException(ErrorMessages.objectWithIdNotFound("User", id));
     }
+  }
+
+  private User retrieveUserFromRepository(Long userId) {
+    return userRepository
+        .findById(userId)
+        .orElseThrow(
+            () -> new EntityNotFoundException(ErrorMessages.objectWithIdNotFound("User", userId)));
+  }
+
+  private Page<CourseDto> mapCoursesToDtos(Page<Course> courses) {
+    return courses.map(courseMapper::convertToDto);
   }
 }
