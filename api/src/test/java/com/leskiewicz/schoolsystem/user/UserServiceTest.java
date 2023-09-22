@@ -5,6 +5,7 @@ import static com.leskiewicz.schoolsystem.builders.UserBuilder.userDtoFrom;
 import static com.leskiewicz.schoolsystem.builders.CourseBuilder.aCourse;
 import static com.leskiewicz.schoolsystem.builders.CourseBuilder.courseDtoFrom;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 
 import com.leskiewicz.schoolsystem.authentication.Role;
@@ -19,6 +20,7 @@ import com.leskiewicz.schoolsystem.testUtils.TestHelper;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetailsRepository;
 import com.leskiewicz.schoolsystem.user.utils.UserMapper;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -102,6 +104,14 @@ public class UserServiceTest {
     Page<CourseDto> result = userService.getUserCourses(1L, PageRequest.of(0, 1));
 
     assertCourseList(courseDto, result);
+  }
+
+  @Test
+  public void getUserCoursesReturns404IfUserDoesntExist() {
+    given(userRepository.existsById(any(Long.class))).willReturn(false);
+
+    Assertions.assertThrows(
+        EntityNotFoundException.class, () -> userService.getUserCourses(1L, null));
   }
 
   private void assertCourseList(CourseDto courseDto, Page<CourseDto> result) {
