@@ -1,6 +1,7 @@
 package com.leskiewicz.schoolsystem.user;
 
 import static org.mockito.BDDMockito.given;
+import static com.leskiewicz.schoolsystem.builders.UserBuilder.anUser;
 
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
@@ -12,6 +13,8 @@ import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetails;
 import com.leskiewicz.schoolsystem.user.utils.UserMapperImpl;
 import jakarta.validation.ConstraintViolationException;
+
+import java.util.List;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,6 +26,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 
 @ExtendWith(MockitoExtension.class)
 public class UserMapperTest {
@@ -148,5 +153,22 @@ public class UserMapperTest {
   public void throwsConstraintViolationExceptionOnInvalidUserObject(User user) {
     Assertions.assertThrows(
         ConstraintViolationException.class, () -> userMapper.convertToDto(user));
+  }
+
+  @Test
+  public void mapPageToDtoMapsUsersProperly() {
+    Page<User> usersPage =
+        new PageImpl<User>(
+            List.of(
+                anUser().firstName("Johnny").lastName("Silverhand").build(),
+                anUser().firstName("Mark").lastName("Cole").build()));
+
+    Page<UserDto> usersDtoPage = userMapper.mapPageToDto(usersPage);
+
+    Assertions.assertEquals(2, usersDtoPage.getContent().size());
+    Assertions.assertEquals("Johnny", usersDtoPage.getContent().get(0).getFirstName());
+    Assertions.assertEquals("Silverhand", usersDtoPage.getContent().get(0).getLastName());
+    Assertions.assertEquals("Mark", usersDtoPage.getContent().get(1).getFirstName());
+    Assertions.assertEquals("Cole", usersDtoPage.getContent().get(1).getLastName());
   }
 }

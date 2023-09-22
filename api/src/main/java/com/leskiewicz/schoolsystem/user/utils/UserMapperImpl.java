@@ -8,6 +8,7 @@ import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -60,5 +61,10 @@ public class UserMapperImpl implements UserMapper {
 
     logger.debug("Converted User entity with ID: {} to UserDto", user.getId());
     return mappedUserDto;
+  }
+
+  @Override
+  public Page<UserDto> mapPageToDto(Page<User> users) {
+    return users.map(this::convertToDto);
   }
 }
