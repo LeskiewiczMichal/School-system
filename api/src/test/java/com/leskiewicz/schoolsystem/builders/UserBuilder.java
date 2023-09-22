@@ -15,7 +15,7 @@ public class UserBuilder {
     private String lastName = "Doe";
     private String email = "johndoe@example.com";
     private String password = "password";
-    private Faculty faculty;
+    private Faculty faculty = new FacultyBuilder().build();
     private Degree degree;
     private TeacherDetails teacherDetails;
     private Role role = Role.ROLE_STUDENT;
