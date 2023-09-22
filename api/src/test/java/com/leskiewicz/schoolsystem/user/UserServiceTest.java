@@ -14,6 +14,7 @@ import com.leskiewicz.schoolsystem.course.Course;
 import com.leskiewicz.schoolsystem.course.CourseRepository;
 import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.course.utils.CourseMapper;
+import com.leskiewicz.schoolsystem.error.customexception.UserAlreadyExistsException;
 import com.leskiewicz.schoolsystem.generic.CommonTests;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetails;
@@ -193,17 +194,27 @@ public class UserServiceTest {
   @Test
   public void getByEmailHappyPath() {
     given(userRepository.findByEmail(any(String.class))).willReturn(Optional.of(user));
-
     User result = userService.getByEmail("email@example.com");
-
     Assertions.assertEquals(user, result);
   }
 
   @Test
   public void getByEmailThrowsEntityNotFound() {
     given(userRepository.findByEmail(any(String.class))).willReturn(Optional.empty());
-
     Assertions.assertThrows(
-            EntityNotFoundException.class, () -> userService.getByEmail("email@example/com"));
+        EntityNotFoundException.class, () -> userService.getByEmail("email@example/com"));
+  }
+
+  @Test
+  public void addUserSavesUser() {
+    given(userRepository.findByEmail(any(String.class))).willReturn(Optional.empty());
+    userService.addUser(user);
+    verify(userRepository).save(user);
+  }
+
+  @Test
+  public void addUserThrowsUserAlreadyExistsExceptionWhenUserWithGivenEmailAlreadyExists() {
+    given(userRepository.findByEmail(any(String.class))).willReturn(Optional.of(user));
+    Assertions.assertThrows(UserAlreadyExistsException.class, () -> userService.addUser(user));
   }
 }
