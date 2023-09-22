@@ -4,6 +4,7 @@ import static com.leskiewicz.schoolsystem.builders.UserBuilder.anUser;
 import static com.leskiewicz.schoolsystem.builders.UserBuilder.userDtoFrom;
 import static com.leskiewicz.schoolsystem.builders.CourseBuilder.aCourse;
 import static com.leskiewicz.schoolsystem.builders.CourseBuilder.courseDtoFrom;
+import static com.leskiewicz.schoolsystem.builders.TeacherDetailsBuilder.aTeacherDetails;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
@@ -18,6 +19,7 @@ import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.testUtils.TestHelper;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
+import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetails;
 import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetailsRepository;
 import com.leskiewicz.schoolsystem.user.utils.UserMapper;
 import jakarta.persistence.EntityNotFoundException;
@@ -55,26 +57,29 @@ public class UserServiceTest {
 
   @InjectMocks private UserServiceImpl userService;
 
-  Faculty faculty;
-  Degree degree;
-
-  @BeforeEach
-  public void setUp() {
-    faculty = Mockito.mock(Faculty.class);
-    degree = Mockito.mock(Degree.class);
-  }
+  List<User> usersList =
+      List.of(
+          anUser().build(),
+          anUser()
+              .firstName("Johnny")
+              .lastName("Silverhand")
+              .email("johnny@example.com")
+              .password("qwerty")
+              .profilePictureName("Mypicture")
+              .build());
+  List<UserDto> userDtosList =
+      List.of(userDtoFrom(usersList.get(0)), userDtoFrom(usersList.get(1)));
 
   @Test
   public void getUsersReturnsPagedUserDtos() {
-    List<User> usersList = List.of(anUser().build());
-    List<UserDto> userDtosList = List.of(userDtoFrom(anUser().build()));
     when(userRepository.findAll(any(Pageable.class))).thenReturn(new PageImpl<>(usersList));
     when(userMapper.mapPageToDto(any(Page.class))).thenReturn(new PageImpl<>(userDtosList));
 
     Page<UserDto> result = userService.getUsers(PageRequest.of(0, 1));
 
-    Assertions.assertEquals(1, result.getTotalElements());
+    Assertions.assertEquals(2, result.getTotalElements());
     Assertions.assertEquals(userDtosList.get(0), result.getContent().get(0));
+    Assertions.assertEquals(userDtosList.get(1), result.getContent().get(1));
   }
 
   @Test
@@ -122,16 +127,13 @@ public class UserServiceTest {
 
   @Test
   public void searchReturnsPagedUserDtos() {
-    List<User> usersList = List.of(anUser().build(), anUser().build());
-    List<UserDto> userDtos = List.of(userDtoFrom(anUser().build()), userDtoFrom(anUser().build()));
-    String LAST_NAME = userDtos.get(0).getLastName();
-    String FIRST_NAME = userDtos.get(0).getFirstName();
-    Role ROLE = userDtos.get(0).getRole();
-
+    String LAST_NAME = userDtosList.get(0).getLastName();
+    String FIRST_NAME = userDtosList.get(0).getFirstName();
+    Role ROLE = userDtosList.get(0).getRole();
     when(userRepository.searchUsersByLastNameAndFirstNameAndRole(
             LAST_NAME, FIRST_NAME, ROLE, PageRequest.of(0, 2)))
         .thenReturn(new PageImpl<>(usersList));
-    when(userMapper.mapPageToDto(any(Page.class))).thenReturn(new PageImpl<>(userDtos));
+    when(userMapper.mapPageToDto(any(Page.class))).thenReturn(new PageImpl<>(userDtosList));
 
     Page<UserDto> result = userService.search(LAST_NAME, FIRST_NAME, ROLE, PageRequest.of(0, 2));
 
@@ -140,7 +142,39 @@ public class UserServiceTest {
     Assertions.assertEquals(2, result.getNumberOfElements());
     Assertions.assertEquals(0, result.getNumber());
     Assertions.assertEquals(2, result.getSize());
-    Assertions.assertEquals(userDtos.get(0), result.getContent().get(0));
-    Assertions.assertEquals(userDtos.get(1), result.getContent().get(1));
+    Assertions.assertEquals(userDtosList.get(0), result.getContent().get(0));
+    Assertions.assertEquals(userDtosList.get(1), result.getContent().get(1));
+  }
+
+  @Test
+  public void getTeacherDetailsReturnsCorrectTeacherDetails() {
+    TeacherDetails teacherDetails = setUpGetTeacherDetailsTest();
+    TeacherDetails testTeacherDetails = userService.getTeacherDetails(1L);
+
+    Assertions.assertEquals(teacherDetails, testTeacherDetails);
+    verify(userRepository).existsById(any(Long.class));
+  }
+
+  @Test
+  public void getTeacherDetailsCallsExistsById() {
+    setUpGetTeacherDetailsTest();
+    userService.getTeacherDetails(1L);
+
+    verify(userRepository).existsById(any(Long.class));
+  }
+
+  private TeacherDetails setUpGetTeacherDetailsTest() {
+    TeacherDetails teacherDetails = aTeacherDetails().build();
+    given(userRepository.existsById(any(Long.class))).willReturn(true);
+    given(teacherDetailsRepository.findByUserId(any(Long.class)))
+        .willReturn(Optional.of(teacherDetails));
+
+    return teacherDetails;
+  }
+
+  @Test
+  public void getTeacherDetailsThrowsEntityNotFound() {
+    given(userRepository.existsById(any(Long.class))).willReturn(false);
+    Assertions.assertThrows(EntityNotFoundException.class, () -> userService.getTeacherDetails(1L));
   }
 }
