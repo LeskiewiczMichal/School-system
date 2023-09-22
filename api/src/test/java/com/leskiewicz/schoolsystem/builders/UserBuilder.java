@@ -1,13 +1,11 @@
 package com.leskiewicz.schoolsystem.builders;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.leskiewicz.schoolsystem.authentication.Role;
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetails;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 
 public class UserBuilder {
     private Long id = 1L;
@@ -16,7 +14,7 @@ public class UserBuilder {
     private String email = "johndoe@example.com";
     private String password = "password";
     private Faculty faculty = new FacultyBuilder().build();
-    private Degree degree;
+    private Degree degree = new DegreeBuilder().build();
     private TeacherDetails teacherDetails;
     private Role role = Role.ROLE_STUDENT;
     private String profilePictureName = "default.png";
