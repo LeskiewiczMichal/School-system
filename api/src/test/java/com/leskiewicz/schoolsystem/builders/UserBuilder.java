@@ -4,10 +4,14 @@ import com.leskiewicz.schoolsystem.authentication.Role;
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.user.User;
+import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetails;
+import com.leskiewicz.schoolsystem.user.utils.UserMapper;
+import com.leskiewicz.schoolsystem.user.utils.UserMapperImpl;
 import jakarta.persistence.*;
 
 public class UserBuilder {
+
     private Long id = 1L;
     private String firstName = "John";
     private String lastName = "Doe";
@@ -21,6 +25,11 @@ public class UserBuilder {
 
     public static UserBuilder anUser() {
         return new UserBuilder();
+    }
+
+    public static UserDto userDtoFrom(User user) {
+        UserMapper userMapper = new UserMapperImpl();
+        return userMapper.convertToDto(user);
     }
 
     public UserBuilder id(Long id) {
@@ -87,4 +96,5 @@ public class UserBuilder {
                 .profilePictureName(profilePictureName)
                 .build();
     }
+
 }
