@@ -1,23 +1,16 @@
 package com.leskiewicz.schoolsystem.user;
 
-import static org.mockito.BDDMockito.given;
 import static com.leskiewicz.schoolsystem.builders.UserBuilder.anUser;
 
-import com.leskiewicz.schoolsystem.degree.Degree;
-import com.leskiewicz.schoolsystem.degree.DegreeTitle;
-import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.authentication.Role;
-import com.leskiewicz.schoolsystem.testUtils.TestHelper;
-import com.leskiewicz.schoolsystem.user.User;
+import com.leskiewicz.schoolsystem.builders.UserBuilder;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetails;
 import com.leskiewicz.schoolsystem.user.utils.UserMapperImpl;
 import jakarta.validation.ConstraintViolationException;
-
 import java.util.List;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -32,67 +25,35 @@ import org.springframework.data.domain.PageImpl;
 @ExtendWith(MockitoExtension.class)
 public class UserMapperTest {
 
-  // Variables
-  Faculty faculty;
-  User user;
-  Degree degree;
+  User user = anUser().build();
+
   @InjectMocks private UserMapperImpl userMapper;
 
   static Stream<Arguments> throwsConstraintViolationExceptionOnInvalidUserObjectProvider() {
-    Faculty faculty = Faculty.builder().name("Engineering").build();
-    Degree degree =
-        Degree.builder()
-            .title(DegreeTitle.BACHELOR)
-            .fieldOfStudy("Computer science")
-            .faculty(faculty)
-            .build();
-
-    User basicUser =
-        User.builder()
-            .id(1L)
-            .firstName("Test")
-            .lastName("Tester")
-            .email("test@example.com")
-            .faculty(faculty)
-            .degree(degree)
-            .password("12345")
-            .role(Role.ROLE_STUDENT)
-            .build();
+    UserBuilder basicUser = anUser();
 
     return Stream.of(
-        Arguments.of(basicUser.toBuilder().firstName(null).build()),
-        Arguments.of(basicUser.toBuilder().lastName(null).build()),
-        Arguments.of(basicUser.toBuilder().email(null).build()),
-        Arguments.of(basicUser.toBuilder().faculty(null).build()),
-        Arguments.of(basicUser.toBuilder().role(null).build()),
-        Arguments.of(basicUser.toBuilder().degree(null).build()));
-  }
-
-  @BeforeEach
-  public void setUp() {
-    faculty = Mockito.mock(Faculty.class);
-    degree = Mockito.mock(Degree.class);
-    user = TestHelper.createUser(faculty, degree);
+        Arguments.of(basicUser.firstName(null).build()),
+        Arguments.of(basicUser.lastName(null).build()),
+        Arguments.of(basicUser.email(null).build()),
+        Arguments.of(basicUser.faculty(null).build()),
+        Arguments.of(basicUser.role(null).build()),
+        Arguments.of(basicUser.degree(null).build()));
   }
 
   @Test
   public void convertToDtoCorrectForStudent() {
-    // Setup
-    given(faculty.getName()).willReturn("FacultyName");
-    given(faculty.getId()).willReturn(1L);
-
     UserDto expectedUserDto =
         UserDto.builder()
             .id(1L)
             .firstName(user.getFirstName())
             .lastName(user.getLastName())
             .email(user.getEmail())
-            .degree(degree.getFieldOfStudy())
-            .faculty(faculty.getName())
+            .degree(user.getDegree().getFieldOfStudy())
+            .faculty(user.getFaculty().getName())
             .facultyId(1L)
             .build();
 
-    // Call function
     UserDto userDto = userMapper.convertToDto(user);
 
     Assertions.assertEquals(expectedUserDto, userDto);
@@ -100,41 +61,27 @@ public class UserMapperTest {
 
   @Test
   public void convertToDtoCorrectForTeacher() {
-    // Setup
     TeacherDetails teacherDetails = Mockito.mock(TeacherDetails.class);
-    User testUser =
-        user.toBuilder()
-            .degree(null)
-            .teacherDetails(teacherDetails)
-            .role(Role.ROLE_TEACHER)
-            .profilePictureName("test.jpg")
-            .build();
-    given(faculty.getName()).willReturn("FacultyName");
-    given(faculty.getId()).willReturn(1L);
-    given(teacherDetails.getId()).willReturn(1L);
-
+    User user = anUser().role(Role.ROLE_TEACHER).teacherDetails(teacherDetails).build();
     UserDto expectedUserDto =
         UserDto.builder()
             .id(1L)
             .firstName(user.getFirstName())
             .lastName(user.getLastName())
             .email(user.getEmail())
-            .faculty(faculty.getName())
+            .degree(user.getDegree().getFieldOfStudy())
+            .faculty(user.getFaculty().getName())
             .facultyId(1L)
-            .teacherDetailsId(1L)
-            .profilePictureName(user.getProfilePictureName())
             .build();
 
-    // Call function
-    UserDto userDto = userMapper.convertToDto(testUser);
+    UserDto userDto = userMapper.convertToDto(user);
 
-    // Assertions
     Assertions.assertEquals(expectedUserDto, userDto);
   }
 
   @Test
   public void convertToDtoThrowsConstraintViolationExceptionOnStudentWithoutDegree() {
-    User testUser = user.toBuilder().role(Role.ROLE_STUDENT).degree(null).build();
+    User testUser = anUser().role(Role.ROLE_STUDENT).degree(null).build();
 
     Assertions.assertThrows(
         ConstraintViolationException.class, () -> userMapper.convertToDto(testUser));
@@ -142,7 +89,7 @@ public class UserMapperTest {
 
   @Test
   public void convertToDtoThrowsIllegalArgumentExceptionOnNoId() {
-    User testUser = TestHelper.createUser(faculty, degree).toBuilder().id(null).build();
+    User testUser = anUser().id(null).build();
 
     Assertions.assertThrows(
         IllegalArgumentException.class, () -> userMapper.convertToDto(testUser));

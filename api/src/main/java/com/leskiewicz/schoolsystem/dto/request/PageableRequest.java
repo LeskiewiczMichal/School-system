@@ -1,14 +1,11 @@
 package com.leskiewicz.schoolsystem.dto.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-@Data
+@Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,10 +14,6 @@ public class PageableRequest {
   private int size = 10;
   private String[] sort = {"id", "asc"};
   private String direction = "asc";
-
-//  public Pageable toPageable() {
-//    return PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sort[1]), sort[0]));
-//  }
 
   public Pageable toPageable() {
     Sort.Direction sortDirection;

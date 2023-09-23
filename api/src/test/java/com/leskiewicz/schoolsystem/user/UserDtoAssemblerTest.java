@@ -20,25 +20,19 @@ import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 @ExtendWith(MockitoExtension.class)
 public class UserDtoAssemblerTest {
 
-  // Variables
-  UserDto user;
+  UserDto user =
+      UserDto.builder()
+          .id(1L)
+          .firstName("John")
+          .lastName("Doe")
+          .email("johndoe@example.com")
+          .faculty("Informatics")
+          .degree("Computer Science")
+          .facultyId(1L)
+          .teacherDetailsId(1L)
+          .build();
+  ;
   @InjectMocks private UserDtoAssembler userDtoAssembler;
-
-  @BeforeEach
-  public void setup() {
-
-    user =
-        UserDto.builder()
-            .id(1L)
-            .firstName("John")
-            .lastName("Doe")
-            .email("johndoe@example.com")
-            .faculty("Informatics")
-            .degree("Computer Science")
-            .facultyId(1L)
-            .teacherDetailsId(1L)
-            .build();
-  }
 
   @Test
   public void testToModelAddsCorrectLinks() {

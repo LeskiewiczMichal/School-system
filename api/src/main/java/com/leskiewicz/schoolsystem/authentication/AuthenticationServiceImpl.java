@@ -88,6 +88,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                     new EntityNotFoundException(
                         ErrorMessages.objectWithIdNotFound("Faculty", request.getFaculty())));
 
+    TeacherDetails teacherDetails =
+            TeacherDetails.builder()
+                    .teacher(null)
+                    .degreeField(request.getDegreeField())
+                    .title(request.getTitle())
+                    .bio("")
+                    .tutorship("")
+                    .build();
+
     // Create new user and teacher details
     User user =
         new User(
@@ -98,19 +107,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             passwordEncoder.encode(request.getPassword()),
             faculty,
             null,
-            null,
+                teacherDetails,
             Role.ROLE_TEACHER,
             null);
 
-    TeacherDetails teacherDetails =
-        TeacherDetails.builder()
-            .teacher(user)
-            .degreeField(request.getDegreeField())
-            .title(request.getTitle())
-            .bio("")
-            .tutorship("")
-            .build();
-    user.setTeacherDetails(teacherDetails);
+
+    teacherDetails.setTeacher(user);
 
     // Save new user, teacher details and generate jwt token
     userService.addUser(user);

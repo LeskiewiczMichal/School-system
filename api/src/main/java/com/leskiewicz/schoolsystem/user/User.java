@@ -20,8 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Getter
-@Setter
-@Builder(toBuilder = true)
+//@Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -94,6 +94,10 @@ public class User {
     if (request.password() != null) {
       this.password = passwordEncoder.encode(request.password());
     }
+  }
+
+  public void setProfilePictureName(String profilePictureName) {
+    this.profilePictureName = profilePictureName;
   }
 
   @Override
