@@ -2,12 +2,14 @@ package com.leskiewicz.schoolsystem.user;
 
 import static com.leskiewicz.schoolsystem.builders.UserBuilder.anUser;
 import static com.leskiewicz.schoolsystem.builders.UserBuilder.userDtoFrom;
+import static com.leskiewicz.schoolsystem.builders.TeacherDetailsBuilder.aTeacherDetails;
+import static com.leskiewicz.schoolsystem.builders.CourseBuilder.courseDtoFrom;
+import static com.leskiewicz.schoolsystem.builders.CourseBuilder.aCourse;
 import static com.leskiewicz.schoolsystem.builders.FacultyBuilder.aFaculty;
 import static com.leskiewicz.schoolsystem.builders.DegreeBuilder.aDegree;
 import static net.bytebuddy.matcher.ElementMatchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willThrow;
+import static org.mockito.BDDMockito.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -45,8 +47,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -59,6 +65,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @ExtendWith(MockitoExtension.class)
 public class UserControllerTest {
@@ -204,29 +211,35 @@ public class UserControllerTest {
   }
 
   @Test
-  public void getUserCourses() {
-    CommonTests.controllerGetEntities(
-        CourseDto.class,
-        coursePagedResourcesAssembler,
-        (Pageable pageable) -> userService.getUserCourses(1L, pageable),
-        courseDtoAssembler::toModel,
-        (PageableRequest request) -> userController.getUserCourses(1L, request));
+  public void getUserCoursesReturnsProperResponse() {
+    PageableRequest request = new PageableRequest();
+    List<CourseDto> courseDtosList =
+        List.of(courseDtoFrom(aCourse().build()), courseDtoFrom(aCourse().build()));
+    Page<CourseDto> courseDtosPage = new PageImpl<>(courseDtosList);
+    PagedModel<EntityModel<CourseDto>> pagedModel = Mockito.mock(PagedModel.class);
+
+    when(userService.getUserCourses(1L, request.toPageable())).thenReturn(courseDtosPage);
+    when(courseDtoAssembler.toModel(any(CourseDto.class)))
+        .thenReturn(courseDtosList.get(0), courseDtosList.get(1));
+    when(coursePagedResourcesAssembler.toModel(any(Page.class))).thenReturn(pagedModel);
+
+    ResponseEntity<RepresentationModel<CourseDto>> response =
+        userController.getUserCourses(1L, request);
+
+    Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+    Assertions.assertEquals(HalModelBuilder.halModelOf(pagedModel).build(), response.getBody());
   }
 
   @Test
   public void getTeacherDetails() throws Exception {
-    // Prepare test data
-    User user = Mockito.mock(User.class);
-    TeacherDetails teacherDetails = TestHelper.createTeacherDetails(user);
+    TeacherDetails teacherDetails = aTeacherDetails().build();
+
     given(userService.getTeacherDetails(any(Long.class))).willReturn(teacherDetails);
     given(teacherDetailsModelAssembler.toModel(any(TeacherDetails.class))).willCallRealMethod();
 
-    // Perform request
-    mvc.perform(
-            get("/api/users/1/teacher-details")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept("application/hal+json"))
-        // Assert response
+    ResultActions result = makeGetTeacherDetailsRequest();
+
+    result
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.bio").value(teacherDetails.getBio()))
         .andExpect(jsonPath("$.tutorship").value(teacherDetails.getTutorship()))
@@ -239,21 +252,24 @@ public class UserControllerTest {
 
   @Test
   public void getTeacherDetailsThrowsProperException() throws Exception {
-    //  Mock service to throw exception
     willThrow(new EntityNotFoundException(ErrorMessages.teacherDetailsNotFound(1L)))
         .given(userService)
         .getTeacherDetails(any(Long.class));
 
-    // Perform request
-    mvc.perform(
-            get("/api/users/1/teacher-details")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept("application/hal+json"))
-        // Assert response
+    ResultActions result = makeGetTeacherDetailsRequest();
+
+    result
         .andExpect(status().isNotFound())
         .andExpect(jsonPath("$.message").value(ErrorMessages.teacherDetailsNotFound(1L)))
         .andExpect(jsonPath("$.path").value("/api/users/1/teacher-details"))
         .andExpect(jsonPath("$.statusCode").value(404));
+  }
+
+  private ResultActions makeGetTeacherDetailsRequest() throws Exception {
+    return mvc.perform(
+        get("/api/users/1/teacher-details")
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept("application/hal+json"));
   }
 
   @Test
