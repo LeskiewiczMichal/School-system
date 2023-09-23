@@ -63,29 +63,14 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.xml.transform.Result;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @ExtendWith(MockitoExtension.class)
 public class UserControllerTest {
-
-  // Services
-  private UserService userService;
-
-  // Assemblers
-  private UserDtoAssembler userDtoAssembler;
-  private PagedResourcesAssembler<UserDto> userPagedResourcesAssembler;
-  private CourseDtoAssembler courseDtoAssembler;
-  private PagedResourcesAssembler<CourseDto> coursePagedResourcesAssembler;
-  private TeacherDetailsModelAssembler teacherDetailsModelAssembler;
-
-  private UserController userController;
-  ObjectMapper objectMapper =
-      new ObjectMapper()
-          .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-          .registerModule(new JavaTimeModule());
-
+  private static final String teacherDetailsLink = "/api/users/1/teacher-details";
   private MockMvc mvc;
 
   Faculty specialFaculty = aFaculty().name("Special Faculty").build();
@@ -98,10 +83,23 @@ public class UserControllerTest {
   PagedModel<UserDto> userPagedModel =
       PagedModel.of(userDtosList, new PagedModel.PageMetadata(1, 1, 1, 1));
 
+  // Mocks
+  private UserService userService;
+  private UserDtoAssembler userDtoAssembler;
+  private PagedResourcesAssembler<UserDto> userPagedResourcesAssembler;
+  private CourseDtoAssembler courseDtoAssembler;
+  private PagedResourcesAssembler<CourseDto> coursePagedResourcesAssembler;
+  private TeacherDetailsModelAssembler teacherDetailsModelAssembler;
+
+  private UserController userController;
+  ObjectMapper objectMapper =
+      new ObjectMapper()
+          .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+          .registerModule(new JavaTimeModule());
+
   // Annotation mocks didn't work as expected here, pagedResourcesAssemblers were mixed up
   @BeforeEach
   public void setUp() {
-    // Create mock instances
     userService = Mockito.mock(UserService.class);
     userDtoAssembler = Mockito.mock(UserDtoAssembler.class);
     userPagedResourcesAssembler = Mockito.mock(PagedResourcesAssembler.class);
@@ -109,7 +107,6 @@ public class UserControllerTest {
     coursePagedResourcesAssembler = Mockito.mock(PagedResourcesAssembler.class);
     teacherDetailsModelAssembler = Mockito.mock(TeacherDetailsModelAssembler.class);
 
-    // Create UserController instance
     userController =
         new UserController(
             userService,
@@ -139,21 +136,27 @@ public class UserControllerTest {
   }
 
   @Test
-  public void getUsers() {
-    CommonTests.controllerGetEntities(
-        UserDto.class,
-        userPagedResourcesAssembler,
-        userService::getUsers,
-        userDtoAssembler::toModel,
-        userController::getUsers);
+  public void getUsersReturnsFormattedResponse() throws Exception {
+    when(userService.getUsers(new PageableRequest().toPageable())).thenReturn(userDtosPage);
+    when(userDtoAssembler.mapPageToModel(userDtosPage)).thenReturn(userDtosPage);
+    when(userPagedResourcesAssembler.toModel(any(Page.class))).thenReturn(userPagedModel);
+
+    mvc.perform(
+            get("/api/users")
+                    .accept(MediaType.APPLICATION_JSON))
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.page").exists())
+            .andExpect(jsonPath("$.links").isArray())
+            .andExpect(jsonPath("$.links[0].rel").value("self"))
+            .andExpect(jsonPath("$.links[1].rel").value("profilePicture"))
+            .andReturn();
   }
 
   @Test
   public void searchUsersReturnsFormattedResponse() throws Exception {
     setUpSearchTest();
-
     ResultActions result = makeSearchRequest();
-
     result
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.page").exists())
@@ -167,9 +170,7 @@ public class UserControllerTest {
   @Test
   public void searchUsersUsesNeededFunctions() throws Exception {
     setUpSearchTest();
-
     makeSearchRequest();
-
     verify(userService, times(1))
         .search(any(String.class), any(String.class), any(Role.class), any(Pageable.class));
     verify(userDtoAssembler, times(2)).toModel(any(UserDto.class));
@@ -231,7 +232,7 @@ public class UserControllerTest {
   }
 
   @Test
-  public void getTeacherDetails() throws Exception {
+  public void getTeacherDetailsReturnsFormattedResponse() throws Exception {
     TeacherDetails teacherDetails = aTeacherDetails().build();
 
     given(userService.getTeacherDetails(any(Long.class))).willReturn(teacherDetails);
@@ -251,7 +252,7 @@ public class UserControllerTest {
   }
 
   @Test
-  public void getTeacherDetailsThrowsProperException() throws Exception {
+  public void getTeacherDetailsThrowsProperEntityNotFoundException() throws Exception {
     willThrow(new EntityNotFoundException(ErrorMessages.teacherDetailsNotFound(1L)))
         .given(userService)
         .getTeacherDetails(any(Long.class));
@@ -261,29 +262,21 @@ public class UserControllerTest {
     result
         .andExpect(status().isNotFound())
         .andExpect(jsonPath("$.message").value(ErrorMessages.teacherDetailsNotFound(1L)))
-        .andExpect(jsonPath("$.path").value("/api/users/1/teacher-details"))
+        .andExpect(jsonPath("$.path").value(teacherDetailsLink))
         .andExpect(jsonPath("$.statusCode").value(404));
   }
 
   private ResultActions makeGetTeacherDetailsRequest() throws Exception {
     return mvc.perform(
-        get("/api/users/1/teacher-details")
+        get(teacherDetailsLink)
             .contentType(MediaType.APPLICATION_JSON)
             .accept("application/hal+json"));
   }
 
   @Test
   public void updateTeacherDetailsWithProperRequest() throws Exception {
-    // Prepare test data
-    User teacher = Mockito.mock(User.class);
-    given(teacher.getId()).willReturn(1L);
-    PatchTeacherDetailsRequest request =
-        PatchTeacherDetailsRequest.builder()
-            .bio("New bio")
-            .title(DegreeTitle.DOCTOR)
-            .tutorship("New tutorship")
-            .degreeField("New degree field")
-            .build();
+    User teacher = anUser().build();
+    PatchTeacherDetailsRequest request = createPatchTeacherDetailsRequest();
     TeacherDetails modifiedTeacherDetails =
         TeacherDetails.builder()
             .teacher(teacher)
@@ -294,19 +287,13 @@ public class UserControllerTest {
             .degreeField(request.degreeField())
             .build();
 
-    // Mocks
     given(userService.updateTeacherDetails(any(PatchTeacherDetailsRequest.class), any(Long.class)))
         .willReturn(modifiedTeacherDetails);
     given(teacherDetailsModelAssembler.toModel(any(TeacherDetails.class))).willCallRealMethod();
 
-    // Perform request
-    mvc.perform(
-            patch("/api/users/1/teacher-details")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request))
-                .accept("application/hal+json"))
-        // Assert response
-        .andDo(print())
+    ResultActions result = makePatchTeacherDetailsRequest(request);
+
+    result
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.bio").value(request.bio()))
         .andExpect(jsonPath("$.tutorship").value(request.tutorship()))
@@ -318,38 +305,43 @@ public class UserControllerTest {
   }
 
   @Test
-  public void updateTeacherDetails_ThrowsEntityNotFoundException() {
-    // Prepare test data
-    PatchTeacherDetailsRequest request =
-        PatchTeacherDetailsRequest.builder()
-            .bio("New bio")
-            .title(DegreeTitle.DOCTOR)
-            .tutorship("New tutorship")
-            .degreeField("New degree field")
-            .build();
+  public void updateTeacherDetailsThrowsEntityNotFoundException() {
+    PatchTeacherDetailsRequest request = createPatchTeacherDetailsRequest();
 
-    // Mocks
     given(userService.updateTeacherDetails(any(PatchTeacherDetailsRequest.class), any(Long.class)))
         .willThrow(new EntityNotFoundException(ErrorMessages.teacherDetailsNotFound(1L)));
 
-    // Perform request
     assertThrows(
         EntityNotFoundException.class,
         () -> userController.patchTeacherDetails(request, 1L),
         ErrorMessages.teacherDetailsNotFound(1L));
   }
 
-  @Test
-  public void changeProfilePicture() throws Exception {
-    // Mock service method to do nothing
-    doNothing().when(userService).addImage(any(Long.class), any(MultipartFile.class));
+  private ResultActions makePatchTeacherDetailsRequest(PatchTeacherDetailsRequest request)
+      throws Exception {
+    return mvc.perform(
+        patch(teacherDetailsLink)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(request))
+            .accept("application/hal+json"));
+  }
 
-    // Create file for testing
+  private PatchTeacherDetailsRequest createPatchTeacherDetailsRequest() {
+    return PatchTeacherDetailsRequest.builder()
+        .bio("New bio")
+        .title(DegreeTitle.DOCTOR)
+        .tutorship("New tutorship")
+        .degreeField("New degree field")
+        .build();
+  }
+
+  @Test
+  public void changeProfilePictureReturnsFormattedResponse() throws Exception {
+    doNothing().when(userService).addImage(any(Long.class), any(MultipartFile.class));
     MockMultipartFile file =
         new MockMultipartFile(
             "file", "test.txt", MediaType.TEXT_PLAIN_VALUE, "Hello, World!".getBytes());
 
-    // Perform request
     mvc.perform(
             multipart("/api/users/1/profile-picture")
                 .file(file)
