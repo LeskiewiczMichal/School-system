@@ -187,14 +187,16 @@ public class CourseServiceImpl implements CourseService {
     byte[] fileData = file.getBytes();
 
     // Create a new File entity and set its properties
-    File newFile = new File();
-    newFile.setFileName(file.getOriginalFilename());
-    newFile.setFileType(file.getContentType());
-    newFile.setUploadedBy(
-        authenticationUtils
-            .getAuthenticatedUser()
-            .getId()); // Set the ID of the user who uploaded the file.
-    newFile.setFileData(fileData);
+    File newFile =
+        File.builder()
+            .fileName(file.getOriginalFilename())
+            .fileType(file.getContentType())
+            .uploadedBy(
+                authenticationUtils
+                    .getAuthenticatedUser()
+                    .getId()) // Set the ID of the user who uploaded the file.
+            .fileData(fileData)
+            .build();
 
     // Save the file
     ValidationUtils.validate(newFile);

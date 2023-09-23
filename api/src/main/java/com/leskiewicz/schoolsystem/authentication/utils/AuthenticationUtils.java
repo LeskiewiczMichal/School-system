@@ -16,4 +16,14 @@ public class AuthenticationUtils {
       return null;
     }
   }
+
+  public Long getAuthenticatedUserId() {
+    try {
+      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+      CustomUserDetails userDetails = (CustomUserDetails) (authentication.getPrincipal());
+      return userDetails.getId();
+    } catch (Exception e) {
+      return null;
+    }
+  }
 }

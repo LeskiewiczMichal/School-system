@@ -10,8 +10,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 @Getter
-@Setter
-@Builder(toBuilder = true)
+@Builder()
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity

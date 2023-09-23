@@ -64,11 +64,12 @@ public class CourseFilesTests {
     course.setFiles(new ArrayList<>());
 
     // Prepare the expected File entity
-    File expectedFile = new File();
-    expectedFile.setFileName("testfile.txt");
-    expectedFile.setFileType("text/plain");
-    expectedFile.setUploadedBy(1L);
-    expectedFile.setFileData("test file content".getBytes());
+    File expectedFile = File.builder()
+        .fileName("testfile.txt")
+        .fileType("text/plain")
+        .uploadedBy(1L)
+        .fileData("test file content".getBytes())
+            .build();
 
     // Mock the repository methods
     given(courseRepository.findById(courseId)).willReturn(Optional.of(course));

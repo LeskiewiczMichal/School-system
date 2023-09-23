@@ -42,13 +42,14 @@ public class FileServiceImpl implements FileService {
   }
 
   public File saveFile(MultipartFile file) throws IOException {
-    File fileToSave = new File();
-    fileToSave.setFileName(file.getOriginalFilename());
-    fileToSave.setFileType(file.getContentType());
-    fileToSave.setUploadedBy(
-        authenticationUtils.getAuthenticatedUser()
-            .getId()); // Set the ID of the user who uploaded the file.
-    fileToSave.setFileData(file.getBytes());
+    File fileToSave =
+        File.builder()
+            .fileName(file.getOriginalFilename())
+            .fileType(file.getContentType())
+            .uploadedBy(authenticationUtils.getAuthenticatedUserId())
+            .fileData(file.getBytes())
+            .build();
+
     return fileRepository.save(fileToSave);
   }
 

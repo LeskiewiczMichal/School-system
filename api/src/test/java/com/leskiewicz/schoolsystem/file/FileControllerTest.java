@@ -50,11 +50,11 @@ public class FileControllerTest {
     String fileType = "text/plain";
     byte[] fileData = "Hello, World!".getBytes();
 
-    File file = new File();
-    file.setId(fileId);
-    file.setFileName(fileName);
-    file.setFileType(fileType);
-    file.setFileData(fileData);
+    File file = File.builder()
+            .id(fileId)
+        .fileName(fileName)
+        .fileType(fileType)
+        .fileData(fileData).build();
 
     // Mock the fileService.getFileById() method
     given(fileService.getFileById(fileId)).willReturn(file);
