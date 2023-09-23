@@ -8,6 +8,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.hateoas.RepresentationModel;
 
+import java.util.Objects;
+
 @Getter
 @Setter
 @Builder(toBuilder = true)
@@ -44,4 +46,65 @@ public class TeacherDetails extends RepresentationModel<TeacherDetails> {
   @NotNull
   @Column(name = "tutorship")
   private String tutorship;
+
+  public void update(PatchTeacherDetailsRequest request) {
+    if (request.getTitle() != null) {
+      this.title = request.getTitle();
+    }
+    if (request.getBio() != null) {
+      this.bio = request.getBio();
+    }
+    if (request.getDegreeField() != null) {
+      this.degreeField = request.getDegreeField();
+    }
+    if (request.getTutorship() != null) {
+      this.tutorship = request.getTutorship();
+    }
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof TeacherDetails that)) return false;
+    if (!super.equals(o)) return false;
+    return Objects.equals(getId(), that.getId())
+        && Objects.equals(getTeacher(), that.getTeacher())
+        && Objects.equals(getDegreeField(), that.getDegreeField())
+        && getTitle() == that.getTitle()
+        && Objects.equals(getBio(), that.getBio())
+        && Objects.equals(getTutorship(), that.getTutorship());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(
+        super.hashCode(),
+        getId(),
+        getTeacher(),
+        getDegreeField(),
+        getTitle(),
+        getBio(),
+        getTutorship());
+  }
+
+  @Override
+  public String toString() {
+    return "TeacherDetails{"
+        + "id="
+        + id
+        + ", teacher="
+        + teacher
+        + ", degreeField='"
+        + degreeField
+        + '\''
+        + ", title="
+        + title
+        + ", bio='"
+        + bio
+        + '\''
+        + ", tutorship='"
+        + tutorship
+        + '\''
+        + '}';
+  }
 }

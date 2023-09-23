@@ -14,9 +14,12 @@ import com.leskiewicz.schoolsystem.course.Course;
 import com.leskiewicz.schoolsystem.course.CourseRepository;
 import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.course.utils.CourseMapper;
+import com.leskiewicz.schoolsystem.degree.DegreeTitle;
 import com.leskiewicz.schoolsystem.error.customexception.UserAlreadyExistsException;
 import com.leskiewicz.schoolsystem.generic.CommonTests;
+import com.leskiewicz.schoolsystem.testUtils.TestHelper;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
+import com.leskiewicz.schoolsystem.user.teacherdetails.PatchTeacherDetailsRequest;
 import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetails;
 import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetailsRepository;
 import com.leskiewicz.schoolsystem.user.utils.UserMapper;
@@ -28,6 +31,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
@@ -216,5 +220,34 @@ public class UserServiceTest {
   public void addUserThrowsUserAlreadyExistsExceptionWhenUserWithGivenEmailAlreadyExists() {
     given(userRepository.findByEmail(any(String.class))).willReturn(Optional.of(user));
     Assertions.assertThrows(UserAlreadyExistsException.class, () -> userService.addUser(user));
+  }
+
+  @Test
+  public void updateTeacherDetailsSavesProperTeacherDetails() {
+    PatchTeacherDetailsRequest changeRequest =
+        PatchTeacherDetailsRequest.builder()
+            .bio("New bio")
+            .title(DegreeTitle.DOCTOR)
+            .tutorship("New tutorship")
+            .degreeField("New degree field")
+            .build();
+    TeacherDetails teacherDetails = aTeacherDetails().build();
+    given(teacherDetailsRepository.findByUserId(any(Long.class)))
+        .willReturn(Optional.of(teacherDetails));
+
+    TeacherDetails teacherDetailsChanged = userService.updateTeacherDetails(changeRequest, 1L);
+
+    verify(teacherDetailsRepository).save(teacherDetailsChanged);
+    Assertions.assertEquals(changeRequest.getBio(), teacherDetailsChanged.getBio());
+    Assertions.assertEquals(changeRequest.getTutorship(), teacherDetailsChanged.getTutorship());
+    Assertions.assertEquals(changeRequest.getDegreeField(), teacherDetailsChanged.getDegreeField());
+    Assertions.assertEquals(changeRequest.getTitle(), teacherDetailsChanged.getTitle());
+  }
+
+  @Test
+  public void updateTeacherDetailsThrowsEntityNotFoundExceptionWhenTeacherDetailsNotFound() {
+    given(teacherDetailsRepository.findByUserId(any(Long.class))).willReturn(Optional.empty());
+    Assertions.assertThrows(
+        EntityNotFoundException.class, () -> userService.updateTeacherDetails(null, 1L));
   }
 }
