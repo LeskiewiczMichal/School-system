@@ -5,6 +5,7 @@ import com.leskiewicz.schoolsystem.files.File;
 import com.leskiewicz.schoolsystem.files.FileRepository;
 import com.leskiewicz.schoolsystem.files.FileServiceImpl;
 import com.leskiewicz.schoolsystem.testUtils.TestHelper;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,6 +37,14 @@ public class FileServiceTest {
     File result = fileService.getFileById(file.getId());
 
     Assertions.assertEquals(file, result);
+  }
+
+  @Test
+  public void getFileByIdThrowsExceptionWhenFileNotFound() {
+    given(fileRepository.findById(1L)).willReturn(Optional.empty());
+
+    Assertions.assertThrows(
+        EntityNotFoundException.class, () -> fileService.getFileById(1L));
   }
 
   @Test

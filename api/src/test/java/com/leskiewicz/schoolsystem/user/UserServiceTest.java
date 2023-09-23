@@ -2,6 +2,7 @@ package com.leskiewicz.schoolsystem.user;
 
 import static com.leskiewicz.schoolsystem.builders.CourseBuilder.aCourse;
 import static com.leskiewicz.schoolsystem.builders.CourseBuilder.courseDtoFrom;
+import static com.leskiewicz.schoolsystem.builders.DegreeBuilder.aDegree;
 import static com.leskiewicz.schoolsystem.builders.FacultyBuilder.aFaculty;
 import static com.leskiewicz.schoolsystem.builders.TeacherDetailsBuilder.aTeacherDetails;
 import static com.leskiewicz.schoolsystem.builders.UserBuilder.anUser;
@@ -116,6 +117,15 @@ public class UserServiceTest {
   }
 
   @Test
+  public void getUserCoursesThrowsExceptionWhenUserIsNotTeacherOrStudent() {
+    User user = anUser().role(Role.ROLE_ADMIN).build();
+    given(userRepository.findById(any(Long.class))).willReturn(Optional.of(user));
+
+    Assertions.assertThrows(
+        EntityNotFoundException.class, () -> userService.getUserCourses(1L, PageRequest.of(0, 1)));
+  }
+
+  @Test
   public void getUserCoursesReturnsPagedCourseDtosWhenUserIsTeacher() {
     List<Course> coursesList = List.of(aCourse().build());
     CourseDto courseDto = courseDtoFrom(aCourse().build());
@@ -141,6 +151,42 @@ public class UserServiceTest {
   private void assertCourseList(CourseDto courseDto, Page<CourseDto> result) {
     Assertions.assertEquals(1, result.getTotalElements());
     Assertions.assertEquals(courseDto, result.getContent().get(0));
+  }
+
+  @Test
+  public void getUserFacultyReturnsFaculty() {
+    Faculty faculty = aFaculty().build();
+    when(userRepository.findFacultyByUserId(any(Long.class))).thenReturn(Optional.of(faculty));
+
+    Faculty result = userService.getUserFaculty(1L);
+
+    Assertions.assertEquals(faculty, result);
+  }
+
+  @Test
+  public void getUserFacultyThrowsExceptionWhenFacultyNotFound() {
+    when(userRepository.findFacultyByUserId(any(Long.class))).thenReturn(Optional.empty());
+
+    Assertions.assertThrows(
+        EntityNotFoundException.class, () -> userService.getUserFaculty(1L));
+  }
+
+  @Test
+  public void getUserDegreeReturnsDegree() {
+    Degree degree = aDegree().build();
+    when(userRepository.findDegreeByUserId(any(Long.class))).thenReturn(Optional.of(degree));
+
+    Degree result = userService.getUserDegree(1L);
+
+    Assertions.assertEquals(degree, result);
+  }
+
+  @Test
+  public void getUserDegreeThrowsExceptionWhenDegreeNotFound() {
+    when(userRepository.findDegreeByUserId(any(Long.class))).thenReturn(Optional.empty());
+
+    Assertions.assertThrows(
+        EntityNotFoundException.class, () -> userService.getUserDegree(1L));
   }
 
   @Test
