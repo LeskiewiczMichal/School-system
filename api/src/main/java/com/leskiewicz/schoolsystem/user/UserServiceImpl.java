@@ -71,7 +71,7 @@ public class UserServiceImpl implements UserService {
   @Override
   public void addUser(User user) {
     ValidationUtils.validate(user);
-    if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+    if (userWithEmailAlreadyExists(user.getEmail())) {
       throw new UserAlreadyExistsException(
           ErrorMessages.userWithEmailAlreadyExists(user.getEmail()));
     }
@@ -85,83 +85,35 @@ public class UserServiceImpl implements UserService {
     // Find user
     User user = retrieveUserFromRepository(userId);
 
-    // Update degree
-    if (request.getDegreeField() != null || request.getDegreeTitle() != null) {
-      logger.debug("Updating degree of user with ID: {}", userId);
-
-      // If faculty data not complete, throw an error
-      if ((request.getDegreeField() != null && request.getDegreeTitle() == null)
-          || (request.getDegreeField() == null && request.getDegreeTitle() != null)) {
-        throw new MissingFieldException(
-            ErrorMessages.objectWasNotUpdated("User")
-                + ". Required fields to update degree: title and field of study");
-      }
-
-      // If user is changing faculty, validate the new one
-      Faculty userFaculty;
-      if (request.getFacultyName() != null) {
-        userFaculty = facultyService.getByName(request.getFacultyName());
-      } else {
-        userFaculty = user.getFaculty();
-      }
-
-      try {
-        Degree degree =
-            facultyService.getDegreeByTitleAndFieldOfStudy(
-                userFaculty, request.getDegreeTitle(), request.getDegreeField());
-        user.setDegree(degree);
-      } catch (EntityNotFoundException e) {
-        throw new EntityNotFoundException(
-            ErrorMessages.objectWasNotUpdated("User") + ". " + e.getMessage());
-      }
-    }
-
-    // Change faculty
-    if (request.getFacultyName() != null) {
-      // TODO: add logic for user changing faculty
-      logger.debug("Updating faculty of user with ID: {}", userId);
-      try {
-        Faculty faculty = facultyService.getByName(request.getFacultyName());
-        Degree degree =
-            facultyService.getDegreeByTitleAndFieldOfStudy(
-                faculty, user.getDegree().getTitle(), user.getDegree().getFieldOfStudy());
-        user.setFaculty(faculty);
-        user.setDegree(degree);
-      } catch (EntityNotFoundException e) {
-        throw new EntityNotFoundException(
-            ErrorMessages.objectWasNotUpdated("User") + ". " + e.getMessage());
-      }
-    }
-
     // Change email
-    if (request.getEmail() != null) {
+    if (request.email() != null) {
       logger.debug("Updating email of user with ID: {}", userId);
-      Optional<User> sameEmailUser = userRepository.findByEmail(request.getEmail());
+      Optional<User> sameEmailUser = userRepository.findByEmail(request.email());
       if (sameEmailUser.isPresent()) {
         throw new UserAlreadyExistsException(
             ErrorMessages.objectWasNotUpdated("User")
                 + ". "
-                + ErrorMessages.userWithEmailAlreadyExists(request.getEmail()));
+                + ErrorMessages.userWithEmailAlreadyExists(request.email()));
       }
-      user.setEmail(request.getEmail());
+      user.setEmail(request.email());
     }
 
     // Change first name
-    if (request.getFirstName() != null) {
+    if (request.firstName() != null) {
       logger.debug("Updating first name of user with ID: {}", userId);
-      user.setFirstName(request.getFirstName());
+      user.setFirstName(request.firstName());
     }
 
     // Change last name
-    if (request.getLastName() != null) {
+    if (request.lastName() != null) {
       logger.debug("Updating last name of user with ID: {}", userId);
-      user.setLastName(request.getLastName());
+      user.setLastName(request.lastName());
     }
 
     // Change password
-    if (request.getPassword() != null) {
+    if (request.password() != null) {
       logger.debug("Updating password of user with ID: {}", userId);
-      String encodedPassword = passwordEncoder.encode(request.getPassword());
+      String encodedPassword = passwordEncoder.encode(request.password());
       user.setPassword(encodedPassword);
     }
 
@@ -182,6 +134,9 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public Degree getUserDegree(Long userId) {
+    User user = retrieveUserFromRepository(userId);
+    user.getDegree();
+
     return userRepository
         .findDegreeByUserId(userId)
         .orElseThrow(
@@ -193,64 +148,20 @@ public class UserServiceImpl implements UserService {
   @Override
   public Page<CourseDto> getUserCourses(Long userId, Pageable pageable) {
     User user = retrieveUserFromRepository(userId);
-    return retrieveUserCourses(user, pageable);
-  }
-
-  private Page<CourseDto> retrieveUserCourses(User user, Pageable pageable) {
-    Page<Course> courses;
-
-    switch (user.getRole()) {
-      case ROLE_STUDENT:
-        courses = courseRepository.findCoursesByUserId(user.getId(), pageable);
-        break;
-      case ROLE_TEACHER:
-        courses = courseRepository.findCoursesByTeacherId(user.getId(), pageable);
-        break;
-      default:
-        throw new EntityNotFoundException(
-            "User with ID: " + user.getId() + " is not a student or teacher");
-    }
-
+    Page<Course> courses = retrieveUserCourses(user, pageable);
     return courseMapper.mapPageToDto(courses);
   }
 
   @Override
   public TeacherDetails getTeacherDetails(Long userId) {
     userExistsCheck(userId);
-
-    return teacherDetailsRepository
-        .findByUserId(userId)
-        .orElseThrow(
-            () -> new EntityNotFoundException(ErrorMessages.teacherDetailsNotFound(userId)));
+    return retrieveTeacherDetailsFromRepository(userId);
   }
 
   @Override
   public TeacherDetails updateTeacherDetails(PatchTeacherDetailsRequest request, Long userId) {
-    // Retrieve teacher details for given user
-    TeacherDetails teacherDetails =
-        teacherDetailsRepository
-            .findByUserId(userId)
-            .orElseThrow(
-                () -> new EntityNotFoundException(ErrorMessages.teacherDetailsNotFound(userId)));
-
-    // Update teacher details
-    if (request.getTitle() != null) {
-      logger.debug("Updating academic title of teacher with ID: {}", userId);
-      teacherDetails.setTitle(request.getTitle());
-    }
-    if (request.getBio() != null) {
-      logger.debug("Updating bio of teacher with ID: {}", userId);
-      teacherDetails.setBio(request.getBio());
-    }
-    if (request.getDegreeField() != null) {
-      logger.debug("Updating degree field of teacher with ID: {}", userId);
-      teacherDetails.setDegreeField(request.getDegreeField());
-    }
-    if (request.getTutorship() != null) {
-      logger.debug("Updating tutorship of teacher with ID: {}", userId);
-      teacherDetails.setTutorship(request.getTutorship());
-    }
-
+    TeacherDetails teacherDetails = retrieveTeacherDetailsFromRepository(userId);
+    teacherDetails.update(request);
     ValidationUtils.validate(teacherDetails);
     teacherDetailsRepository.save(teacherDetails);
     return teacherDetails;
@@ -261,19 +172,12 @@ public class UserServiceImpl implements UserService {
     Page<User> users =
         userRepository.searchUsersByLastNameAndFirstNameAndRole(
             lastName, firstName, role, pageable);
-
     return userMapper.mapPageToDto(users);
   }
 
   @Override
   public void addImage(Long userId, MultipartFile image) {
-    User user =
-        userRepository
-            .findById(userId)
-            .orElseThrow(
-                () ->
-                    new EntityNotFoundException(
-                        ErrorMessages.objectWithIdNotFound("User", userId)));
+    User user = retrieveUserFromRepository(userId);
 
     // Handle the image if available
     if (image != null) {
@@ -293,10 +197,38 @@ public class UserServiceImpl implements UserService {
     }
   }
 
+  private boolean userWithEmailAlreadyExists(String email) {
+    return userRepository.findByEmail(email).isPresent();
+  }
+
   private User retrieveUserFromRepository(Long userId) {
     return userRepository
         .findById(userId)
         .orElseThrow(
             () -> new EntityNotFoundException(ErrorMessages.objectWithIdNotFound("User", userId)));
+  }
+
+  private TeacherDetails retrieveTeacherDetailsFromRepository(Long userId) {
+    return teacherDetailsRepository
+        .findByUserId(userId)
+        .orElseThrow(() -> new EntityNotFoundException(ErrorMessages.teacherDetailsNotFound(userId)));
+  }
+
+  private Page<Course> retrieveUserCourses(User user, Pageable pageable) {
+    Page<Course> courses;
+
+    switch (user.getRole()) {
+      case ROLE_STUDENT:
+        courses = courseRepository.findCoursesByUserId(user.getId(), pageable);
+        break;
+      case ROLE_TEACHER:
+        courses = courseRepository.findCoursesByTeacherId(user.getId(), pageable);
+        break;
+      default:
+        throw new EntityNotFoundException(
+                "User with ID: " + user.getId() + " is not a student or teacher");
+    }
+
+    return courses;
   }
 }

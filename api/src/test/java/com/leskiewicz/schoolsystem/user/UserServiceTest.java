@@ -2,6 +2,7 @@ package com.leskiewicz.schoolsystem.user;
 
 import static com.leskiewicz.schoolsystem.builders.CourseBuilder.aCourse;
 import static com.leskiewicz.schoolsystem.builders.CourseBuilder.courseDtoFrom;
+import static com.leskiewicz.schoolsystem.builders.FacultyBuilder.aFaculty;
 import static com.leskiewicz.schoolsystem.builders.TeacherDetailsBuilder.aTeacherDetails;
 import static com.leskiewicz.schoolsystem.builders.UserBuilder.anUser;
 import static com.leskiewicz.schoolsystem.builders.UserBuilder.userDtoFrom;
@@ -10,25 +11,37 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 import com.leskiewicz.schoolsystem.authentication.Role;
+import com.leskiewicz.schoolsystem.builders.UserBuilder;
 import com.leskiewicz.schoolsystem.course.Course;
 import com.leskiewicz.schoolsystem.course.CourseRepository;
 import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.course.utils.CourseMapper;
+import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
 import com.leskiewicz.schoolsystem.error.customexception.UserAlreadyExistsException;
+import com.leskiewicz.schoolsystem.faculty.Faculty;
+import com.leskiewicz.schoolsystem.files.FileService;
 import com.leskiewicz.schoolsystem.generic.CommonTests;
 import com.leskiewicz.schoolsystem.testUtils.TestHelper;
+import com.leskiewicz.schoolsystem.user.dto.PatchUserRequest;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.teacherdetails.PatchTeacherDetailsRequest;
 import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetails;
 import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetailsRepository;
 import com.leskiewicz.schoolsystem.user.utils.UserMapper;
 import jakarta.persistence.EntityNotFoundException;
+
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -39,6 +52,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.multipart.MultipartFile;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -52,6 +67,9 @@ public class UserServiceTest {
   // Mappers
   @Mock private UserMapper userMapper;
   @Mock private CourseMapper courseMapper;
+  @Mock private PasswordEncoder passwordEncoder;
+  @Mock private FileService fileService;
+
 
   @InjectMocks private UserServiceImpl userService;
 
@@ -223,6 +241,38 @@ public class UserServiceTest {
   }
 
   @Test
+  public void updateUserUpdatesAndSavesUser() {
+    User user = anUser().build();
+    User userSpy = spy(user);
+    PatchUserRequest request = PatchUserRequest.builder().firstName("Test").lastName("Testing").email("testing@example.com").password("TestPassword").build();
+
+            given(userRepository.findById(user.getId())).willReturn(Optional.of(userSpy));
+    Mockito.lenient().when(passwordEncoder.encode(any(String.class))).thenReturn("encoded");
+    Mockito.lenient()
+            .when(userRepository.findByEmail(any(String.class)))
+            .thenReturn(Optional.empty());
+
+    userService.updateUser(request, user.getId());
+
+    verify(userRepository).save(userSpy);
+//    verify(userSpy).setFirstName("Test");
+  }
+
+  @Test
+  public void addProfilePictureToUser() {
+    MultipartFile file = Mockito.mock(MultipartFile.class);
+
+    given(fileService.uploadImage(any(MultipartFile.class))).willReturn("imagePath");
+    given(userRepository.findById(any(Long.class)))
+            .willReturn(Optional.of(TestHelper.createUser(Mockito.mock(Faculty.class), Mockito.mock(Degree.class))));
+
+    userService.addImage(1L, file);
+
+    verify(userRepository, Mockito.times(1)).save(any(User.class));
+    verify(fileService, Mockito.times(1)).uploadImage(any(MultipartFile.class));
+  }
+
+  @Test
   public void updateTeacherDetailsSavesProperTeacherDetails() {
     PatchTeacherDetailsRequest changeRequest =
         PatchTeacherDetailsRequest.builder()
@@ -232,16 +282,14 @@ public class UserServiceTest {
             .degreeField("New degree field")
             .build();
     TeacherDetails teacherDetails = aTeacherDetails().build();
+    TeacherDetails spyTeacherDetails = spy(teacherDetails);
     given(teacherDetailsRepository.findByUserId(any(Long.class)))
-        .willReturn(Optional.of(teacherDetails));
+        .willReturn(Optional.of(spyTeacherDetails));
 
     TeacherDetails teacherDetailsChanged = userService.updateTeacherDetails(changeRequest, 1L);
 
     verify(teacherDetailsRepository).save(teacherDetailsChanged);
-    Assertions.assertEquals(changeRequest.getBio(), teacherDetailsChanged.getBio());
-    Assertions.assertEquals(changeRequest.getTutorship(), teacherDetailsChanged.getTutorship());
-    Assertions.assertEquals(changeRequest.getDegreeField(), teacherDetailsChanged.getDegreeField());
-    Assertions.assertEquals(changeRequest.getTitle(), teacherDetailsChanged.getTitle());
+    verify(spyTeacherDetails).update(changeRequest);
   }
 
   @Test
