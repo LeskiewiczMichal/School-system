@@ -7,6 +7,7 @@ import com.leskiewicz.schoolsystem.degree.DegreeController;
 import com.leskiewicz.schoolsystem.faculty.FacultyController;
 import com.leskiewicz.schoolsystem.user.UserController;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
+import org.springframework.data.domain.Page;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
@@ -55,5 +56,10 @@ public class UserDtoAssembler extends RepresentationModelAssemblerSupport<UserDt
     }
 
     return user;
+  }
+
+  public Page<UserDto> mapPageToModel(Page<UserDto> page) {
+    page.forEach(this::toModel);
+    return page;
   }
 }

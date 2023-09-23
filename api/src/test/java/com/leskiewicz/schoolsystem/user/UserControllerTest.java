@@ -1,5 +1,9 @@
 package com.leskiewicz.schoolsystem.user;
 
+import static com.leskiewicz.schoolsystem.builders.UserBuilder.anUser;
+import static com.leskiewicz.schoolsystem.builders.UserBuilder.userDtoFrom;
+import static com.leskiewicz.schoolsystem.builders.FacultyBuilder.aFaculty;
+import static com.leskiewicz.schoolsystem.builders.DegreeBuilder.aDegree;
 import static net.bytebuddy.matcher.ElementMatchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
@@ -32,6 +36,7 @@ import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetailsModelAssemb
 import com.leskiewicz.schoolsystem.user.utils.UserDtoAssembler;
 import jakarta.persistence.EntityNotFoundException;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,9 +47,13 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -71,6 +80,16 @@ public class UserControllerTest {
           .registerModule(new JavaTimeModule());
 
   private MockMvc mvc;
+
+  Faculty specialFaculty = aFaculty().name("Special Faculty").build();
+  Degree specialDegree = aDegree().title(DegreeTitle.PROFESSOR).faculty(specialFaculty).build();
+  List<UserDto> userDtosList =
+      List.of(
+          userDtoFrom(anUser().build()),
+          userDtoFrom(anUser().faculty(specialFaculty).degree(specialDegree).build()));
+  Page<UserDto> userDtosPage = new PageImpl<>(userDtosList);
+  PagedModel<UserDto> userPagedModel =
+      PagedModel.of(userDtosList, new PagedModel.PageMetadata(1, 1, 1, 1));
 
   // Annotation mocks didn't work as expected here, pagedResourcesAssemblers were mixed up
   @BeforeEach
@@ -101,15 +120,15 @@ public class UserControllerTest {
 
   @Test
   public void getUserById() {
-    //    // Mock input and output data
-    Faculty faculty = Mockito.mock(Faculty.class);
-    Degree degree = Mockito.mock(Degree.class);
-    given(faculty.getName()).willReturn("Test");
-    given(degree.getFieldOfStudy()).willReturn("Law");
-    UserDto userDto = TestHelper.createUserDto(faculty.getName(), degree.getFieldOfStudy());
+    UserDto userDto = userDtoFrom(anUser().build());
 
-    CommonTests.controllerGetEntityById(
-        userDto, 1L, userService::getById, userDtoAssembler::toModel, userController::getUserById);
+    given(userService.getById(userDto.getId())).willReturn(userDto);
+    given(userDtoAssembler.toModel(userDto)).willReturn(userDto);
+
+    ResponseEntity<UserDto> result = userController.getUserById(userDto.getId());
+
+    Assertions.assertEquals(userDto, result.getBody());
+    Assertions.assertEquals(HttpStatus.OK, result.getStatusCode());
   }
 
   @Test
@@ -123,30 +142,12 @@ public class UserControllerTest {
   }
 
   @Test
-  public void searchUsers() throws Exception {
-    // Prepare test data
-    List<UserDto> userDtos =
-        Arrays.asList(
-            TestHelper.createUserDto("Test", "Law"), TestHelper.createUserDto("Test", "Law"));
-    Page<UserDto> userPage = new PageImpl<>(userDtos);
-    PagedModel<UserDto> userPagedModel =
-        PagedModel.of(userDtos, new PagedModel.PageMetadata(1, 1, 1, 1));
+  public void searchUsersReturnsFormattedResponse() throws Exception {
+    setUpSearchTest();
 
-    // Mocks
-    given(
-            userService.search(
-                any(String.class), any(String.class), any(Role.class), any(Pageable.class)))
-        .willReturn(userPage);
-    given(userDtoAssembler.toModel(any(UserDto.class))).willReturn(userDtos.get(0));
-    given(userPagedResourcesAssembler.toModel(any(Page.class))).willReturn(userPagedModel);
+    ResultActions result = makeSearchRequest();
 
-    // Perform request
-    mvc.perform(
-            get("/api/users/search")
-                .param("firstName", "Test")
-                .param("lastName", "Test")
-                .param("role", "ROLE_TEACHER")
-                .accept(MediaType.APPLICATION_JSON))
+    result
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.page").exists())
         .andExpect(jsonPath("$.links").isArray())
@@ -154,22 +155,52 @@ public class UserControllerTest {
         .andExpect(jsonPath("$.links[1].rel").value("users"))
         .andExpect(jsonPath("$.links[2].rel").value("user"))
         .andReturn();
+  }
 
-    // Verify mocks
+  @Test
+  public void searchUsersUsesNeededFunctions() throws Exception {
+    setUpSearchTest();
+
+    makeSearchRequest();
+
     verify(userService, times(1))
         .search(any(String.class), any(String.class), any(Role.class), any(Pageable.class));
     verify(userDtoAssembler, times(2)).toModel(any(UserDto.class));
     verify(userPagedResourcesAssembler, times(1)).toModel(any(Page.class));
   }
 
+  private void setUpSearchTest() {
+    when(userService.search(
+            any(String.class), any(String.class), any(Role.class), any(Pageable.class)))
+        .thenReturn(userDtosPage);
+    when(userDtoAssembler.toModel(any(UserDto.class)))
+        .thenReturn(userDtosList.get(0), userDtosList.get(1));
+    when(userPagedResourcesAssembler.toModel(any(Page.class))).thenReturn(userPagedModel);
+  }
+
+  private ResultActions makeSearchRequest() throws Exception {
+    return mvc.perform(
+        get("/api/users/search")
+            .param("firstName", "Test")
+            .param("lastName", "Test")
+            .param("role", "ROLE_TEACHER")
+            .accept(MediaType.APPLICATION_JSON));
+  }
+
   @Test
-  public void testPatchUser() {
-    CommonTests.controllerPatchEntity(
-        UserDto.class,
-        PatchUserRequest.class,
-        userService::updateUser,
-        userDtoAssembler::toModel,
-        userController::patchUser);
+  public void patchUserReturnsUserDto() {
+    UserDto userDto = userDtoFrom(anUser().build());
+    Long id = userDto.getId();
+    PatchUserRequest request = Mockito.mock(PatchUserRequest.class);
+
+    given(userService.updateUser(request, id)).willReturn(userDto);
+    given(userDtoAssembler.toModel(any(UserDto.class))).willReturn(userDto);
+
+    ResponseEntity<UserDto> response = userController.patchUser(request, id);
+
+    Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+    Assertions.assertEquals(userDto, response.getBody());
+    verify(userService, times(1)).updateUser(request, id);
   }
 
   @Test

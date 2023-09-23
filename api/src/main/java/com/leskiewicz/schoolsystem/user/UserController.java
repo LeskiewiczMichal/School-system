@@ -35,12 +35,6 @@ import java.util.List;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-/**
- * REST controller for managing {@link User}.
- *
- * <p>All endpoints return responses formatted as HAL representations with _links. Collections are
- * return inside _embedded field.
- */
 @RestController
 @RequestMapping("/api/users")
 @AllArgsConstructor
@@ -68,7 +62,7 @@ public class UserController {
   public ResponseEntity<RepresentationModel<UserDto>> getUsers(
       @ModelAttribute PageableRequest request) {
     Page<UserDto> users = userService.getUsers(request.toPageable());
-    users = users.map(userDtoAssembler::toModel);
+    users = userDtoAssembler.mapPageToModel(users);
 
     Link selfLink = linkTo(methodOn(UserController.class).getUsers(request)).withSelfRel();
     Link profilePictureLink = linkTo(methodOn(UserController.class).updateImage(null, null))
@@ -235,4 +229,5 @@ public class UserController {
 
     return ResponseEntity.status(HttpStatus.OK).body(message);
   }
+
 }
