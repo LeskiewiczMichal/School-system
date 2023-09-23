@@ -31,9 +31,9 @@ public class TeacherDetailsTest {
 
     teacherDetails.update(changeRequest);
 
-    Assertions.assertEquals(changeRequest.getBio(), teacherDetails.getBio());
-    Assertions.assertEquals(changeRequest.getTutorship(), teacherDetails.getTutorship());
-    Assertions.assertEquals(changeRequest.getDegreeField(), teacherDetails.getDegreeField());
-    Assertions.assertEquals(changeRequest.getTitle(), teacherDetails.getTitle());
+    Assertions.assertEquals(changeRequest.bio(), teacherDetails.getBio());
+    Assertions.assertEquals(changeRequest.tutorship(), teacherDetails.getTutorship());
+    Assertions.assertEquals(changeRequest.degreeField(), teacherDetails.getDegreeField());
+    Assertions.assertEquals(changeRequest.title(), teacherDetails.getTitle());
   }
 }

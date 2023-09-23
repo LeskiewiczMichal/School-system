@@ -48,17 +48,17 @@ public class TeacherDetails extends RepresentationModel<TeacherDetails> {
   private String tutorship;
 
   public void update(PatchTeacherDetailsRequest request) {
-    if (request.getTitle() != null) {
-      this.title = request.getTitle();
+    if (request.title() != null) {
+      this.title = request.title();
     }
-    if (request.getBio() != null) {
-      this.bio = request.getBio();
+    if (request.bio() != null) {
+      this.bio = request.bio();
     }
-    if (request.getDegreeField() != null) {
-      this.degreeField = request.getDegreeField();
+    if (request.degreeField() != null) {
+      this.degreeField = request.degreeField();
     }
-    if (request.getTutorship() != null) {
-      this.tutorship = request.getTutorship();
+    if (request.tutorship() != null) {
+      this.tutorship = request.tutorship();
     }
   }
 

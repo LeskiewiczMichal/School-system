@@ -6,14 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
-@AllArgsConstructor
 @Builder
-@NoArgsConstructor
-public class PatchTeacherDetailsRequest {
-
-    private String bio;
-    private String tutorship;
-    private DegreeTitle title;
-    private String degreeField;
-}
+public record PatchTeacherDetailsRequest(
+    String bio, String tutorship, DegreeTitle title, String degreeField) {}

@@ -241,10 +241,10 @@ public class UserControllerTest {
         TeacherDetails.builder()
             .teacher(teacher)
             .id(1L)
-            .bio(request.getBio())
-            .title(request.getTitle())
-            .tutorship(request.getTutorship())
-            .degreeField(request.getDegreeField())
+            .bio(request.bio())
+            .title(request.title())
+            .tutorship(request.tutorship())
+            .degreeField(request.degreeField())
             .build();
 
     // Mocks
@@ -261,10 +261,10 @@ public class UserControllerTest {
         // Assert response
         .andDo(print())
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.bio").value(request.getBio()))
-        .andExpect(jsonPath("$.tutorship").value(request.getTutorship()))
-        .andExpect(jsonPath("$.title").value(request.getTitle().toString()))
-        .andExpect(jsonPath("$.degreeField").value(request.getDegreeField()))
+        .andExpect(jsonPath("$.bio").value(request.bio()))
+        .andExpect(jsonPath("$.tutorship").value(request.tutorship()))
+        .andExpect(jsonPath("$.title").value(request.title().toString()))
+        .andExpect(jsonPath("$.degreeField").value(request.degreeField()))
         .andExpect(jsonPath("$.links[*].rel", Matchers.hasItems("self", "teacher")))
         .andExpect(jsonPath("$.links[*].href", Matchers.hasSize(2)))
         .andReturn();
@@ -299,19 +299,19 @@ public class UserControllerTest {
 
     // Create file for testing
     MockMultipartFile file =
-            new MockMultipartFile(
-                    "file", "test.txt", MediaType.TEXT_PLAIN_VALUE, "Hello, World!".getBytes());
+        new MockMultipartFile(
+            "file", "test.txt", MediaType.TEXT_PLAIN_VALUE, "Hello, World!".getBytes());
 
     // Perform request
     mvc.perform(
-                    multipart("/api/users/1/profile-picture")
-                            .file(file)
-                            .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
-                            .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.message").value("File with name: test.txt uploaded successfully"))
-            .andExpect(jsonPath("$.links[*].rel", Matchers.hasItems("user")))
-            .andExpect(jsonPath("$.links[*].href", Matchers.hasSize(1)))
-            .andReturn();
+            multipart("/api/users/1/profile-picture")
+                .file(file)
+                .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.message").value("File with name: test.txt uploaded successfully"))
+        .andExpect(jsonPath("$.links[*].rel", Matchers.hasItems("user")))
+        .andExpect(jsonPath("$.links[*].href", Matchers.hasSize(1)))
+        .andReturn();
   }
 }
