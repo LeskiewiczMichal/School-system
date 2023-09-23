@@ -141,16 +141,14 @@ public class UserControllerTest {
     when(userDtoAssembler.mapPageToModel(userDtosPage)).thenReturn(userDtosPage);
     when(userPagedResourcesAssembler.toModel(any(Page.class))).thenReturn(userPagedModel);
 
-    mvc.perform(
-            get("/api/users")
-                    .accept(MediaType.APPLICATION_JSON))
-            .andDo(print())
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.page").exists())
-            .andExpect(jsonPath("$.links").isArray())
-            .andExpect(jsonPath("$.links[0].rel").value("self"))
-            .andExpect(jsonPath("$.links[1].rel").value("profilePicture"))
-            .andReturn();
+    mvc.perform(get("/api/users").accept(MediaType.APPLICATION_JSON))
+        .andDo(print())
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.page").exists())
+        .andExpect(jsonPath("$.links").isArray())
+        .andExpect(jsonPath("$.links[0].rel").value("self"))
+        .andExpect(jsonPath("$.links[1].rel").value("profilePicture"))
+        .andReturn();
   }
 
   @Test
@@ -173,7 +171,7 @@ public class UserControllerTest {
     makeSearchRequest();
     verify(userService, times(1))
         .search(any(String.class), any(String.class), any(Role.class), any(Pageable.class));
-    verify(userDtoAssembler, times(2)).toModel(any(UserDto.class));
+    verify(userDtoAssembler).mapPageToModel(any(Page.class));
     verify(userPagedResourcesAssembler, times(1)).toModel(any(Page.class));
   }
 
@@ -181,8 +179,7 @@ public class UserControllerTest {
     when(userService.search(
             any(String.class), any(String.class), any(Role.class), any(Pageable.class)))
         .thenReturn(userDtosPage);
-    when(userDtoAssembler.toModel(any(UserDto.class)))
-        .thenReturn(userDtosList.get(0), userDtosList.get(1));
+    when(userDtoAssembler.mapPageToModel(any(Page.class))).thenReturn(userDtosPage);
     when(userPagedResourcesAssembler.toModel(any(Page.class))).thenReturn(userPagedModel);
   }
 

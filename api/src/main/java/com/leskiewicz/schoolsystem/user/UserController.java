@@ -95,7 +95,7 @@ public class UserController {
       @RequestParam(value = "role", required = false) Role role,
       @ModelAttribute PageableRequest request) {
     Page<UserDto> users = userService.search(lastName, firstName, role, request.toPageable());
-    users = users.map(userDtoAssembler::toModel);
+    users = userDtoAssembler.mapPageToModel(users);
 
     Link selfLink =
         linkTo(methodOn(UserController.class).searchUsers(firstName, lastName, role, request))
@@ -222,7 +222,6 @@ public class UserController {
           @PathVariable Long id, @RequestParam("file") MultipartFile file) {
     userService.addImage(id, file);
 
-    // Create response
     MessageModel message =
             new MessageModel(APIResponses.fileUploaded(file.getOriginalFilename()));
     message.add(linkTo(methodOn(this.getClass()).getUserById(id)).withRel("user"));
