@@ -34,7 +34,6 @@ import org.springframework.web.multipart.MultipartFile;
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
-  private final FacultyService facultyService;
   private final FileService fileService;
   private final PasswordEncoder passwordEncoder;
 
@@ -82,41 +81,9 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public UserDto updateUser(PatchUserRequest request, Long userId) {
-    // Find user
+    checkIfUserWithEmailAlreadyExists(request.email());
     User user = retrieveUserFromRepository(userId);
-
-    // Change email
-    if (request.email() != null) {
-      logger.debug("Updating email of user with ID: {}", userId);
-      Optional<User> sameEmailUser = userRepository.findByEmail(request.email());
-      if (sameEmailUser.isPresent()) {
-        throw new UserAlreadyExistsException(
-            ErrorMessages.objectWasNotUpdated("User")
-                + ". "
-                + ErrorMessages.userWithEmailAlreadyExists(request.email()));
-      }
-      user.setEmail(request.email());
-    }
-
-    // Change first name
-    if (request.firstName() != null) {
-      logger.debug("Updating first name of user with ID: {}", userId);
-      user.setFirstName(request.firstName());
-    }
-
-    // Change last name
-    if (request.lastName() != null) {
-      logger.debug("Updating last name of user with ID: {}", userId);
-      user.setLastName(request.lastName());
-    }
-
-    // Change password
-    if (request.password() != null) {
-      logger.debug("Updating password of user with ID: {}", userId);
-      String encodedPassword = passwordEncoder.encode(request.password());
-      user.setPassword(encodedPassword);
-    }
-
+    user.update(request, passwordEncoder);
     ValidationUtils.validate(user);
     userRepository.save(user);
     return userMapper.convertToDto(user);
@@ -134,9 +101,6 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public Degree getUserDegree(Long userId) {
-    User user = retrieveUserFromRepository(userId);
-    user.getDegree();
-
     return userRepository
         .findDegreeByUserId(userId)
         .orElseThrow(
@@ -178,17 +142,18 @@ public class UserServiceImpl implements UserService {
   @Override
   public void addImage(Long userId, MultipartFile image) {
     User user = retrieveUserFromRepository(userId);
-
-    // Handle the image if available
-    if (image != null) {
-      String filename = fileService.uploadImage(image);
-      user.setProfilePictureName(filename);
-    } else {
-      throw new IllegalArgumentException("Image cannot be null");
-    }
-
+    String filename = fileService.uploadImage(image);
+    user.setProfilePictureName(filename);
     userRepository.save(user);
-    logger.info("Updated profile picture of user with ID: {}", userId);
+  }
+
+  private void checkIfUserWithEmailAlreadyExists(String email) {
+    if (email == null) {
+      return;
+    }
+    if (userWithEmailAlreadyExists(email)) {
+      throw new UserAlreadyExistsException(ErrorMessages.userWithEmailAlreadyExists(email));
+    }
   }
 
   private void userExistsCheck(Long id) {
@@ -211,7 +176,8 @@ public class UserServiceImpl implements UserService {
   private TeacherDetails retrieveTeacherDetailsFromRepository(Long userId) {
     return teacherDetailsRepository
         .findByUserId(userId)
-        .orElseThrow(() -> new EntityNotFoundException(ErrorMessages.teacherDetailsNotFound(userId)));
+        .orElseThrow(
+            () -> new EntityNotFoundException(ErrorMessages.teacherDetailsNotFound(userId)));
   }
 
   private Page<Course> retrieveUserCourses(User user, Pageable pageable) {
@@ -226,7 +192,7 @@ public class UserServiceImpl implements UserService {
         break;
       default:
         throw new EntityNotFoundException(
-                "User with ID: " + user.getId() + " is not a student or teacher");
+            "User with ID: " + user.getId() + " is not a student or teacher");
     }
 
     return courses;

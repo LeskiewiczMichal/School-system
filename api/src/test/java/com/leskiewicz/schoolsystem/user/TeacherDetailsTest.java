@@ -19,7 +19,7 @@ import static org.mockito.Mockito.verify;
 public class TeacherDetailsTest {
 
   @Test
-  public void updateTeacherDetailsSavesProperTeacherDetails() {
+  public void updateTeacherDetailsChangesObjectProperly() {
     TeacherDetails teacherDetails = aTeacherDetails().build();
     PatchTeacherDetailsRequest changeRequest =
         PatchTeacherDetailsRequest.builder()

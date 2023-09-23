@@ -2,15 +2,22 @@ package com.leskiewicz.schoolsystem.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.leskiewicz.schoolsystem.degree.Degree;
+import com.leskiewicz.schoolsystem.error.ErrorMessages;
+import com.leskiewicz.schoolsystem.error.customexception.UserAlreadyExistsException;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.authentication.Role;
 import com.leskiewicz.schoolsystem.files.File;
+import com.leskiewicz.schoolsystem.user.dto.PatchUserRequest;
 import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetails;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotNull;
 import java.util.Objects;
+import java.util.Optional;
+
 import lombok.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Getter
 @Setter
@@ -69,6 +76,24 @@ public class User {
 
   public String getFullName() {
     return firstName + " " + lastName;
+  }
+
+  public void update(PatchUserRequest request, PasswordEncoder passwordEncoder) {
+    if (request.email() != null) {
+      this.email = request.email();
+    }
+
+    if (request.firstName() != null) {
+      this.firstName = request.firstName();
+    }
+
+    if (request.lastName() != null) {
+      this.lastName = request.lastName();
+    }
+
+    if (request.password() != null) {
+      this.password = passwordEncoder.encode(request.password());
+    }
   }
 
   @Override

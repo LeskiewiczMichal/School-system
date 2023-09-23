@@ -255,7 +255,18 @@ public class UserServiceTest {
     userService.updateUser(request, user.getId());
 
     verify(userRepository).save(userSpy);
-//    verify(userSpy).setFirstName("Test");
+    verify(userSpy).update(any(PatchUserRequest.class), any(PasswordEncoder.class));
+  }
+
+  @Test
+  public void updateUserThrowsUserAlreadyExistsExceptionWhenUserWithGivenEmailAlreadyExists() {
+    PatchUserRequest request = PatchUserRequest.builder().firstName("Test").lastName("Testing").email("test@example.com").password("password").build();
+
+    given(userRepository.findById(any(Long.class))).willReturn(Optional.of(user));
+    given(userRepository.findByEmail(any(String.class))).willReturn(Optional.of(user));
+
+    Assertions.assertThrows(UserAlreadyExistsException.class, () -> userService.updateUser(request, 1L));
+
   }
 
   @Test
