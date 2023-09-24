@@ -20,6 +20,7 @@ import com.leskiewicz.schoolsystem.faculty.utils.FacultyMapper;
 import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.UserRepository;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
+import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetails;
 import com.leskiewicz.schoolsystem.user.utils.UserMapper;
 import com.leskiewicz.schoolsystem.utils.Mapper;
 import com.leskiewicz.schoolsystem.utils.StringUtils;
@@ -53,13 +54,8 @@ public class FacultyServiceImpl implements FacultyService {
 
   @Override
   public FacultyDto getById(Long id) {
-    return facultyMapper.mapToDto(
-        facultyRepository
-            .findById(id)
-            .orElseThrow(
-                () ->
-                    new EntityNotFoundException(
-                        ErrorMessages.objectWithIdNotFound("Faculty", id))));
+    Faculty faculty = retrieveFacultyFromRepositoryById(id);
+    return facultyMapper.mapToDto(faculty);
   }
 
   @Override
@@ -114,13 +110,7 @@ public class FacultyServiceImpl implements FacultyService {
 
   @Override
   public FacultyDto updateFaculty(PatchFacultyRequest request, Long facultyId) {
-    Faculty faculty =
-        facultyRepository
-            .findById(facultyId)
-            .orElseThrow(
-                () ->
-                    new EntityNotFoundException(
-                        ErrorMessages.objectWithIdNotFound("Faculty", facultyId)));
+    Faculty faculty = retrieveFacultyFromRepositoryById(facultyId);
 
     if (request.name() != null) {
       if (facultyRepository.findByName(request.name()).isPresent()) {
@@ -158,10 +148,18 @@ public class FacultyServiceImpl implements FacultyService {
     return courseMapper.mapPageToDto(courses);
   }
 
-
   private void facultyExistsCheck(Long facultyId) {
     if (!facultyRepository.existsById(facultyId)) {
       throw new EntityNotFoundException(ErrorMessages.objectWithIdNotFound("Faculty", facultyId));
     }
+  }
+
+  private Faculty retrieveFacultyFromRepositoryById(Long facultyId) {
+    return facultyRepository
+        .findById(facultyId)
+        .orElseThrow(
+            () ->
+                new EntityNotFoundException(
+                    ErrorMessages.objectWithIdNotFound("Faculty", facultyId)));
   }
 }
