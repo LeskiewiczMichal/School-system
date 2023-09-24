@@ -1,5 +1,6 @@
 package com.leskiewicz.schoolsystem.faculty;
 
+import com.leskiewicz.schoolsystem.authentication.Role;
 import com.leskiewicz.schoolsystem.course.Course;
 import com.leskiewicz.schoolsystem.course.CourseRepository;
 import com.leskiewicz.schoolsystem.course.dto.CourseDto;
@@ -43,10 +44,11 @@ import static com.leskiewicz.schoolsystem.builders.DegreeBuilder.aDegree;
 import static com.leskiewicz.schoolsystem.builders.DegreeBuilder.degreeDtoFrom;
 import static com.leskiewicz.schoolsystem.builders.FacultyBuilder.aFaculty;
 import static com.leskiewicz.schoolsystem.builders.FacultyBuilder.facultyDtoFrom;
+import static com.leskiewicz.schoolsystem.builders.UserBuilder.anUser;
 import static com.leskiewicz.schoolsystem.builders.UserBuilder.userDtoFrom;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class FacultyServiceTest {
@@ -64,7 +66,7 @@ public class FacultyServiceTest {
   @Mock private Mapper<Faculty, FacultyDto> facultyMapper;
   @Mock private CourseMapper courseMapper;
   @Mock private DegreeMapper degreeMapper;
-  @Mock private UserMapper userMapper;
+  @Mock private Mapper<User, UserDto> userMapper;
 
   @InjectMocks private FacultyServiceImpl facultyService;
 
@@ -94,7 +96,7 @@ public class FacultyServiceTest {
 
     @Test
     public void throwsExceptionWhenUserWithGivenIdDoesntExist() {
-      given(facultyRepository.findById(any(Long.class))).willReturn(Optional.empty());
+      when(facultyRepository.findById(any(Long.class))).thenReturn(Optional.empty());
       Assertions.assertThrows(EntityNotFoundException.class, () -> facultyService.getById(1L));
     }
   }
@@ -103,7 +105,7 @@ public class FacultyServiceTest {
   public class getByName {
     @Test
     public void getByNameReturnsFacultyDto() {
-      given(facultyRepository.findByName(faculty.getName())).willReturn(Optional.of(faculty));
+      when(facultyRepository.findByName(faculty.getName())).thenReturn(Optional.of(faculty));
 
       Faculty testFaculty = facultyService.getByName(faculty.getName());
 
@@ -112,7 +114,7 @@ public class FacultyServiceTest {
 
     @Test
     public void getByNameThrowsExceptionWhenFacultyDoesntExist() {
-      given(facultyRepository.findByName(faculty.getName())).willReturn(Optional.empty());
+      when(facultyRepository.findByName(faculty.getName())).thenReturn(Optional.empty());
       Assertions.assertThrows(
           EntityNotFoundException.class, () -> facultyService.getByName(faculty.getName()));
     }
@@ -164,7 +166,7 @@ public class FacultyServiceTest {
     public void throwsExceptionWhenFacultyDoesntExist() {
       Pageable pageable = Mockito.mock(PageRequest.class);
 
-      given(facultyRepository.existsById(any(Long.class))).willReturn(false);
+      when(facultyRepository.existsById(any(Long.class))).thenReturn(false);
 
       Assertions.assertThrows(
               EntityNotFoundException.class, () -> facultyService.getFacultyCourses(1L, pageable));
@@ -192,7 +194,7 @@ public class FacultyServiceTest {
     public void throwsExceptionWhenFacultyDoesntExist() {
       Pageable pageable = Mockito.mock(PageRequest.class);
 
-      given(facultyRepository.existsById(any(Long.class))).willReturn(false);
+      when(facultyRepository.existsById(any(Long.class))).thenReturn(false);
 
       Assertions.assertThrows(
               EntityNotFoundException.class,
@@ -200,4 +202,36 @@ public class FacultyServiceTest {
     }
   }
 
+  @Nested
+  public class getFacultyUsers {
+    List<User> usersList = List.of(anUser().build(), anUser().firstName("Testing").lastName("FacultyTest").email("testingemail@example.com").build());
+    List<UserDto> userDtosList = List.of(userDtoFrom(usersList.get(0)), userDtoFrom(usersList.get(1)));
+
+    @Test
+    public void returnsPagedUsers() {
+      when(userRepository.findUsersByFacultyId(
+              any(Long.class), any(Pageable.class), any(Role.class)))
+          .thenReturn(new PageImpl<>(usersList));
+      when(userMapper.mapPageToDto(any(Page.class))).thenReturn(new PageImpl<>(userDtosList));
+      when(facultyRepository.existsById(any(Long.class))).thenReturn(true);
+
+      Page<UserDto> result =
+          facultyService.getFacultyUsers(1L, PageRequest.of(0, 2), Role.ROLE_STUDENT);
+
+//      Assertions.assertEquals(2, result.getTotalElements());
+      Assertions.assertEquals(userDtosList.get(0), result.getContent().get(0));
+      Assertions.assertEquals(userDtosList.get(1), result.getContent().get(1));
+    }
+
+    @Test
+    public void throwsExceptionWhenFacultyDoesntExist() {
+      Pageable pageable = Mockito.mock(PageRequest.class);
+
+      when(facultyRepository.existsById(any(Long.class))).thenReturn(false);
+
+      Assertions.assertThrows(
+              EntityNotFoundException.class,
+              () -> facultyService.getFacultyUsers(faculty.getId(), pageable, Role.ROLE_STUDENT));
+    }
+  }
 }
