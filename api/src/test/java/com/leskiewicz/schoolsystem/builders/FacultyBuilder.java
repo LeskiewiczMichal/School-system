@@ -3,7 +3,14 @@ package com.leskiewicz.schoolsystem.builders;
 import com.leskiewicz.schoolsystem.course.Course;
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
+import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
+import com.leskiewicz.schoolsystem.faculty.utils.FacultyMapper;
+import com.leskiewicz.schoolsystem.faculty.utils.FacultyMapperImpl;
 import com.leskiewicz.schoolsystem.user.User;
+import com.leskiewicz.schoolsystem.user.dto.UserDto;
+import com.leskiewicz.schoolsystem.user.utils.UserMapper;
+import com.leskiewicz.schoolsystem.user.utils.UserMapperImpl;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +24,11 @@ public class FacultyBuilder {
 
   public static FacultyBuilder aFaculty() {
     return new FacultyBuilder();
+  }
+
+  public static FacultyDto facultyDtoFrom(Faculty faculty) {
+    FacultyMapper facultyMapper = new FacultyMapperImpl();
+    return facultyMapper.convertToDto(faculty);
   }
 
   public FacultyBuilder id(Long id) {
