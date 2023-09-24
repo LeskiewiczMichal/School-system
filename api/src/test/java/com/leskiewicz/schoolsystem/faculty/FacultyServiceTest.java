@@ -84,5 +84,20 @@ public class FacultyServiceTest {
     Assertions.assertThrows(EntityNotFoundException.class, () -> facultyService.getById(1L));
   }
 
+  @Test
+  public void getByNameReturnsFacultyDto() {
+    given(facultyRepository.findByName(faculty.getName())).willReturn(Optional.of(faculty));
+
+    Faculty testFaculty = facultyService.getByName(faculty.getName());
+
+    Assertions.assertEquals(faculty, testFaculty);
+  }
+
+  @Test
+  public void getByNameThrowsExceptionWhenFacultyDoesntExist() {
+    given(facultyRepository.findByName(faculty.getName())).willReturn(Optional.empty());
+    Assertions.assertThrows(
+            EntityNotFoundException.class, () -> facultyService.getByName(faculty.getName()));
+  }
 
 }
