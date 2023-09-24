@@ -2,7 +2,9 @@ package com.leskiewicz.schoolsystem.faculty;
 
 import com.leskiewicz.schoolsystem.course.CourseRepository;
 import com.leskiewicz.schoolsystem.course.utils.CourseMapper;
+import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.degree.DegreeRepository;
+import com.leskiewicz.schoolsystem.degree.DegreeTitle;
 import com.leskiewicz.schoolsystem.degree.utils.DegreeMapper;
 import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
 import com.leskiewicz.schoolsystem.faculty.utils.FacultyMapper;
@@ -15,6 +17,7 @@ import com.leskiewicz.schoolsystem.user.utils.UserMapper;
 import com.leskiewicz.schoolsystem.utils.Mapper;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -26,9 +29,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static com.leskiewicz.schoolsystem.builders.DegreeBuilder.aDegree;
 import static com.leskiewicz.schoolsystem.builders.FacultyBuilder.aFaculty;
 import static com.leskiewicz.schoolsystem.builders.FacultyBuilder.facultyDtoFrom;
 import static com.leskiewicz.schoolsystem.builders.UserBuilder.userDtoFrom;
@@ -68,36 +73,66 @@ public class FacultyServiceTest {
     Assertions.assertEquals(facultyDtosList.get(1), result.getContent().get(1));
   }
 
-  @Test
-  public void getByIdReturnsFacultyDto() {
-    when(facultyRepository.findById(any(Long.class))).thenReturn(Optional.of(faculty));
-    when(facultyMapper.mapToDto(any(Faculty.class))).thenReturn(facultyDto);
+  @Nested
+  public class getById {
+    @Test
+    public void returnsFacultyDto() {
+      when(facultyRepository.findById(any(Long.class))).thenReturn(Optional.of(faculty));
+      when(facultyMapper.mapToDto(any(Faculty.class))).thenReturn(facultyDto);
 
-    FacultyDto result = facultyService.getById(1L);
+      FacultyDto result = facultyService.getById(1L);
 
-    Assertions.assertEquals(facultyDto, result);
+      Assertions.assertEquals(facultyDto, result);
+    }
+
+    @Test
+    public void throwsExceptionWhenUserWithGivenIdDoesntExist() {
+      given(facultyRepository.findById(any(Long.class))).willReturn(Optional.empty());
+      Assertions.assertThrows(EntityNotFoundException.class, () -> facultyService.getById(1L));
+    }
   }
 
-  @Test
-  public void getByIdThrowsExceptionWhenUserWithGivenIdDoesntExist() {
-    given(facultyRepository.findById(any(Long.class))).willReturn(Optional.empty());
-    Assertions.assertThrows(EntityNotFoundException.class, () -> facultyService.getById(1L));
+  @Nested
+  public class getByName {
+    @Test
+    public void getByNameReturnsFacultyDto() {
+      given(facultyRepository.findByName(faculty.getName())).willReturn(Optional.of(faculty));
+
+      Faculty testFaculty = facultyService.getByName(faculty.getName());
+
+      Assertions.assertEquals(faculty, testFaculty);
+    }
+
+    @Test
+    public void getByNameThrowsExceptionWhenFacultyDoesntExist() {
+      given(facultyRepository.findByName(faculty.getName())).willReturn(Optional.empty());
+      Assertions.assertThrows(
+          EntityNotFoundException.class, () -> facultyService.getByName(faculty.getName()));
+    }
   }
 
-  @Test
-  public void getByNameReturnsFacultyDto() {
-    given(facultyRepository.findByName(faculty.getName())).willReturn(Optional.of(faculty));
+  @Nested
+  public class getByTitleAndFieldOfStudy {
+    @Test
+    public void getDegreeByTitleAndFieldOfStudyReturnsCorrectDegree() {
+      Degree degree = aDegree().build();
+      Faculty faculty = aFaculty().degrees(List.of(degree)).build();
 
-    Faculty testFaculty = facultyService.getByName(faculty.getName());
+      Degree testDegree =
+          facultyService.getDegreeByTitleAndFieldOfStudy(
+              faculty, degree.getTitle(), degree.getFieldOfStudy());
 
-    Assertions.assertEquals(faculty, testFaculty);
-  }
+      Assertions.assertEquals(degree, testDegree);
+    }
 
-  @Test
-  public void getByNameThrowsExceptionWhenFacultyDoesntExist() {
-    given(facultyRepository.findByName(faculty.getName())).willReturn(Optional.empty());
-    Assertions.assertThrows(
-            EntityNotFoundException.class, () -> facultyService.getByName(faculty.getName()));
+    @Test
+    public void getDegreeByTitleAndFieldOfStudyThrowEntityNotFound() {
+      Assertions.assertThrows(
+          EntityNotFoundException.class,
+          () ->
+              facultyService.getDegreeByTitleAndFieldOfStudy(
+                  faculty, DegreeTitle.BACHELOR, "test"));
+    }
   }
 
 }
