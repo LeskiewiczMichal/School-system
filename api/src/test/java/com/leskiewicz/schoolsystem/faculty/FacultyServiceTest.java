@@ -1,6 +1,8 @@
 package com.leskiewicz.schoolsystem.faculty;
 
+import com.leskiewicz.schoolsystem.course.Course;
 import com.leskiewicz.schoolsystem.course.CourseRepository;
+import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.course.utils.CourseMapper;
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.degree.DegreeRepository;
@@ -22,6 +24,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -33,6 +36,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static com.leskiewicz.schoolsystem.builders.CourseBuilder.aCourse;
+import static com.leskiewicz.schoolsystem.builders.CourseBuilder.courseDtoFrom;
 import static com.leskiewicz.schoolsystem.builders.DegreeBuilder.aDegree;
 import static com.leskiewicz.schoolsystem.builders.FacultyBuilder.aFaculty;
 import static com.leskiewicz.schoolsystem.builders.FacultyBuilder.facultyDtoFrom;
@@ -132,6 +137,35 @@ public class FacultyServiceTest {
           () ->
               facultyService.getDegreeByTitleAndFieldOfStudy(
                   faculty, DegreeTitle.BACHELOR, "test"));
+    }
+  }
+
+  @Nested
+  public class getFacultyCourses {
+    List<Course> coursesList = List.of(aCourse().build(), aCourse().title("Testing").build());
+    List<CourseDto> courseDtosList = List.of(courseDtoFrom(coursesList.get(0)), courseDtoFrom(coursesList.get(1)));
+
+    @Test
+    public void returnsPagedCourses() {
+      when(facultyRepository.existsById(any(Long.class))).thenReturn(true);
+      when(courseRepository.findCoursesByFacultyId(any(Long.class), any(Pageable.class))).thenReturn(new PageImpl<>(coursesList));
+      when(courseMapper.mapPageToDto(any(Page.class))).thenReturn(new PageImpl<>(courseDtosList));
+
+      Page<CourseDto> result = facultyService.getFacultyCourses(1L, PageRequest.of(0, 2));
+
+      Assertions.assertEquals(2, result.getTotalElements());
+      Assertions.assertEquals(courseDtosList.get(0), result.getContent().get(0));
+      Assertions.assertEquals(courseDtosList.get(1), result.getContent().get(1));
+    }
+
+    @Test
+    public void throwsExceptionWhenFacultyDoesntExist() {
+      Pageable pageable = Mockito.mock(PageRequest.class);
+
+      given(facultyRepository.existsById(any(Long.class))).willReturn(false);
+
+      Assertions.assertThrows(
+              EntityNotFoundException.class, () -> facultyService.getFacultyCourses(1L, pageable));
     }
   }
 

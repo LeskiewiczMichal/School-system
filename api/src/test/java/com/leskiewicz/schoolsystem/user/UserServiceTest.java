@@ -28,10 +28,12 @@ import com.leskiewicz.schoolsystem.user.teacherdetails.PatchTeacherDetailsReques
 import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetails;
 import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetailsRepository;
 import com.leskiewicz.schoolsystem.user.utils.UserMapper;
+import com.leskiewicz.schoolsystem.utils.Mapper;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -57,7 +59,7 @@ public class UserServiceTest {
   @Mock private TeacherDetailsRepository teacherDetailsRepository;
 
   // Mappers
-  @Mock private UserMapper userMapper;
+  @Mock private Mapper<User, UserDto> userMapper;
   @Mock private CourseMapper courseMapper;
   @Mock private PasswordEncoder passwordEncoder;
   @Mock private FileService fileService;
@@ -92,92 +94,102 @@ public class UserServiceTest {
     Assertions.assertEquals(userDtosList.get(1), result.getContent().get(1));
   }
 
-  @Test
-  public void getUserCoursesReturnsPagedCourseDtosWhenUserIsStudent() {
-    List<Course> coursesList = List.of(aCourse().build());
-    CourseDto courseDto = courseDtoFrom(aCourse().build());
-    when(userRepository.findById(any(Long.class)))
-        .thenReturn(Optional.ofNullable(anUser().build()));
-    when(courseRepository.findCoursesByUserId(any(Long.class), any(Pageable.class)))
-        .thenReturn(new PageImpl<>(coursesList));
-    when(courseMapper.mapPageToDto(any(Page.class))).thenReturn(new PageImpl<>(List.of(courseDto)));
+  @Nested
+  public class getUserCourses {
+    @Test
+    public void returnsPagedCourseDtosWhenUserIsStudent() {
+      List<Course> coursesList = List.of(aCourse().build());
+      CourseDto courseDto = courseDtoFrom(aCourse().build());
+      when(userRepository.findById(any(Long.class)))
+          .thenReturn(Optional.ofNullable(anUser().build()));
+      when(courseRepository.findCoursesByUserId(any(Long.class), any(Pageable.class)))
+          .thenReturn(new PageImpl<>(coursesList));
+      when(courseMapper.mapPageToDto(any(Page.class)))
+          .thenReturn(new PageImpl<>(List.of(courseDto)));
 
-    Page<CourseDto> result = userService.getUserCourses(1L, PageRequest.of(0, 1));
+      Page<CourseDto> result = userService.getUserCourses(1L, PageRequest.of(0, 1));
 
-    assertCourseList(courseDto, result);
+      assertCourseList(courseDto, result);
+    }
+
+    @Test
+    public void throwsExceptionWhenUserIsNotTeacherOrStudent() {
+      User user = anUser().role(Role.ROLE_ADMIN).build();
+      given(userRepository.findById(any(Long.class))).willReturn(Optional.of(user));
+
+      Assertions.assertThrows(
+          EntityNotFoundException.class,
+          () -> userService.getUserCourses(1L, PageRequest.of(0, 1)));
+    }
+
+    @Test
+    public void returnsPagedCourseDtosWhenUserIsTeacher() {
+      List<Course> coursesList = List.of(aCourse().build());
+      CourseDto courseDto = courseDtoFrom(aCourse().build());
+      when(userRepository.findById(any(Long.class)))
+          .thenReturn(Optional.ofNullable(anUser().role(Role.ROLE_TEACHER).build()));
+      when(courseMapper.mapPageToDto(any(Page.class)))
+          .thenReturn(new PageImpl<>(List.of(courseDto)));
+      when(courseRepository.findCoursesByTeacherId(any(Long.class), any(Pageable.class)))
+          .thenReturn(new PageImpl<>(coursesList));
+
+      Page<CourseDto> result = userService.getUserCourses(1L, PageRequest.of(0, 1));
+
+      assertCourseList(courseDto, result);
+    }
+
+    @Test
+    public void returns404IfUserDoesntExist() {
+      given(userRepository.existsById(any(Long.class))).willReturn(false);
+
+      Assertions.assertThrows(
+          EntityNotFoundException.class, () -> userService.getUserCourses(1L, null));
+    }
+
+    private void assertCourseList(CourseDto courseDto, Page<CourseDto> result) {
+      Assertions.assertEquals(1, result.getTotalElements());
+      Assertions.assertEquals(courseDto, result.getContent().get(0));
+    }
   }
 
-  @Test
-  public void getUserCoursesThrowsExceptionWhenUserIsNotTeacherOrStudent() {
-    User user = anUser().role(Role.ROLE_ADMIN).build();
-    given(userRepository.findById(any(Long.class))).willReturn(Optional.of(user));
+  @Nested
+  public class getUserFaculty {
+    @Test
+    public void returnsFacultyDto() {
+      Faculty faculty = aFaculty().build();
+      when(userRepository.findFacultyByUserId(any(Long.class))).thenReturn(Optional.of(faculty));
 
-    Assertions.assertThrows(
-        EntityNotFoundException.class, () -> userService.getUserCourses(1L, PageRequest.of(0, 1)));
+      Faculty result = userService.getUserFaculty(1L);
+
+      Assertions.assertEquals(faculty, result);
+    }
+
+    @Test
+    public void throwsExceptionWhenFacultyNotFound() {
+      when(userRepository.findFacultyByUserId(any(Long.class))).thenReturn(Optional.empty());
+
+      Assertions.assertThrows(EntityNotFoundException.class, () -> userService.getUserFaculty(1L));
+    }
   }
 
-  @Test
-  public void getUserCoursesReturnsPagedCourseDtosWhenUserIsTeacher() {
-    List<Course> coursesList = List.of(aCourse().build());
-    CourseDto courseDto = courseDtoFrom(aCourse().build());
-    when(userRepository.findById(any(Long.class)))
-        .thenReturn(Optional.ofNullable(anUser().role(Role.ROLE_TEACHER).build()));
-    when(courseMapper.mapPageToDto(any(Page.class))).thenReturn(new PageImpl<>(List.of(courseDto)));
-    when(courseRepository.findCoursesByTeacherId(any(Long.class), any(Pageable.class)))
-        .thenReturn(new PageImpl<>(coursesList));
+  @Nested
+  public class getUserDegree {
+    @Test
+    public void getUserDegreeReturnsDegree() {
+      Degree degree = aDegree().build();
+      when(userRepository.findDegreeByUserId(any(Long.class))).thenReturn(Optional.of(degree));
 
-    Page<CourseDto> result = userService.getUserCourses(1L, PageRequest.of(0, 1));
+      Degree result = userService.getUserDegree(1L);
 
-    assertCourseList(courseDto, result);
-  }
+      Assertions.assertEquals(degree, result);
+    }
 
-  @Test
-  public void getUserCoursesReturns404IfUserDoesntExist() {
-    given(userRepository.existsById(any(Long.class))).willReturn(false);
+    @Test
+    public void getUserDegreeThrowsExceptionWhenDegreeNotFound() {
+      when(userRepository.findDegreeByUserId(any(Long.class))).thenReturn(Optional.empty());
 
-    Assertions.assertThrows(
-        EntityNotFoundException.class, () -> userService.getUserCourses(1L, null));
-  }
-
-  private void assertCourseList(CourseDto courseDto, Page<CourseDto> result) {
-    Assertions.assertEquals(1, result.getTotalElements());
-    Assertions.assertEquals(courseDto, result.getContent().get(0));
-  }
-
-  @Test
-  public void getUserFacultyReturnsFaculty() {
-    Faculty faculty = aFaculty().build();
-    when(userRepository.findFacultyByUserId(any(Long.class))).thenReturn(Optional.of(faculty));
-
-    Faculty result = userService.getUserFaculty(1L);
-
-    Assertions.assertEquals(faculty, result);
-  }
-
-  @Test
-  public void getUserFacultyThrowsExceptionWhenFacultyNotFound() {
-    when(userRepository.findFacultyByUserId(any(Long.class))).thenReturn(Optional.empty());
-
-    Assertions.assertThrows(
-        EntityNotFoundException.class, () -> userService.getUserFaculty(1L));
-  }
-
-  @Test
-  public void getUserDegreeReturnsDegree() {
-    Degree degree = aDegree().build();
-    when(userRepository.findDegreeByUserId(any(Long.class))).thenReturn(Optional.of(degree));
-
-    Degree result = userService.getUserDegree(1L);
-
-    Assertions.assertEquals(degree, result);
-  }
-
-  @Test
-  public void getUserDegreeThrowsExceptionWhenDegreeNotFound() {
-    when(userRepository.findDegreeByUserId(any(Long.class))).thenReturn(Optional.empty());
-
-    Assertions.assertThrows(
-        EntityNotFoundException.class, () -> userService.getUserDegree(1L));
+      Assertions.assertThrows(EntityNotFoundException.class, () -> userService.getUserDegree(1L));
+    }
   }
 
   @Test
@@ -201,109 +213,137 @@ public class UserServiceTest {
     Assertions.assertEquals(userDtosList.get(1), result.getContent().get(1));
   }
 
-  @Test
-  public void getTeacherDetailsReturnsCorrectTeacherDetails() {
-    TeacherDetails teacherDetails = setUpGetTeacherDetailsTest();
-    TeacherDetails testTeacherDetails = userService.getTeacherDetails(1L);
+  @Nested
+  public class getTeacherDetails {
+    @Test
+    public void returnsCorrectTeacherDetails() {
+      TeacherDetails teacherDetails = setUpGetTeacherDetailsTest();
+      TeacherDetails testTeacherDetails = userService.getTeacherDetails(1L);
 
-    Assertions.assertEquals(teacherDetails, testTeacherDetails);
-    verify(userRepository).existsById(any(Long.class));
+      Assertions.assertEquals(teacherDetails, testTeacherDetails);
+      verify(userRepository).existsById(any(Long.class));
+    }
+
+    @Test
+    public void callsExistsById() {
+      setUpGetTeacherDetailsTest();
+      userService.getTeacherDetails(1L);
+
+      verify(userRepository).existsById(any(Long.class));
+    }
+
+    private TeacherDetails setUpGetTeacherDetailsTest() {
+      TeacherDetails teacherDetails = aTeacherDetails().build();
+      given(userRepository.existsById(any(Long.class))).willReturn(true);
+      given(teacherDetailsRepository.findByUserId(any(Long.class)))
+          .willReturn(Optional.of(teacherDetails));
+
+      return teacherDetails;
+    }
+
+    @Test
+    public void throwsEntityNotFound() {
+      given(userRepository.existsById(any(Long.class))).willReturn(false);
+      Assertions.assertThrows(
+          EntityNotFoundException.class, () -> userService.getTeacherDetails(1L));
+    }
   }
 
-  @Test
-  public void getTeacherDetailsCallsExistsById() {
-    setUpGetTeacherDetailsTest();
-    userService.getTeacherDetails(1L);
+  @Nested
+  public class getById {
+    @Test
+    public void returnsUserDto() {
+      UserDto dto = userDtoFrom(user);
+      when(userRepository.findById(any(Long.class))).thenReturn(Optional.of(user));
+      when(userMapper.mapToDto(any(User.class))).thenReturn(dto);
 
-    verify(userRepository).existsById(any(Long.class));
+      UserDto result = userService.getById(1L);
+
+      Assertions.assertEquals(dto, result);
+    }
+
+    @Test
+    public void throwsEntityNotFoundWhenUserWithGivenIdDoesntExist() {
+      given(userRepository.findById(any(Long.class))).willReturn(Optional.empty());
+      Assertions.assertThrows(EntityNotFoundException.class, () -> userService.getById(1L));
+    }
   }
 
-  private TeacherDetails setUpGetTeacherDetailsTest() {
-    TeacherDetails teacherDetails = aTeacherDetails().build();
-    given(userRepository.existsById(any(Long.class))).willReturn(true);
-    given(teacherDetailsRepository.findByUserId(any(Long.class)))
-        .willReturn(Optional.of(teacherDetails));
+  @Nested
+  public class getUserEmail {
+    @Test
+    public void returnsUser() {
+      given(userRepository.findByEmail(any(String.class))).willReturn(Optional.of(user));
+      User result = userService.getByEmail("email@example.com");
+      Assertions.assertEquals(user, result);
+    }
 
-    return teacherDetails;
+    @Test
+    public void throwsEntityNotFound() {
+      given(userRepository.findByEmail(any(String.class))).willReturn(Optional.empty());
+      Assertions.assertThrows(
+          EntityNotFoundException.class, () -> userService.getByEmail("email@example/com"));
+    }
   }
 
-  @Test
-  public void getTeacherDetailsThrowsEntityNotFound() {
-    given(userRepository.existsById(any(Long.class))).willReturn(false);
-    Assertions.assertThrows(EntityNotFoundException.class, () -> userService.getTeacherDetails(1L));
+  @Nested
+  public class addUser {
+    @Test
+    public void savesUser() {
+      given(userRepository.findByEmail(any(String.class))).willReturn(Optional.empty());
+      userService.addUser(user);
+      verify(userRepository).save(user);
+    }
+
+    @Test
+    public void throwsUserAlreadyExistsExceptionWhenUserWithGivenEmailAlreadyExists() {
+      given(userRepository.findByEmail(any(String.class))).willReturn(Optional.of(user));
+      Assertions.assertThrows(UserAlreadyExistsException.class, () -> userService.addUser(user));
+    }
   }
 
-  @Test
-  public void getByIdReturnsUserDto() {
-    UserDto dto = userDtoFrom(user);
-    when(userRepository.findById(any(Long.class))).thenReturn(Optional.of(user));
-    when(userMapper.convertToDto(any(User.class))).thenReturn(dto);
+  @Nested
+  public class updateUser {
+    @Test
+    public void updatesAndSavesUser() {
+      User user = anUser().build();
+      User userSpy = spy(user);
+      PatchUserRequest request =
+          PatchUserRequest.builder()
+              .firstName("Test")
+              .lastName("Testing")
+              .email("testing@example.com")
+              .password("TestPassword")
+              .build();
 
-    UserDto result = userService.getById(1L);
+      given(userRepository.findById(user.getId())).willReturn(Optional.of(userSpy));
+      Mockito.lenient().when(passwordEncoder.encode(any(String.class))).thenReturn("encoded");
+      Mockito.lenient()
+          .when(userRepository.findByEmail(any(String.class)))
+          .thenReturn(Optional.empty());
 
-    Assertions.assertEquals(dto, result);
-  }
+      userService.updateUser(request, user.getId());
 
-  @Test
-  public void getByIdThrowsEntityNotFoundWhenUserWithGivenIdDoesntExist() {
-    given(userRepository.findById(any(Long.class))).willReturn(Optional.empty());
-    Assertions.assertThrows(EntityNotFoundException.class, () -> userService.getById(1L));
-  }
+      verify(userRepository).save(userSpy);
+      verify(userSpy).update(any(PatchUserRequest.class), any(PasswordEncoder.class));
+    }
 
-  @Test
-  public void getByEmailHappyPath() {
-    given(userRepository.findByEmail(any(String.class))).willReturn(Optional.of(user));
-    User result = userService.getByEmail("email@example.com");
-    Assertions.assertEquals(user, result);
-  }
+    @Test
+    public void throwsUserAlreadyExistsExceptionWhenUserWithGivenEmailAlreadyExists() {
+      PatchUserRequest request =
+          PatchUserRequest.builder()
+              .firstName("Test")
+              .lastName("Testing")
+              .email("test@example.com")
+              .password("password")
+              .build();
 
-  @Test
-  public void getByEmailThrowsEntityNotFound() {
-    given(userRepository.findByEmail(any(String.class))).willReturn(Optional.empty());
-    Assertions.assertThrows(
-        EntityNotFoundException.class, () -> userService.getByEmail("email@example/com"));
-  }
+      given(userRepository.findById(any(Long.class))).willReturn(Optional.of(user));
+      given(userRepository.findByEmail(any(String.class))).willReturn(Optional.of(user));
 
-  @Test
-  public void addUserSavesUser() {
-    given(userRepository.findByEmail(any(String.class))).willReturn(Optional.empty());
-    userService.addUser(user);
-    verify(userRepository).save(user);
-  }
-
-  @Test
-  public void addUserThrowsUserAlreadyExistsExceptionWhenUserWithGivenEmailAlreadyExists() {
-    given(userRepository.findByEmail(any(String.class))).willReturn(Optional.of(user));
-    Assertions.assertThrows(UserAlreadyExistsException.class, () -> userService.addUser(user));
-  }
-
-  @Test
-  public void updateUserUpdatesAndSavesUser() {
-    User user = anUser().build();
-    User userSpy = spy(user);
-    PatchUserRequest request = PatchUserRequest.builder().firstName("Test").lastName("Testing").email("testing@example.com").password("TestPassword").build();
-
-            given(userRepository.findById(user.getId())).willReturn(Optional.of(userSpy));
-    Mockito.lenient().when(passwordEncoder.encode(any(String.class))).thenReturn("encoded");
-    Mockito.lenient()
-            .when(userRepository.findByEmail(any(String.class)))
-            .thenReturn(Optional.empty());
-
-    userService.updateUser(request, user.getId());
-
-    verify(userRepository).save(userSpy);
-    verify(userSpy).update(any(PatchUserRequest.class), any(PasswordEncoder.class));
-  }
-
-  @Test
-  public void updateUserThrowsUserAlreadyExistsExceptionWhenUserWithGivenEmailAlreadyExists() {
-    PatchUserRequest request = PatchUserRequest.builder().firstName("Test").lastName("Testing").email("test@example.com").password("password").build();
-
-    given(userRepository.findById(any(Long.class))).willReturn(Optional.of(user));
-    given(userRepository.findByEmail(any(String.class))).willReturn(Optional.of(user));
-
-    Assertions.assertThrows(UserAlreadyExistsException.class, () -> userService.updateUser(request, 1L));
-
+      Assertions.assertThrows(
+          UserAlreadyExistsException.class, () -> userService.updateUser(request, 1L));
+    }
   }
 
   @Test
@@ -320,30 +360,33 @@ public class UserServiceTest {
     verify(fileService, Mockito.times(1)).uploadImage(any(MultipartFile.class));
   }
 
-  @Test
-  public void updateTeacherDetailsSavesProperTeacherDetails() {
-    PatchTeacherDetailsRequest changeRequest =
-        PatchTeacherDetailsRequest.builder()
-            .bio("New bio")
-            .title(DegreeTitle.DOCTOR)
-            .tutorship("New tutorship")
-            .degreeField("New degree field")
-            .build();
-    TeacherDetails teacherDetails = aTeacherDetails().build();
-    TeacherDetails spyTeacherDetails = spy(teacherDetails);
-    given(teacherDetailsRepository.findByUserId(any(Long.class)))
-        .willReturn(Optional.of(spyTeacherDetails));
+  @Nested
+  public class updateTeacherDetails {
+    @Test
+    public void savesProperTeacherDetails() {
+      PatchTeacherDetailsRequest changeRequest =
+          PatchTeacherDetailsRequest.builder()
+              .bio("New bio")
+              .title(DegreeTitle.DOCTOR)
+              .tutorship("New tutorship")
+              .degreeField("New degree field")
+              .build();
+      TeacherDetails teacherDetails = aTeacherDetails().build();
+      TeacherDetails spyTeacherDetails = spy(teacherDetails);
+      given(teacherDetailsRepository.findByUserId(any(Long.class)))
+          .willReturn(Optional.of(spyTeacherDetails));
 
-    TeacherDetails teacherDetailsChanged = userService.updateTeacherDetails(changeRequest, 1L);
+      TeacherDetails teacherDetailsChanged = userService.updateTeacherDetails(changeRequest, 1L);
 
-    verify(teacherDetailsRepository).save(teacherDetailsChanged);
-    verify(spyTeacherDetails).update(changeRequest);
-  }
+      verify(teacherDetailsRepository).save(teacherDetailsChanged);
+      verify(spyTeacherDetails).update(changeRequest);
+    }
 
-  @Test
-  public void updateTeacherDetailsThrowsEntityNotFoundExceptionWhenTeacherDetailsNotFound() {
-    given(teacherDetailsRepository.findByUserId(any(Long.class))).willReturn(Optional.empty());
-    Assertions.assertThrows(
-        EntityNotFoundException.class, () -> userService.updateTeacherDetails(null, 1L));
+    @Test
+    public void throwsEntityNotFoundExceptionWhenTeacherDetailsNotFound() {
+      given(teacherDetailsRepository.findByUserId(any(Long.class))).willReturn(Optional.empty());
+      Assertions.assertThrows(
+          EntityNotFoundException.class, () -> userService.updateTeacherDetails(null, 1L));
+    }
   }
 }

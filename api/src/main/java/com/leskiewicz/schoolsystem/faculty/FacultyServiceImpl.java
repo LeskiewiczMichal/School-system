@@ -155,7 +155,7 @@ public class FacultyServiceImpl implements FacultyService {
   public Page<CourseDto> getFacultyCourses(Long facultyId, Pageable pageable) {
     facultyExistsCheck(facultyId);
     Page<Course> courses = courseRepository.findCoursesByFacultyId(facultyId, pageable);
-    return courses.map(courseMapper::convertToDto);
+    return courseMapper.mapPageToDto(courses);
   }
 
 
