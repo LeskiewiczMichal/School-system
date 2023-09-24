@@ -29,6 +29,7 @@ import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetails;
 import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetailsRepository;
 import com.leskiewicz.schoolsystem.user.utils.UserMapper;
 import com.leskiewicz.schoolsystem.utils.Mapper;
+import com.leskiewicz.schoolsystem.utils.Support;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
@@ -53,6 +54,7 @@ import org.springframework.web.multipart.MultipartFile;
 //@MockitoSettings(strictness = Strictness.LENIENT)
 public class UserServiceTest {
 
+  @Mock private Support support;
   // Repositories
   @Mock private UserRepository userRepository;
   @Mock private CourseRepository courseRepository;
@@ -290,9 +292,12 @@ public class UserServiceTest {
   public class addUser {
     @Test
     public void savesUser() {
-      given(userRepository.findByEmail(any(String.class))).willReturn(Optional.empty());
+      User user = anUser().build();
+      when(userRepository.findByEmail(any(String.class))).thenReturn(Optional.empty());
+      when(userRepository.save(any(User.class))).thenReturn(user);
       userService.addUser(user);
       verify(userRepository).save(user);
+      verify(support).notifyCreated(any(String.class), any(Long.class));
     }
 
     @Test
@@ -326,6 +331,7 @@ public class UserServiceTest {
 
       verify(userRepository).save(userSpy);
       verify(userSpy).update(any(PatchUserRequest.class), any(PasswordEncoder.class));
+      verify(support).notifyUpdated(any(String.class), any(Long.class));
     }
 
     @Test
@@ -379,6 +385,7 @@ public class UserServiceTest {
 
       verify(teacherDetailsRepository).save(teacherDetailsChanged);
       verify(spyTeacherDetails).update(changeRequest);
+      verify(support).notifyUpdated(any(String.class), any(Long.class));
     }
 
     @Test

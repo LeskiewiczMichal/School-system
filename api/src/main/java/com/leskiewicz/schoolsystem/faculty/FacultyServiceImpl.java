@@ -77,17 +77,18 @@ public class FacultyServiceImpl implements FacultyService {
   public Degree getDegreeByTitleAndFieldOfStudy(
       Faculty faculty, DegreeTitle title, String fieldOfStudy) {
     List<Degree> degrees = faculty.getDegrees();
-
-    // Get degree if it is in the faculty
-    Optional<Degree> degree =
-        degrees.stream()
-            .filter(d -> d.getTitle().equals(title) && d.getFieldOfStudy().equals(fieldOfStudy))
-            .findFirst();
+    Optional<Degree> degree = findDegreeByTitleAndFieldOfStudy(degrees, title, fieldOfStudy);
 
     return degree.orElseThrow(
         () ->
             new EntityNotFoundException(
                 ErrorMessages.degreeNotOnFaculty(fieldOfStudy, title, faculty.getName())));
+  }
+
+  private Optional<Degree> findDegreeByTitleAndFieldOfStudy(List<Degree> degrees, DegreeTitle title, String fieldOfStudy) {
+    return degrees.stream()
+            .filter(d -> d.getTitle().equals(title) && d.getFieldOfStudy().equals(fieldOfStudy))
+            .findFirst();
   }
 
   @Override

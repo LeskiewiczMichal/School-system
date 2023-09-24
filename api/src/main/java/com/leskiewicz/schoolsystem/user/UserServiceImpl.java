@@ -20,6 +20,7 @@ import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetails;
 import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetailsRepository;
 import com.leskiewicz.schoolsystem.user.utils.UserMapper;
 import com.leskiewicz.schoolsystem.utils.Mapper;
+import com.leskiewicz.schoolsystem.utils.Support;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
@@ -37,6 +38,7 @@ public class UserServiceImpl implements UserService {
 
   private final FileService fileService;
   private final PasswordEncoder passwordEncoder;
+  private final Support support;
 
   // Repositories
   private final UserRepository userRepository;
@@ -46,7 +48,6 @@ public class UserServiceImpl implements UserService {
   // Mappers
   private final Mapper<User, UserDto> userMapper;
   private final CourseMapper courseMapper;
-  private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
   @Override
   public UserDto getById(Long id) {
@@ -71,14 +72,11 @@ public class UserServiceImpl implements UserService {
   @Override
   public void addUser(User user) {
     ValidationUtils.validate(user);
-    if (userWithEmailAlreadyExists(user.getEmail())) {
-      throw new UserAlreadyExistsException(
-          ErrorMessages.userWithEmailAlreadyExists(user.getEmail()));
-    }
-
-    logger.info("Adding new user with email: " + user.getEmail());
-    userRepository.save(user);
+    checkIfUserWithEmailAlreadyExists(user.getEmail());
+    User savedUser = userRepository.save(user);
+    support.notifyCreated("User", savedUser.getId());
   }
+
 
   @Override
   public UserDto updateUser(PatchUserRequest request, Long userId) {
@@ -87,6 +85,7 @@ public class UserServiceImpl implements UserService {
     user.update(request, passwordEncoder);
     ValidationUtils.validate(user);
     userRepository.save(user);
+    support.notifyUpdated("User", user.getId());
     return userMapper.mapToDto(user);
   }
 
@@ -129,6 +128,7 @@ public class UserServiceImpl implements UserService {
     teacherDetails.update(request);
     ValidationUtils.validate(teacherDetails);
     teacherDetailsRepository.save(teacherDetails);
+    support.notifyUpdated("TeacherDetails", teacherDetails.getId());
     return teacherDetails;
   }
 
