@@ -7,6 +7,7 @@ import com.leskiewicz.schoolsystem.course.utils.CourseMapper;
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.degree.DegreeRepository;
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
+import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
 import com.leskiewicz.schoolsystem.degree.utils.DegreeMapper;
 import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
 import com.leskiewicz.schoolsystem.faculty.utils.FacultyMapper;
@@ -39,6 +40,7 @@ import java.util.Optional;
 import static com.leskiewicz.schoolsystem.builders.CourseBuilder.aCourse;
 import static com.leskiewicz.schoolsystem.builders.CourseBuilder.courseDtoFrom;
 import static com.leskiewicz.schoolsystem.builders.DegreeBuilder.aDegree;
+import static com.leskiewicz.schoolsystem.builders.DegreeBuilder.degreeDtoFrom;
 import static com.leskiewicz.schoolsystem.builders.FacultyBuilder.aFaculty;
 import static com.leskiewicz.schoolsystem.builders.FacultyBuilder.facultyDtoFrom;
 import static com.leskiewicz.schoolsystem.builders.UserBuilder.userDtoFrom;
@@ -166,6 +168,35 @@ public class FacultyServiceTest {
 
       Assertions.assertThrows(
               EntityNotFoundException.class, () -> facultyService.getFacultyCourses(1L, pageable));
+    }
+  }
+
+  @Nested
+  public class getFacultyDegrees {
+    List<Degree> degreesList = List.of(aDegree().build(), aDegree().build());
+    List<DegreeDto> degreeDtosList = List.of(degreeDtoFrom(degreesList.get(0)), degreeDtoFrom(degreesList.get(1)));
+    @Test
+    public void returnsPagedDegrees() {
+      when(facultyRepository.existsById(any(Long.class))).thenReturn(true);
+      when(degreeRepository.findDegreesByFacultyId(any(Long.class), any(Pageable.class))).thenReturn(new PageImpl<>(degreesList));
+      when(degreeMapper.mapPageToDto(any(Page.class))).thenReturn(new PageImpl<>(degreeDtosList));
+
+      Page<DegreeDto> result = facultyService.getFacultyDegrees(1L, PageRequest.of(0, 2));
+
+      Assertions.assertEquals(2, result.getTotalElements());
+      Assertions.assertEquals(degreeDtosList.get(0), result.getContent().get(0));
+      Assertions.assertEquals(degreeDtosList.get(1), result.getContent().get(1));
+    }
+
+    @Test
+    public void throwsExceptionWhenFacultyDoesntExist() {
+      Pageable pageable = Mockito.mock(PageRequest.class);
+
+      given(facultyRepository.existsById(any(Long.class))).willReturn(false);
+
+      Assertions.assertThrows(
+              EntityNotFoundException.class,
+              () -> facultyService.getFacultyDegrees(faculty.getId(), pageable));
     }
   }
 

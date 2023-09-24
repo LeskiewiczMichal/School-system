@@ -7,6 +7,7 @@ import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.authentication.utils.ValidationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -43,5 +44,10 @@ public class DegreeMapperImpl implements DegreeMapper {
     DegreeDto degreeDto = convertToDto(degree);
     degreeDto.setDescription(degree.getDescription());
     return degreeDto;
+  }
+
+  @Override
+  public Page<DegreeDto> mapPageToDto(Page<Degree> degreePage) {
+    return degreePage.map(this::convertToDto);
   }
 }

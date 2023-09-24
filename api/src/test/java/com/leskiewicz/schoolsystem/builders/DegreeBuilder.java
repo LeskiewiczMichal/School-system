@@ -1,8 +1,14 @@
 package com.leskiewicz.schoolsystem.builders;
 
 import com.leskiewicz.schoolsystem.course.Course;
+import com.leskiewicz.schoolsystem.course.dto.CourseDto;
+import com.leskiewicz.schoolsystem.course.utils.CourseMapper;
+import com.leskiewicz.schoolsystem.course.utils.CourseMapperImpl;
 import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
+import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
+import com.leskiewicz.schoolsystem.degree.utils.DegreeMapper;
+import com.leskiewicz.schoolsystem.degree.utils.DegreeMapperImpl;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.utils.Language;
 import jakarta.persistence.*;
@@ -23,6 +29,11 @@ public class DegreeBuilder {
 
   public static DegreeBuilder aDegree() {
     return new DegreeBuilder();
+  }
+
+  public static DegreeDto degreeDtoFrom(Degree degree) {
+    DegreeMapper degreeMapper = new DegreeMapperImpl();
+    return degreeMapper.convertToDto(degree);
   }
 
   public DegreeBuilder id(Long id) {

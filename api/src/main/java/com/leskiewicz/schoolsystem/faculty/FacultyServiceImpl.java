@@ -148,7 +148,7 @@ public class FacultyServiceImpl implements FacultyService {
   public Page<DegreeDto> getFacultyDegrees(Long facultyId, Pageable pageable) {
     facultyExistsCheck(facultyId);
     Page<Degree> degrees = degreeRepository.findDegreesByFacultyId(facultyId, pageable);
-    return degrees.map(degreeMapper::convertToDto);
+    return degreeMapper.mapPageToDto(degrees);
   }
 
   @Override
