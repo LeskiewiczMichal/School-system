@@ -10,6 +10,7 @@ import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserMapper;
 import com.leskiewicz.schoolsystem.user.utils.UserMapperImpl;
+import com.leskiewicz.schoolsystem.utils.Mapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +28,8 @@ public class FacultyBuilder {
   }
 
   public static FacultyDto facultyDtoFrom(Faculty faculty) {
-    FacultyMapper facultyMapper = new FacultyMapperImpl();
-    return facultyMapper.convertToDto(faculty);
+    Mapper<Faculty, FacultyDto> facultyMapper = new FacultyMapperImpl();
+    return facultyMapper.mapToDto(faculty);
   }
 
   public FacultyBuilder id(Long id) {

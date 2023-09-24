@@ -5,6 +5,7 @@ import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
 import com.leskiewicz.schoolsystem.faculty.utils.FacultyMapperImpl;
 import com.leskiewicz.schoolsystem.testUtils.TestHelper;
+import com.leskiewicz.schoolsystem.utils.Mapper;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,7 +21,7 @@ public class FacultyMapperTest {
   Faculty faculty;
   Degree degree;
   @InjectMocks
-  private FacultyMapperImpl facultyMapper;
+  private Mapper<Faculty, FacultyDto> facultyMapper;
 
   @BeforeEach
   public void setup() {
@@ -33,7 +34,7 @@ public class FacultyMapperTest {
   public void convertToDtoCorrectForFaculty() {
     FacultyDto expectedFacultyDto = FacultyDto.builder().id(1L).name("TestFaculty").build();
 
-    FacultyDto result = facultyMapper.convertToDto(faculty);
+    FacultyDto result = facultyMapper.mapToDto(faculty);
 
     Assertions.assertEquals(expectedFacultyDto, result);
   }
@@ -45,7 +46,7 @@ public class FacultyMapperTest {
     Faculty testFaculty = faculty.toBuilder().id(null).build();
 
     Assertions.assertThrows(IllegalArgumentException.class,
-        () -> facultyMapper.convertToDto(testFaculty));
+        () -> facultyMapper.mapToDto(testFaculty));
   }
 
   @Test
@@ -53,7 +54,7 @@ public class FacultyMapperTest {
     Faculty testFaculty = faculty.toBuilder().name(null).build();
 
     Assertions.assertThrows(ConstraintViolationException.class,
-        () -> facultyMapper.convertToDto(testFaculty));
+        () -> facultyMapper.mapToDto(testFaculty));
   }
 
 }

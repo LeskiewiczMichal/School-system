@@ -21,6 +21,7 @@ import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.UserRepository;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserMapper;
+import com.leskiewicz.schoolsystem.utils.Mapper;
 import com.leskiewicz.schoolsystem.utils.StringUtils;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
@@ -44,7 +45,7 @@ public class FacultyServiceImpl implements FacultyService {
 
   // Mappers
   private final DegreeMapper degreeMapper;
-  private final FacultyMapper facultyMapper;
+  private final Mapper<Faculty, FacultyDto> facultyMapper;
   private final UserMapper userMapper;
   private final CourseMapper courseMapper;
 
@@ -52,7 +53,7 @@ public class FacultyServiceImpl implements FacultyService {
 
   @Override
   public FacultyDto getById(Long id) {
-    return facultyMapper.convertToDto(
+    return facultyMapper.mapToDto(
         facultyRepository
             .findById(id)
             .orElseThrow(
@@ -73,7 +74,7 @@ public class FacultyServiceImpl implements FacultyService {
   @Override
   public Page<FacultyDto> getFaculties(Pageable pageable) {
     Page<Faculty> faculties = facultyRepository.findAll(pageable);
-    return faculties.map(facultyMapper::convertToDto);
+    return facultyMapper.mapPageToDto(faculties);
   }
 
   @Override
@@ -108,7 +109,7 @@ public class FacultyServiceImpl implements FacultyService {
     facultyRepository.save(faculty);
     logger.info("Created new faculty with name: {}", faculty.getName());
 
-    return facultyMapper.convertToDto(faculty);
+    return facultyMapper.mapToDto(faculty);
   }
 
   @Override
@@ -133,7 +134,7 @@ public class FacultyServiceImpl implements FacultyService {
 
     facultyRepository.save(faculty);
     logger.info("Updated faculty with id: {}", facultyId);
-    return facultyMapper.convertToDto(faculty);
+    return facultyMapper.mapToDto(faculty);
   }
 
   @Override
