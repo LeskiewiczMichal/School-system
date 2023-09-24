@@ -4,20 +4,22 @@ import com.leskiewicz.schoolsystem.authentication.Role;
 import com.leskiewicz.schoolsystem.authentication.utils.ValidationUtils;
 import com.leskiewicz.schoolsystem.error.ErrorMessages;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
+import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
 import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
+import com.leskiewicz.schoolsystem.utils.Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserMapperImpl implements UserMapper {
+public class UserMapperImpl implements Mapper<User, UserDto> {
 
   private final Logger logger = LoggerFactory.getLogger(UserMapperImpl.class);
 
   @Override
-  public UserDto convertToDto(User user) {
+  public UserDto mapToDto(User user) {
     // Perform manual validation
     ValidationUtils.validate(user);
     if (user.getId() == null) {
@@ -65,6 +67,6 @@ public class UserMapperImpl implements UserMapper {
 
   @Override
   public Page<UserDto> mapPageToDto(Page<User> users) {
-    return users.map(this::convertToDto);
+    return users.map(this::mapToDto);
   }
 }

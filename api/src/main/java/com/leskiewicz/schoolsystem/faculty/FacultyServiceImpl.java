@@ -46,7 +46,7 @@ public class FacultyServiceImpl implements FacultyService {
   // Mappers
   private final DegreeMapper degreeMapper;
   private final Mapper<Faculty, FacultyDto> facultyMapper;
-  private final UserMapper userMapper;
+  private final Mapper<User, UserDto> userMapper;
   private final CourseMapper courseMapper;
 
   private final Logger logger = LoggerFactory.getLogger(FacultyController.class);
@@ -141,7 +141,7 @@ public class FacultyServiceImpl implements FacultyService {
   public Page<UserDto> getFacultyUsers(Long facultyId, Pageable pageable, Role role) {
     facultyExistsCheck(facultyId);
     Page<User> users = userRepository.findUsersByFacultyId(facultyId, pageable, role);
-    return users.map(userMapper::convertToDto);
+    return userMapper.mapPageToDto(users);
   }
 
   @Override

@@ -12,7 +12,10 @@ import com.leskiewicz.schoolsystem.error.customexception.EntityAlreadyExistsExce
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.FacultyService;
 import com.leskiewicz.schoolsystem.files.FileService;
+import com.leskiewicz.schoolsystem.user.User;
+import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserMapper;
+import com.leskiewicz.schoolsystem.utils.Mapper;
 import com.leskiewicz.schoolsystem.utils.StringUtils;
 import com.leskiewicz.schoolsystem.authentication.utils.ValidationUtils;
 import jakarta.persistence.EntityNotFoundException;
@@ -36,7 +39,7 @@ public class DegreeServiceImpl implements DegreeService {
   private final FileService fileService;
 
   // Mappers
-  private final UserMapper userMapper;
+  private final Mapper<User, UserDto> userMapper;
   private final DegreeMapper degreeMapper;
   private final CourseMapper courseMapper;
 

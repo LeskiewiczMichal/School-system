@@ -20,6 +20,7 @@ import com.leskiewicz.schoolsystem.user.UserRepository;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserMapper;
 import com.leskiewicz.schoolsystem.utils.Language;
+import com.leskiewicz.schoolsystem.utils.Mapper;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -43,7 +44,7 @@ public class CourseServiceImpl implements CourseService {
 
   // Mappers
   private final CourseMapper courseMapper;
-  private final UserMapper userMapper;
+  private final Mapper<User, UserDto> userMapper;
 
   private final AuthenticationUtils authenticationUtils;
 
@@ -124,7 +125,7 @@ public class CourseServiceImpl implements CourseService {
   public Page<UserDto> getCourseStudents(Long courseId, Pageable pageable) {
     courseExistsCheck(courseId);
     Page<User> students = userRepository.findUsersByCourseId(courseId, pageable);
-    return students.map(userMapper::convertToDto);
+    return userMapper.mapPageToDto(students);
   }
 
   @Override

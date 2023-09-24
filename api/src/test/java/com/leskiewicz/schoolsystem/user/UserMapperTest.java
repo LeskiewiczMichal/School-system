@@ -7,6 +7,7 @@ import com.leskiewicz.schoolsystem.builders.UserBuilder;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetails;
 import com.leskiewicz.schoolsystem.user.utils.UserMapperImpl;
+import com.leskiewicz.schoolsystem.utils.Mapper;
 import jakarta.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.stream.Stream;
@@ -27,7 +28,7 @@ public class UserMapperTest {
 
   User user = anUser().build();
 
-  @InjectMocks private UserMapperImpl userMapper;
+  @InjectMocks private Mapper<User, UserDto> userMapper;
 
   static Stream<Arguments> throwsConstraintViolationExceptionOnInvalidUserObjectProvider() {
     UserBuilder basicUser = anUser();
@@ -54,7 +55,7 @@ public class UserMapperTest {
             .facultyId(1L)
             .build();
 
-    UserDto userDto = userMapper.convertToDto(user);
+    UserDto userDto = userMapper.mapToDto(user);
 
     Assertions.assertEquals(expectedUserDto, userDto);
   }
@@ -74,7 +75,7 @@ public class UserMapperTest {
             .facultyId(1L)
             .build();
 
-    UserDto userDto = userMapper.convertToDto(user);
+    UserDto userDto = userMapper.mapToDto(user);
 
     Assertions.assertEquals(expectedUserDto, userDto);
   }
@@ -84,7 +85,7 @@ public class UserMapperTest {
     User testUser = anUser().role(Role.ROLE_STUDENT).degree(null).build();
 
     Assertions.assertThrows(
-        ConstraintViolationException.class, () -> userMapper.convertToDto(testUser));
+        ConstraintViolationException.class, () -> userMapper.mapToDto(testUser));
   }
 
   @Test
@@ -92,14 +93,14 @@ public class UserMapperTest {
     User testUser = anUser().id(null).build();
 
     Assertions.assertThrows(
-        IllegalArgumentException.class, () -> userMapper.convertToDto(testUser));
+        IllegalArgumentException.class, () -> userMapper.mapToDto(testUser));
   }
 
   @ParameterizedTest
   @MethodSource("throwsConstraintViolationExceptionOnInvalidUserObjectProvider")
   public void throwsConstraintViolationExceptionOnInvalidUserObject(User user) {
     Assertions.assertThrows(
-        ConstraintViolationException.class, () -> userMapper.convertToDto(user));
+        ConstraintViolationException.class, () -> userMapper.mapToDto(user));
   }
 
   @Test

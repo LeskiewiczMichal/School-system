@@ -19,6 +19,7 @@ import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetails;
 import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetailsRepository;
 import com.leskiewicz.schoolsystem.user.utils.UserMapper;
+import com.leskiewicz.schoolsystem.utils.Mapper;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
@@ -43,13 +44,13 @@ public class UserServiceImpl implements UserService {
   private final TeacherDetailsRepository teacherDetailsRepository;
 
   // Mappers
-  private final UserMapper userMapper;
+  private final Mapper<User, UserDto> userMapper;
   private final CourseMapper courseMapper;
   private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
   @Override
   public UserDto getById(Long id) {
-    return userMapper.convertToDto(retrieveUserFromRepository(id));
+    return userMapper.mapToDto(retrieveUserFromRepository(id));
   }
 
   @Override
@@ -86,7 +87,7 @@ public class UserServiceImpl implements UserService {
     user.update(request, passwordEncoder);
     ValidationUtils.validate(user);
     userRepository.save(user);
-    return userMapper.convertToDto(user);
+    return userMapper.mapToDto(user);
   }
 
   @Override

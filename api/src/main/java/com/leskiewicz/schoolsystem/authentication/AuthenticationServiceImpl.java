@@ -17,6 +17,7 @@ import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.UserService;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserMapper;
+import com.leskiewicz.schoolsystem.utils.Mapper;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -36,7 +37,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
   private final AuthenticationManager authenticationManager;
   private final FacultyRepository facultyRepository;
   private final TeacherDetailsRepository teacherDetailsRepository;
-  private final UserMapper userMapper;
+  private final Mapper<User, UserDto> userMapper;
 
   public AuthenticationResponse register(RegisterRequest request) {
     // Retrieve faculty and degree
@@ -61,7 +62,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     // Save new user and generate jwt token
     userService.addUser(user);
     var jwtToken = jwtUtils.generateToken(user);
-    UserDto userDto = userMapper.convertToDto(user);
+    UserDto userDto = userMapper.mapToDto(user);
 
     return new AuthenticationResponse(jwtToken, userDto);
   }
@@ -74,7 +75,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     var jwtToken = jwtUtils.generateToken(user);
 
     // Convert user to dto and create response
-    UserDto userDto = userMapper.convertToDto(user);
+    UserDto userDto = userMapper.mapToDto(user);
     return new AuthenticationResponse(jwtToken, userDto);
   }
 
@@ -120,7 +121,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     var jwtToken = jwtUtils.generateToken(user);
 
     // Convert user to dto and create response
-    UserDto userDto = userMapper.convertToDto(user);
+    UserDto userDto = userMapper.mapToDto(user);
     return new AuthenticationResponse(jwtToken, userDto);
   }
 
@@ -134,7 +135,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     var jwtToken = jwtUtils.generateToken(user);
 
     // Convert user to dto and create response
-    UserDto userDto = userMapper.convertToDto(user);
+    UserDto userDto = userMapper.mapToDto(user);
     return new AuthenticationResponse(jwtToken, userDto);
   }
 }

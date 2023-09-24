@@ -20,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Getter
-//@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

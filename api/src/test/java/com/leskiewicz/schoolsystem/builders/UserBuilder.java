@@ -8,6 +8,7 @@ import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetails;
 import com.leskiewicz.schoolsystem.user.utils.UserMapper;
 import com.leskiewicz.schoolsystem.user.utils.UserMapperImpl;
+import com.leskiewicz.schoolsystem.utils.Mapper;
 import jakarta.persistence.*;
 
 public class UserBuilder {
@@ -28,8 +29,8 @@ public class UserBuilder {
     }
 
     public static UserDto userDtoFrom(User user) {
-        UserMapper userMapper = new UserMapperImpl();
-        return userMapper.convertToDto(user);
+        Mapper<User, UserDto> userMapper = new UserMapperImpl();
+        return userMapper.mapToDto(user);
     }
 
     public UserBuilder id(Long id) {
