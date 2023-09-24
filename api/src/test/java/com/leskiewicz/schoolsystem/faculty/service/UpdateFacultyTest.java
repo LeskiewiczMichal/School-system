@@ -54,26 +54,4 @@ public class UpdateFacultyTest {
     verify(facultyRepository).save(faculty);
     Assertions.assertEquals(mockDto, result);
   }
-
-  @Test
-  public void updateFacultyThrowsEntityNotFound() {
-    given(facultyRepository.findById(any(Long.class))).willReturn(Optional.empty());
-    PatchFacultyRequest request = new PatchFacultyRequest("new name");
-
-    Assertions.assertThrows(
-        EntityNotFoundException.class,
-        () -> facultyService.updateFaculty(request, faculty.getId()));
-  }
-
-  @Test
-  public void updateFacultyThrowsEntityAlreadyExistsException() {
-    given(facultyRepository.findById(any(Long.class))).willReturn(Optional.of(faculty));
-    PatchFacultyRequest request = new PatchFacultyRequest("new name");
-    Faculty faculty2 = Faculty.builder().id(2L).name("new name").build();
-    given(facultyRepository.findByName(any(String.class))).willReturn(Optional.of(faculty2));
-
-    Assertions.assertThrows(
-        EntityAlreadyExistsException.class,
-        () -> facultyService.updateFaculty(request, faculty.getId()));
-  }
 }

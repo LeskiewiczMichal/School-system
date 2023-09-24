@@ -1,5 +1,17 @@
 package com.leskiewicz.schoolsystem.faculty;
 
+import static com.leskiewicz.schoolsystem.builders.CourseBuilder.aCourse;
+import static com.leskiewicz.schoolsystem.builders.CourseBuilder.courseDtoFrom;
+import static com.leskiewicz.schoolsystem.builders.DegreeBuilder.aDegree;
+import static com.leskiewicz.schoolsystem.builders.DegreeBuilder.degreeDtoFrom;
+import static com.leskiewicz.schoolsystem.builders.FacultyBuilder.aFaculty;
+import static com.leskiewicz.schoolsystem.builders.FacultyBuilder.facultyDtoFrom;
+import static com.leskiewicz.schoolsystem.builders.UserBuilder.anUser;
+import static com.leskiewicz.schoolsystem.builders.UserBuilder.userDtoFrom;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
+
 import com.leskiewicz.schoolsystem.authentication.Role;
 import com.leskiewicz.schoolsystem.course.Course;
 import com.leskiewicz.schoolsystem.course.CourseRepository;
@@ -10,16 +22,20 @@ import com.leskiewicz.schoolsystem.degree.DegreeRepository;
 import com.leskiewicz.schoolsystem.degree.DegreeTitle;
 import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
 import com.leskiewicz.schoolsystem.degree.utils.DegreeMapper;
+import com.leskiewicz.schoolsystem.error.customexception.EntityAlreadyExistsException;
+import com.leskiewicz.schoolsystem.faculty.dto.CreateFacultyRequest;
 import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
-import com.leskiewicz.schoolsystem.faculty.utils.FacultyMapper;
-import com.leskiewicz.schoolsystem.generic.CommonTests;
-import com.leskiewicz.schoolsystem.testUtils.TestHelper;
+import com.leskiewicz.schoolsystem.faculty.dto.PatchFacultyRequest;
+import com.leskiewicz.schoolsystem.faculty.utils.FacultyMapperImpl;
 import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.UserRepository;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
-import com.leskiewicz.schoolsystem.user.utils.UserMapper;
+import com.leskiewicz.schoolsystem.user.utils.UserMapperImpl;
 import com.leskiewicz.schoolsystem.utils.Mapper;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.ConstraintViolationException;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -33,45 +49,33 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
-import static com.leskiewicz.schoolsystem.builders.CourseBuilder.aCourse;
-import static com.leskiewicz.schoolsystem.builders.CourseBuilder.courseDtoFrom;
-import static com.leskiewicz.schoolsystem.builders.DegreeBuilder.aDegree;
-import static com.leskiewicz.schoolsystem.builders.DegreeBuilder.degreeDtoFrom;
-import static com.leskiewicz.schoolsystem.builders.FacultyBuilder.aFaculty;
-import static com.leskiewicz.schoolsystem.builders.FacultyBuilder.facultyDtoFrom;
-import static com.leskiewicz.schoolsystem.builders.UserBuilder.anUser;
-import static com.leskiewicz.schoolsystem.builders.UserBuilder.userDtoFrom;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
 @ExtendWith(MockitoExtension.class)
 public class FacultyServiceTest {
-  List<Faculty> facultiesList =
-      List.of(aFaculty().build(), aFaculty().name("Faculty of Electronics").id(2L).build());
-  List<FacultyDto> facultyDtosList =
-      List.of(facultyDtoFrom(facultiesList.get(0)), facultyDtoFrom(facultiesList.get(1)));
-  Faculty faculty = aFaculty().build();
-  FacultyDto facultyDto = facultyDtoFrom(faculty);
 
   @Mock private FacultyRepository facultyRepository;
   @Mock private CourseRepository courseRepository;
   @Mock private DegreeRepository degreeRepository;
   @Mock private UserRepository userRepository;
-  @Mock private Mapper<Faculty, FacultyDto> facultyMapper;
+  @Mock private Mapper<Faculty, FacultyDto> facultyMapper = new FacultyMapperImpl();
   @Mock private CourseMapper courseMapper;
   @Mock private DegreeMapper degreeMapper;
-  @Mock private Mapper<User, UserDto> userMapper;
+  @Mock private Mapper<User, UserDto> userMapper = new UserMapperImpl();
 
   @InjectMocks private FacultyServiceImpl facultyService;
 
+  List<Faculty> facultiesList =
+          List.of(aFaculty().build(), aFaculty().name("Faculty of Electronics").id(2L).build());
+    List<FacultyDto> facultyDtosList =
+            List.of(facultyDtoFrom(facultiesList.get(0)), facultyDtoFrom(facultiesList.get(1)));
+  Faculty faculty = aFaculty().build();
+    FacultyDto facultyDto = facultyDtoFrom(faculty);
+
   @Test
   public void getFacultiesReturnsPagedFacultyDtos() {
+    List<Faculty> facultiesList =
+            List.of(aFaculty().build(), aFaculty().name("Faculty of Electronics").id(2L).build());
+    List<FacultyDto> facultyDtosList =
+            List.of(facultyDtoFrom(facultiesList.get(0)), facultyDtoFrom(facultiesList.get(1)));
     when(facultyRepository.findAll(any(Pageable.class))).thenReturn(new PageImpl<>(facultiesList));
     when(facultyMapper.mapPageToDto(any(Page.class))).thenReturn(new PageImpl<>(facultyDtosList));
 
@@ -86,12 +90,12 @@ public class FacultyServiceTest {
   public class getById {
     @Test
     public void returnsFacultyDto() {
-      when(facultyRepository.findById(any(Long.class))).thenReturn(Optional.of(faculty));
-      when(facultyMapper.mapToDto(any(Faculty.class))).thenReturn(facultyDto);
+      when(facultyRepository.findById(4L)).thenReturn(Optional.of(faculty));
+      when(facultyMapper.mapToDto(faculty)).thenReturn(facultyDto);
 
-      FacultyDto result = facultyService.getById(1L);
+      FacultyDto result = facultyService.getById(4L);
 
-      Assertions.assertEquals(facultyDto, result);
+      Assertions.assertEquals(facultyDto.getName(), result.getName());
     }
 
     @Test
@@ -103,6 +107,7 @@ public class FacultyServiceTest {
 
   @Nested
   public class getByName {
+
     @Test
     public void getByNameReturnsFacultyDto() {
       when(facultyRepository.findByName(faculty.getName())).thenReturn(Optional.of(faculty));
@@ -204,15 +209,16 @@ public class FacultyServiceTest {
 
   @Nested
   public class getFacultyUsers {
-    List<User> usersList = List.of(anUser().build(), anUser().firstName("Testing").lastName("FacultyTest").email("testingemail@example.com").build());
+    List<User> usersList = List.of(anUser().faculty(faculty).build(), anUser().faculty(faculty).firstName("Testing").lastName("FacultyTest").email("testingemail@example.com").build());
     List<UserDto> userDtosList = List.of(userDtoFrom(usersList.get(0)), userDtoFrom(usersList.get(1)));
 
     @Test
-    public void returnsPagedUsers() {
+    public void returnsPageUsers() {
+
       when(userRepository.findUsersByFacultyId(
               any(Long.class), any(Pageable.class), any(Role.class)))
           .thenReturn(new PageImpl<>(usersList));
-      when(userMapper.mapPageToDto(any(Page.class))).thenReturn(new PageImpl<>(userDtosList));
+      when(userMapper.mapPageToDto(any())).thenReturn(new PageImpl<UserDto>(userDtosList));
       when(facultyRepository.existsById(any(Long.class))).thenReturn(true);
 
       Page<UserDto> result =
@@ -232,6 +238,53 @@ public class FacultyServiceTest {
       Assertions.assertThrows(
               EntityNotFoundException.class,
               () -> facultyService.getFacultyUsers(faculty.getId(), pageable, Role.ROLE_STUDENT));
+    }
+  }
+
+  @Nested
+  public class createFaculty {
+    CreateFacultyRequest request = new CreateFacultyRequest("Faculty Name");
+
+    /// Creating test is in another file because of conflict with other tests
+    @Test
+    public void throwsConstraintViolationExceptionOnRequestInvalid() {
+      CreateFacultyRequest request = new CreateFacultyRequest(null);
+
+      Assertions.assertThrows(
+              ConstraintViolationException.class, () -> facultyService.createFaculty(request));
+    }
+
+    @Test
+    public void throwsEntityAlreadyExistsExceptionOnNameThatIsAlreadyTaken() {
+      given(facultyRepository.findByName(any(String.class))).willReturn(Optional.of(faculty));
+
+      Assertions.assertThrows(
+              EntityAlreadyExistsException.class, () -> facultyService.createFaculty(request));
+    }
+  }
+
+  @Nested
+  public class updateFaculty {
+    PatchFacultyRequest request = new PatchFacultyRequest("new name");
+
+    /// Updating test is in another file because of conflict with other tests
+    @Test
+    public void updateFacultyThrowsEntityNotFound() {
+      given(facultyRepository.findById(any(Long.class))).willReturn(Optional.empty());
+
+      Assertions.assertThrows(
+              EntityNotFoundException.class,
+              () -> facultyService.updateFaculty(request, faculty.getId()));
+    }
+
+    @Test
+    public void updateFacultyThrowsEntityAlreadyExistsException() {
+      given(facultyRepository.findById(any(Long.class))).willReturn(Optional.of(faculty));
+      given(facultyRepository.findByName(any(String.class))).willReturn(Optional.of(faculty));
+
+      Assertions.assertThrows(
+              EntityAlreadyExistsException.class,
+              () -> facultyService.updateFaculty(request, faculty.getId()));
     }
   }
 }

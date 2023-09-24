@@ -29,7 +29,8 @@ public class FacultyBuilder {
 
   public static FacultyDto facultyDtoFrom(Faculty faculty) {
     Mapper<Faculty, FacultyDto> facultyMapper = new FacultyMapperImpl();
-    return facultyMapper.mapToDto(faculty);
+    FacultyDto facultyDto = facultyMapper.mapToDto(faculty);
+    return facultyDto;
   }
 
   public FacultyBuilder id(Long id) {

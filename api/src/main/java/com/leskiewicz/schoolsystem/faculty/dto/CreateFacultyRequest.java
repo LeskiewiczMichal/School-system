@@ -5,11 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class CreateFacultyRequest {
 
+public record CreateFacultyRequest(
   @NotNull(message = "Faculty name required")
-  private String name;
-}
+  String name
+) {}

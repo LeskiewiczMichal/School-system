@@ -1,5 +1,6 @@
 package com.leskiewicz.schoolsystem.faculty.service;
 
+import static com.leskiewicz.schoolsystem.builders.FacultyBuilder.aFaculty;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
@@ -12,6 +13,7 @@ import com.leskiewicz.schoolsystem.faculty.FacultyServiceImpl;
 import com.leskiewicz.schoolsystem.faculty.dto.CreateFacultyRequest;
 import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
 import com.leskiewicz.schoolsystem.faculty.utils.FacultyMapper;
+import com.leskiewicz.schoolsystem.utils.Mapper;
 import com.leskiewicz.schoolsystem.utils.StringUtils;
 import io.jsonwebtoken.lang.Assert;
 import jakarta.validation.ConstraintViolationException;
@@ -30,7 +32,7 @@ public class CreateFacultyTest {
   Faculty faculty;
   // Mocks
   @Mock private FacultyRepository facultyRepository;
-  @Mock private FacultyMapper facultyMapper;
+  @Mock private Mapper<Faculty, FacultyDto> facultyMapper;
   @InjectMocks private FacultyServiceImpl facultyService;
 
   @BeforeEach
@@ -43,16 +45,16 @@ public class CreateFacultyTest {
   @Test
   public void createsAndReturnsFacultyAndOnProperRequest() {
     // Create a mock request
-    CreateFacultyRequest request = new CreateFacultyRequest();
-    request.setName("Faculty Name");
+    CreateFacultyRequest request = new CreateFacultyRequest("name");
 
     // Mock the behavior of facultyRepository.findByName()
-    given(facultyRepository.findByName(request.getName())).willReturn(Optional.empty());
+    given(facultyRepository.findByName(request.name())).willReturn(Optional.empty());
+  given(facultyRepository.save(any(Faculty.class))).willReturn(aFaculty().build());
 
     // Mock the behavior of facultyMapper.convertToDto()
     Faculty faculty = new Faculty();
-    faculty.setName(StringUtils.capitalizeFirstLetterOfEveryWord(request.getName()));
-    given(facultyMapper.convertToDto(any(Faculty.class)))
+    faculty.setName(StringUtils.capitalizeFirstLetterOfEveryWord(request.name()));
+    given(facultyMapper.mapToDto(any(Faculty.class)))
         .willReturn(new FacultyDto(1L, faculty.getName()));
 
     // Call the method to test
@@ -63,26 +65,8 @@ public class CreateFacultyTest {
     Assertions.assertEquals("Faculty Name", createdFaculty.getName());
 
     // Verify the interactions with facultyRepository and facultyMapper
-    verify(facultyRepository, times(1)).findByName(request.getName());
+    verify(facultyRepository, times(1)).findByName(request.name());
     verify(facultyRepository, times(1)).save(any(Faculty.class));
-    verify(facultyMapper, times(1)).convertToDto(any(Faculty.class));
-  }
-
-  @Test
-  public void throwsConstraintViolationExceptionOnRequestInvalid() {
-    CreateFacultyRequest request = new CreateFacultyRequest(null);
-
-    Assertions.assertThrows(
-        ConstraintViolationException.class, () -> facultyService.createFaculty(request));
-  }
-
-  @Test
-  public void throwsEntityAlreadyExistsExceptionOnNameThatIsAlreadyTaken() {
-    CreateFacultyRequest request = new CreateFacultyRequest(faculty.getName());
-
-    given(facultyRepository.findByName(any(String.class))).willReturn(Optional.of(faculty));
-
-    Assertions.assertThrows(
-        EntityAlreadyExistsException.class, () -> facultyService.createFaculty(request));
+    verify(facultyMapper, times(1)).mapToDto(any(Faculty.class));
   }
 }

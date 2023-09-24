@@ -50,7 +50,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.multipart.MultipartFile;
 
 @ExtendWith(MockitoExtension.class)
-@MockitoSettings(strictness = Strictness.LENIENT)
+//@MockitoSettings(strictness = Strictness.LENIENT)
 public class UserServiceTest {
 
   // Repositories
@@ -140,7 +140,7 @@ public class UserServiceTest {
 
     @Test
     public void returns404IfUserDoesntExist() {
-      given(userRepository.existsById(any(Long.class))).willReturn(false);
+//      given(userRepository.existsById(any(Long.class))).willReturn(false);
 
       Assertions.assertThrows(
           EntityNotFoundException.class, () -> userService.getUserCourses(1L, null));
@@ -338,7 +338,6 @@ public class UserServiceTest {
               .password("password")
               .build();
 
-      given(userRepository.findById(any(Long.class))).willReturn(Optional.of(user));
       given(userRepository.findByEmail(any(String.class))).willReturn(Optional.of(user));
 
       Assertions.assertThrows(

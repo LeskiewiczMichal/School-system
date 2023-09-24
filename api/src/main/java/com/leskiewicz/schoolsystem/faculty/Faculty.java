@@ -19,7 +19,7 @@ import org.springframework.hateoas.RepresentationModel;
 @NoArgsConstructor
 @Entity
 @Table(name = "faculty")
-public class Faculty extends RepresentationModel<Faculty> {
+public class Faculty {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

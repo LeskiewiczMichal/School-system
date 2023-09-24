@@ -96,17 +96,17 @@ public class FacultyServiceImpl implements FacultyService {
 
   @Override
   public FacultyDto createFaculty(CreateFacultyRequest request) {
-    if (facultyRepository.findByName(request.getName()).isPresent()) {
+    if (facultyRepository.findByName(request.name()).isPresent()) {
       throw new EntityAlreadyExistsException(
-          ErrorMessages.objectWithPropertyAlreadyExists("Faculty", "name", request.getName()));
+          ErrorMessages.objectWithPropertyAlreadyExists("Faculty", "name", request.name()));
     }
 
     Faculty faculty =
         Faculty.builder()
-            .name(StringUtils.capitalizeFirstLetterOfEveryWord(request.getName()))
+            .name(StringUtils.capitalizeFirstLetterOfEveryWord(request.name()))
             .build();
     ValidationUtils.validate(faculty);
-    facultyRepository.save(faculty);
+    faculty = facultyRepository.save(faculty);
     logger.info("Created new faculty with name: {}", faculty.getName());
 
     return facultyMapper.mapToDto(faculty);
@@ -122,14 +122,14 @@ public class FacultyServiceImpl implements FacultyService {
                     new EntityNotFoundException(
                         ErrorMessages.objectWithIdNotFound("Faculty", facultyId)));
 
-    if (request.getName() != null) {
-      if (facultyRepository.findByName(request.getName()).isPresent()) {
+    if (request.name() != null) {
+      if (facultyRepository.findByName(request.name()).isPresent()) {
         throw new EntityAlreadyExistsException(
-            ErrorMessages.objectWithPropertyAlreadyExists("Faculty", "name", request.getName()));
+            ErrorMessages.objectWithPropertyAlreadyExists("Faculty", "name", request.name()));
       }
 
-      logger.debug("Updating faculty name from {} to {}", faculty.getName(), request.getName());
-      faculty.setName(StringUtils.capitalizeFirstLetterOfEveryWord(request.getName()));
+      logger.debug("Updating faculty name from {} to {}", faculty.getName(), request.name());
+      faculty.setName(StringUtils.capitalizeFirstLetterOfEveryWord(request.name()));
     }
 
     facultyRepository.save(faculty);
