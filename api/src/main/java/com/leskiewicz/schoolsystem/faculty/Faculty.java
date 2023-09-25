@@ -2,6 +2,7 @@ package com.leskiewicz.schoolsystem.faculty;
 
 import com.leskiewicz.schoolsystem.course.Course;
 import com.leskiewicz.schoolsystem.degree.Degree;
+import com.leskiewicz.schoolsystem.faculty.dto.PatchFacultyRequest;
 import com.leskiewicz.schoolsystem.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -44,6 +45,10 @@ public class Faculty {
   @Singular
   @OneToMany(mappedBy = "faculty")
   private List<User> users;
+
+  public void update(PatchFacultyRequest request) {
+    this.name = request.name();
+  }
 
   @Override
   public String toString() {

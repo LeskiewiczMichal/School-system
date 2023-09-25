@@ -96,17 +96,19 @@ public class FacultyServiceImpl implements FacultyService {
   @Override
   public FacultyDto createFaculty(CreateFacultyRequest request) {
     facultyWithNameAlreadyExistsCheck(request.name());
-
-    Faculty faculty =
-        Faculty.builder()
-            .name(StringUtils.capitalizeFirstLetterOfEveryWord(request.name()))
-            .build();
-
-    ValidationUtils.validate(faculty);
+    Faculty faculty = buildFaculty(request);
     faculty = facultyRepository.save(faculty);
     support.notifyCreated("Faculty", faculty.getId());
 
     return facultyMapper.mapToDto(faculty);
+  }
+
+  private Faculty buildFaculty(CreateFacultyRequest request) {
+   Faculty newFaculty = Faculty.builder()
+            .name(StringUtils.capitalizeFirstLetterOfEveryWord(request.name()))
+            .build();
+   ValidationUtils.validate(newFaculty);
+    return newFaculty;
   }
 
   @Override
