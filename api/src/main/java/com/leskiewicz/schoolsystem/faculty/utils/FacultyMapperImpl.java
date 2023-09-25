@@ -11,7 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 @Component
-public class FacultyMapperImpl implements Mapper<Faculty, FacultyDto> {
+public class FacultyMapperImpl implements FacultyMapper {
 
   private final Logger logger = LoggerFactory.getLogger(FacultyMapperImpl.class);
 

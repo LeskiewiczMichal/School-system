@@ -24,6 +24,7 @@ import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetails;
 import com.leskiewicz.schoolsystem.user.utils.UserMapper;
 import com.leskiewicz.schoolsystem.utils.Mapper;
 import com.leskiewicz.schoolsystem.utils.StringUtils;
+import com.leskiewicz.schoolsystem.utils.Support;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
@@ -38,6 +39,7 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class FacultyServiceImpl implements FacultyService {
 
+  private final Support support;
   // Repositories
   private final FacultyRepository facultyRepository;
   private final CourseRepository courseRepository;
@@ -46,7 +48,7 @@ public class FacultyServiceImpl implements FacultyService {
 
   // Mappers
   private final DegreeMapper degreeMapper;
-  private final Mapper<Faculty, FacultyDto> facultyMapper;
+  private final FacultyMapper facultyMapper;
   private final Mapper<User, UserDto> userMapper;
   private final CourseMapper courseMapper;
 
@@ -93,18 +95,16 @@ public class FacultyServiceImpl implements FacultyService {
 
   @Override
   public FacultyDto createFaculty(CreateFacultyRequest request) {
-    if (facultyRepository.findByName(request.name()).isPresent()) {
-      throw new EntityAlreadyExistsException(
-          ErrorMessages.objectWithPropertyAlreadyExists("Faculty", "name", request.name()));
-    }
+    facultyWithNameAlreadyExistsCheck(request.name());
 
     Faculty faculty =
         Faculty.builder()
             .name(StringUtils.capitalizeFirstLetterOfEveryWord(request.name()))
             .build();
+
     ValidationUtils.validate(faculty);
     faculty = facultyRepository.save(faculty);
-    logger.info("Created new faculty with name: {}", faculty.getName());
+    support.notifyCreated("Faculty", faculty.getId());
 
     return facultyMapper.mapToDto(faculty);
   }
@@ -152,6 +152,13 @@ public class FacultyServiceImpl implements FacultyService {
   private void facultyExistsCheck(Long facultyId) {
     if (!facultyRepository.existsById(facultyId)) {
       throw new EntityNotFoundException(ErrorMessages.objectWithIdNotFound("Faculty", facultyId));
+    }
+  }
+
+  private void facultyWithNameAlreadyExistsCheck(String facultyName) {
+    if (facultyRepository.findByName(facultyName).isPresent()) {
+      throw new EntityAlreadyExistsException(
+          ErrorMessages.objectWithPropertyAlreadyExists("Faculty", "name", facultyName));
     }
   }
 
