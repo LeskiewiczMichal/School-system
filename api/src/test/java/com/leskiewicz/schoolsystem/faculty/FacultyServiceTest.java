@@ -249,13 +249,12 @@ public class FacultyServiceTest {
 
   @Nested
   public class createFaculty {
+    CreateFacultyRequest createFacultyRequest = new CreateFacultyRequest("Faculty of Tests");
+    FacultyDto facultyDto = facultyDtoFrom(aFaculty().name(createFacultyRequest.name()).build());
+
     @Test
-    public void savesAndReturnsFacultyDto() {
-      CreateFacultyRequest createFacultyRequest = new CreateFacultyRequest("Faculty of Tests");
-      FacultyDto facultyDto = facultyDtoFrom(aFaculty().name("Faculty of Tests").build());
-      when(facultyRepository.save(any(Faculty.class)))
-          .thenReturn(aFaculty().name("Faculty of Tests").build());
-      when(facultyMapper.mapToDto(any(Faculty.class))).thenReturn(facultyDto);
+    public void returnsFacultyDto() {
+      setUpCreateFacultyMocks();
 
       FacultyDto facultyDtoFromService = facultyService.createFaculty(createFacultyRequest);
 
@@ -264,21 +263,35 @@ public class FacultyServiceTest {
     }
 
     @Test
+    public void callsSaveAndNotify() {
+      setUpCreateFacultyMocks();
+
+      facultyService.createFaculty(createFacultyRequest);
+
+      verify(facultyRepository).save(any(Faculty.class));
+      verify(support).notifyCreated(any(String.class), any(Long.class));
+    }
+
+    @Test
     public void throwsConstraintViolationExceptionOnRequestInvalid() {
       CreateFacultyRequest request = new CreateFacultyRequest(null);
-
       Assertions.assertThrows(
           ConstraintViolationException.class, () -> facultyService.createFaculty(request));
     }
 
     @Test
     public void throwsEntityAlreadyExistsExceptionOnNameThatIsAlreadyTaken() {
-      CreateFacultyRequest request = new CreateFacultyRequest("Test");
-      given(facultyRepository.findByName(any(String.class)))
-          .willReturn(Optional.of(aFaculty().build()));
-
+      when(facultyRepository.findByName(any(String.class)))
+          .thenReturn(Optional.of(aFaculty().build()));
       Assertions.assertThrows(
-          EntityAlreadyExistsException.class, () -> facultyService.createFaculty(request));
+          EntityAlreadyExistsException.class,
+          () -> facultyService.createFaculty(createFacultyRequest));
+    }
+
+    private void setUpCreateFacultyMocks() {
+      when(facultyRepository.save(any(Faculty.class)))
+              .thenReturn(aFaculty().name(createFacultyRequest.name()).build());
+      when(facultyMapper.mapToDto(any(Faculty.class))).thenReturn(facultyDto);
     }
   }
 
@@ -287,7 +300,7 @@ public class FacultyServiceTest {
     PatchFacultyRequest request = new PatchFacultyRequest("new name");
 
     @Test
-    public void returnsCorrectFaculty() {
+    public void returnsFacultyDto() {
       setUpUpdateFacultyMocks(aFaculty().build());
 
       FacultyDto result = facultyService.updateFaculty(request, faculty.getId());
@@ -296,7 +309,7 @@ public class FacultyServiceTest {
     }
 
     @Test
-    public void callsSaveAndUpdateMethods() {
+    public void callsSaveAndUpdateAndNotifyMethods() {
       Faculty faculty = aFaculty().build();
       Faculty spyFaculty = spy(faculty);
       setUpUpdateFacultyMocks(spyFaculty);
@@ -305,6 +318,7 @@ public class FacultyServiceTest {
 
       verify(facultyRepository).save(spyFaculty);
       verify(spyFaculty).update(any(PatchFacultyRequest.class));
+      verify(support).notifyUpdated(any(String.class), any(Long.class));
     }
 
     @Test
