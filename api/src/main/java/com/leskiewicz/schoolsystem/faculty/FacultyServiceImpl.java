@@ -87,10 +87,11 @@ public class FacultyServiceImpl implements FacultyService {
                 ErrorMessages.degreeNotOnFaculty(fieldOfStudy, title, faculty.getName())));
   }
 
-  private Optional<Degree> findDegreeByTitleAndFieldOfStudy(List<Degree> degrees, DegreeTitle title, String fieldOfStudy) {
+  private Optional<Degree> findDegreeByTitleAndFieldOfStudy(
+      List<Degree> degrees, DegreeTitle title, String fieldOfStudy) {
     return degrees.stream()
-            .filter(d -> d.getTitle().equals(title) && d.getFieldOfStudy().equals(fieldOfStudy))
-            .findFirst();
+        .filter(d -> d.getTitle().equals(title) && d.getFieldOfStudy().equals(fieldOfStudy))
+        .findFirst();
   }
 
   @Override
@@ -104,29 +105,22 @@ public class FacultyServiceImpl implements FacultyService {
   }
 
   private Faculty buildFaculty(CreateFacultyRequest request) {
-   Faculty newFaculty = Faculty.builder()
+    Faculty newFaculty =
+        Faculty.builder()
             .name(StringUtils.capitalizeFirstLetterOfEveryWord(request.name()))
             .build();
-   ValidationUtils.validate(newFaculty);
+    ValidationUtils.validate(newFaculty);
     return newFaculty;
   }
 
   @Override
   public FacultyDto updateFaculty(PatchFacultyRequest request, Long facultyId) {
+    facultyWithNameAlreadyExistsCheck(request.name());
     Faculty faculty = retrieveFacultyFromRepositoryById(facultyId);
+    faculty.update(request);
+    faculty = facultyRepository.save(faculty);
+    support.notifyUpdated("Faculty", facultyId);
 
-    if (request.name() != null) {
-      if (facultyRepository.findByName(request.name()).isPresent()) {
-        throw new EntityAlreadyExistsException(
-            ErrorMessages.objectWithPropertyAlreadyExists("Faculty", "name", request.name()));
-      }
-
-      logger.debug("Updating faculty name from {} to {}", faculty.getName(), request.name());
-      faculty.setName(StringUtils.capitalizeFirstLetterOfEveryWord(request.name()));
-    }
-
-    facultyRepository.save(faculty);
-    logger.info("Updated faculty with id: {}", facultyId);
     return facultyMapper.mapToDto(faculty);
   }
 

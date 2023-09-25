@@ -17,6 +17,7 @@ import com.leskiewicz.schoolsystem.faculty.dto.PatchFacultyRequest;
 import com.leskiewicz.schoolsystem.faculty.utils.FacultyMapper;
 import com.leskiewicz.schoolsystem.user.User;
 import com.leskiewicz.schoolsystem.user.UserRepository;
+import com.leskiewicz.schoolsystem.user.dto.PatchUserRequest;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.utils.Mapper;
 import com.leskiewicz.schoolsystem.utils.Support;
@@ -47,8 +48,7 @@ import static com.leskiewicz.schoolsystem.builders.UserBuilder.anUser;
 import static com.leskiewicz.schoolsystem.builders.UserBuilder.userDtoFrom;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class FacultyServiceTest {
@@ -141,8 +141,7 @@ public class FacultyServiceTest {
       Assertions.assertThrows(
           EntityNotFoundException.class,
           () ->
-              facultyService.getDegreeByTitleAndFieldOfStudy(
-                  faculty, DegreeTitle.MASTER, "Test"));
+              facultyService.getDegreeByTitleAndFieldOfStudy(faculty, DegreeTitle.MASTER, "Test"));
     }
   }
 
@@ -150,7 +149,7 @@ public class FacultyServiceTest {
   public class getFacultyCourses {
     List<Course> coursesList = List.of(aCourse().build(), aCourse().title("Testing").build());
     List<CourseDto> courseDtosList =
-            List.of(courseDtoFrom(coursesList.get(0)), courseDtoFrom(coursesList.get(1)));
+        List.of(courseDtoFrom(coursesList.get(0)), courseDtoFrom(coursesList.get(1)));
 
     @Test
     public void returnsPagedCourses() {
@@ -181,9 +180,9 @@ public class FacultyServiceTest {
   @Nested
   public class getFacultyDegrees {
     List<Degree> degreesList =
-            List.of(aDegree().build(), aDegree().fieldOfStudy("Testing").build());
+        List.of(aDegree().build(), aDegree().fieldOfStudy("Testing").build());
     List<DegreeDto> degreeDtosList =
-            List.of(degreeDtoFrom(degreesList.get(0)), degreeDtoFrom(degreesList.get(1)));
+        List.of(degreeDtoFrom(degreesList.get(0)), degreeDtoFrom(degreesList.get(1)));
 
     @Test
     public void returnsPagedDegrees() {
@@ -214,11 +213,11 @@ public class FacultyServiceTest {
   @Nested
   public class getFacultyUsers {
     List<User> usersList =
-            List.of(
-                    anUser().build(),
-                    anUser().firstName("Testing").lastName("Tester").email("testemail@test.pl").build());
+        List.of(
+            anUser().build(),
+            anUser().firstName("Testing").lastName("Tester").email("testemail@test.pl").build());
     List<UserDto> usersDtosList =
-            List.of(userDtoFrom(usersList.get(0)), userDtoFrom(usersList.get(1)));
+        List.of(userDtoFrom(usersList.get(0)), userDtoFrom(usersList.get(1)));
 
     @Test
     public void returnsPagedUsers() {
@@ -285,21 +284,27 @@ public class FacultyServiceTest {
 
   @Nested
   public class updateFaculty {
-    @Test
-    public void updateFacultySavesCorrectFaculty() {
-      Faculty faculty = aFaculty().build();
-      given(facultyRepository.findById(any(Long.class))).willReturn(Optional.of(faculty));
-      PatchFacultyRequest request = new PatchFacultyRequest("new name");
+    PatchFacultyRequest request = new PatchFacultyRequest("new name");
 
-      FacultyDto facultyDto = facultyDtoFrom(faculty);
-      given(facultyMapper.mapToDto(any(Faculty.class))).willReturn(facultyDto);
+    @Test
+    public void returnsCorrectFaculty() {
+      setUpUpdateFacultyMocks(aFaculty().build());
 
       FacultyDto result = facultyService.updateFaculty(request, faculty.getId());
 
-      faculty.setName("New name");
+      Assertions.assertEquals(facultyDto.getName(), result.getName());
+    }
 
-      verify(facultyRepository).save(faculty);
-      Assertions.assertEquals(facultyDto, result);
+    @Test
+    public void callsSaveAndUpdateMethods() {
+      Faculty faculty = aFaculty().build();
+      Faculty spyFaculty = spy(faculty);
+      setUpUpdateFacultyMocks(spyFaculty);
+
+      facultyService.updateFaculty(request, spyFaculty.getId());
+
+      verify(facultyRepository).save(spyFaculty);
+      verify(spyFaculty).update(any(PatchFacultyRequest.class));
     }
 
     @Test
@@ -313,14 +318,18 @@ public class FacultyServiceTest {
 
     @Test
     public void throwsExceptionWhenFacultyWithTheSameNameExists() {
-      given(facultyRepository.findById(any(Long.class)))
-          .willReturn(Optional.of(aFaculty().build()));
-      given(facultyRepository.findByName(any(String.class)))
-          .willReturn(Optional.of(aFaculty().build()));
+      when(facultyRepository.findByName(any(String.class)))
+          .thenReturn(Optional.of(aFaculty().build()));
 
       Assertions.assertThrows(
           EntityAlreadyExistsException.class,
           () -> facultyService.updateFaculty(new PatchFacultyRequest("Test"), 1L));
+    }
+
+    private void setUpUpdateFacultyMocks(Faculty faculty) {
+      when(facultyRepository.findById(any(Long.class))).thenReturn(Optional.of(faculty));
+      when(facultyMapper.mapToDto(any(Faculty.class))).thenReturn(facultyDto);
+      when(facultyRepository.save(any(Faculty.class))).thenReturn(faculty);
     }
   }
 
