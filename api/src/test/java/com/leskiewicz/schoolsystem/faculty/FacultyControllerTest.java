@@ -6,6 +6,7 @@ import com.leskiewicz.schoolsystem.course.utils.CourseDtoAssembler;
 import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
 import com.leskiewicz.schoolsystem.degree.utils.DegreeDtoAssembler;
 import com.leskiewicz.schoolsystem.dto.request.PageableRequest;
+import com.leskiewicz.schoolsystem.error.DefaultExceptionHandler;
 import com.leskiewicz.schoolsystem.faculty.dto.CreateFacultyRequest;
 import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
 import com.leskiewicz.schoolsystem.faculty.dto.PatchFacultyRequest;
@@ -14,17 +15,38 @@ import com.leskiewicz.schoolsystem.generic.CommonTests;
 import com.leskiewicz.schoolsystem.testUtils.TestHelper;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserDtoAssembler;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import java.util.List;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static com.leskiewicz.schoolsystem.builders.FacultyBuilder.aFaculty;
+import static com.leskiewicz.schoolsystem.builders.FacultyBuilder.facultyDtoFrom;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
 public class FacultyControllerTest {
+  private static final String facultiesLink = "/api/faculties";
 
   private FacultyController facultyController;
 
@@ -39,6 +61,12 @@ public class FacultyControllerTest {
   private PagedResourcesAssembler<DegreeDto> degreePagedResourcesAssembler;
   private PagedResourcesAssembler<UserDto> userPagedResourcesAssembler;
   private PagedResourcesAssembler<CourseDto> coursePagedResourcesAssembler;
+
+  private MockMvc mvc;
+  List<Faculty> facultiesList =
+      List.of(aFaculty().build(), aFaculty().name("Test faculty").build());
+  List<FacultyDto> facultyDtosList =
+      List.of(facultyDtoFrom(facultiesList.get(0)), facultyDtoFrom(facultiesList.get(1)));
 
   // Annotation mocks didn't work as expected here, pagedResourcesAssemblers were mixed up
   @BeforeEach
@@ -66,28 +94,44 @@ public class FacultyControllerTest {
             degreePagedResourcesAssembler,
             userPagedResourcesAssembler,
             coursePagedResourcesAssembler);
+
+    mvc =
+        MockMvcBuilders.standaloneSetup(facultyController)
+            .setControllerAdvice(new DefaultExceptionHandler())
+            .build();
   }
 
   @Test
-  public void getFaculties() {
-    CommonTests.controllerGetEntities(
-        FacultyDto.class,
-        facultyPagedResourcesAssembler,
-        facultyService::getFaculties,
-        facultyDtoAssembler::toModel,
-        facultyController::getFaculties);
+  public void getFacultiesReturnsFormattedResponse() throws Exception {
+    Page<FacultyDto> facultyDtoPage = new PageImpl<>(facultyDtosList);
+    PagedModel<FacultyDto> facultyPagedModel =
+        PagedModel.of(facultyDtosList, new PagedModel.PageMetadata(1, 1, 1, 1));
+
+    when(facultyService.getFaculties(new PageableRequest().toPageable()))
+        .thenReturn(facultyDtoPage);
+    when(facultyDtoAssembler.mapPageToModel(facultyDtoPage))
+        .thenReturn(new PageImpl<>(facultyDtosList));
+    when(facultyPagedResourcesAssembler.toModel(any(Page.class))).thenReturn(facultyPagedModel);
+
+    mvc.perform(get(facultiesLink).accept(MediaType.APPLICATION_JSON))
+        .andDo(print())
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.page").exists())
+        .andExpect(jsonPath("$.links").isArray())
+        .andReturn();
   }
 
   @Test
-  public void getFacultyById() {
-    FacultyDto facultyDto = TestHelper.createFacultyDto("TestFaculty");
+  public void getFacultyByIdReturnsFormattedResponse() {
+    FacultyDto facultyDto = facultyDtoFrom(aFaculty().build());
 
-    CommonTests.controllerGetEntityById(
-        facultyDto,
-        1L,
-        facultyService::getById,
-        facultyDtoAssembler::toModel,
-        facultyController::getFacultyById);
+    when(facultyService.getById(1L)).thenReturn(facultyDto);
+    when(facultyDtoAssembler.toModel(facultyDto)).thenReturn(facultyDto);
+
+    ResponseEntity<FacultyDto> result = facultyController.getFacultyById(1L);
+
+    Assertions.assertEquals(facultyDto, result.getBody());
+    Assertions.assertEquals(HttpStatus.OK, result.getStatusCode());
   }
 
   @Test

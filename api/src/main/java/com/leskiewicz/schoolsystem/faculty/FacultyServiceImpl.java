@@ -52,8 +52,6 @@ public class FacultyServiceImpl implements FacultyService {
   private final Mapper<User, UserDto> userMapper;
   private final CourseMapper courseMapper;
 
-  private final Logger logger = LoggerFactory.getLogger(FacultyController.class);
-
   @Override
   public FacultyDto getById(Long id) {
     Faculty faculty = retrieveFacultyFromRepositoryById(id);

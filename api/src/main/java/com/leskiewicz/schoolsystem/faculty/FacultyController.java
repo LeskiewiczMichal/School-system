@@ -64,7 +64,7 @@ public class FacultyController {
   public ResponseEntity<RepresentationModel<FacultyDto>> getFaculties(
       @ModelAttribute PageableRequest request) {
     Page<FacultyDto> faculties = facultyService.getFaculties(request.toPageable());
-    faculties = faculties.map(facultyDtoAssembler::toModel);
+    faculties = facultyDtoAssembler.mapPageToModel(faculties);
 
     return ResponseEntity.ok(
         HalModelBuilder.halModelOf(facultyPagedResourcesAssembler.toModel(faculties)).build());

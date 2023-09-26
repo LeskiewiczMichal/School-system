@@ -5,6 +5,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import com.leskiewicz.schoolsystem.article.ArticleController;
 import com.leskiewicz.schoolsystem.faculty.FacultyController;
 import com.leskiewicz.schoolsystem.faculty.dto.FacultyDto;
+import org.springframework.data.domain.Page;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
@@ -53,5 +54,10 @@ public class FacultyDtoAssembler
     faculty.add(articlesLink);
 
     return faculty;
+  }
+
+  public Page<FacultyDto> mapPageToModel(Page<FacultyDto> page) {
+    page.forEach(this::toModel);
+    return page;
   }
 }

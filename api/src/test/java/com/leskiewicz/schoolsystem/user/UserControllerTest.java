@@ -123,11 +123,11 @@ public class UserControllerTest {
   }
 
   @Test
-  public void getUserById() {
+  public void getFacultyByIdReturnsFormattedResponse() {
     UserDto userDto = userDtoFrom(anUser().build());
 
-    given(userService.getById(userDto.getId())).willReturn(userDto);
-    given(userDtoAssembler.toModel(userDto)).willReturn(userDto);
+    when(userService.getById(userDto.getId())).thenReturn(userDto);
+    when(userDtoAssembler.toModel(userDto)).thenReturn(userDto);
 
     ResponseEntity<UserDto> result = userController.getUserById(userDto.getId());
 
@@ -142,7 +142,6 @@ public class UserControllerTest {
     when(userPagedResourcesAssembler.toModel(any(Page.class))).thenReturn(userPagedModel);
 
     mvc.perform(get("/api/users").accept(MediaType.APPLICATION_JSON))
-        .andDo(print())
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.page").exists())
         .andExpect(jsonPath("$.links").isArray())
