@@ -26,7 +26,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -36,6 +39,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.List;
 
+import static com.leskiewicz.schoolsystem.builders.DegreeBuilder.aDegree;
+import static com.leskiewicz.schoolsystem.builders.DegreeBuilder.degreeDtoFrom;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static com.leskiewicz.schoolsystem.builders.FacultyBuilder.aFaculty;
@@ -171,12 +176,18 @@ public class FacultyControllerTest {
 
   @Test
   public void getFacultyDegrees() {
-    CommonTests.controllerGetEntities(
-        DegreeDto.class,
-        degreePagedResourcesAssembler,
-        (Pageable pageable) -> facultyService.getFacultyDegrees(1L, pageable),
-        degreeDtoAssembler::toModel,
-        (PageableRequest request) -> facultyController.getFacultyDegrees(1L, request));
+    List<DegreeDto> degreeDtoList = List.of(degreeDtoFrom(aDegree().build()), degreeDtoFrom(aDegree().fieldOfStudy("Testing").build()));
+    Page<DegreeDto> degreeDtosPage = new PageImpl<>(degreeDtoList);
+    PagedModel<EntityModel<DegreeDto>> pagedModel = Mockito.mock(PagedModel.class);
+
+    when(facultyService.getFacultyDegrees(1L, new PageableRequest().toPageable())).thenReturn(degreeDtosPage);
+    when(degreeDtoAssembler.toModel(any(DegreeDto.class))).thenReturn(degreeDtoList.get(0), degreeDtoList.get(1));
+    when(degreePagedResourcesAssembler.toModel(any(Page.class))).thenReturn(pagedModel);
+
+    ResponseEntity<RepresentationModel<DegreeDto>> response = facultyController.getFacultyDegrees(1L, new PageableRequest());
+
+    Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+    Assertions.assertEquals(HalModelBuilder.halModelOf(pagedModel).build(), response.getBody());
   }
 
   @Test
