@@ -42,8 +42,8 @@ import java.util.List;
 import static com.leskiewicz.schoolsystem.builders.CourseBuilder.*;
 import static com.leskiewicz.schoolsystem.builders.DegreeBuilder.aDegree;
 import static com.leskiewicz.schoolsystem.builders.DegreeBuilder.degreeDtoFrom;
-import static com.leskiewicz.schoolsystem.builders.UserBuilder.createUserDtoListFrom;
-import static com.leskiewicz.schoolsystem.builders.UserBuilder.createUserList;
+import static com.leskiewicz.schoolsystem.builders.TeacherDetailsBuilder.aTeacherDetails;
+import static com.leskiewicz.schoolsystem.builders.UserBuilder.*;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static com.leskiewicz.schoolsystem.builders.FacultyBuilder.aFaculty;
@@ -225,7 +225,7 @@ public class FacultyControllerTest {
     Page<UserDto> studentsDtosPage = new PageImpl<>(studentsDtosList);
     PagedModel<EntityModel<UserDto>> pagedModel = Mockito.mock(PagedModel.class);
 
-    when(facultyService.getFacultyUsers(1L, new PageableRequest().toPageable(), Role.ROLE_STUDENT))
+    when(facultyService.getFacultyUsers(1L, new PageableRequest().toPageable(), Role.ROLE_TEACHER))
         .thenReturn(studentsDtosPage);
     when(userDtoAssembler.toModel(any(UserDto.class)))
         .thenReturn(studentsDtosList.get(0), studentsDtosList.get(1));
@@ -239,13 +239,32 @@ public class FacultyControllerTest {
   }
 
   @Test
-  public void getFacultyTeachers() {
-    CommonTests.controllerGetEntities(
-        UserDto.class,
-        userPagedResourcesAssembler,
-        (Pageable pageable) -> facultyService.getFacultyUsers(1L, pageable, Role.ROLE_TEACHER),
-        userDtoAssembler::toModel,
-        (PageableRequest request) -> facultyController.getFacultyTeachers(1L, request));
+  public void getFacultyTeachersReturnsUserDtos() {
+    List<UserDto> teachersDtosList = createTeachersList();
+    Page<UserDto> teachersDtosPage = new PageImpl<>(teachersDtosList);
+    PagedModel<EntityModel<UserDto>> pagedModel = Mockito.mock(PagedModel.class);
+
+    when(facultyService.getFacultyUsers(1L, new PageableRequest().toPageable(), Role.ROLE_TEACHER))
+        .thenReturn(teachersDtosPage);
+    when(userDtoAssembler.toModel(any(UserDto.class)))
+        .thenReturn(teachersDtosList.get(0), teachersDtosList.get(1));
+    when(userPagedResourcesAssembler.toModel(any(Page.class))).thenReturn(pagedModel);
+
+    ResponseEntity<RepresentationModel<UserDto>> response =
+        facultyController.getFacultyTeachers(1L, new PageableRequest());
+
+    Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+    Assertions.assertEquals(HalModelBuilder.halModelOf(pagedModel).build(), response.getBody());
+  }
+
+  private List<UserDto> createTeachersList() {
+    return createUserDtoListFrom(
+            List.of(
+                    anUser().role(Role.ROLE_TEACHER).teacherDetails(aTeacherDetails().build()).build(),
+                    anUser()
+                            .role(Role.ROLE_TEACHER)
+                            .teacherDetails(aTeacherDetails().build())
+                            .build()));
   }
 
   @Test
