@@ -5,8 +5,7 @@ import static com.leskiewicz.schoolsystem.builders.CourseBuilder.courseDtoFrom;
 import static com.leskiewicz.schoolsystem.builders.DegreeBuilder.aDegree;
 import static com.leskiewicz.schoolsystem.builders.FacultyBuilder.aFaculty;
 import static com.leskiewicz.schoolsystem.builders.TeacherDetailsBuilder.aTeacherDetails;
-import static com.leskiewicz.schoolsystem.builders.UserBuilder.anUser;
-import static com.leskiewicz.schoolsystem.builders.UserBuilder.userDtoFrom;
+import static com.leskiewicz.schoolsystem.builders.UserBuilder.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
@@ -51,7 +50,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.multipart.MultipartFile;
 
 @ExtendWith(MockitoExtension.class)
-//@MockitoSettings(strictness = Strictness.LENIENT)
 public class UserServiceTest {
 
   @Mock private Support support;
@@ -69,18 +67,8 @@ public class UserServiceTest {
 
   @InjectMocks private UserServiceImpl userService;
 
-  List<User> usersList =
-      List.of(
-          anUser().build(),
-          anUser()
-              .firstName("Johnny")
-              .lastName("Silverhand")
-              .email("johnny@example.com")
-              .password("qwerty")
-              .profilePictureName("Mypicture")
-              .build());
-  List<UserDto> userDtosList =
-      List.of(userDtoFrom(usersList.get(0)), userDtoFrom(usersList.get(1)));
+  List<User> usersList = createUserList();
+  List<UserDto> userDtosList = createUserDtoListFrom(usersList);
   User user = anUser().build();
   UserDto userDto = userDtoFrom(user);
 
