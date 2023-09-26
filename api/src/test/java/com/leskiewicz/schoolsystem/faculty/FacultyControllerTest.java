@@ -44,6 +44,7 @@ import static com.leskiewicz.schoolsystem.builders.DegreeBuilder.aDegree;
 import static com.leskiewicz.schoolsystem.builders.DegreeBuilder.degreeDtoFrom;
 import static com.leskiewicz.schoolsystem.builders.TeacherDetailsBuilder.aTeacherDetails;
 import static com.leskiewicz.schoolsystem.builders.UserBuilder.*;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static com.leskiewicz.schoolsystem.builders.FacultyBuilder.aFaculty;
@@ -268,17 +269,16 @@ public class FacultyControllerTest {
   }
 
   @Test
-  public void testCreateFaculty() {
-    FacultyDto mockedFacultyDto = TestHelper.createFacultyDto("TestFaculty");
+  public void createFacultyReturnsFacultyDtoAndCreatedStatus() {
+    FacultyDto facultyDto = facultyDtoFrom(aFaculty().build());
+    FacultyDto facultyDtoWithLinks = facultyDto.add(WebMvcLinkBuilder.linkTo(CreateFacultyRequest.class).withSelfRel());
 
-    CommonTests.controllerCreateEntity(
-        mockedFacultyDto,
-        FacultyDto.class,
-        mockedFacultyDto.add(WebMvcLinkBuilder.linkTo(CreateFacultyRequest.class).withSelfRel()),
-        CreateFacultyRequest.class,
-        new CreateFacultyRequest("TestFaculty"),
-        facultyService::createFaculty,
-        facultyDtoAssembler::toModel,
-        facultyController::createFaculty);
+    when(facultyService.createFaculty(any(CreateFacultyRequest.class))).thenReturn(facultyDto);
+    when(facultyDtoAssembler.toModel(any(FacultyDto.class))).thenReturn(facultyDtoWithLinks);
+
+    ResponseEntity<FacultyDto> responseEntity = facultyController.createFaculty(new CreateFacultyRequest("TestFaculty"));
+
+    Assertions.assertEquals(facultyDtoWithLinks, responseEntity.getBody());
+    Assertions.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
   }
 }
