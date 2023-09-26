@@ -11,6 +11,8 @@ import com.leskiewicz.schoolsystem.user.utils.UserMapperImpl;
 import com.leskiewicz.schoolsystem.utils.Mapper;
 import jakarta.persistence.*;
 
+import java.util.List;
+
 public class UserBuilder {
 
     private Long id = 1L;
@@ -31,6 +33,14 @@ public class UserBuilder {
     public static UserDto userDtoFrom(User user) {
         Mapper<User, UserDto> userMapper = new UserMapperImpl();
         return userMapper.mapToDto(user);
+    }
+
+    public static List<User> createUserList() {
+        return List.of(anUser().build(), anUser().firstName("Jane").lastName("Smith").email("testingemail@example.com").build());
+    }
+
+    public static List<UserDto> createUserDtoListFrom(List<User> users) {
+        return List.of(userDtoFrom(users.get(0)), userDtoFrom(users.get(1)));
     }
 
     public UserBuilder id(Long id) {
