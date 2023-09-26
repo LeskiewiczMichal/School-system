@@ -39,6 +39,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.List;
 
+import static com.leskiewicz.schoolsystem.builders.CourseBuilder.*;
 import static com.leskiewicz.schoolsystem.builders.DegreeBuilder.aDegree;
 import static com.leskiewicz.schoolsystem.builders.DegreeBuilder.degreeDtoFrom;
 import static org.mockito.Mockito.verify;
@@ -149,7 +150,8 @@ public class FacultyControllerTest {
     public void returnsFacultyDto() {
       FacultyDto facultyDto = setUpPatchFaculty();
 
-      ResponseEntity<FacultyDto> response = facultyController.updateFaculty(request, facultyDto.getId());
+      ResponseEntity<FacultyDto> response =
+          facultyController.updateFaculty(request, facultyDto.getId());
 
       Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
       Assertions.assertEquals(facultyDto, response.getBody());
@@ -157,12 +159,12 @@ public class FacultyControllerTest {
 
     @Test
     public void callsUpdateFaculty() {
-        FacultyDto facultyDto = setUpPatchFaculty();
-        Long id = facultyDto.getId();
+      FacultyDto facultyDto = setUpPatchFaculty();
+      Long id = facultyDto.getId();
 
-        facultyController.updateFaculty(request, id);
+      facultyController.updateFaculty(request, id);
 
-        verify(facultyService).updateFaculty(request, id);
+      verify(facultyService).updateFaculty(request, id);
     }
 
     private FacultyDto setUpPatchFaculty() {
@@ -176,28 +178,43 @@ public class FacultyControllerTest {
 
   @Test
   public void getFacultyDegrees() {
-    List<DegreeDto> degreeDtoList = List.of(degreeDtoFrom(aDegree().build()), degreeDtoFrom(aDegree().fieldOfStudy("Testing").build()));
+    List<DegreeDto> degreeDtoList =
+        List.of(
+            degreeDtoFrom(aDegree().build()),
+            degreeDtoFrom(aDegree().fieldOfStudy("Testing").build()));
     Page<DegreeDto> degreeDtosPage = new PageImpl<>(degreeDtoList);
     PagedModel<EntityModel<DegreeDto>> pagedModel = Mockito.mock(PagedModel.class);
 
-    when(facultyService.getFacultyDegrees(1L, new PageableRequest().toPageable())).thenReturn(degreeDtosPage);
-    when(degreeDtoAssembler.toModel(any(DegreeDto.class))).thenReturn(degreeDtoList.get(0), degreeDtoList.get(1));
+    when(facultyService.getFacultyDegrees(1L, new PageableRequest().toPageable()))
+        .thenReturn(degreeDtosPage);
+    when(degreeDtoAssembler.toModel(any(DegreeDto.class)))
+        .thenReturn(degreeDtoList.get(0), degreeDtoList.get(1));
     when(degreePagedResourcesAssembler.toModel(any(Page.class))).thenReturn(pagedModel);
 
-    ResponseEntity<RepresentationModel<DegreeDto>> response = facultyController.getFacultyDegrees(1L, new PageableRequest());
+    ResponseEntity<RepresentationModel<DegreeDto>> response =
+        facultyController.getFacultyDegrees(1L, new PageableRequest());
 
     Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
     Assertions.assertEquals(HalModelBuilder.halModelOf(pagedModel).build(), response.getBody());
   }
 
   @Test
-  public void getFacultyCourses() {
-    CommonTests.controllerGetEntities(
-        CourseDto.class,
-        coursePagedResourcesAssembler,
-        (Pageable pageable) -> facultyService.getFacultyCourses(1L, pageable),
-        courseDtoAssembler::toModel,
-        (PageableRequest request) -> facultyController.getFacultyCourses(1L, request));
+  public void getFacultyCoursesReturnsCourseDtos() {
+    List<CourseDto> courseDtosList = createCourseDtoListFrom(createCourseList());
+    Page<CourseDto> courseDtosPage = new PageImpl<>(courseDtosList);
+    PagedModel<EntityModel<CourseDto>> pagedModel = Mockito.mock(PagedModel.class);
+
+    when(facultyService.getFacultyCourses(any(Long.class), any(Pageable.class)))
+        .thenReturn(courseDtosPage);
+    when(courseDtoAssembler.toModel(any(CourseDto.class)))
+        .thenReturn(courseDtosList.get(0), courseDtosList.get(1));
+    when(coursePagedResourcesAssembler.toModel(any(Page.class))).thenReturn(pagedModel);
+
+    ResponseEntity<RepresentationModel<CourseDto>> response =
+        facultyController.getFacultyCourses(1L, new PageableRequest());
+
+    Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+    Assertions.assertEquals(HalModelBuilder.halModelOf(pagedModel).build(), response.getBody());
   }
 
   @Test

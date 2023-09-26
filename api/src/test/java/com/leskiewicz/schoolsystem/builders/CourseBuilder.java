@@ -44,6 +44,14 @@ public class CourseBuilder {
     return courseMapper.convertToDto(course);
   }
 
+  public static List<Course> createCourseList() {
+    return List.of(aCourse().build(), aCourse().title("Testing course").build());
+  }
+
+  public static List<CourseDto> createCourseDtoListFrom(List<Course> courses) {
+    return List.of(courseDtoFrom(courses.get(0)), courseDtoFrom(courses.get(1)));
+  }
+
   public CourseBuilder id(Long id) {
     this.id = id;
     return this;
