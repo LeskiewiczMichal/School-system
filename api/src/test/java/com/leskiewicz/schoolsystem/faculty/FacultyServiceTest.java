@@ -38,14 +38,11 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.Optional;
 
-import static com.leskiewicz.schoolsystem.builders.CourseBuilder.aCourse;
-import static com.leskiewicz.schoolsystem.builders.CourseBuilder.courseDtoFrom;
-import static com.leskiewicz.schoolsystem.builders.DegreeBuilder.aDegree;
-import static com.leskiewicz.schoolsystem.builders.DegreeBuilder.degreeDtoFrom;
+import static com.leskiewicz.schoolsystem.builders.CourseBuilder.*;
+import static com.leskiewicz.schoolsystem.builders.DegreeBuilder.*;
 import static com.leskiewicz.schoolsystem.builders.FacultyBuilder.aFaculty;
 import static com.leskiewicz.schoolsystem.builders.FacultyBuilder.facultyDtoFrom;
-import static com.leskiewicz.schoolsystem.builders.UserBuilder.anUser;
-import static com.leskiewicz.schoolsystem.builders.UserBuilder.userDtoFrom;
+import static com.leskiewicz.schoolsystem.builders.UserBuilder.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
@@ -147,9 +144,9 @@ public class FacultyServiceTest {
 
   @Nested
   public class getFacultyCourses {
-    List<Course> coursesList = List.of(aCourse().build(), aCourse().title("Testing").build());
+    List<Course> coursesList = createCourseList();
     List<CourseDto> courseDtosList =
-        List.of(courseDtoFrom(coursesList.get(0)), courseDtoFrom(coursesList.get(1)));
+        createCourseDtoListFrom(createCourseList());
 
     @Test
     public void returnsPagedCourses() {
@@ -179,10 +176,8 @@ public class FacultyServiceTest {
 
   @Nested
   public class getFacultyDegrees {
-    List<Degree> degreesList =
-        List.of(aDegree().build(), aDegree().fieldOfStudy("Testing").build());
-    List<DegreeDto> degreeDtosList =
-        List.of(degreeDtoFrom(degreesList.get(0)), degreeDtoFrom(degreesList.get(1)));
+    List<Degree> degreesList = createDegreeList();
+    List<DegreeDto> degreeDtosList = createDegreeDtoListFrom(degreesList);
 
     @Test
     public void returnsPagedDegrees() {
@@ -212,12 +207,8 @@ public class FacultyServiceTest {
 
   @Nested
   public class getFacultyUsers {
-    List<User> usersList =
-        List.of(
-            anUser().build(),
-            anUser().firstName("Testing").lastName("Tester").email("testemail@test.pl").build());
-    List<UserDto> usersDtosList =
-        List.of(userDtoFrom(usersList.get(0)), userDtoFrom(usersList.get(1)));
+    List<User> usersList = createUserList();
+    List<UserDto> usersDtosList = createUserDtoListFrom(usersList);
 
     @Test
     public void returnsPagedUsers() {

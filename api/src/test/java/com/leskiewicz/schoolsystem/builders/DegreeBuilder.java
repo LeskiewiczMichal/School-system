@@ -36,6 +36,14 @@ public class DegreeBuilder {
     return degreeMapper.convertToDto(degree);
   }
 
+  public static List<Degree> createDegreeList() {
+    return List.of(aDegree().build(), aDegree().title(DegreeTitle.DOCTOR).fieldOfStudy("Testing").build());
+  }
+
+  public static List<DegreeDto> createDegreeDtoListFrom(List<Degree> degrees) {
+    return List.of(degreeDtoFrom(degrees.get(0)), degreeDtoFrom(degrees.get(1)));
+  }
+
   public DegreeBuilder id(Long id) {
     this.id = id;
     return this;

@@ -40,8 +40,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.List;
 
 import static com.leskiewicz.schoolsystem.builders.CourseBuilder.*;
-import static com.leskiewicz.schoolsystem.builders.DegreeBuilder.aDegree;
-import static com.leskiewicz.schoolsystem.builders.DegreeBuilder.degreeDtoFrom;
+import static com.leskiewicz.schoolsystem.builders.DegreeBuilder.*;
 import static com.leskiewicz.schoolsystem.builders.TeacherDetailsBuilder.aTeacherDetails;
 import static com.leskiewicz.schoolsystem.builders.UserBuilder.*;
 import static org.mockito.BDDMockito.given;
@@ -181,10 +180,7 @@ public class FacultyControllerTest {
 
   @Test
   public void getFacultyDegrees() {
-    List<DegreeDto> degreeDtoList =
-        List.of(
-            degreeDtoFrom(aDegree().build()),
-            degreeDtoFrom(aDegree().fieldOfStudy("Testing").build()));
+    List<DegreeDto> degreeDtoList = createDegreeDtoListFrom(createDegreeList());
     Page<DegreeDto> degreeDtosPage = new PageImpl<>(degreeDtoList);
     PagedModel<EntityModel<DegreeDto>> pagedModel = Mockito.mock(PagedModel.class);
 
@@ -226,7 +222,7 @@ public class FacultyControllerTest {
     Page<UserDto> studentsDtosPage = new PageImpl<>(studentsDtosList);
     PagedModel<EntityModel<UserDto>> pagedModel = Mockito.mock(PagedModel.class);
 
-    when(facultyService.getFacultyUsers(1L, new PageableRequest().toPageable(), Role.ROLE_TEACHER))
+    when(facultyService.getFacultyUsers(1L, new PageableRequest().toPageable(), Role.ROLE_STUDENT))
         .thenReturn(studentsDtosPage);
     when(userDtoAssembler.toModel(any(UserDto.class)))
         .thenReturn(studentsDtosList.get(0), studentsDtosList.get(1));
