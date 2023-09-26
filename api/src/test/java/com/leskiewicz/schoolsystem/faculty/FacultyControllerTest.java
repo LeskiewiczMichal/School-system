@@ -17,6 +17,7 @@ import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.utils.UserDtoAssembler;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -35,6 +36,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.List;
 
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static com.leskiewicz.schoolsystem.builders.FacultyBuilder.aFaculty;
 import static com.leskiewicz.schoolsystem.builders.FacultyBuilder.facultyDtoFrom;
@@ -134,14 +136,37 @@ public class FacultyControllerTest {
     Assertions.assertEquals(HttpStatus.OK, result.getStatusCode());
   }
 
-  @Test
-  public void patchFaculty() {
-    CommonTests.controllerPatchEntity(
-        FacultyDto.class,
-        PatchFacultyRequest.class,
-        facultyService::updateFaculty,
-        facultyDtoAssembler::toModel,
-        facultyController::updateFaculty);
+  @Nested
+  public class patchFaculty {
+    PatchFacultyRequest request = Mockito.mock(PatchFacultyRequest.class);
+
+    @Test
+    public void returnsFacultyDto() {
+      FacultyDto facultyDto = setUpPatchFaculty();
+
+      ResponseEntity<FacultyDto> response = facultyController.updateFaculty(request, facultyDto.getId());
+
+      Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+      Assertions.assertEquals(facultyDto, response.getBody());
+    }
+
+    @Test
+    public void callsUpdateFaculty() {
+        FacultyDto facultyDto = setUpPatchFaculty();
+        Long id = facultyDto.getId();
+
+        facultyController.updateFaculty(request, id);
+
+        verify(facultyService).updateFaculty(request, id);
+    }
+
+    private FacultyDto setUpPatchFaculty() {
+      FacultyDto facultyDto = facultyDtoFrom(aFaculty().build());
+      when(facultyService.updateFaculty(request, facultyDto.getId())).thenReturn(facultyDto);
+      when(facultyDtoAssembler.toModel(any(FacultyDto.class))).thenReturn(facultyDto);
+
+      return facultyDto;
+    }
   }
 
   @Test

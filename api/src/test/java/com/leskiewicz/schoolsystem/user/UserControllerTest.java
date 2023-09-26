@@ -123,7 +123,7 @@ public class UserControllerTest {
   }
 
   @Test
-  public void getFacultyByIdReturnsFormattedResponse() {
+  public void getUserByIdReturnsFormattedResponse() {
     UserDto userDto = userDtoFrom(anUser().build());
 
     when(userService.getById(userDto.getId())).thenReturn(userDto);
@@ -197,8 +197,8 @@ public class UserControllerTest {
     Long id = userDto.getId();
     PatchUserRequest request = Mockito.mock(PatchUserRequest.class);
 
-    given(userService.updateUser(request, id)).willReturn(userDto);
-    given(userDtoAssembler.toModel(any(UserDto.class))).willReturn(userDto);
+    when(userService.updateUser(request, id)).thenReturn(userDto);
+    when(userDtoAssembler.toModel(any(UserDto.class))).thenReturn(userDto);
 
     ResponseEntity<UserDto> response = userController.patchUser(request, id);
 
