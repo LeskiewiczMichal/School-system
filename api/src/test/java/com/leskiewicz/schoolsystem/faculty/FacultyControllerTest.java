@@ -224,8 +224,8 @@ public class FacultyControllerTest {
 
     when(facultyService.getFacultyUsers(1L, new PageableRequest().toPageable(), Role.ROLE_STUDENT))
         .thenReturn(studentsDtosPage);
-    when(userDtoAssembler.toModel(any(UserDto.class)))
-        .thenReturn(studentsDtosList.get(0), studentsDtosList.get(1));
+    when(userDtoAssembler.mapPageToModel(any(Page.class)))
+        .thenReturn(studentsDtosPage);
     when(userPagedResourcesAssembler.toModel(any(Page.class))).thenReturn(pagedModel);
 
     ResponseEntity<RepresentationModel<UserDto>> response =
@@ -243,8 +243,7 @@ public class FacultyControllerTest {
 
     when(facultyService.getFacultyUsers(1L, new PageableRequest().toPageable(), Role.ROLE_TEACHER))
         .thenReturn(teachersDtosPage);
-    when(userDtoAssembler.toModel(any(UserDto.class)))
-        .thenReturn(teachersDtosList.get(0), teachersDtosList.get(1));
+    when(userDtoAssembler.mapPageToModel(any(Page.class))).thenReturn(teachersDtosPage);
     when(userPagedResourcesAssembler.toModel(any(Page.class))).thenReturn(pagedModel);
 
     ResponseEntity<RepresentationModel<UserDto>> response =

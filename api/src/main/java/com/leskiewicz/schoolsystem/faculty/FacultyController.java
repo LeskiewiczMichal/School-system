@@ -146,7 +146,7 @@ public class FacultyController {
       @PathVariable Long id, @ModelAttribute PageableRequest request) {
     Page<UserDto> users =
         facultyService.getFacultyUsers(id, request.toPageable(), Role.ROLE_STUDENT);
-    users = users.map(userDtoAssembler::toModel);
+    users = userDtoAssembler.mapPageToModel(users);
 
     return ResponseEntity.ok(
         HalModelBuilder.halModelOf(userPagedResourcesAssembler.toModel(users)).build());
@@ -167,7 +167,7 @@ public class FacultyController {
       @PathVariable Long id, @ModelAttribute PageableRequest request) {
     Page<UserDto> users =
         facultyService.getFacultyUsers(id, request.toPageable(), Role.ROLE_TEACHER);
-    users = users.map(userDtoAssembler::toModel);
+    users = userDtoAssembler.mapPageToModel(users);
 
     return ResponseEntity.ok(
         HalModelBuilder.halModelOf(userPagedResourcesAssembler.toModel(users)).build());

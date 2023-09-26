@@ -1,18 +1,15 @@
 package com.leskiewicz.schoolsystem.user;
 
+import static com.leskiewicz.schoolsystem.builders.CourseBuilder.*;
+import static com.leskiewicz.schoolsystem.builders.DegreeBuilder.aDegree;
+import static com.leskiewicz.schoolsystem.builders.FacultyBuilder.aFaculty;
+import static com.leskiewicz.schoolsystem.builders.TeacherDetailsBuilder.aTeacherDetails;
 import static com.leskiewicz.schoolsystem.builders.UserBuilder.anUser;
 import static com.leskiewicz.schoolsystem.builders.UserBuilder.userDtoFrom;
-import static com.leskiewicz.schoolsystem.builders.TeacherDetailsBuilder.aTeacherDetails;
-import static com.leskiewicz.schoolsystem.builders.CourseBuilder.courseDtoFrom;
-import static com.leskiewicz.schoolsystem.builders.CourseBuilder.aCourse;
-import static com.leskiewicz.schoolsystem.builders.FacultyBuilder.aFaculty;
-import static com.leskiewicz.schoolsystem.builders.DegreeBuilder.aDegree;
-import static net.bytebuddy.matcher.ElementMatchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -28,8 +25,6 @@ import com.leskiewicz.schoolsystem.dto.request.PageableRequest;
 import com.leskiewicz.schoolsystem.error.DefaultExceptionHandler;
 import com.leskiewicz.schoolsystem.error.ErrorMessages;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
-import com.leskiewicz.schoolsystem.generic.CommonTests;
-import com.leskiewicz.schoolsystem.testUtils.TestHelper;
 import com.leskiewicz.schoolsystem.user.dto.PatchUserRequest;
 import com.leskiewicz.schoolsystem.user.dto.UserDto;
 import com.leskiewicz.schoolsystem.user.teacherdetails.PatchTeacherDetailsRequest;
@@ -37,6 +32,7 @@ import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetails;
 import com.leskiewicz.schoolsystem.user.teacherdetails.TeacherDetailsModelAssembler;
 import com.leskiewicz.schoolsystem.user.utils.UserDtoAssembler;
 import jakarta.persistence.EntityNotFoundException;
+import java.util.List;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -47,7 +43,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
@@ -58,15 +53,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.xml.transform.Result;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @ExtendWith(MockitoExtension.class)
 public class UserControllerTest {
@@ -210,8 +199,7 @@ public class UserControllerTest {
   @Test
   public void getUserCoursesReturnsProperResponse() {
     PageableRequest request = new PageableRequest();
-    List<CourseDto> courseDtosList =
-        List.of(courseDtoFrom(aCourse().build()), courseDtoFrom(aCourse().build()));
+    List<CourseDto> courseDtosList = createCourseDtoListFrom(createCourseList());
     Page<CourseDto> courseDtosPage = new PageImpl<>(courseDtosList);
     PagedModel<EntityModel<CourseDto>> pagedModel = Mockito.mock(PagedModel.class);
 
