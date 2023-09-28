@@ -209,6 +209,7 @@ public class FacultyController {
     Page<CourseDto> courses = facultyService.getFacultyCourses(id, request.toPageable());
     courses = courses.map(courseDtoAssembler::toModel);
 
+
     return ResponseEntity.ok(
         HalModelBuilder.halModelOf(coursePagedResourcesAssembler.toModel(courses)).build());
   }

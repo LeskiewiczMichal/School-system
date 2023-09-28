@@ -58,7 +58,7 @@ public class DegreeServiceImpl implements DegreeService {
   @Override
   public Page<DegreeDto> getDegrees(Pageable pageable) {
     Page<Degree> degrees = degreeRepository.findAll(pageable);
-    return degrees.map(degreeMapper::convertToDto);
+    return degreeMapper.mapPageToDto(degrees);
   }
 
   @Override
