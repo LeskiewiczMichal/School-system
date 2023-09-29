@@ -1,5 +1,7 @@
 package com.leskiewicz.schoolsystem.degree;
 
+import static com.leskiewicz.schoolsystem.builders.DegreeBuilder.createDegreeDtoListFrom;
+import static com.leskiewicz.schoolsystem.builders.DegreeBuilder.createDegreeList;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
@@ -21,6 +23,7 @@ import java.util.List;
 
 import com.leskiewicz.schoolsystem.utils.Language;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,8 +34,11 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -40,6 +46,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @ExtendWith(MockitoExtension.class)
 public class DegreeControllerTest {
+  private final static String DEGREES_ENDPOINT = "/api/degrees";
 
   private DegreeService degreeService;
 
@@ -78,14 +85,23 @@ public class DegreeControllerTest {
             .build();
   }
 
+  List<Degree> degreeList = createDegreeList();
+  List<DegreeDto> degreeDtoList = createDegreeDtoListFrom(degreeList);
+  Page<Degree> degreePage = new PageImpl<>(degreeList);
+    Page<DegreeDto> degreeDtoPage = new PageImpl<>(degreeDtoList);
+    PagedModel<DegreeDto> degreePagedModel = PagedModel.of(degreeDtoList, new PagedModel.PageMetadata(1, 1, 1, 1));
+
   @Test
-  public void getDegrees() {
-    CommonTests.controllerGetEntities(
-        DegreeDto.class,
-        degreePagedResourcesAssembler,
-        degreeService::getDegrees,
-        degreeDtoAssembler::toModel,
-        degreeController::getDegrees);
+  public void getDegreesReturnsFormattedResponse() throws Exception {
+    when(degreeService.getDegrees(new PageableRequest().toPageable())).thenReturn(degreeDtoPage);
+    when(degreeDtoAssembler.mapPageToModel(any(Page.class))).thenReturn(degreeDtoPage);
+    when(degreePagedResourcesAssembler.toModel(any(Page.class))).thenReturn(degreePagedModel);
+
+    mvc.perform(get(DEGREES_ENDPOINT).accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.page").exists())
+            .andExpect(jsonPath("$.links").isArray())
+            .andReturn();
   }
 
   @Test

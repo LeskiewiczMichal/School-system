@@ -85,7 +85,7 @@ public class DegreeController {
   public ResponseEntity<RepresentationModel<DegreeDto>> getDegrees(
       @ModelAttribute PageableRequest request) {
     Page<DegreeDto> degrees = degreeService.getDegrees(request.toPageable());
-    degrees = degrees.map(degreeDtoAssembler::toModel);
+    degrees = degreeDtoAssembler.mapPageToModel(degrees);
 
     Link selfLink =
         linkTo(methodOn(this.getClass()).getDegrees(null))

@@ -4,6 +4,7 @@ import com.leskiewicz.schoolsystem.degree.Degree;
 import com.leskiewicz.schoolsystem.degree.DegreeController;
 import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
 import com.leskiewicz.schoolsystem.faculty.FacultyController;
+import org.springframework.data.domain.Page;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
@@ -37,5 +38,10 @@ public class DegreeDtoAssembler extends RepresentationModelAssemblerSupport<Degr
     degree.add(coursesLink);
 
     return degree;
+  }
+
+  public Page<DegreeDto> mapPageToModel(Page<DegreeDto> degrees) {
+    degrees.forEach(this::toModel);
+    return degrees;
   }
 }
