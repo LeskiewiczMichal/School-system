@@ -45,15 +45,11 @@ public class DegreeServiceImpl implements DegreeService {
   private final CourseMapper courseMapper;
 
   private final Support support;
-  
+
   @Override
   public DegreeDto getById(Long id) {
-    return degreeMapper.convertToDto(
-        degreeRepository
-            .findById(id)
-            .orElseThrow(
-                () ->
-                    new EntityNotFoundException(ErrorMessages.objectWithIdNotFound("Degree", id))));
+    Degree degree = retrieveDegreeFromRepository(id);
+    return degreeMapper.convertToDto(degree);
   }
 
   @Override
@@ -97,21 +93,9 @@ public class DegreeServiceImpl implements DegreeService {
 
   @Override
   public void addImage(Long degreeId, MultipartFile image) {
-    Degree degree =
-        degreeRepository
-            .findById(degreeId)
-            .orElseThrow(
-                () ->
-                    new EntityNotFoundException(
-                        ErrorMessages.objectWithIdNotFound("Degree", degreeId)));
-
-    // Handle the image if available
-    if (image != null) {
-      String filename = fileService.uploadImage(image);
-      degree.setImageName(filename);
-    } else {
-      throw new IllegalArgumentException("Image cannot be null");
-    }
+    Degree degree = retrieveDegreeFromRepository(degreeId);
+    String filename = fileService.uploadImage(image);
+    degree.setImageName(filename);
 
     degreeRepository.save(degree);
   }
@@ -159,5 +143,13 @@ public class DegreeServiceImpl implements DegreeService {
     if (!degreeRepository.existsById(degreeId)) {
       throw new EntityNotFoundException(ErrorMessages.objectWithIdNotFound("Degree", degreeId));
     }
+  }
+
+  private Degree retrieveDegreeFromRepository(Long degreeId) {
+    return degreeRepository
+            .findById(degreeId)
+            .orElseThrow(
+                () ->
+                    new EntityNotFoundException(ErrorMessages.objectWithIdNotFound("Degree", degreeId)));
   }
 }

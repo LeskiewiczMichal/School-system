@@ -256,14 +256,6 @@ public class DegreeServiceTest {
     }
 
     @Test
-    public void throwsExceptionsWhenImageIsNull() {
-      when(degreeRepository.findById(any(Long.class))).thenReturn(Optional.of(degree));
-
-        Assertions.assertThrows(
-            IllegalArgumentException.class, () -> degreeService.addImage(1L, null));
-    }
-
-    @Test
     public void throwsExceptionWhenDegreeDoesNotExist() {
       when(degreeRepository.findById(any(Long.class))).thenReturn(Optional.empty());
 
