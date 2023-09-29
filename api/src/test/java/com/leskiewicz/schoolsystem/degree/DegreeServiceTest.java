@@ -10,6 +10,7 @@ import com.leskiewicz.schoolsystem.degree.utils.DegreeMapper;
 import com.leskiewicz.schoolsystem.error.customexception.EntityAlreadyExistsException;
 import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.FacultyService;
+import com.leskiewicz.schoolsystem.files.FileService;
 import com.leskiewicz.schoolsystem.utils.Language;
 import io.jsonwebtoken.lang.Assert;
 import jakarta.persistence.EntityNotFoundException;
@@ -24,10 +25,12 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -49,6 +52,7 @@ public class DegreeServiceTest {
   @Mock private DegreeRepository degreeRepository;
   @Mock private CourseRepository courseRepository;
   @Mock private FacultyService facultyService;
+  @Mock private FileService fileService;
   @Mock private DegreeMapper degreeMapper;
   @Mock private CourseMapper courseMapper;
   @InjectMocks private DegreeServiceImpl degreeService;
@@ -176,13 +180,12 @@ public class DegreeServiceTest {
 
     @Test
     public void throwsEntityAlreadyExistsExceptionWhenDegreeAlreadyExists() {
-      when(
-              degreeRepository.findByFacultyNameAndTitleAndFieldOfStudy(
-                      any(String.class), any(DegreeTitle.class), any(String.class)))
-              .thenReturn(Optional.of(degree));
+      when(degreeRepository.findByFacultyNameAndTitleAndFieldOfStudy(
+              any(String.class), any(DegreeTitle.class), any(String.class)))
+          .thenReturn(Optional.of(degree));
 
       Assertions.assertThrows(
-              EntityAlreadyExistsException.class, () -> degreeService.createDegree(request));
+          EntityAlreadyExistsException.class, () -> degreeService.createDegree(request));
     }
 
     @ParameterizedTest
@@ -234,5 +237,35 @@ public class DegreeServiceTest {
       when(degreeMapper.convertToDto(any(Degree.class))).thenReturn(degreeDtosList.get(0));
     }
   }
-  
+
+  @Nested
+  public class addImage {
+    @Test
+    public void savesDegreeAndCallsUploadImage() {
+      MultipartFile file = Mockito.mock(MultipartFile.class);
+
+      when(degreeRepository.findById(any(Long.class))).thenReturn(Optional.of(degree));
+
+      degreeService.addImage(1L, file);
+
+      verify(degreeRepository).save(any(Degree.class));
+      verify(fileService).uploadImage(any(MultipartFile.class));
+    }
+
+    @Test
+    public void throwsExceptionsWhenImageIsNull() {
+      when(degreeRepository.findById(any(Long.class))).thenReturn(Optional.of(degree));
+
+        Assertions.assertThrows(
+            IllegalArgumentException.class, () -> degreeService.addImage(1L, null));
+    }
+
+    @Test
+    public void throwsExceptionWhenDegreeDoesNotExist() {
+      when(degreeRepository.findById(any(Long.class))).thenReturn(Optional.empty());
+
+        Assertions.assertThrows(
+            EntityNotFoundException.class, () -> degreeService.addImage(1L, null));
+    }
+  }
 }
