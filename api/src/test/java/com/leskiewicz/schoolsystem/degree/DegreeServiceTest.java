@@ -12,6 +12,7 @@ import com.leskiewicz.schoolsystem.faculty.Faculty;
 import com.leskiewicz.schoolsystem.faculty.FacultyService;
 import com.leskiewicz.schoolsystem.files.FileService;
 import com.leskiewicz.schoolsystem.utils.Language;
+import com.leskiewicz.schoolsystem.utils.Support;
 import io.jsonwebtoken.lang.Assert;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
@@ -55,6 +56,7 @@ public class DegreeServiceTest {
   @Mock private FileService fileService;
   @Mock private DegreeMapper degreeMapper;
   @Mock private CourseMapper courseMapper;
+  @Mock private Support support;
   @InjectMocks private DegreeServiceImpl degreeService;
 
   List<Degree> degreesList = createDegreeList();
@@ -233,6 +235,7 @@ public class DegreeServiceTest {
       when(degreeRepository.findByFacultyNameAndTitleAndFieldOfStudy(
               any(String.class), any(DegreeTitle.class), any(String.class)))
           .thenReturn(Optional.empty());
+      when(degreeRepository.save(any(Degree.class))).thenReturn(degree);
       when(facultyService.getByName(any(String.class))).thenReturn(faculty);
       when(degreeMapper.convertToDto(any(Degree.class))).thenReturn(degreeDtosList.get(0));
     }

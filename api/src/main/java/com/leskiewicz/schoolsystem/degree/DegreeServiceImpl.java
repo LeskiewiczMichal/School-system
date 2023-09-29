@@ -18,6 +18,7 @@ import com.leskiewicz.schoolsystem.user.utils.UserMapper;
 import com.leskiewicz.schoolsystem.utils.Mapper;
 import com.leskiewicz.schoolsystem.utils.StringUtils;
 import com.leskiewicz.schoolsystem.authentication.utils.ValidationUtils;
+import com.leskiewicz.schoolsystem.utils.Support;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -43,8 +44,8 @@ public class DegreeServiceImpl implements DegreeService {
   private final DegreeMapper degreeMapper;
   private final CourseMapper courseMapper;
 
-  private final Logger logger = LoggerFactory.getLogger(DegreeServiceImpl.class);
-
+  private final Support support;
+  
   @Override
   public DegreeDto getById(Long id) {
     return degreeMapper.convertToDto(
@@ -68,40 +69,11 @@ public class DegreeServiceImpl implements DegreeService {
 
   @Override
   public DegreeDto createDegree(CreateDegreeRequest request) {
-    // If the same degree already exist, throws error
-    if (degreeRepository
-        .findByFacultyNameAndTitleAndFieldOfStudy(
-            request.facultyName(), request.title(), request.fieldOfStudy())
-        .isPresent()) {
-      throw new EntityAlreadyExistsException(
-          ErrorMessages.objectWithPropertyAlreadyExists(
-              "Degree",
-              "title",
-              request.title()
-                  + " in "
-                  + request.fieldOfStudy()
-                  + " on faculty: "
-                  + request.facultyName()));
-    }
-
-    // Retrieves faculty from database
-    Faculty faculty = facultyService.getByName(request.facultyName());
-
-    // Creates degree
-    Degree degree =
-        Degree.builder()
-            .title(request.title())
-            .fieldOfStudy(StringUtils.capitalizeFirstLetterOfEveryWord(request.fieldOfStudy()))
-            .faculty(faculty)
-            .description(request.description())
-            .language(request.languages())
-            .tuitionFeePerYear(request.tuitionFeePerYear())
-            .lengthOfStudy(request.lengthOfStudy())
-            .build();
-
+    checkIfIdenticalDegreeExists(request);
+    Degree degree = buildDegree(request);
     ValidationUtils.validate(degree);
-    degreeRepository.save(degree);
-    logger.info("Created degree: {}", degree);
+    degree = degreeRepository.save(degree);
+    support.notifyCreated("Degree", degree.getId());
 
     return degreeMapper.convertToDto(degree);
   }
@@ -142,6 +114,45 @@ public class DegreeServiceImpl implements DegreeService {
     }
 
     degreeRepository.save(degree);
+  }
+
+  private void checkIfIdenticalDegreeExists(CreateDegreeRequest request) {
+    String fieldOfStudy = request.fieldOfStudy();
+    DegreeTitle title = request.title();
+    String facultyName = request.facultyName();
+
+    if (degreeWithNameTitleAndFieldOfStudyExists(facultyName, title, fieldOfStudy)) {
+      throw new EntityAlreadyExistsException(
+          ErrorMessages.objectWithPropertyAlreadyExists(
+              "Degree",
+              "title",
+              request.title()
+                  + " in "
+                  + request.fieldOfStudy()
+                  + " on faculty: "
+                  + request.facultyName()));
+    }
+  }
+
+  private boolean degreeWithNameTitleAndFieldOfStudyExists(
+      String name, DegreeTitle title, String fieldOfStudy) {
+    return degreeRepository
+        .findByFacultyNameAndTitleAndFieldOfStudy(name, title, fieldOfStudy)
+        .isPresent();
+  }
+
+  private Degree buildDegree(CreateDegreeRequest request) {
+    Faculty faculty = facultyService.getByName(request.facultyName());
+
+    return Degree.builder()
+              .title(request.title())
+              .fieldOfStudy(StringUtils.capitalizeFirstLetterOfEveryWord(request.fieldOfStudy()))
+              .faculty(faculty)
+              .description(request.description())
+              .language(request.languages())
+              .tuitionFeePerYear(request.tuitionFeePerYear())
+              .lengthOfStudy(request.lengthOfStudy())
+              .build();
   }
 
   private void degreeExistsCheck(Long degreeId) {
