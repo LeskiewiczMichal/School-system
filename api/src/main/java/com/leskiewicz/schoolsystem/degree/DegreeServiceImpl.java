@@ -110,7 +110,7 @@ public class DegreeServiceImpl implements DegreeService {
   public Page<CourseDto> getDegreeCourses(Long degreeId, Pageable pageable) {
     degreeExistsCheck(degreeId);
     Page<Course> courses = courseRepository.findCoursesByDegreeId(degreeId, pageable);
-    return courses.map(courseMapper::convertToDto);
+    return courseMapper.mapPageToDto(courses);
   }
 
   @Override
@@ -119,7 +119,8 @@ public class DegreeServiceImpl implements DegreeService {
     Page<Degree> degrees =
         degreeRepository.searchByFacultyNameAndTitleAndFieldOfStudy(
             fieldOfStudy, facultyId, title, pageable);
-    return degrees.map(degreeMapper::convertToDto);
+
+    return degreeMapper.mapPageToDto(degrees);
   }
 
   @Override
