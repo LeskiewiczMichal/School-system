@@ -40,7 +40,6 @@ public class DegreeServiceImpl implements DegreeService {
   private final FileService fileService;
 
   // Mappers
-  private final Mapper<User, UserDto> userMapper;
   private final DegreeMapper degreeMapper;
   private final CourseMapper courseMapper;
 

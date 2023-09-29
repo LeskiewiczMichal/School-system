@@ -1,5 +1,14 @@
 package com.leskiewicz.schoolsystem.degree;
 
+import static com.leskiewicz.schoolsystem.builders.CourseBuilder.createCourseDtoListFrom;
+import static com.leskiewicz.schoolsystem.builders.CourseBuilder.createCourseList;
+import static com.leskiewicz.schoolsystem.builders.DegreeBuilder.createDegreeDtoListFrom;
+import static com.leskiewicz.schoolsystem.builders.DegreeBuilder.createDegreeList;
+import static com.leskiewicz.schoolsystem.builders.FacultyBuilder.aFaculty;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import com.leskiewicz.schoolsystem.course.Course;
 import com.leskiewicz.schoolsystem.course.CourseRepository;
 import com.leskiewicz.schoolsystem.course.dto.CourseDto;
@@ -16,8 +25,10 @@ import com.leskiewicz.schoolsystem.utils.Support;
 import io.jsonwebtoken.lang.Assert;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,20 +43,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
-
-import static com.leskiewicz.schoolsystem.builders.CourseBuilder.createCourseDtoListFrom;
-import static com.leskiewicz.schoolsystem.builders.CourseBuilder.createCourseList;
-import static com.leskiewicz.schoolsystem.builders.DegreeBuilder.createDegreeDtoListFrom;
-import static com.leskiewicz.schoolsystem.builders.DegreeBuilder.createDegreeList;
-import static com.leskiewicz.schoolsystem.builders.FacultyBuilder.aFaculty;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(MockitoExtension.class)
 public class DegreeServiceTest {
@@ -172,12 +169,13 @@ public class DegreeServiceTest {
     }
 
     @Test
-    public void savesCreatedDegree() {
+    public void savesCreatedDegreeAndNotifies() {
       setUpSuccessfulTest();
 
       degreeService.createDegree(request);
 
       verify(degreeRepository).save(any(Degree.class));
+      verify(support).notifyCreated(any(String.class), any(Long.class));
     }
 
     @Test
@@ -259,8 +257,8 @@ public class DegreeServiceTest {
     public void throwsExceptionWhenDegreeDoesNotExist() {
       when(degreeRepository.findById(any(Long.class))).thenReturn(Optional.empty());
 
-        Assertions.assertThrows(
-            EntityNotFoundException.class, () -> degreeService.addImage(1L, null));
+      Assertions.assertThrows(
+          EntityNotFoundException.class, () -> degreeService.addImage(1L, null));
     }
   }
 }
