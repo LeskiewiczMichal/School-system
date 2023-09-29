@@ -71,32 +71,32 @@ public class DegreeServiceImpl implements DegreeService {
     // If the same degree already exist, throws error
     if (degreeRepository
         .findByFacultyNameAndTitleAndFieldOfStudy(
-            request.getFacultyName(), request.getTitle(), request.getFieldOfStudy())
+            request.facultyName(), request.title(), request.fieldOfStudy())
         .isPresent()) {
       throw new EntityAlreadyExistsException(
           ErrorMessages.objectWithPropertyAlreadyExists(
               "Degree",
               "title",
-              request.getTitle()
+              request.title()
                   + " in "
-                  + request.getFieldOfStudy()
+                  + request.fieldOfStudy()
                   + " on faculty: "
-                  + request.getFacultyName()));
+                  + request.facultyName()));
     }
 
     // Retrieves faculty from database
-    Faculty faculty = facultyService.getByName(request.getFacultyName());
+    Faculty faculty = facultyService.getByName(request.facultyName());
 
     // Creates degree
     Degree degree =
         Degree.builder()
-            .title(request.getTitle())
-            .fieldOfStudy(StringUtils.capitalizeFirstLetterOfEveryWord(request.getFieldOfStudy()))
+            .title(request.title())
+            .fieldOfStudy(StringUtils.capitalizeFirstLetterOfEveryWord(request.fieldOfStudy()))
             .faculty(faculty)
-            .description(request.getDescription())
-            .language(request.getLanguages())
-            .tuitionFeePerYear(request.getTuitionFeePerYear())
-            .lengthOfStudy(request.getLengthOfStudy())
+            .description(request.description())
+            .language(request.languages())
+            .tuitionFeePerYear(request.tuitionFeePerYear())
+            .lengthOfStudy(request.lengthOfStudy())
             .build();
 
     ValidationUtils.validate(degree);

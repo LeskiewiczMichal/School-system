@@ -9,29 +9,27 @@ import lombok.Getter;
 
 import java.util.List;
 
-@Getter
-@AllArgsConstructor
 @Builder
-public class CreateDegreeRequest {
+public record CreateDegreeRequest (
 
   @NotNull(message = "Degree title required")
-  private final DegreeTitle title;
+  DegreeTitle title,
 
   @NotNull(message = "Degree field of study required")
-  private final String fieldOfStudy;
+  String fieldOfStudy,
 
   @NotNull(message = "Faculty name required")
-  private final String facultyName;
+   String facultyName,
 
   @NotNull(message = "Degree description required")
-  private final String description;
+  String description,
 
   @NotNull(message = "Degree length of study required")
-  private final Double lengthOfStudy;
+  Double lengthOfStudy,
 
   @NotNull(message = "Degree tuition fee per year required")
-  private final Double tuitionFeePerYear;
+  Double tuitionFeePerYear,
 
   @NotNull(message = "Degree languages required")
-  private final List<Language> languages;
-}
+   List<Language> languages
+) {}

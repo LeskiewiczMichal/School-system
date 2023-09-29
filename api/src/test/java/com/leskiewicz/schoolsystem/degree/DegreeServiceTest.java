@@ -4,8 +4,13 @@ import com.leskiewicz.schoolsystem.course.Course;
 import com.leskiewicz.schoolsystem.course.CourseRepository;
 import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.course.utils.CourseMapper;
+import com.leskiewicz.schoolsystem.degree.dto.CreateDegreeRequest;
 import com.leskiewicz.schoolsystem.degree.dto.DegreeDto;
 import com.leskiewicz.schoolsystem.degree.utils.DegreeMapper;
+import com.leskiewicz.schoolsystem.faculty.Faculty;
+import com.leskiewicz.schoolsystem.faculty.FacultyService;
+import com.leskiewicz.schoolsystem.utils.Language;
+import io.jsonwebtoken.lang.Assert;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,6 +31,7 @@ import static com.leskiewicz.schoolsystem.builders.CourseBuilder.createCourseDto
 import static com.leskiewicz.schoolsystem.builders.CourseBuilder.createCourseList;
 import static com.leskiewicz.schoolsystem.builders.DegreeBuilder.createDegreeDtoListFrom;
 import static com.leskiewicz.schoolsystem.builders.DegreeBuilder.createDegreeList;
+import static com.leskiewicz.schoolsystem.builders.FacultyBuilder.aFaculty;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.any;
@@ -35,6 +41,7 @@ public class DegreeServiceTest {
 
     @Mock private DegreeRepository degreeRepository;
     @Mock private CourseRepository courseRepository;
+    @Mock private FacultyService facultyService;
     @Mock private DegreeMapper degreeMapper;
     @Mock private CourseMapper courseMapper;
     @InjectMocks private DegreeServiceImpl degreeService;
@@ -123,5 +130,32 @@ public class DegreeServiceTest {
         degreeDtosList.get(1).getFieldOfStudy(), result.getContent().get(1).getFieldOfStudy());
     }
 
+    @Nested
+    public class createDegree {
+        @Test
+        public void returnsCreatedDegreeDto() {
+            Faculty faculty = aFaculty().build();
+            CreateDegreeRequest request =
+                    CreateDegreeRequest.builder()
+                            .facultyName("Informatics")
+                            .title(DegreeTitle.BACHELOR)
+                            .fieldOfStudy("Computer Science")
+                            .description("This is description")
+                            .languages(List.of(Language.ENGLISH))
+                            .lengthOfStudy(3.0)
+                            .tuitionFeePerYear(15000.00)
+                            .build();
+
+            when(degreeRepository.findByFacultyNameAndTitleAndFieldOfStudy(any(String.class), any(DegreeTitle.class), any(String.class)))
+                    .thenReturn(Optional.empty());
+            when(facultyService.getByName(any(String.class))).thenReturn(faculty);
+            when(degreeMapper.convertToDto(any(Degree.class))).thenReturn(degreeDtosList.get(0));
+
+            DegreeDto result = degreeService.createDegree(request);
+
+            Assert.notNull(result);
+            Assertions.assertEquals(degreeDtosList.get(0).getFieldOfStudy(), result.getFieldOfStudy());
+        }
+    }
 
 }
