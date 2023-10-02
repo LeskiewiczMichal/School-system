@@ -167,7 +167,7 @@ public class DegreeController {
       @ModelAttribute PageableRequest request) {
     Page<DegreeDto> degrees =
         degreeService.search(fieldOfStudy, facultyId, title, request.toPageable());
-    degrees = degrees.map(degreeDtoAssembler::toModel);
+    degrees = degreeDtoAssembler.mapPageToModel(degrees);
 
     Link selfLink =
         linkTo(

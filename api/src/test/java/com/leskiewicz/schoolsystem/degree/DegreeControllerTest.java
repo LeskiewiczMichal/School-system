@@ -1,14 +1,16 @@
 package com.leskiewicz.schoolsystem.degree;
 
-import static com.leskiewicz.schoolsystem.builders.DegreeBuilder.createDegreeDtoListFrom;
-import static com.leskiewicz.schoolsystem.builders.DegreeBuilder.createDegreeList;
+import static com.leskiewicz.schoolsystem.builders.DegreeBuilder.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.leskiewicz.schoolsystem.course.dto.CourseDto;
 import com.leskiewicz.schoolsystem.course.utils.CourseDtoAssembler;
 import com.leskiewicz.schoolsystem.degree.dto.CreateDegreeRequest;
@@ -37,6 +39,7 @@ import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
@@ -90,6 +93,7 @@ public class DegreeControllerTest {
   Page<Degree> degreePage = new PageImpl<>(degreeList);
     Page<DegreeDto> degreeDtoPage = new PageImpl<>(degreeDtoList);
     PagedModel<DegreeDto> degreePagedModel = PagedModel.of(degreeDtoList, new PagedModel.PageMetadata(1, 1, 1, 1));
+    DegreeDto degreeDto = degreeDtoFrom(aDegree().build());
 
   @Test
   public void getDegreesReturnsFormattedResponse() throws Exception {
@@ -105,34 +109,28 @@ public class DegreeControllerTest {
   }
 
   @Test
-  public void getDegreeById() {
-    DegreeDto degreeDto = TestHelper.createDegreeDto("Faculty");
+  public void getDegreeByIdReturnsFormattedResponse() {
+    when(degreeService.getById(any(Long.class))).thenReturn(degreeDto);
+    when(degreeDtoAssembler.toModel(any(DegreeDto.class))).thenReturn(degreeDto);
 
-    CommonTests.controllerGetEntityById(
-        degreeDto,
-        1L,
-        degreeService::getById,
-        degreeDtoAssembler::toModel,
-        degreeController::getDegreeById);
+    ResponseEntity<DegreeDto> result = degreeController.getDegreeById(1L);
+
+    Assertions.assertEquals(degreeDto, result.getBody());
+    Assertions.assertEquals(HttpStatus.OK, result.getStatusCode());
   }
 
   @Test
   public void searchDegrees() throws Exception {
-    // Prepare test data
-    List<DegreeDto> degreeDto = Arrays.asList(TestHelper.createDegreeDto("Faculty"));
-    Page<DegreeDto> degreePage = new PageImpl<>(degreeDto);
-    PagedModel<DegreeDto> degreePagedModel =
-        PagedModel.of(degreeDto, new PagedModel.PageMetadata(1, 1, 1, 1));
-
-    // Mocks
-    given(
+    when(
             degreeService.search(
                 any(String.class), any(Long.class), any(DegreeTitle.class), any(Pageable.class)))
-        .willReturn(degreePage);
-    given(degreeDtoAssembler.toModel(any(DegreeDto.class))).willReturn(degreeDto.get(0));
-    given(degreePagedResourcesAssembler.toModel(any(Page.class))).willReturn(degreePagedModel);
+        .thenReturn(degreeDtoPage);
+    when(degreeDtoAssembler.mapPageToModel(any(Page.class))).thenReturn(degreeDtoPage);
+    when(degreePagedResourcesAssembler.toModel(any(Page.class))).thenReturn(degreePagedModel);
 
-    // Perform request
+    ResponseEntity<RepresentationModel<DegreeDto>> response = degreeController.searchDegrees(
+        "Computer Science", 101L, DegreeTitle.BACHELOR_OF_SCIENCE, new PageableRequest());
+
     mvc.perform(
             get("/api/degrees/search")
                 .param("fieldOfStudy", "Computer Science")
@@ -146,34 +144,35 @@ public class DegreeControllerTest {
         .andExpect(jsonPath("$.links[1].rel").value("degrees"))
         .andExpect(jsonPath("$.links[2].rel").value("degree"))
         .andReturn();
-
-    // Verify function calls
-    verify(degreeService, times(1))
-        .search(any(String.class), any(Long.class), any(DegreeTitle.class), any(Pageable.class));
-    verify(degreeDtoAssembler, times(1)).toModel(any(DegreeDto.class));
-    verify(degreePagedResourcesAssembler, times(1)).toModel(any(Page.class));
   }
 
   @Test
-  public void createDegree() {
-    DegreeDto degreeDto = TestHelper.createDegreeDto("Faculty");
+  public void createDegreeReturnsFormattedResponse() throws Exception {
+    DegreeDto degreeDto = degreeDtoFrom(aDegree().build());
+    String requestBody = prepareCreateRequest();
 
-    CommonTests.controllerCreateEntity(
-        degreeDto,
-        DegreeDto.class,
-        degreeDto.add(WebMvcLinkBuilder.linkTo(DegreeController.class).withSelfRel()),
-        CreateDegreeRequest.class,
-        new CreateDegreeRequest(
+    when(degreeService.createDegree(any(CreateDegreeRequest.class))).thenReturn(degreeDto);
+    when(degreeDtoAssembler.toModel(any(DegreeDto.class))).thenReturn(degreeDto);
+
+    mvc.perform(post(DEGREES_ENDPOINT).content(requestBody).accept(MediaType.APPLICATION_JSON))
+            .andDo(print())
+            .andExpect(status().isCreated())
+            .andReturn();
+  }
+
+  private String prepareCreateRequest() throws Exception {
+    CreateDegreeRequest request = new CreateDegreeRequest(
             degreeDto.getTitle(),
             degreeDto.getFieldOfStudy(),
             degreeDto.getFaculty(),
             "Description",
             3.0,
             15000.00,
-            List.of(Language.ENGLISH)),
-        degreeService::createDegree,
-        degreeDtoAssembler::toModel,
-        degreeController::createDegree);
+            List.of(Language.ENGLISH));
+
+    ObjectMapper objectMapper = new ObjectMapper();
+    ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
+    return objectWriter.writeValueAsString(request);
   }
 
   @Test
@@ -185,6 +184,8 @@ public class DegreeControllerTest {
         courseDtoAssembler::toModel,
         (PageableRequest request) -> degreeController.getDegreeCourses(1L, request));
   }
+
+
 
   @Test
   public void uploadImage() throws Exception {
