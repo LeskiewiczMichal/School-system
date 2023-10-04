@@ -90,17 +90,10 @@ public class DegreeController {
     Link selfLink =
         linkTo(methodOn(this.getClass()).getDegrees(null))
             .withSelfRel();
-    Link getByIdLink =
-        linkTo(methodOn(this.getClass()).getDegreeById(null))
-            .withRel("degree");
-    Link searchLink =
-        linkTo(
-                methodOn(this.getClass()).searchDegrees(null, null, null, null))
-            .withRel("degrees");
 
     return ResponseEntity.ok(
         HalModelBuilder.halModelOf(degreePagedResourcesAssembler.toModel(degrees))
-            .links(List.of(selfLink, getByIdLink, searchLink))
+            .links(List.of(selfLink, retrieveGetByIdLink(), retrieveSearchLink()))
             .build());
   }
 
@@ -173,16 +166,10 @@ public class DegreeController {
         linkTo(
                 methodOn(this.getClass()).searchDegrees(null, null, null, null))
             .withSelfRel();
-    Link degreesLink =
-        linkTo(methodOn(this.getClass()).getDegrees(null))
-            .withRel("degrees");
-    Link getByIdLink =
-        linkTo(methodOn(this.getClass()).getDegreeById(null))
-            .withRel("degree");
 
     return ResponseEntity.ok(
         HalModelBuilder.halModelOf(degreePagedResourcesAssembler.toModel(degrees))
-            .links(List.of(selfLink, degreesLink, getByIdLink))
+            .links(List.of(selfLink, retrieveGetDegreesLink(), retrieveGetByIdLink()))
             .build());
   }
 
@@ -197,12 +184,28 @@ public class DegreeController {
   public ResponseEntity<MessageModel> updateImage(
       @PathVariable Long id, @RequestParam("file") MultipartFile file) {
     degreeService.addImage(id, file);
-
-    // Create response
-    MessageModel message =
-            new MessageModel(APIResponses.fileUploaded(file.getOriginalFilename()));
-    message.add(linkTo(methodOn(this.getClass()).getDegreeById(id)).withRel("degree"));
+    MessageModel message = createImageUpdatedMessage(id, file);
 
     return ResponseEntity.status(HttpStatus.OK).body(message);
+  }
+
+  private MessageModel createImageUpdatedMessage(Long id, MultipartFile file) {
+    MessageModel message =
+        new MessageModel(APIResponses.fileUploaded(file.getOriginalFilename()));
+    message.add(linkTo(methodOn(this.getClass()).getDegreeById(id)).withRel("degree"));
+
+    return message;
+  }
+
+  private Link retrieveGetDegreesLink() {
+    return linkTo(methodOn(this.getClass()).getDegrees(null)).withRel("degrees");
+  }
+
+  private Link retrieveGetByIdLink() {
+    return linkTo(methodOn(this.getClass()).getDegreeById(null)).withRel("degree");
+  }
+
+  private Link retrieveSearchLink() {
+    return linkTo(methodOn(this.getClass()).searchDegrees(null, null, null, null)).withRel("degrees");
   }
 }
