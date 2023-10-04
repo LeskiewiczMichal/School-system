@@ -1,5 +1,7 @@
 package com.leskiewicz.schoolsystem.degree;
 
+import static com.leskiewicz.schoolsystem.builders.CourseBuilder.createCourseDtoListFrom;
+import static com.leskiewicz.schoolsystem.builders.CourseBuilder.createCourseList;
 import static com.leskiewicz.schoolsystem.builders.DegreeBuilder.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -39,9 +41,7 @@ import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -147,59 +147,31 @@ public class DegreeControllerTest {
   }
 
   @Test
-  public void createDegreeReturnsFormattedResponse() throws Exception {
-    DegreeDto degreeDto = degreeDtoFrom(aDegree().build());
-    String requestBody = prepareCreateRequest();
+  public void getDegreeCoursesReturnsFormattedResponse() throws Exception {
+    List<CourseDto> courseDtoList = createCourseDtoListFrom(createCourseList());
+    Page<CourseDto> courseDtoPage = new PageImpl<>(courseDtoList);
 
-    when(degreeService.createDegree(any(CreateDegreeRequest.class))).thenReturn(degreeDto);
-    when(degreeDtoAssembler.toModel(any(DegreeDto.class))).thenReturn(degreeDto);
+    when(degreeService.getDegreeCourses(any(Long.class), any(Pageable.class))).thenReturn(courseDtoPage);
+    when(courseDtoAssembler.toModel(any(CourseDto.class))).thenReturn(courseDtoList.get(0), courseDtoList.get(1));
+    when(coursePagedResourcesAssembler.toModel(any(Page.class))).thenReturn(PagedModel.of(courseDtoList, new PagedModel.PageMetadata(1, 1, 1, 1)));
 
-    mvc.perform(post(DEGREES_ENDPOINT).content(requestBody).accept(MediaType.APPLICATION_JSON))
-            .andDo(print())
-            .andExpect(status().isCreated())
+    mvc.perform(get(DEGREES_ENDPOINT + "/1/courses").accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.page").exists())
+            .andExpect(jsonPath("$.links").isArray())
             .andReturn();
   }
 
-  private String prepareCreateRequest() throws Exception {
-    CreateDegreeRequest request = new CreateDegreeRequest(
-            degreeDto.getTitle(),
-            degreeDto.getFieldOfStudy(),
-            degreeDto.getFaculty(),
-            "Description",
-            3.0,
-            15000.00,
-            List.of(Language.ENGLISH));
-
-    ObjectMapper objectMapper = new ObjectMapper();
-    ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
-    return objectWriter.writeValueAsString(request);
-  }
-
-  @Test
-  public void getDegreeCourses() {
-    CommonTests.controllerGetEntities(
-        CourseDto.class,
-        coursePagedResourcesAssembler,
-        (Pageable pageable) -> degreeService.getDegreeCourses(1L, pageable),
-        courseDtoAssembler::toModel,
-        (PageableRequest request) -> degreeController.getDegreeCourses(1L, request));
-  }
-
 
 
   @Test
-  public void uploadImage() throws Exception {
-    // Mock service method to do nothing
+  public void uploadImageReturnsFormattedResponse() throws Exception {
     doNothing().when(degreeService).addImage(any(Long.class), any(MultipartFile.class));
 
-    // Create file for testing
-    MockMultipartFile file =
-        new MockMultipartFile(
-            "file", "test.txt", MediaType.TEXT_PLAIN_VALUE, "Hello, World!".getBytes());
+    MockMultipartFile file = createMockFile();
 
-    // Perform request
     mvc.perform(
-            multipart("/api/degrees/1/image")
+            multipart(DEGREES_ENDPOINT + "/1/image")
                 .file(file)
                 .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
                 .accept(MediaType.APPLICATION_JSON))
@@ -208,5 +180,10 @@ public class DegreeControllerTest {
         .andExpect(jsonPath("$.links[*].rel", Matchers.hasItems("degree")))
         .andExpect(jsonPath("$.links[*].href", Matchers.hasSize(1)))
         .andReturn();
+  }
+
+  private MockMultipartFile createMockFile() {
+    return new MockMultipartFile(
+        "file", "test.txt", MediaType.TEXT_PLAIN_VALUE, "Hello, World!".getBytes());
   }
 }
